@@ -44,7 +44,7 @@ public class AssignmentSubmissions extends BaseTransaction {
 	
 	@ManyToOne
 	@JoinColumn(name = "id_submission_status", nullable = false)
-	private SubmissionStatuses idSubmissionStatus;
+	private SubmissionStatus idSubmissionStatus;
 	
 	@ManyToOne
 	@JoinColumn(name = "id_assignments", nullable = false)

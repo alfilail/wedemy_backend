@@ -20,7 +20,7 @@ import lombok.EqualsAndHashCode;
 @Table(name = "t_r_presence")
 @EqualsAndHashCode(callSuper = false)
 @Data
-public class Presense extends BaseTransaction{
+public class Presence extends BaseTransaction{
 	
 	private static final long serialVersionUID = 4676572555617809925L;
 
