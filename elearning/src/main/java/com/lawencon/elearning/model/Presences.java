@@ -17,10 +17,10 @@ import lombok.EqualsAndHashCode;
 
 @Entity
 @JsonInclude(Include.NON_NULL)
-@Table(name = "t_r_presence")
+@Table(name = "t_r_presences")
 @EqualsAndHashCode(callSuper = false)
 @Data
-public class Presence extends BaseTransaction{
+public class Presences extends BaseTransaction{
 	
 	private static final long serialVersionUID = 4676572555617809925L;
 
