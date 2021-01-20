@@ -1,0 +1,44 @@
+package com.lawencon.elearning.model;
+
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.lawencon.model.BaseMaster;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+@Entity
+@JsonInclude(Include.NON_NULL)
+@Table(name = "t_m_profiles")
+@EqualsAndHashCode(callSuper=false)
+@Data
+public class Profiles extends BaseMaster {
+	private static final long serialVersionUID = -6796563419779346683L;
+
+	@Column(name = "fullname", length = 35, unique = true, nullable = false)
+	private String fullName;
+
+	@Column(name = "id_number", length = 16, nullable = false, unique = true)
+	private Integer idNumber;
+	
+	@Column(name = "birth_place", length = 35, nullable = false)
+	private String birthPlace;
+	
+	@Column(name = "birth_date", length = 10, nullable = false)
+	private Date birthDate;
+	
+	@Column(name = "phone", length = 13, nullable = false)
+	private String phone;
+	
+	@Column(name = "address", length = 50, nullable = false)
+	private String address;
+
+	@Column(name = "email", length = 20, nullable = false)
+	private String email;
+}

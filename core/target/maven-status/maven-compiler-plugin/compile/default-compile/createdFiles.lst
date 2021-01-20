@@ -1,0 +1,10 @@
+com\lawencon\model\BaseMaster.class
+com\lawencon\util\BeanUtil.class
+com\lawencon\util\Callback.class
+com\lawencon\helper\InquiryTemplate.class
+com\lawencon\base\BaseDaoImpl.class
+com\lawencon\base\ConnHandler.class
+com\lawencon\model\BaseEntity.class
+com\lawencon\model\BaseTransaction.class
+com\lawencon\base\BaseServiceImpl.class
+com\lawencon\util\JasperUtil.class
