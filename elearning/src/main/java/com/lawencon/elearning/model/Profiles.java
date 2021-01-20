@@ -1,6 +1,6 @@
 package com.lawencon.elearning.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,13 +26,13 @@ public class Profiles extends BaseMaster {
 	private String fullName;
 
 	@Column(name = "id_number", length = 16, nullable = false, unique = true)
-	private Integer idNumber;
+	private String idNumber;
 	
 	@Column(name = "birth_place", length = 35, nullable = false)
 	private String birthPlace;
 	
 	@Column(name = "birth_date", length = 10, nullable = false)
-	private Date birthDate;
+	private LocalDate birthDate;
 	
 	@Column(name = "phone", length = 13, nullable = false)
 	private String phone;

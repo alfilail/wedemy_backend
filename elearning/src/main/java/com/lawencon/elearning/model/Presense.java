@@ -1,6 +1,6 @@
 package com.lawencon.elearning.model;
 
-import java.util.Date;
+import java.time.LocalTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,15 +17,15 @@ import lombok.EqualsAndHashCode;
 
 @Entity
 @JsonInclude(Include.NON_NULL)
-@Table(name = "t_r_presense")
+@Table(name = "t_r_presence")
 @EqualsAndHashCode(callSuper = false)
 @Data
 public class Presense extends BaseTransaction{
 	
 	private static final long serialVersionUID = 4676572555617809925L;
 
-	@Column(name = "date", nullable = false)
-	private Date presenseDate;
+	@Column(name = "presence_time", nullable = false)
+	private LocalTime presenceTime;
 	
 	@ManyToOne
 	@JoinColumn(name = "id_user", nullable = false)

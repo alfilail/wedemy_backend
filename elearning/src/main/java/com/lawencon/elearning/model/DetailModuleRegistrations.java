@@ -1,5 +1,6 @@
 package com.lawencon.elearning.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -28,4 +29,7 @@ public class DetailModuleRegistrations extends BaseTransaction{
 	@ManyToOne
 	@JoinColumn(name = "id_learning_material", nullable = false)
 	private LearningMaterials idLearningMaterial;
+	
+	@Column(name = "order_number", nullable = false)
+	private Integer orderNumber;
 }

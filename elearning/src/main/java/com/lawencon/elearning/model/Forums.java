@@ -24,10 +24,10 @@ public class Forums extends BaseTransaction {
 	
 	private static final long serialVersionUID = 2066438852664914222L;
 	
-	@Column(name = "hdr_forum_datetime")
+	@Column(name = "forum_datetime")
 	private LocalDateTime forumDateTime;
 	
-	@Column(name = "content_text")
+	@Column(name = "content_text", columnDefinition = "text")
 	private String contentText;
 	
 	@ManyToOne

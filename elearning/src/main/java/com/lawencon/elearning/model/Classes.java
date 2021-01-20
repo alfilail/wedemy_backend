@@ -1,12 +1,13 @@
 package com.lawencon.elearning.model;
 
+import java.sql.Blob;
+import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.exolab.castor.types.DateTime;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -30,20 +31,20 @@ public class Classes extends BaseMaster {
 	@Column(name = "class_name", length = 30, nullable = false)
 	private String className;
 	
-	@Column(name = "description", length = 100, nullable = false)
+	@Column(name = "description", nullable = false, columnDefinition = "text")
 	private String description;
 	
 	@Column(name = "thubmnail_img", length = 100, nullable = false)
-	private String thubmnailImg;
+	private Blob thubmnailImg;
 	
 	@Column(name = "quota", length = 3, nullable = false)
 	private Integer quota;
 	
-	@Column(name = "start_datetime", nullable = false)
-	private DateTime startDateTime;
+	@Column(name = "start_date", nullable = false)
+	private LocalDate startDate;
 	
-	@Column(name = "end_datetime", nullable = false)
-	private DateTime endDateTime;
+	@Column(name = "end_date", nullable = false)
+	private LocalDate endDate;
 	
 	@ManyToOne
 	@JoinColumn(name = "id_tutor", nullable = false)

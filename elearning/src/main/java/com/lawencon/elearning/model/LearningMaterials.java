@@ -28,7 +28,7 @@ public class LearningMaterials extends BaseMaster {
 	@Column(name = "learning_material_name", length = 35, nullable = false)
 	private String learningMaterialName;
 
-	@Column(name = "description", length = 100, nullable = false)
+	@Column(name = "description", nullable = false, columnDefinition = "text")
 	private String description;
 
 	@Column(name = "file", nullable = false)

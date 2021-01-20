@@ -27,13 +27,14 @@ public class DetailForums extends BaseTransaction {
 	@Column(name = "dtl_forum_datetime")
 	private LocalDateTime dtlForumDateTime;
 	
-	@Column(name = "content_text")
+	@Column(name = "content_text", columnDefinition = "text")
 	private String contentText;
 	
 	@ManyToOne
 	@JoinColumn(name = "id_user", nullable = false)
 	private Users idUser;
 	
-	@JoinColumn(name = "id_forum")
+	@ManyToOne
+	@JoinColumn(name = "id_forum", nullable = false)
 	private Forums idForum;
 }

@@ -1,14 +1,13 @@
 package com.lawencon.elearning.model;
 
 import java.sql.Blob;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.exolab.castor.types.DateTime;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -33,12 +32,16 @@ public class Assignments extends BaseTransaction {
 	private Blob file;
 
 	@Column(name = "start_datetime", nullable = false)
-	private DateTime startDateTime;
+	private LocalDateTime startDateTime;
 
 	@Column(name = "end_datetime", nullable = false)
-	private DateTime endDateTime;
+	private LocalDateTime endDateTime;
 	
 	@ManyToOne
 	@JoinColumn(name = "id_dtl_module_rgs", nullable = false)
 	private DetailModuleRegistrations idDetailModuleRegistration;
+	
+	@ManyToOne
+	@JoinColumn(name = "id_assignment_type", nullable = false)
+	private AssignmentType idAssignmentType;
 }
