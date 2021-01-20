@@ -20,7 +20,8 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 @Data
 public class Users extends BaseMaster{
-	private static final long serialVersionUID = -6796563419779346683L;
+
+	private static final long serialVersionUID = -2476328339109602669L;
 
 	@Column(name = "username", length = 20, unique = true, nullable = false)
 	private String username;

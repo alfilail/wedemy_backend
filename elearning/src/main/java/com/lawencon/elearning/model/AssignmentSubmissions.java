@@ -1,28 +1,31 @@
 package com.lawencon.elearning.model;
 
+import java.sql.Blob;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.lawencon.model.BaseMaster;
+import com.lawencon.model.BaseTransaction;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Entity
 @JsonInclude(Include.NON_NULL)
-@Table(name = "t_m_assignment_type")
+@Table(name = "t_r_assignment_submissions")
 @EqualsAndHashCode(callSuper = false)
 @Data
-public class AssignmentType extends BaseMaster {
+public class AssignmentSubmissions extends BaseTransaction {
 	
-	private static final long serialVersionUID = 7963551211706180316L;
+	private static final long serialVersionUID = -4540610639400514155L;
 
-	@Column(name = "code", length = 6, unique = true, nullable = false)
-	private String code;
-
-	@Column(name = "assignment_type_name", length = 35, nullable = false)
-	private String assignmentTypeName;
+	@Column(name = "file", nullable = false)
+	private Blob file;
+	
+	@Column(name = "score", length = 3, nullable = false)
+	private Float score;
+	
 }
