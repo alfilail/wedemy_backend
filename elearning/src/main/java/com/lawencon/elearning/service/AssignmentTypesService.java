@@ -16,4 +16,6 @@ public interface AssignmentTypesService {
 	void updateAssignmentType(AssignmentTypes assignmentType) throws Exception;
 	
 	AssignmentTypes getAssignmentTypeByCode(String code) throws Exception;
+	
+	void validation(AssignmentTypes assignmentType) throws Exception;
 }
