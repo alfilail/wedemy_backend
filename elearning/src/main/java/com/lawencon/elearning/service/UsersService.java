@@ -1,13 +1,12 @@
-package com.lawencon.elearning.dao;
+package com.lawencon.elearning.service;
 
 import java.util.List;
 
 import com.lawencon.elearning.model.Users;
-import com.lawencon.util.Callback;
 
-public interface UsersDao {
-
-	void insertUser(Users user, Callback before) throws Exception;
+public interface UsersService {
+	
+	void insertUser(Users user) throws Exception;
 
 	List<Users> getAllUsers() throws Exception;
 
@@ -15,7 +14,7 @@ public interface UsersDao {
 
 	Users getUserByUsername(String username) throws Exception;
 
-	void updateUser(Users user, Callback before) throws Exception;
+	void updateUser(Users user) throws Exception;
 
 	void deleteUserById(String id) throws Exception;
 

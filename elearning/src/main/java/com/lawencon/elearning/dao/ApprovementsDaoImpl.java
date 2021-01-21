@@ -2,13 +2,10 @@ package com.lawencon.elearning.dao;
 
 import java.util.List;
 
-import org.springframework.stereotype.Repository;
-
 import com.lawencon.base.BaseDaoImpl;
 import com.lawencon.elearning.model.Approvements;
 import com.lawencon.util.Callback;
 
-@Repository
 public class ApprovementsDaoImpl extends BaseDaoImpl<Approvements> implements ApprovementsDao {
 
 	@Override

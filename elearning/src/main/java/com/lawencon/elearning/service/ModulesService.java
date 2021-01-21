@@ -1,22 +1,21 @@
-package com.lawencon.elearning.dao;
+package com.lawencon.elearning.service;
 
 import java.util.List;
 
 import com.lawencon.elearning.model.Modules;
-import com.lawencon.util.Callback;
 
-public interface ModulesDao {
-	
-	void insertModule(Modules module, Callback before) throws Exception;
-	
+public interface ModulesService {
+
+	void insertModule(Modules module) throws Exception;
+
 	List<Modules> getAllModules() throws Exception;
 	
 	Modules getModuleById(String id) throws Exception;
 	
 	Modules getModuleByCode(String code) throws Exception;
-	
-	void updateModule(Modules module, Callback before) throws Exception;
-	
+
+	void updateModule(Modules module) throws Exception;
+
 	void deleteModuleById(String id) throws Exception;
-	
+
 }

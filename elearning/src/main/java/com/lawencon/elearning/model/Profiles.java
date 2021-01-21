@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.lawencon.model.BaseMaster;
@@ -31,6 +32,7 @@ public class Profiles extends BaseMaster {
 	@Column(name = "birth_place", length = 35, nullable = false)
 	private String birthPlace;
 	
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	@Column(name = "birth_date", length = 10, nullable = false)
 	private LocalDate birthDate;
 	

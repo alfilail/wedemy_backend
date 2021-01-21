@@ -1,13 +1,12 @@
-package com.lawencon.elearning.dao;
+package com.lawencon.elearning.service;
 
 import java.util.List;
 
 import com.lawencon.elearning.model.Profiles;
-import com.lawencon.util.Callback;
 
-public interface ProfilesDao {
+public interface ProfilesService {
 	
-	void insertProfile(Profiles profile, Callback before) throws Exception;
+	void insertProfile(Profiles profile) throws Exception;
 
 	List<Profiles> getAllProfiles() throws Exception;
 
@@ -15,7 +14,7 @@ public interface ProfilesDao {
 
 	Profiles getProfileByCode(String code) throws Exception;
 
-	void updateProfile(Profiles profile, Callback before) throws Exception;
+	void updateProfile(Profiles profile) throws Exception;
 
 	void deleteProfileById(String id) throws Exception;
 
