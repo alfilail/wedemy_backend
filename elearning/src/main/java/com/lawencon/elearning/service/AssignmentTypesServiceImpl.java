@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.elearning.dao.AssignmentTypesDao;
 import com.lawencon.elearning.model.AssignmentTypes;
-import com.lawencon.util.Callback;
 
 @Service
 public class AssignmentTypesServiceImpl extends BaseServiceImpl implements AssignmentTypesService {
@@ -20,7 +19,7 @@ public class AssignmentTypesServiceImpl extends BaseServiceImpl implements Assig
 	public void insertAssignmentType(AssignmentTypes assignmentType) throws Exception {
 		assignmentType.setCreatedAt(LocalDateTime.now());
 		assignmentTypesDao.insertAssignmentType(assignmentType, 
-				() -> validation(assignmentType));
+				() -> validateInsert(assignmentType));
 	}
 
 	@Override
@@ -40,9 +39,9 @@ public class AssignmentTypesServiceImpl extends BaseServiceImpl implements Assig
 
 	@Override
 	public void updateAssignmentType(AssignmentTypes assignmentType) throws Exception {
-		Callback before = null;
 		assignmentType.setUpdatedAt(LocalDateTime.now());
-		assignmentTypesDao.updateAssignmentType(assignmentType, before);
+		assignmentTypesDao.updateAssignmentType(assignmentType, 
+				()-> validateUpdate(assignmentType));
 	}
 
 	@Override
@@ -50,10 +49,15 @@ public class AssignmentTypesServiceImpl extends BaseServiceImpl implements Assig
 		return assignmentTypesDao.getAssignmentTypeByCode(code);
 	}
 
-	@Override
-	public void validation(AssignmentTypes assignmentType) throws Exception {
+	private void validateInsert(AssignmentTypes assignmentType) throws Exception {
 		if (assignmentType.getCode() == null) {
-			throw new Exception("Invalid Input Assignment Type");
+			throw new Exception("Invalid Input Assignment Type Code");
+		}
+	}
+	
+	private void validateUpdate(AssignmentTypes assignmentType) throws Exception {
+		if (assignmentType.getCode() == null) {
+			throw new Exception("Invalid Input Assignment Type Code");
 		}
 	}
 }

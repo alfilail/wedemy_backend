@@ -22,11 +22,11 @@ import com.lawencon.elearning.model.AssignmentTypes;
 import com.lawencon.elearning.service.AssignmentTypesService;
 
 @RestController
-@RequestMapping("/assignment-types")
-public class AssignmentTypesController{
+@RequestMapping("assignment-types")
+public class AssignmentTypesController {
 	@Autowired
 	private AssignmentTypesService assignmentTypesService;
-	
+
 	@PostMapping
 	public ResponseEntity<?> insertAssignmentType(@RequestBody String body) {
 		try {
@@ -38,8 +38,8 @@ public class AssignmentTypesController{
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
-	@GetMapping("/id/{id}")
+
+	@GetMapping("{id}")
 	public ResponseEntity<?> getAssignmentTypeById(@PathVariable("id") String id) {
 		AssignmentTypes assignmentType = new AssignmentTypes();
 		try {
@@ -50,19 +50,7 @@ public class AssignmentTypesController{
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
-	@GetMapping("/code/{code}")
-	public ResponseEntity<?> getAssignmentTypeByCode(@PathVariable("code") String code) {
-		AssignmentTypes assignmentType = new AssignmentTypes();
-		try {
-			assignmentType = assignmentTypesService.getAssignmentTypeByCode(code);
-			return new ResponseEntity<>(assignmentType, HttpStatus.OK);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-	
+
 	@GetMapping("/all")
 	public ResponseEntity<?> getAllAsignmentTypes() {
 		List<AssignmentTypes> assignmentTypesList = new ArrayList<AssignmentTypes>();
@@ -74,8 +62,8 @@ public class AssignmentTypesController{
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
-	@DeleteMapping("/{id}")
+
+	@DeleteMapping("{id}")
 	public ResponseEntity<?> deleteAssignmentTypeById(@PathVariable("id") String id) {
 		try {
 			assignmentTypesService.deleteAssignmentTypeById(id);
@@ -85,16 +73,12 @@ public class AssignmentTypesController{
 			return new ResponseEntity<>("Data used in another table", HttpStatus.BAD_REQUEST);
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (e.getMessage().contains("id")) {
-				return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-			} else {
-				return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-			}
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	@PutMapping
-	public ResponseEntity<?> updateAssignmentType (@RequestBody String body) {
+	public ResponseEntity<?> updateAssignmentType(@RequestBody String body) {
 		try {
 			AssignmentTypes assignmentType = new ObjectMapper().readValue(body, AssignmentTypes.class);
 			assignmentTypesService.updateAssignmentType(assignmentType);

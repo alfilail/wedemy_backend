@@ -11,4 +11,10 @@ public interface GradesDao {
 	List<Grades> getAllGrades() throws Exception;
 	
 	Grades getGradeById(String id) throws Exception;
+	
+	void updateGrades(Grades grade, Callback before) throws Exception;
+	
+	void deleteGradeById(String id) throws Exception;
+	
+	Grades getGradeByCode(String code) throws Exception;
 }

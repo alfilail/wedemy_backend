@@ -18,33 +18,33 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lawencon.elearning.model.Grades;
-import com.lawencon.elearning.service.GradesService;
+import com.lawencon.elearning.model.SubmissionStatus;
+import com.lawencon.elearning.service.SubmissionStatusService;
 
 @RestController
-@RequestMapping("grades")
-public class GradesController {
+@RequestMapping("submission-status")
+public class SubmissionStatusController {
 	@Autowired
-	private GradesService gradesService;
+	private SubmissionStatusService submissionStatusService;
 
 	@PostMapping
-	public ResponseEntity<?> insertGrade(@RequestBody String body) {
+	public ResponseEntity<?> insertSubmissionStatus(@RequestBody String body) {
 		try {
-			Grades grade = new ObjectMapper().readValue(body, Grades.class);
-			gradesService.insertGrade(grade);
-			return new ResponseEntity<>(grade, HttpStatus.CREATED);
+			SubmissionStatus submissionStatus= new ObjectMapper().readValue(body, SubmissionStatus.class);
+			submissionStatusService.insertSubmissionStatus(submissionStatus);
+			return new ResponseEntity<>(submissionStatus, HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
-	@GetMapping("/{id}")
-	public ResponseEntity<?> getGradeById(@PathVariable("id") String id) {
-		Grades grade = new Grades();
+	@GetMapping("{id}")
+	public ResponseEntity<?> getSubmissionStatusById(@PathVariable("id") String id) {
+		SubmissionStatus submissionStatus = new SubmissionStatus();
 		try {
-			grade = gradesService.getGradeById(id);
-			return new ResponseEntity<>(grade, HttpStatus.OK);
+			submissionStatus = submissionStatusService.getSubmissionStatusById(id);
+			return new ResponseEntity<>(submissionStatus, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -52,21 +52,21 @@ public class GradesController {
 	}
 
 	@GetMapping("/all")
-	public ResponseEntity<?> getAllGrades() {
-		List<Grades> gradesList = new ArrayList<Grades>();
+	public ResponseEntity<?> getAllSubmissionStatus() {
+		List<SubmissionStatus> submissionStatusList = new ArrayList<SubmissionStatus>();
 		try {
-			gradesList = gradesService.getAllGrades();
-			return new ResponseEntity<>(gradesList, HttpStatus.OK);
+			submissionStatusList = submissionStatusService.getAllSubmissionStatus();
+			return new ResponseEntity<>(submissionStatusList, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
-	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteGradeById(@PathVariable("id") String id) {
+	@DeleteMapping("{id}")
+	public ResponseEntity<?> deleteSubmissionStatusById(@PathVariable("id") String id) {
 		try {
-			gradesService.deleteGradeById(id);
+			submissionStatusService.deleteSubmissionStatusById(id);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();
@@ -78,11 +78,11 @@ public class GradesController {
 	}
 
 	@PutMapping
-	public ResponseEntity<?> updateGrade(@RequestBody String body) {
+	public ResponseEntity<?> updateSubmissionStatus(@RequestBody String body) {
 		try {
-			Grades grade = new ObjectMapper().readValue(body, Grades.class);
-			gradesService.updateGrades(grade);
-			return new ResponseEntity<>(grade, HttpStatus.OK);
+			SubmissionStatus submissionStatus = new ObjectMapper().readValue(body, SubmissionStatus.class);
+			submissionStatusService.updateSubmissionStatus(submissionStatus);
+			return new ResponseEntity<>(submissionStatus, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

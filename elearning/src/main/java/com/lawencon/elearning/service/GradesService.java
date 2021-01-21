@@ -10,4 +10,10 @@ public interface GradesService {
 	List<Grades> getAllGrades() throws Exception;
 	
 	Grades getGradeById (String id) throws Exception;
+	
+	void deleteGradeById (String id) throws Exception;
+	
+	void updateGrades(Grades grade) throws Exception;
+	
+	Grades getGradeByCode(String code) throws Exception;
 }

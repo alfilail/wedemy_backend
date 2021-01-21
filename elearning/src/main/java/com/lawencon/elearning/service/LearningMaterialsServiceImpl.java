@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.elearning.dao.LearningMaterialsDao;
@@ -13,6 +14,7 @@ import com.lawencon.elearning.model.LearningMaterials;
  * @author Nur Alfilail
  */
 
+@Service
 public class LearningMaterialsServiceImpl extends BaseServiceImpl implements LearningMaterialsService {
 
 	@Autowired

@@ -23,4 +23,21 @@ public class GradesDaoImpl extends BaseDaoImpl<Grades> implements GradesDao {
 	public Grades getGradeById(String id) throws Exception {
 		return getById(id);
 	}
+	
+	@Override
+	public Grades getGradeByCode(String code) throws Exception {
+		Grades grade = createQuery("FROM Grades WHERE code = ?1", Grades.class)
+				.setParameter(1, code).getSingleResult();
+		return grade;
+	}
+	
+	@Override
+	public void deleteGradeById(String id) throws Exception {
+		deleteById(id);
+	}
+	
+	@Override
+	public void updateGrades(Grades grade, Callback before) throws Exception {
+		save(grade, before, null, true, true);
+	}
 }
