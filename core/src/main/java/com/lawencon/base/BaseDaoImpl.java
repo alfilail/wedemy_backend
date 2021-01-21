@@ -316,7 +316,7 @@ public abstract class BaseDaoImpl<T extends Serializable> {
 //		id.setAccessible(true);
 
 //		Object objId = id.get(entity);
-		Object objId = m.getDefaultValue();
+		Object objId = m.invoke(entity);
 
 		if (objId != null) {
 //			T data = getById(id.get(entity).toString());
@@ -372,6 +372,7 @@ public abstract class BaseDaoImpl<T extends Serializable> {
 //	}
 
 	private void setVersion(final T entity, T data, boolean isAdd) throws Exception {
+		Method versionGet = getBaseClass(entity).getDeclaredMethod("getVersion");
 		List<Method> listMethod = getAllBaseMethod(entity);
 		for (Method m : listMethod) {
 			if (m.getName().equals("setVersion")) {
@@ -379,7 +380,7 @@ public abstract class BaseDaoImpl<T extends Serializable> {
 					m.invoke(entity, 0L);
 				else {
 					valVersion(entity, data);
-					Object obj = m.getClass();
+					Object obj = versionGet.invoke(entity);
 					m.invoke(entity, Long.parseLong(String.valueOf(obj)) + 1);
 				}
 
