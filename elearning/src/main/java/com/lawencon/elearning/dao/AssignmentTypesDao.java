@@ -16,5 +16,5 @@ public interface AssignmentTypesDao {
 	
 	void deleteAssignmentTypeById(String id) throws Exception;
 	
-	void deleteAllAsignmentTypes (AssignmentTypes assignmentType) throws Exception;
+	AssignmentTypes getAssignmentTypeByCode(String code) throws Exception;
 }

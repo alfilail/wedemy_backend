@@ -39,11 +39,23 @@ public class AssignmentTypesController{
 		}
 	}
 	
-	@GetMapping("/{id}")
+	@GetMapping("/id/{id}")
 	public ResponseEntity<?> getAssignmentTypeById(@PathVariable("id") String id) {
 		AssignmentTypes assignmentType = new AssignmentTypes();
 		try {
 			assignmentType = assignmentTypesService.getAssignmentTypeById(id);
+			return new ResponseEntity<>(assignmentType, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@GetMapping("/code/{code}")
+	public ResponseEntity<?> getAssignmentTypeByCode(@PathVariable("code") String code) {
+		AssignmentTypes assignmentType = new AssignmentTypes();
+		try {
+			assignmentType = assignmentTypesService.getAssignmentTypeByCode(code);
 			return new ResponseEntity<>(assignmentType, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();

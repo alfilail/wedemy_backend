@@ -14,4 +14,6 @@ public interface AssignmentTypesService {
 	void deleteAssignmentTypeById (String id) throws Exception;
 	
 	void updateAssignmentType(AssignmentTypes assignmentType) throws Exception;
+	
+	AssignmentTypes getAssignmentTypeByCode(String code) throws Exception;
 }

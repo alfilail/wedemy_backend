@@ -35,7 +35,9 @@ public class AssignmentTypesDaoImpl extends BaseDaoImpl<AssignmentTypes> impleme
 	}
 	
 	@Override
-	public void deleteAllAsignmentTypes(AssignmentTypes assignmentType) throws Exception {
-		delete(assignmentType, null, null, true, true);
+	public AssignmentTypes getAssignmentTypeByCode(String code) throws Exception {
+		AssignmentTypes assignmentTypes = createQuery("FROM AssignmentTypes WHERE code = ?1", AssignmentTypes.class)
+				.setParameter(1, code).getSingleResult();
+		return assignmentTypes;
 	}
 }

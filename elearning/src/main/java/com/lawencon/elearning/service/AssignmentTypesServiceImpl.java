@@ -44,4 +44,9 @@ public class AssignmentTypesServiceImpl extends BaseServiceImpl implements Assig
 		Callback before = null;
 		assignmentTypesDao.updateAssignmentType(assignmentType, before);
 	}
+	
+	@Override
+	public AssignmentTypes getAssignmentTypeByCode(String code) throws Exception {
+		return assignmentTypesDao.getAssignmentTypeByCode(code);
+	}
 }
