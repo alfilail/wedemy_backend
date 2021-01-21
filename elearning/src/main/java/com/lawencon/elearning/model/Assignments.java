@@ -43,5 +43,5 @@ public class Assignments extends BaseTransaction {
 	
 	@ManyToOne
 	@JoinColumn(name = "id_assignment_type", nullable = false)
-	private AssignmentType idAssignmentType;
+	private AssignmentTypes idAssignmentType;
 }

@@ -16,7 +16,7 @@ import lombok.EqualsAndHashCode;
 @Table(name = "t_m_assignment_type")
 @EqualsAndHashCode(callSuper = false)
 @Data
-public class AssignmentType extends BaseMaster {
+public class AssignmentTypes extends BaseMaster {
 	
 	private static final long serialVersionUID = 7963551211706180316L;
 
