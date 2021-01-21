@@ -34,4 +34,8 @@ public class Presences extends BaseTransaction{
 	@ManyToOne
 	@JoinColumn(name = "id_schedule", nullable = false)
 	private Scheduling idSchedule;
+	
+	@ManyToOne
+	@JoinColumn(name = "id_approvement", nullable = false)
+	private Approvements idApprovement;
 }
