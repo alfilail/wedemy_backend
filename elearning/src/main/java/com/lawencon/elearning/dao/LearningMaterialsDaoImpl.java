@@ -4,12 +4,11 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.lawencon.base.BaseDaoImpl;
 import com.lawencon.elearning.model.LearningMaterials;
 import com.lawencon.util.Callback;
 
 @Repository
-public class LearningMaterialsDaoImpl extends BaseDaoImpl<LearningMaterials> implements LearningMaterialsDao {
+public class LearningMaterialsDaoImpl extends ElearningBaseDaoImpl<LearningMaterials> implements LearningMaterialsDao {
 
 	@Override
 	public void insertLearningMaterial(LearningMaterials learningMaterial, Callback before) throws Exception {
