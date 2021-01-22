@@ -3,6 +3,7 @@ package com.lawencon.elearning.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.BaseServiceImpl;
@@ -15,8 +16,12 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 	@Autowired
 	private UsersDao usersDao;
 	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
+	
 	@Override
 	public void insertUser(Users user) throws Exception {
+		user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
 		usersDao.insertUser(user, () -> validateInsert(user));
 	}
 
