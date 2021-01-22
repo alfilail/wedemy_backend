@@ -1,18 +1,17 @@
-package com.lawencon.elearning.dao;
+package com.lawencon.elearning.service;
 
 import java.util.List;
 
 import com.lawencon.elearning.model.Roles;
-import com.lawencon.util.Callback;
 
-public interface RolesDao {
-	void insertRole(Roles role, Callback before) throws Exception;
+public interface RolesService {
+	void insertRole(Roles role) throws Exception;
 	
 	List<Roles> getAllRoles() throws Exception;
 	
 	Roles getRoleById(String id) throws Exception;
 	
-	void updateRole(Roles role, Callback before) throws Exception;
+	void updateRole(Roles role) throws Exception;
 	
 	void deleteRoleById(String id) throws Exception;
 	

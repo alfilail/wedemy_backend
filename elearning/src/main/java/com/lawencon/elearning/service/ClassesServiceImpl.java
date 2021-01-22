@@ -1,9 +1,11 @@
 package com.lawencon.elearning.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.elearning.dao.ClassesDao;
@@ -16,7 +18,10 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 	private ClassesDao classesDao;
 
 	@Override
-	public void insertClass(Classes clazz) throws Exception {
+	public void insertClass(Classes clazz, MultipartFile file) throws Exception {
+		clazz.setCreatedAt(LocalDateTime.now());
+		clazz.setThubmnailImg(file.getBytes());
+		clazz.setFileType(file.getContentType());
 		classesDao.insertClass(clazz, () -> validateInsert(clazz));
 	}
 
@@ -36,7 +41,9 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 	}
 
 	@Override
-	public void updateClass(Classes clazz) throws Exception {
+	public void updateClass(Classes clazz, MultipartFile file) throws Exception {
+		clazz.setThubmnailImg(file.getBytes());
+		clazz.setFileType(file.getContentType());
 		classesDao.updateClass(clazz, () -> validateUpdate(clazz));
 	}
 

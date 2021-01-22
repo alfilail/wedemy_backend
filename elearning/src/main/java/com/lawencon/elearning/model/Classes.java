@@ -1,6 +1,5 @@
 package com.lawencon.elearning.model;
 
-import java.sql.Blob;
 import java.time.LocalDate;
 
 import javax.persistence.Column;
@@ -9,6 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.lawencon.model.BaseMaster;
@@ -34,15 +34,20 @@ public class Classes extends BaseMaster {
 	@Column(name = "description", nullable = false, columnDefinition = "text")
 	private String description;
 	
-	@Column(name = "thubmnail_img", length = 100, nullable = false)
-	private Blob thubmnailImg;
+	@Column(name = "thubmnail_img", nullable = false)
+	private byte[] thubmnailImg;
+	
+	@Column(name = "file_type")
+	private String fileType;
 	
 	@Column(name = "quota", length = 3, nullable = false)
 	private Integer quota;
 	
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	@Column(name = "start_date", nullable = false)
 	private LocalDate startDate;
 	
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	@Column(name = "end_date", nullable = false)
 	private LocalDate endDate;
 	

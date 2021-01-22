@@ -1,7 +1,5 @@
 package com.lawencon.elearning.model;
 
-import java.sql.Blob;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -32,5 +30,8 @@ public class LearningMaterials extends BaseMaster {
 	private String description;
 
 	@Column(name = "file", nullable = false)
-	private Blob file;
+	private byte[] file;
+	
+	@Column(name = "file_type")
+	private String fileType;
 }

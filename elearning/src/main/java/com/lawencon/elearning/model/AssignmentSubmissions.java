@@ -1,6 +1,5 @@
 package com.lawencon.elearning.model;
 
-import java.sql.Blob;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -26,7 +25,10 @@ public class AssignmentSubmissions extends BaseTransaction {
 	private static final long serialVersionUID = -4540610639400514155L;
 
 	@Column(name = "file", nullable = false)
-	private Blob file;
+	private byte[] file;
+	
+	@Column(name = "file_type")
+	private String fileType;
 	
 	@Column(name = "score", length = 3, nullable = false)
 	private Double score;

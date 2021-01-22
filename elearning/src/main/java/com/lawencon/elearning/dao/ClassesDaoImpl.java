@@ -4,12 +4,11 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.lawencon.base.BaseDaoImpl;
 import com.lawencon.elearning.model.Classes;
 import com.lawencon.util.Callback;
 
 @Repository
-public class ClassesDaoImpl extends BaseDaoImpl<Classes> implements ClassesDao{
+public class ClassesDaoImpl extends ElearningBaseDaoImpl<Classes> implements ClassesDao{
 
 	@Override
 	public void insertClass(Classes clazz, Callback before) throws Exception {

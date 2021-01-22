@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.elearning.dao.LearningMaterialsDao;
@@ -21,8 +22,11 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 	private LearningMaterialsDao learningMaterialsDao;
 
 	@Override
-	public void insertLearningMaterial(LearningMaterials learningMaterial) throws Exception {
+	public void insertLearningMaterial(LearningMaterials learningMaterial, 
+			MultipartFile file) throws Exception {
 		learningMaterial.setCreatedAt(LocalDateTime.now());
+		learningMaterial.setFile(file.getBytes());
+		learningMaterial.setFileType(file.getContentType());
 		learningMaterialsDao.insertLearningMaterial(learningMaterial, () -> validateInsert(learningMaterial));
 	}
 
@@ -37,8 +41,10 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 	}
 
 	@Override
-	public void updateLearningMaterial(LearningMaterials learningMaterial) throws Exception {
+	public void updateLearningMaterial(LearningMaterials learningMaterial, MultipartFile file) throws Exception {
 		learningMaterial.setUpdatedAt(LocalDateTime.now());
+		learningMaterial.setFile(file.getBytes());
+		learningMaterial.setFileType(file.getContentType());
 		learningMaterialsDao.updateLearningMaterial(learningMaterial, () -> validateUpdate(learningMaterial));
 	}
 

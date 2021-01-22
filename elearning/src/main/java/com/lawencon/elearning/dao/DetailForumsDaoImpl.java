@@ -1,9 +1,7 @@
 package com.lawencon.elearning.dao;
 
-import java.io.Serializable;
+import com.lawencon.elearning.model.DetailForums;
 
-import com.lawencon.base.BaseDaoImpl;
-
-public class DetailForumsDaoImpl extends BaseDaoImpl<Serializable> implements DetailForumsDao{
+public class DetailForumsDaoImpl extends ElearningBaseDaoImpl<DetailForums> implements DetailForumsDao{
 
 }

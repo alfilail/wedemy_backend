@@ -10,11 +10,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.lawencon.elearning.model.Classes;
 import com.lawencon.elearning.service.ClassesService;
 
@@ -48,10 +50,13 @@ public class ClassesController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> insertClass(@RequestBody String body) {
+	public ResponseEntity<?> insertClass(@RequestPart String body, 
+			@RequestPart("file") MultipartFile file) {
 		try {
-			Classes clazz = new ObjectMapper().readValue(body, Classes.class);
-			classesService.insertClass(clazz);
+			ObjectMapper obj = new ObjectMapper();
+			obj.registerModule(new JavaTimeModule());
+			Classes clazz = obj.readValue(body, Classes.class);
+			classesService.insertClass(clazz, file);
 			return new ResponseEntity<>(clazz, HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -60,10 +65,13 @@ public class ClassesController {
 	}
 	
 	@PutMapping
-	public ResponseEntity<?> updateClass(@RequestBody String body) {
+	public ResponseEntity<?> updateClass(@RequestPart String body, 
+			@RequestPart("file") MultipartFile file) {
 		try {
-			Classes clazz = new ObjectMapper().readValue(body, Classes.class);
-			classesService.updateClass(clazz);
+			ObjectMapper obj = new ObjectMapper();
+			obj.registerModule(new JavaTimeModule());
+			Classes clazz = obj.readValue(body, Classes.class);
+			classesService.updateClass(clazz, file);
 			return new ResponseEntity<>(clazz, HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();

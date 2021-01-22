@@ -4,12 +4,11 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.lawencon.base.BaseDaoImpl;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.util.Callback;
 
 @Repository
-public class ProfilesDaoImpl extends BaseDaoImpl<Profiles> implements ProfilesDao {
+public class ProfilesDaoImpl extends ElearningBaseDaoImpl<Profiles> implements ProfilesDao {
 
 	@Override
 	public void insertProfile(Profiles profile, Callback before) throws Exception {

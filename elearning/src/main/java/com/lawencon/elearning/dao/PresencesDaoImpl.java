@@ -1,9 +1,7 @@
 package com.lawencon.elearning.dao;
 
-import java.io.Serializable;
+import com.lawencon.elearning.model.Presences;
 
-import com.lawencon.base.BaseDaoImpl;
-
-public class PresencesDaoImpl extends BaseDaoImpl<Serializable> implements PresencesDao {
+public class PresencesDaoImpl extends ElearningBaseDaoImpl<Presences> implements PresencesDao {
 
 }

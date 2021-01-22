@@ -12,9 +12,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lawencon.elearning.model.LearningMaterials;
@@ -32,10 +33,11 @@ public class LearningMaterialsController {
 	private LearningMaterialsService learningMaterialsService;
 
 	@PostMapping
-	public ResponseEntity<?> insertLearningMaterial(@RequestBody String body) {
+	public ResponseEntity<?> insertLearningMaterial(@RequestPart String body, 
+			@RequestPart("file") MultipartFile file) {
 		try {
 			LearningMaterials learningMaterial = new ObjectMapper().readValue(body, LearningMaterials.class);
-			learningMaterialsService.insertLearningMaterial(learningMaterial);
+			learningMaterialsService.insertLearningMaterial(learningMaterial, file);
 			return new ResponseEntity<>(learningMaterial, HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -80,10 +82,11 @@ public class LearningMaterialsController {
 	}
 
 	@PutMapping
-	public ResponseEntity<?> updateLearningMaterial(@RequestBody String body) {
+	public ResponseEntity<?> updateLearningMaterial(@RequestPart String body, 
+			@RequestPart("file") MultipartFile file) {
 		try {
 			LearningMaterials learningMaterial = new ObjectMapper().readValue(body, LearningMaterials.class);
-			learningMaterialsService.updateLearningMaterial(learningMaterial);
+			learningMaterialsService.updateLearningMaterial(learningMaterial, file);
 			return new ResponseEntity<>(learningMaterial, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();

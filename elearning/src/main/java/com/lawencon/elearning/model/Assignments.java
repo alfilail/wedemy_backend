@@ -1,6 +1,5 @@
 package com.lawencon.elearning.model;
 
-import java.sql.Blob;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -29,7 +28,10 @@ public class Assignments extends BaseTransaction {
 	private String code;
 	
 	@Column(name = "file", nullable = false)
-	private Blob file;
+	private byte[] file;
+	
+	@Column(name = "file_type")
+	private String fileType;
 
 	@Column(name = "start_datetime", nullable = false)
 	private LocalDateTime startDateTime;

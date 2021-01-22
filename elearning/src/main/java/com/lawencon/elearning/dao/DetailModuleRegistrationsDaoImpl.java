@@ -1,9 +1,7 @@
 package com.lawencon.elearning.dao;
 
-import java.io.Serializable;
+import com.lawencon.elearning.model.DetailModuleRegistrations;
 
-import com.lawencon.base.BaseDaoImpl;
-
-public class DetailModuleRegistrationsDaoImpl extends BaseDaoImpl<Serializable> implements DetailModuleRegistrationsDao {
+public class DetailModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<DetailModuleRegistrations> implements DetailModuleRegistrationsDao {
 
 }
