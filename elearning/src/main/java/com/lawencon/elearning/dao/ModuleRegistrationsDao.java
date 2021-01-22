@@ -4,5 +4,8 @@ import com.lawencon.elearning.model.ModuleRegistrations;
 import com.lawencon.util.Callback;
 
 public interface ModuleRegistrationsDao {
+	
 	void insertModuleRegistration(ModuleRegistrations moduleRegistration, Callback before) throws Exception;
+	
+	ModuleRegistrations getByIdClassAndIdModuleRegistration(String idClass, String idModRegist) throws Exception;
 }

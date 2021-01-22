@@ -29,6 +29,12 @@ public class ModuleRegistrationsServiceImpl extends BaseServiceImpl implements M
 
 	}
 
+	@Override
+	public ModuleRegistrations getByIdClassAndIdModuleRegistration(String idClass, String idModRegist)
+			throws Exception {
+		return moduleRegistrationDao.getByIdClassAndIdModuleRegistration(idClass, idModRegist);
+	}
+
 //	private void validateUpdate(ModuleRegistrations moduleRegistration) {
 //
 //	}

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lawencon.elearning.helper.LearningMaterialHelper;
 import com.lawencon.elearning.model.LearningMaterials;
 import com.lawencon.elearning.service.LearningMaterialsService;
 
@@ -36,9 +37,9 @@ public class LearningMaterialsController {
 	public ResponseEntity<?> insertLearningMaterial(@RequestPart String body, 
 			@RequestPart("file") MultipartFile file) {
 		try {
-			LearningMaterials learningMaterial = new ObjectMapper().readValue(body, LearningMaterials.class);
-			learningMaterialsService.insertLearningMaterial(learningMaterial, file);
-			return new ResponseEntity<>(learningMaterial, HttpStatus.CREATED);
+			LearningMaterialHelper helper = new ObjectMapper().readValue(body, LearningMaterialHelper.class);
+			learningMaterialsService.insertLearningMaterial(helper, file);
+			return new ResponseEntity<>(helper, HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
