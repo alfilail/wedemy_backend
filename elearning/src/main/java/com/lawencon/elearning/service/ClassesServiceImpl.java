@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.elearning.dao.ClassesDao;
+import com.lawencon.elearning.helper.ClassesHelper;
 import com.lawencon.elearning.model.Classes;
 
 @Service
@@ -16,13 +17,18 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 
 	@Autowired
 	private ClassesDao classesDao;
+	
+	@Autowired
+	private ModuleRegistrationsService moduleRegistrationsService;
 
 	@Override
-	public void insertClass(Classes clazz, MultipartFile file) throws Exception {
+	public void insertClass(ClassesHelper clazzHelper, MultipartFile file) throws Exception {
+		Classes clazz = clazzHelper.getClazz();
 		clazz.setCreatedAt(LocalDateTime.now());
 		clazz.setThubmnailImg(file.getBytes());
 		clazz.setFileType(file.getContentType());
 		classesDao.insertClass(clazz, () -> validateInsert(clazz));
+		moduleRegistrationsService.insertModuleRegistration(clazzHelper);
 	}
 
 	@Override

@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.lawencon.elearning.helper.ClassesHelper;
 import com.lawencon.elearning.model.Classes;
 import com.lawencon.elearning.service.ClassesService;
 
@@ -55,9 +56,9 @@ public class ClassesController {
 		try {
 			ObjectMapper obj = new ObjectMapper();
 			obj.registerModule(new JavaTimeModule());
-			Classes clazz = obj.readValue(body, Classes.class);
-			classesService.insertClass(clazz, file);
-			return new ResponseEntity<>(clazz, HttpStatus.CREATED);
+			ClassesHelper clazzHelper = obj.readValue(body, ClassesHelper.class);
+			classesService.insertClass(clazzHelper, file);
+			return new ResponseEntity<>(clazzHelper, HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

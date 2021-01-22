@@ -4,11 +4,12 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.lawencon.elearning.helper.ClassesHelper;
 import com.lawencon.elearning.model.Classes;
 
 public interface ClassesService {
 
-	void insertClass(Classes clazz, MultipartFile file) throws Exception;
+	void insertClass(ClassesHelper clazzHelper, MultipartFile file) throws Exception;
 
 	List<Classes> getAllClasses() throws Exception;
 
