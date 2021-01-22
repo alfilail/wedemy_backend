@@ -65,7 +65,9 @@ public class ProfilesController {
 	@PutMapping
 	public ResponseEntity<?> updateProfile(@RequestBody String body) {
 		try {
-			Profiles profile = new ObjectMapper().readValue(body, Profiles.class);
+			ObjectMapper obj = new ObjectMapper();
+			obj.registerModule(new JavaTimeModule());
+			Profiles profile = obj.readValue(body, Profiles.class);
 			profilesService.updateProfile(profile);
 			return new ResponseEntity<>(profile, HttpStatus.CREATED);
 		} catch (Exception e) {

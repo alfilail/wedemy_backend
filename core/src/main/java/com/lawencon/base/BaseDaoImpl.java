@@ -56,9 +56,9 @@ public abstract class BaseDaoImpl<T extends Serializable> {
 		return em().find(clazz, id);
 	}
 
-	@SuppressWarnings("unchecked")
+//	@SuppressWarnings("unchecked")
 	protected List<T> getAll() {
-		return em().createQuery("FROM " + clazz.getName()).getResultList();
+		return em().createQuery("FROM " + clazz.getName(), clazz).getResultList();
 	}
 
 	/**
