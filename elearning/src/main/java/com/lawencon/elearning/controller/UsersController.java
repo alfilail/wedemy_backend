@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lawencon.elearning.helper.Register;
 import com.lawencon.elearning.model.Users;
 import com.lawencon.elearning.service.UsersService;
 
@@ -50,9 +51,9 @@ public class UsersController {
 	@PostMapping
 	public ResponseEntity<?> insertUser(@RequestBody String body) {
 		try {
-			Users user = new ObjectMapper().readValue(body, Users.class);
-			usersService.insertUser(user);
-			return new ResponseEntity<>(user, HttpStatus.CREATED);
+			Register register = new ObjectMapper().readValue(body, Register.class);
+			usersService.insertUser(register);
+			return new ResponseEntity<>(register, HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

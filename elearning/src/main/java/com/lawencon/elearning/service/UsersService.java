@@ -2,11 +2,12 @@ package com.lawencon.elearning.service;
 
 import java.util.List;
 
+import com.lawencon.elearning.helper.Register;
 import com.lawencon.elearning.model.Users;
 
 public interface UsersService {
 	
-	void insertUser(Users user) throws Exception;
+	void insertUser(Register register) throws Exception;
 
 	List<Users> getAllUsers() throws Exception;
 

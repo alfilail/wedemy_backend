@@ -8,19 +8,26 @@ import org.springframework.stereotype.Service;
 
 import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.elearning.dao.UsersDao;
+import com.lawencon.elearning.helper.Register;
 import com.lawencon.elearning.model.Users;
 
 @Service
 public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
-	
+
 	@Autowired
 	private UsersDao usersDao;
-	
+
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
-	
+
+	@Autowired
+	private ProfilesService profilesService;
+
 	@Override
-	public void insertUser(Users user) throws Exception {
+	public void insertUser(Register register) throws Exception {
+		profilesService.insertProfile(register.getProfile());
+		Users user = register.getUser();
+		user.setIdProfile(register.getProfile());
 		user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
 		usersDao.insertUser(user, () -> validateInsert(user));
 	}
@@ -49,7 +56,7 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 	public void deleteUserById(String id) throws Exception {
 		usersDao.deleteUserById(id);
 	}
-	
+
 	private void validateInsert(Users user) {
 
 	}
