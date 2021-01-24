@@ -30,7 +30,7 @@ public class AssignmentSubmissions extends BaseTransaction {
 	@Column(name = "file_type")
 	private String fileType;
 	
-	@Column(name = "score", length = 3, nullable = false)
+	@Column(name = "score", length = 3)
 	private Double score;
 	
 	@Column(name = "submit_datetime", nullable = false)
@@ -41,7 +41,7 @@ public class AssignmentSubmissions extends BaseTransaction {
 	private Users idParticipant;
 	
 	@ManyToOne
-	@JoinColumn(name = "id_grade", nullable = false)
+	@JoinColumn(name = "id_grade")
 	private Grades idGrade;
 	
 	@ManyToOne

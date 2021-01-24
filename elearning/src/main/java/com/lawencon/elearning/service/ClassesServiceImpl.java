@@ -11,6 +11,7 @@ import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.elearning.dao.ClassesDao;
 import com.lawencon.elearning.helper.ClassesHelper;
 import com.lawencon.elearning.model.Classes;
+import com.lawencon.elearning.model.DetailClasses;
 
 @Service
 public class ClassesServiceImpl extends BaseServiceImpl implements ClassesService {
@@ -20,15 +21,28 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 	
 	@Autowired
 	private ModuleRegistrationsService moduleRegistrationsService;
+	
+	@Autowired
+	private DetailClassesService detailClassesService;
 
 	@Override
 	public void insertClass(ClassesHelper clazzHelper, MultipartFile file) throws Exception {
-		Classes clazz = clazzHelper.getClazz();
-		clazz.setCreatedAt(LocalDateTime.now());
-		clazz.setThumbnailImg(file.getBytes());
-		clazz.setFileType(file.getContentType());
-		classesDao.insertClass(clazz, () -> validateInsert(clazz));
-		moduleRegistrationsService.insertModuleRegistration(clazzHelper);
+		if(clazzHelper.getClazz().getCode() != null) {
+			Classes clazz = clazzHelper.getClazz();
+			clazz.setCreatedAt(LocalDateTime.now());
+			clazz.setThumbnailImg(file.getBytes());
+			clazz.setFileType(file.getContentType());
+			classesDao.insertClass(clazz, () -> validateInsert(clazz));
+			DetailClasses detailClass = clazzHelper.getDetailClass();
+			detailClass.setIdClass(clazz);
+			clazzHelper.setDetailClass(detailClass);
+			detailClassesService.insertDetailClass(clazzHelper);
+			moduleRegistrationsService.insertModuleRegistration(clazzHelper);
+		}
+		else {
+			detailClassesService.insertDetailClass(clazzHelper);
+			moduleRegistrationsService.insertModuleRegistration(clazzHelper);
+		}
 	}
 
 	@Override

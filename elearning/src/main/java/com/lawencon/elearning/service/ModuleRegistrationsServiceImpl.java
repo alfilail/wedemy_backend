@@ -1,5 +1,7 @@
 package com.lawencon.elearning.service;
 
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +21,8 @@ public class ModuleRegistrationsServiceImpl extends BaseServiceImpl implements M
 		Modules[] modulesList =  clazzHelper.getModule();
 		for(Modules modules : modulesList) {
 			ModuleRegistrations moduleRegistrations = new ModuleRegistrations();
-			moduleRegistrations.setIdClass(clazzHelper.getClazz());
+			moduleRegistrations.setCreatedAt(LocalDateTime.now());
+			moduleRegistrations.setIdDetailClass(clazzHelper.getDetailClass());
 			moduleRegistrations.setIdModule(modules);
 			moduleRegistrationDao.insertModuleRegistration(moduleRegistrations, ()-> validateInsert(moduleRegistrations));
 		}
