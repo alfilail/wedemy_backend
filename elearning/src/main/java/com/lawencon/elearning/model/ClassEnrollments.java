@@ -23,8 +23,8 @@ public class ClassEnrollments extends BaseTransaction {
 	private static final long serialVersionUID = 7114555677950524878L;
 	
 	@ManyToOne
-	@JoinColumn(name = "id_class", nullable = false)
-	private Classes idClass;
+	@JoinColumn(name = "id_detail_class", nullable = false)
+	private DetailClasses idDetailClass;
 	
 	@ManyToOne
 	@JoinColumn(name = "id_user", nullable = false)
