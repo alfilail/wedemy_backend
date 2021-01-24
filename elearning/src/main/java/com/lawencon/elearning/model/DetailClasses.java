@@ -32,6 +32,9 @@ public class DetailClasses extends BaseMaster {
 	@OneToOne
 	@JoinColumn(name = "id_class", nullable = false)
 	private Classes idClass;
+	
+	@Column(name = "code", length = 20, unique = true, nullable = false)
+	private String code;
 
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	@Column(name = "start_date", nullable = false)

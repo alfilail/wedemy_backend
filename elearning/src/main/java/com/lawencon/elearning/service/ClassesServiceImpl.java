@@ -25,7 +25,7 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 	public void insertClass(ClassesHelper clazzHelper, MultipartFile file) throws Exception {
 		Classes clazz = clazzHelper.getClazz();
 		clazz.setCreatedAt(LocalDateTime.now());
-		clazz.setThubmnailImg(file.getBytes());
+		clazz.setThumbnailImg(file.getBytes());
 		clazz.setFileType(file.getContentType());
 		classesDao.insertClass(clazz, () -> validateInsert(clazz));
 		moduleRegistrationsService.insertModuleRegistration(clazzHelper);
@@ -48,7 +48,7 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 
 	@Override
 	public void updateClass(Classes clazz, MultipartFile file) throws Exception {
-		clazz.setThubmnailImg(file.getBytes());
+		clazz.setThumbnailImg(file.getBytes());
 		clazz.setFileType(file.getContentType());
 		classesDao.updateClass(clazz, () -> validateUpdate(clazz));
 	}

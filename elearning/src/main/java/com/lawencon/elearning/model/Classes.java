@@ -25,17 +25,14 @@ public class Classes extends BaseMaster {
 	@Column(name = "code", length = 6, nullable = false)
 	private String code;
 
-	@Column(name = "period_code", length = 20, unique = true, nullable = false)
-	private String periodCode;
-
 	@Column(name = "class_name", length = 30, nullable = false)
 	private String className;
 
 	@Column(name = "description", nullable = false, columnDefinition = "text")
 	private String description;
 
-	@Column(name = "thubmnail_img", nullable = false)
-	private byte[] thubmnailImg;
+	@Column(name = "thumbnail_img", nullable = false)
+	private byte[] thumbnailImg;
 
 	@Column(name = "file_type")
 	private String fileType;
