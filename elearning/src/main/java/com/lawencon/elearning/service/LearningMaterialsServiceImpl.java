@@ -42,9 +42,10 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 				.getByIdDetailClassAndIdModuleRegistration(helper.getModuleRegistrations().getIdDetailClass().getId(), 
 				helper.getModuleRegistrations().getIdModule().getId());
 		DetailModuleRegistrations dtlModRegist = new DetailModuleRegistrations();
+		dtlModRegist.setOrderNumber(helper.getDtlModuleRegistrations().getOrderNumber());
+		dtlModRegist.setScheduleDate(helper.getDtlModuleRegistrations().getScheduleDate());
 		dtlModRegist.setIdLearningMaterial(learnMaterial);
 		dtlModRegist.setIdModuleRegistration(modRegist);
-		dtlModRegist.setOrderNumber(1);
 		dtlModRegistService.insertDetailModuleRegistration(dtlModRegist);
 	}
 
