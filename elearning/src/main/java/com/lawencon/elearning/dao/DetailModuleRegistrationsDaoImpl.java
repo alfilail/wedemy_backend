@@ -7,8 +7,8 @@ import com.lawencon.elearning.model.ModuleRegistrations;
 import com.lawencon.util.Callback;
 
 @Repository
-public class DetailModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<DetailModuleRegistrations> implements DetailModuleRegistrationsDao {
-
+public class DetailModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<DetailModuleRegistrations>
+		implements DetailModuleRegistrationsDao {
 
 	@Override
 	public ModuleRegistrations getByIdClassAndIdModuleRegistration(String idClass, String idModRegist)
@@ -18,8 +18,14 @@ public class DetailModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<Detai
 	}
 
 	@Override
-	public void insertDetailModuleRegistration(DetailModuleRegistrations dtlModRegist, Callback before) throws Exception {
+	public void insertDetailModuleRegistration(DetailModuleRegistrations dtlModRegist, Callback before)
+			throws Exception {
 		save(dtlModRegist, before, null, true, true);
+	}
+
+	@Override
+	public DetailModuleRegistrations getDetailModuleRegistrationsById(String id) throws Exception {
+		return getById(id);
 	}
 
 }

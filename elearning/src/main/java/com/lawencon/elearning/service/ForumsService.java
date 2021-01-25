@@ -1,15 +1,14 @@
-package com.lawencon.elearning.dao;
+package com.lawencon.elearning.service;
 
 import java.util.List;
 
 import com.lawencon.elearning.model.Forums;
-import com.lawencon.util.Callback;
 
-public interface ForumsDao {
+public interface ForumsService {
 	
-	void insertForum(Forums forum, Callback before) throws Exception;
+	void insertForum(Forums forum) throws Exception;
 	
-	void updateContentForum(Forums forum, Callback before) throws Exception;
+	void updateContentForum(Forums forum) throws Exception;
 	
 	void deleteForumById(String id) throws Exception;
 	

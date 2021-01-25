@@ -53,7 +53,7 @@ public class ApprovementsServiceImpl extends BaseServiceImpl implements Approvem
 	}
 
 	private void validateInsert(Approvements approvement) throws Exception {
-
+		
 	}
 
 	private void validateUpdate(Approvements approvement) throws Exception {

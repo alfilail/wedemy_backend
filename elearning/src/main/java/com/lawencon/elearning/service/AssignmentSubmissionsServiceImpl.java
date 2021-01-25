@@ -56,6 +56,7 @@ public class AssignmentSubmissionsServiceImpl extends BaseServiceImpl implements
 		AssignmentSubmissions assignmentSubmission = 
 				assignmentSubmissionsDao.getAssignmentSubmissionById(assignmentSubmissions.getId());
 		assignmentSubmission.setScore(assignmentSubmissions.getScore());
+		assignmentSubmission.setIdGrade(assignmentSubmissions.getIdGrade());
 		assignmentSubmissionsDao.updateAssignmentSubmission(assignmentSubmission, ()->validateUpdate(assignmentSubmission));
 		System.out.println("Sending Email...");
 		sendEmailUpdateScore();

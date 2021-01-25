@@ -8,6 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.lawencon.model.BaseTransaction;
@@ -24,6 +25,7 @@ public class Forums extends BaseTransaction {
 	
 	private static final long serialVersionUID = 2066438852664914222L;
 	
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@Column(name = "forum_datetime")
 	private LocalDateTime forumDateTime;
 	
