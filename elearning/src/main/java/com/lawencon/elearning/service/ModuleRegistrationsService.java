@@ -7,6 +7,6 @@ public interface ModuleRegistrationsService {
 	
 	void insertModuleRegistration(ClassesHelper clazzHelper) throws Exception;
 	
-	ModuleRegistrations getByIdClassAndIdModuleRegistration(String idClass, String idModRegist) throws Exception;
+	ModuleRegistrations getByIdDetailClassAndIdModuleRegistration(String idDtlClass, String idModRegist) throws Exception;
 	
 }

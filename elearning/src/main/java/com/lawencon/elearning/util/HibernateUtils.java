@@ -2,6 +2,7 @@ package com.lawencon.elearning.util;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -76,7 +77,6 @@ public class HibernateUtils {
 						String mapping = columns[i];
 
 						invokeMethod(newClass, methodList, value, mapping.toLowerCase(), mapObject);
-
 					}
 				} else if (val instanceof Object) {
 					if (columns.length != 1)
@@ -116,17 +116,17 @@ public class HibernateUtils {
 
 				Parameter p = m.getParameters()[0];
 
-				if (mapping.startsWith(p.getName().toLowerCase())) {
+				if (mapping.equalsIgnoreCase(p.getName()) || mapping.contains(".") && mapping.startsWith(p.getName())) {
 
 					Class<?> classVariable = p.getType();
 
 					if (classVariable.getPackageName().equals(newClass.getClass().getPackageName())) {
 						Object objVariable = classVariable.getDeclaredConstructor().newInstance();
-						Object objMap = mapObject.get(objVariable.getClass().getName());
+						Object objMap = mapObject.get(p.getName());
 
 						if (objMap == null) {
-							mapObject.put(objVariable.getClass().getName(), objVariable);
-							objMap = mapObject.get(objVariable.getClass().getName());
+							mapObject.put(p.getName(), objVariable);
+							objMap = mapObject.get(p.getName());
 						}
 
 						Method[] methods = classVariable.getDeclaredMethods();
@@ -137,7 +137,7 @@ public class HibernateUtils {
 							for (Method method : methods) {
 								Class<?>[] param = method.getParameterTypes();
 								if (method.getName().equalsIgnoreCase("set" + mapSplit[1])) {
-									method.invoke(objMap, value != null ? param[0].cast(value) : null);
+									setValueToSetter(method, objMap, param[0], value);
 									break;
 								}
 							}
@@ -146,7 +146,7 @@ public class HibernateUtils {
 						}
 					} else {
 						Class<?>[] param = m.getParameterTypes();
-						m.invoke(newClass, value != null ? param[0].cast(value) : null);
+						setValueToSetter(m, newClass, param[0], value);
 					}
 
 					break;
@@ -154,5 +154,30 @@ public class HibernateUtils {
 			}
 		}
 	}
+
+	private static <T> void setValueToSetter(Method m, T newClass, Class<?> clazz, Object value) throws Exception {
+		if (value != null) {
+			if (clazz.equals(java.time.LocalDate.class) && value instanceof java.sql.Date) {
+				m.invoke(newClass, value != null ? ((java.sql.Date) value).toLocalDate() : null);
+			} else if (clazz.equals(java.time.LocalDateTime.class) && value instanceof java.sql.Timestamp) {
+				m.invoke(newClass, value != null ? ((java.sql.Timestamp) value).toLocalDateTime() : null);
+			} else if (clazz.equals(java.time.LocalTime.class) && value instanceof java.sql.Time) {
+				m.invoke(newClass, value != null ? ((java.sql.Time) value).toLocalTime() : null);
+			} else if (clazz.equals(java.util.Date.class) && value instanceof java.sql.Date) {
+				m.invoke(newClass, value != null ? new java.util.Date(((java.sql.Date) value).getTime()) : null);
+			} else if (clazz.equals(java.util.Date.class) && value instanceof java.sql.Timestamp) {
+				m.invoke(newClass, value != null ? new java.util.Date(((java.sql.Timestamp) value).getTime()) : null);
+			} else if (clazz.equals(BigDecimal.class)) {
+				m.invoke(newClass, value != null ? new BigDecimal(value.toString()) : null);
+			} else if (clazz.equals(Long.class)) {
+				m.invoke(newClass, value != null ? Long.valueOf(value.toString()) : null);
+			} else {
+				m.invoke(newClass, value != null ? value : null);
+			}
+		} else {
+			m.invoke(newClass, value != null ? value : null);
+		}
+	}
 }
+
 

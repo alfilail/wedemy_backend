@@ -7,5 +7,5 @@ public interface ModuleRegistrationsDao {
 	
 	void insertModuleRegistration(ModuleRegistrations moduleRegistration, Callback before) throws Exception;
 	
-	ModuleRegistrations getByIdClassAndIdModuleRegistration(String idClass, String idModRegist) throws Exception;
+	ModuleRegistrations getByIdDetailClassAndIdModuleRegistration(String idDtlClass, String idModRegist) throws Exception;
 }

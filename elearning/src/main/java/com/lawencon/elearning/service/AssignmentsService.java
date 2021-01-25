@@ -1,13 +1,14 @@
-package com.lawencon.elearning.dao;
+package com.lawencon.elearning.service;
 
 import java.util.List;
 
-import com.lawencon.elearning.model.Assignments;
-import com.lawencon.util.Callback;
+import org.springframework.web.multipart.MultipartFile;
 
-public interface AssignmentsDao {
+import com.lawencon.elearning.model.Assignments;
+
+public interface AssignmentsService {
 	
-	void insertAssignment(Assignments assignments, Callback before) throws Exception;
+	void insertAssignment(Assignments assignments, MultipartFile file) throws Exception;
 
 	List<Assignments> getAllAssignments() throws Exception;
 

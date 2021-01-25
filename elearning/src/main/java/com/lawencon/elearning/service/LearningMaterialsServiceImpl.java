@@ -38,11 +38,9 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 		learnMaterial.setFile(file.getBytes());
 		learnMaterial.setFileType(file.getContentType());
 		learningMaterialsDao.insertLearningMaterial(learnMaterial, () -> validateInsert(learnMaterial));
-		System.out.println("Id learn material : " + learnMaterial.getId());
 		ModuleRegistrations modRegist = moduleRegistrationsService
-				.getByIdClassAndIdModuleRegistration(helper.getModuleRegistrations().getIdDetailClass().getId(), 
+				.getByIdDetailClassAndIdModuleRegistration(helper.getModuleRegistrations().getIdDetailClass().getId(), 
 				helper.getModuleRegistrations().getIdModule().getId());
-		System.out.println("ini ni" + modRegist.getId());
 		DetailModuleRegistrations dtlModRegist = new DetailModuleRegistrations();
 		dtlModRegist.setIdLearningMaterial(learnMaterial);
 		dtlModRegist.setIdModuleRegistration(modRegist);

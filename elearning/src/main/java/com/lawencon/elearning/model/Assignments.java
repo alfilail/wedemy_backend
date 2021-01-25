@@ -8,6 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.lawencon.model.BaseTransaction;
@@ -32,18 +33,20 @@ public class Assignments extends BaseTransaction {
 	
 	@Column(name = "file_type")
 	private String fileType;
-
+	
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@Column(name = "start_datetime", nullable = false)
 	private LocalDateTime startDateTime;
 
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@Column(name = "end_datetime", nullable = false)
 	private LocalDateTime endDateTime;
 	
 	@ManyToOne
-	@JoinColumn(name = "id_dtl_module_rgs", nullable = false)
+	@JoinColumn(name = "id_dtl_module_rgs")
 	private DetailModuleRegistrations idDetailModuleRegistration;
 	
 	@ManyToOne
-	@JoinColumn(name = "id_assignment_type", nullable = false)
+	@JoinColumn(name = "id_assignment_type")
 	private AssignmentTypes idAssignmentType;
 }
