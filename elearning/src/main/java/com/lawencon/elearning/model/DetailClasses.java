@@ -1,6 +1,7 @@
 package com.lawencon.elearning.model;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,7 +33,7 @@ public class DetailClasses extends BaseMaster {
 	@OneToOne
 	@JoinColumn(name = "id_class", nullable = false)
 	private Classes idClass;
-	
+
 	@Column(name = "code", length = 20, unique = true, nullable = false)
 	private String code;
 
@@ -43,5 +44,11 @@ public class DetailClasses extends BaseMaster {
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	@Column(name = "end_date", nullable = false)
 	private LocalDate endDate;
+
+	@Column(name = "start_time", nullable = false)
+	private LocalTime startTime;
+
+	@Column(name = "end_time", nullable = false)
+	private LocalTime endTime;
 
 }

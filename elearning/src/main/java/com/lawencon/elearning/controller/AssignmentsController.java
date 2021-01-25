@@ -15,9 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.lawencon.elearning.helper.ClassesHelper;
 import com.lawencon.elearning.model.Assignments;
-import com.lawencon.elearning.model.Classes;
 import com.lawencon.elearning.service.AssignmentsService;
 
 @RestController

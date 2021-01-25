@@ -1,5 +1,7 @@
 package com.lawencon.elearning.model;
 
+import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -18,18 +20,21 @@ import lombok.EqualsAndHashCode;
 @Table(name = "t_r_detail_module_registrations")
 @EqualsAndHashCode(callSuper = false)
 @Data
-public class DetailModuleRegistrations extends BaseTransaction{
-	
+public class DetailModuleRegistrations extends BaseTransaction {
+
 	private static final long serialVersionUID = -8107533276767612098L;
 
 	@ManyToOne
 	@JoinColumn(name = "id_module_rgs", nullable = false)
 	private ModuleRegistrations idModuleRegistration;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "id_learning_material", nullable = false)
 	private LearningMaterials idLearningMaterial;
-	
+
 	@Column(name = "order_number", nullable = false)
 	private Integer orderNumber;
+
+	@Column(name = "schedule_date", nullable = false)
+	private LocalDate scheduleDate;
 }
