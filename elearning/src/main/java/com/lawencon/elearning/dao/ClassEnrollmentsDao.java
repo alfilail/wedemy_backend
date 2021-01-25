@@ -1,5 +1,20 @@
 package com.lawencon.elearning.dao;
 
-public interface ClassEnrollmentsDao {
+import java.util.List;
 
+import com.lawencon.elearning.model.ClassEnrollments;
+import com.lawencon.util.Callback;
+
+public interface ClassEnrollmentsDao {
+	void insertClassEndrollment(ClassEnrollments classEnrollment, Callback before) throws Exception;
+	
+	List<ClassEnrollments> getAllClassEnrollments() throws Exception;
+	
+	ClassEnrollments getClassEnrollmentById(String id) throws Exception;
+	
+	void updateClassEnrollment(ClassEnrollments classEnrollment, Callback before) throws Exception;
+	
+	void deleteclassEnrollmentById(String id) throws Exception;
+	
+	ClassEnrollments getclassEnrollmentByCode(String code) throws Exception;
 }

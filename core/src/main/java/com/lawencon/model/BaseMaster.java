@@ -1,5 +1,7 @@
 package com.lawencon.model;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
@@ -9,6 +11,12 @@ public abstract class BaseMaster extends BaseEntity {
 
 	@Column(name = "is_active")
 	private Boolean isActive = true;
+	
+	@Column(name = "updated_by")
+	private String updatedBy;
+
+	@Column(name = "updated_at")
+	private LocalDateTime updatedAt;
 
 	public Boolean getIsActive() {
 		return isActive;
@@ -16,5 +24,21 @@ public abstract class BaseMaster extends BaseEntity {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
+	}
+	
+	public String getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(String updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(LocalDateTime updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 }

@@ -1,12 +1,14 @@
 package com.lawencon.elearning.service;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.elearning.dao.PresencesDao;
 import com.lawencon.elearning.model.Approvements;
 import com.lawencon.elearning.model.Presences;
@@ -16,7 +18,7 @@ import com.lawencon.elearning.model.Presences;
  */
 
 @Service
-public class PresencesServiceImpl extends BaseServiceImpl implements PresencesService {
+public class PresencesServiceImpl extends ElearningBaseServiceImpl implements PresencesService {
 
 	@Autowired
 	private PresencesDao presencesDao;
@@ -28,6 +30,7 @@ public class PresencesServiceImpl extends BaseServiceImpl implements PresencesSe
 	public void insertPresence(Presences presence) throws Exception {
 		Approvements approvement = approvementsService.getApprovementByCode(presence.getIdApprovement().getCode());
 		presence.setIdApprovement(approvement);
+		presence.setTrxNumber(generateTrxNumber());
 		presence.setPresenceTime(LocalTime.now());
 		presencesDao.insertPresence(presence, () -> validateInsert(presence));
 	}
@@ -65,6 +68,18 @@ public class PresencesServiceImpl extends BaseServiceImpl implements PresencesSe
 
 	private void validateUpdate(Presences presence) throws Exception {
 
+	}
+	
+	private String generateTrxNumber() {
+		Random random = new Random();
+		LocalDate localDate = LocalDate.now();
+		DateTimeFormatter myFormat = DateTimeFormatter.ofPattern("yy-MM-dd");
+		String formattedDate = localDate.format(myFormat);
+		String trxCodeValue = String.valueOf(random.nextInt((999 + 1 - 100) + 100));
+		String trx = bBuilder(formattedDate).toString();
+		trx = trx.replaceAll("-", "");
+		String trxNumber= bBuilder("ASB-", trx, "-",trxCodeValue).toString();
+		return trxNumber;
 	}
 
 }

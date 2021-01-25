@@ -44,10 +44,12 @@ public class DetailClasses extends BaseMaster {
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	@Column(name = "end_date", nullable = false)
 	private LocalDate endDate;
-
+	
+	@JsonFormat(pattern = "HH:mm")
 	@Column(name = "start_time", nullable = false)
 	private LocalTime startTime;
-
+	
+	@JsonFormat(pattern = "HH:mm")
 	@Column(name = "end_time", nullable = false)
 	private LocalTime endTime;
 

@@ -1,7 +1,10 @@
 package com.lawencon.elearning.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -9,12 +12,11 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.elearning.dao.AssignmentSubmissionsDao;
 import com.lawencon.elearning.model.AssignmentSubmissions;
 
 @Service
-public class AssignmentSubmissionsServiceImpl extends BaseServiceImpl implements AssignmentSubmissionsService{	
+public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl implements AssignmentSubmissionsService{	
 	@Autowired
 	JavaMailSender javaMailSender;
 
@@ -57,6 +59,7 @@ public class AssignmentSubmissionsServiceImpl extends BaseServiceImpl implements
 				assignmentSubmissionsDao.getAssignmentSubmissionById(assignmentSubmissions.getId());
 		assignmentSubmission.setScore(assignmentSubmissions.getScore());
 		assignmentSubmission.setIdGrade(assignmentSubmissions.getIdGrade());
+		assignmentSubmission.setTrxNumber(generateTrxNumber());
 		assignmentSubmissionsDao.updateAssignmentSubmission(assignmentSubmission, ()->validateUpdate(assignmentSubmission));
 		System.out.println("Sending Email...");
 		sendEmailUpdateScore();
@@ -100,6 +103,18 @@ public class AssignmentSubmissionsServiceImpl extends BaseServiceImpl implements
 
 	private void validateUpdate(AssignmentSubmissions assignmentSubmissions) {
 
+	}
+	
+	private String generateTrxNumber() {
+		Random random = new Random();
+		LocalDate localDate = LocalDate.now();
+		DateTimeFormatter myFormat = DateTimeFormatter.ofPattern("yy-MM-dd");
+		String formattedDate = localDate.format(myFormat);
+		String trxCodeValue = String.valueOf(random.nextInt((999 + 1 - 100) + 100));
+		String trx = bBuilder(formattedDate).toString();
+		trx = trx.replaceAll("-", "");
+		String trxNumber= bBuilder("ASB-", trx, "-",trxCodeValue).toString();
+		return trxNumber;
 	}
 
 }
