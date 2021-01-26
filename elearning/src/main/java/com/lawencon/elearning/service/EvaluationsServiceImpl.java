@@ -12,6 +12,8 @@ import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.elearning.dao.EvaluationsDao;
 import com.lawencon.elearning.model.Evaluations;
 import com.lawencon.elearning.model.Grades;
+import com.lawencon.elearning.model.SubmissionStatus;
+import com.lawencon.elearning.model.SubmissionStatusRenewal;
 
 /**
  * @author Nur Alfilail
@@ -29,12 +31,19 @@ public class EvaluationsServiceImpl extends BaseServiceImpl implements Evaluatio
 	@Autowired
 	private GradesService gradesService;
 
+	@Autowired
+	private SubmissionStatusRenewalsService statusRenewalService;
+
+	@Autowired
+	private SubmissionStatusService statusService;
+
 	@Override
 	public void insertEvaluation(Evaluations evaluation) throws Exception {
 		Grades grade = gradesService.getGradeByScore(evaluation.getScore());
 		evaluation.setIdGrade(grade);
 		evaluation.setCreatedAt(LocalDateTime.now());
 		evaluationsDao.insertEvaluation(evaluation, () -> validateInsert(evaluation));
+		insertStatusRenewal(evaluation);
 		System.out.println("Sending Email...");
 		sendEmail(evaluation);
 		System.out.println("Done");
@@ -53,6 +62,14 @@ public class EvaluationsServiceImpl extends BaseServiceImpl implements Evaluatio
 	@Override
 	public Evaluations getEvaluationByCode(String code) throws Exception {
 		return evaluationsDao.getEvaluationByCode(code);
+	}
+
+	private void insertStatusRenewal(Evaluations evaluation) throws Exception {
+		SubmissionStatus submissionStatus = statusService.getSubmissionStatusByCode("SNT");
+		SubmissionStatusRenewal statusRenewal = new SubmissionStatusRenewal();
+		statusRenewal.setIdAssignmentSubmission(evaluation.getIdAssignmentSubmission());
+		statusRenewal.setIdSubmissionStatus(submissionStatus);
+		statusRenewalService.insertSubmissionStatusRenewal(statusRenewal);
 	}
 
 	private void validateInsert(Evaluations evaluation) throws Exception {
