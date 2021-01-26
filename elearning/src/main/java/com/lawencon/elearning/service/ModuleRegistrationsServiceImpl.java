@@ -15,19 +15,20 @@ import com.lawencon.elearning.model.Modules;
 public class ModuleRegistrationsServiceImpl extends BaseServiceImpl implements ModuleRegistrationsService {
 	@Autowired
 	private ModuleRegistrationsDao moduleRegistrationDao;
-	
+
 	@Override
 	public void insertModuleRegistration(ClassesHelper clazzHelper) throws Exception {
-		Modules[] modulesList =  clazzHelper.getModule();
-		for(Modules modules : modulesList) {
+		Modules[] modulesList = clazzHelper.getModule();
+		for (Modules modules : modulesList) {
 			ModuleRegistrations moduleRegistrations = new ModuleRegistrations();
 			moduleRegistrations.setCreatedAt(LocalDateTime.now());
 			moduleRegistrations.setIdDetailClass(clazzHelper.getDetailClass());
 			moduleRegistrations.setIdModule(modules);
-			moduleRegistrationDao.insertModuleRegistration(moduleRegistrations, ()-> validateInsert(moduleRegistrations));
+			moduleRegistrationDao.insertModuleRegistration(moduleRegistrations,
+					() -> validateInsert(moduleRegistrations));
 		}
 	}
-	
+
 	private void validateInsert(ModuleRegistrations moduleRegistration) {
 
 	}

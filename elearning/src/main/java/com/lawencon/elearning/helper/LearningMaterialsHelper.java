@@ -7,10 +7,10 @@ import com.lawencon.elearning.model.ModuleRegistrations;
 import lombok.Data;
 
 @Data
-public class LearningMaterialHelper {
+public class LearningMaterialsHelper {
 
-	private LearningMaterials learningMaterials;
-	private ModuleRegistrations moduleRegistrations;
-	private DetailModuleRegistrations dtlModuleRegistrations;
+	private LearningMaterials learningMaterial;
+	private ModuleRegistrations moduleRegistration;
+	private DetailModuleRegistrations dtlModuleRegistration;
 
 }

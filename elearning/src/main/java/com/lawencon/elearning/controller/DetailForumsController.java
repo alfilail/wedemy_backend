@@ -21,7 +21,7 @@ import com.lawencon.elearning.service.DetailForumsService;
 
 @RestController
 @RequestMapping("detail-forum")
-public class DetailForumController {
+public class DetailForumsController {
 	@Autowired
 	private DetailForumsService detailForumService;
 	

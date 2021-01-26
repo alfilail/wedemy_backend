@@ -18,31 +18,27 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 
 	@Autowired
 	private ClassesDao classesDao;
-	
+
 	@Autowired
 	private ModuleRegistrationsService moduleRegistrationsService;
-	
+
 	@Autowired
 	private DetailClassesService detailClassesService;
 
 	@Override
-	public void insertClass(ClassesHelper clazzHelper, MultipartFile file) throws Exception {
-		if(clazzHelper.getClazz().getCode() != null) {
-			Classes clazz = clazzHelper.getClazz();
+	public void insertClass(ClassesHelper helper, MultipartFile file) throws Exception {
+		if (helper.getClazz().getCode() != null) {
+			Classes clazz = helper.getClazz();
 			clazz.setCreatedAt(LocalDateTime.now());
 			clazz.setThumbnailImg(file.getBytes());
 			clazz.setFileType(file.getContentType());
 			classesDao.insertClass(clazz, () -> validateInsert(clazz));
-			DetailClasses detailClass = clazzHelper.getDetailClass();
+			DetailClasses detailClass = helper.getDetailClass();
 			detailClass.setIdClass(clazz);
-			clazzHelper.setDetailClass(detailClass);
-			detailClassesService.insertDetailClass(clazzHelper);
-			moduleRegistrationsService.insertModuleRegistration(clazzHelper);
+			helper.setDetailClass(detailClass);
 		}
-		else {
-			detailClassesService.insertDetailClass(clazzHelper);
-			moduleRegistrationsService.insertModuleRegistration(clazzHelper);
-		}
+		detailClassesService.insertDetailClass(helper);
+		moduleRegistrationsService.insertModuleRegistration(helper);
 	}
 
 	@Override

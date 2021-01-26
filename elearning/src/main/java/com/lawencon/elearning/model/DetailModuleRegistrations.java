@@ -35,7 +35,7 @@ public class DetailModuleRegistrations extends BaseTransaction {
 
 	@Column(name = "order_number", nullable = false)
 	private Integer orderNumber;
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	@Column(name = "schedule_date", nullable = false)
 	private LocalDate scheduleDate;

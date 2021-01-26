@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.elearning.dao.UsersDao;
-import com.lawencon.elearning.helper.Register;
+import com.lawencon.elearning.helper.RegisterHelper;
 import com.lawencon.elearning.model.Users;
 
 @Service
@@ -24,7 +24,7 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 	private ProfilesService profilesService;
 
 	@Override
-	public void insertUser(Register register) throws Exception {
+	public void insertUser(RegisterHelper register) throws Exception {
 		profilesService.insertProfile(register.getProfile());
 		Users user = register.getUser();
 		user.setIdProfile(register.getProfile());

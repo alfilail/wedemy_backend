@@ -2,19 +2,19 @@ package com.lawencon.elearning.dao;
 
 import java.util.List;
 
-import com.lawencon.elearning.model.AssignmentTypes;
+import com.lawencon.elearning.model.LearningMaterialTypes;
 import com.lawencon.util.Callback;
 
 public interface AssignmentTypesDao {
-	void insertAssignmentType(AssignmentTypes assignmentType, Callback before) throws Exception;
+	void insertAssignmentType(LearningMaterialTypes assignmentType, Callback before) throws Exception;
 	
-	List<AssignmentTypes> getAllAssignmentTypes() throws Exception;
+	List<LearningMaterialTypes> getAllAssignmentTypes() throws Exception;
 	
-	AssignmentTypes getAssignmentTypesById(String id) throws Exception;
+	LearningMaterialTypes getAssignmentTypesById(String id) throws Exception;
 	
-	void updateAssignmentType(AssignmentTypes assignmentType, Callback before) throws Exception;
+	void updateAssignmentType(LearningMaterialTypes assignmentType, Callback before) throws Exception;
 	
 	void deleteAssignmentTypeById(String id) throws Exception;
 	
-	AssignmentTypes getAssignmentTypeByCode(String code) throws Exception;
+	LearningMaterialTypes getAssignmentTypeByCode(String code) throws Exception;
 }

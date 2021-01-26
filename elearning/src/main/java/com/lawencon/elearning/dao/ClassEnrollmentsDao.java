@@ -6,7 +6,7 @@ import com.lawencon.elearning.model.ClassEnrollments;
 import com.lawencon.util.Callback;
 
 public interface ClassEnrollmentsDao {
-	void insertClassEndrollment(ClassEnrollments classEnrollment, Callback before) throws Exception;
+	void insertClassEnrollment(ClassEnrollments classEnrollment, Callback before) throws Exception;
 	
 	List<ClassEnrollments> getAllClassEnrollments() throws Exception;
 	

@@ -1,11 +1,10 @@
 package com.lawencon.elearning.model;
 
-import java.time.LocalDateTime;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -15,26 +14,27 @@ import com.lawencon.model.BaseTransaction;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * @author Nur Alfilail
+ */
+
 @Entity
 @JsonInclude(Include.NON_NULL)
-@Table(name = "t_r_dtl_forums")
+@Table(name = "t_r_evaluations")
 @EqualsAndHashCode(callSuper = false)
 @Data
-public class DetailForums extends BaseTransaction {
+public class Evaluations extends BaseTransaction {
+	private static final long serialVersionUID = -6413847636799608477L;
 
-	private static final long serialVersionUID = 2293791171060517367L;
+	@OneToOne
+	@JoinColumn(name = "id_assignment_submission")
+	private AssignmentSubmissions idAssignmentSubmission;
 
-	@Column(name = "dtl_forum_datetime")
-	private LocalDateTime dtlForumDateTime;
-
-	@Column(name = "content_text", columnDefinition = "text")
-	private String contentText;
-
-	@ManyToOne
-	@JoinColumn(name = "id_user", nullable = false)
-	private Users idUser;
+	@Column(name = "score")
+	private Double score;
 
 	@ManyToOne
-	@JoinColumn(name = "id_forum", nullable = false)
-	private Forums idForum;
+	@JoinColumn(name = "id_grade")
+	private Grades idGrade;
+
 }

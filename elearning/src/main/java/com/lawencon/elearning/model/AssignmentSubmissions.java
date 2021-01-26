@@ -21,35 +21,24 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 @Data
 public class AssignmentSubmissions extends BaseTransaction {
-	
+
 	private static final long serialVersionUID = -4540610639400514155L;
 
 	@Column(name = "file", nullable = false)
 	private byte[] file;
-	
+
 	@Column(name = "file_type")
 	private String fileType;
-	
-	@Column(name = "score", length = 3)
-	private Double score;
-	
+
 	@Column(name = "submit_datetime", nullable = false)
 	private LocalDateTime submitDateTime;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "id_participant", nullable = false)
 	private Users idParticipant;
-	
+
 	@ManyToOne
-	@JoinColumn(name = "id_grade")
-	private Grades idGrade;
-	
-	@ManyToOne
-	@JoinColumn(name = "id_submission_status", nullable = false)
-	private SubmissionStatus idSubmissionStatus;
-	
-	@ManyToOne
-	@JoinColumn(name = "id_assignments", nullable = false)
-	private Assignments idAssignments;
-	
+	@JoinColumn(name = "id_dtl_module_rgs")
+	private DetailModuleRegistrations idDetailModuleRegistration;
+
 }

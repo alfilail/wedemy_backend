@@ -10,7 +10,7 @@ import lombok.Data;
  */
 
 @Data
-public class Register {
+public class RegisterHelper {
 
 	private Users user;
 	private Profiles profile;

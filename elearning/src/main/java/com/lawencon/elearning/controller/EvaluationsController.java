@@ -11,56 +11,55 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.lawencon.elearning.model.Assignments;
-import com.lawencon.elearning.service.AssignmentsService;
+import com.lawencon.elearning.model.Evaluations;
+import com.lawencon.elearning.service.EvaluationsService;
+
+/**
+ * @author Nur Alfilail
+ */
 
 @RestController
-@RequestMapping("assignment")
-public class AssignmentsController {
-	
+@RequestMapping("evaluation")
+public class EvaluationsController {
+
 	@Autowired
-	AssignmentsService assignmentsService;
-	
+	private EvaluationsService evaluationsService;
+
 	@GetMapping("all")
-	public ResponseEntity<?> getAllAssignments() {
+	public ResponseEntity<?> getAllEvaluations() {
 		try {
-			List<Assignments> assignment = assignmentsService.getAllAssignments();
-			return new ResponseEntity<>(assignment, HttpStatus.OK);
+			List<Evaluations> evaluations = evaluationsService.getAllEvaluations();
+			return new ResponseEntity<>(evaluations, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	@GetMapping("{id}")
-	public ResponseEntity<?> getAssignmentById(@PathVariable("id") String id) {
+	public ResponseEntity<?> getEvaluationById(@PathVariable("id") String id) {
 		try {
-			Assignments assignment = assignmentsService.getAssignmentsById(id);
-			return new ResponseEntity<>(assignment, HttpStatus.OK);
+			Evaluations evaluation = evaluationsService.getEvaluationById(id);
+			return new ResponseEntity<>(evaluation, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	@PostMapping
-	public ResponseEntity<?> insertAssignments(@RequestPart String body, 
-			@RequestPart("file") MultipartFile file) {
+	public ResponseEntity<?> insertEvaluation(@RequestPart String body) {
 		try {
 			ObjectMapper obj = new ObjectMapper();
-			obj.registerModule(new JavaTimeModule());
-			Assignments assignment = obj.readValue(body, Assignments.class);
-			assignmentsService.insertAssignment(assignment, file);
-			return new ResponseEntity<>(assignment, HttpStatus.CREATED);
+			Evaluations evaluation = obj.readValue(body, Evaluations.class);
+			evaluationsService.insertEvaluation(evaluation);
+			return new ResponseEntity<>(evaluation, HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
 
 }

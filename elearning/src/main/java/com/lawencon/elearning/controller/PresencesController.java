@@ -25,7 +25,7 @@ import com.lawencon.elearning.service.PresencesService;
  */
 
 @RestController
-@RequestMapping("presences")
+@RequestMapping("presence")
 public class PresencesController {
 
 	@Autowired

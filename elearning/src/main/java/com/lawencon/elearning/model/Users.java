@@ -19,7 +19,7 @@ import lombok.EqualsAndHashCode;
 @Table(name = "t_m_users")
 @EqualsAndHashCode(callSuper = false)
 @Data
-public class Users extends BaseMaster{
+public class Users extends BaseMaster {
 
 	private static final long serialVersionUID = -2476328339109602669L;
 
@@ -28,12 +28,12 @@ public class Users extends BaseMaster{
 
 	@Column(name = "user_password", length = 100, nullable = false)
 	private String userPassword;
-	
+
 	@OneToOne
-	@JoinColumn(name = "id_profile",  nullable = false)
+	@JoinColumn(name = "id_profile", nullable = false)
 	private Profiles idProfile;
-	
+
 	@ManyToOne
-	@JoinColumn(name = "id_role",  nullable = false)
+	@JoinColumn(name = "id_role", nullable = false)
 	private Roles idRole;
 }

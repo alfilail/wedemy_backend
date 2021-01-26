@@ -19,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.lawencon.elearning.helper.LearningMaterialHelper;
+import com.lawencon.elearning.helper.LearningMaterialsHelper;
 import com.lawencon.elearning.model.LearningMaterials;
 import com.lawencon.elearning.service.LearningMaterialsService;
 
@@ -28,7 +28,7 @@ import com.lawencon.elearning.service.LearningMaterialsService;
  */
 
 @RestController
-@RequestMapping("learning-materials")
+@RequestMapping("learning-material")
 public class LearningMaterialsController {
 
 	@Autowired
@@ -40,7 +40,7 @@ public class LearningMaterialsController {
 		try {
 			ObjectMapper obj = new ObjectMapper();
 			obj.registerModule(new JavaTimeModule());
-			LearningMaterialHelper helper = obj.readValue(body, LearningMaterialHelper.class);
+			LearningMaterialsHelper helper = obj.readValue(body, LearningMaterialsHelper.class);
 			learningMaterialsService.insertLearningMaterial(helper, file);
 			return new ResponseEntity<>(helper, HttpStatus.CREATED);
 		} catch (Exception e) {

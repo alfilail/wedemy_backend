@@ -14,6 +14,8 @@ public interface AssignmentSubmissionsDao {
 	
 	AssignmentSubmissions getAssignmentSubmissionByCode(String code) throws Exception;
 	
+	String getTutorEmail(AssignmentSubmissions assignmentSubmission) throws Exception;
+	
 	void updateAssignmentSubmission(AssignmentSubmissions assignmentSubmission, Callback before) throws Exception;
 	
 	void deleteAssignmentSubmissionById(String id) throws Exception;

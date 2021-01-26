@@ -25,7 +25,7 @@ import com.lawencon.elearning.service.ApprovementsService;
  */
 
 @RestController
-@RequestMapping("approvements")
+@RequestMapping("approvement")
 public class ApprovementsController {
 
 	@Autowired

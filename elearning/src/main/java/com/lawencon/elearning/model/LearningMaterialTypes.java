@@ -13,16 +13,16 @@ import lombok.EqualsAndHashCode;
 
 @Entity
 @JsonInclude(Include.NON_NULL)
-@Table(name = "t_m_assignment_type")
+@Table(name = "t_m_learning_material_types")
 @EqualsAndHashCode(callSuper = false)
 @Data
-public class AssignmentTypes extends BaseMaster {
-	
+public class LearningMaterialTypes extends BaseMaster {
+
 	private static final long serialVersionUID = 7963551211706180316L;
 
 	@Column(name = "code", length = 6, unique = true, nullable = false)
 	private String code;
 
-	@Column(name = "assignment_type_name", length = 35, nullable = false)
-	private String assignmentTypeName;
+	@Column(name = "learning_material_type_name", length = 35, nullable = false)
+	private String learningMaterialTypeName;
 }

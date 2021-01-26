@@ -18,21 +18,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lawencon.elearning.model.AssignmentTypes;
-import com.lawencon.elearning.service.AssignmentTypesService;
+import com.lawencon.elearning.model.LearningMaterialTypes;
+import com.lawencon.elearning.service.LearningMaterialTypesService;
 
 @RestController
-@RequestMapping("assignment-types")
-public class AssignmentTypesController {
+@RequestMapping("learning-material-type")
+public class LearningMaterialTypesController {
 	@Autowired
-	private AssignmentTypesService assignmentTypesService;
+	private LearningMaterialTypesService lmTypesService;
 
 	@PostMapping
-	public ResponseEntity<?> insertAssignmentType(@RequestBody String body) {
+	public ResponseEntity<?> insertLearningMaterialType(@RequestBody String body) {
 		try {
-			AssignmentTypes assignmentType = new ObjectMapper().readValue(body, AssignmentTypes.class);
-			assignmentTypesService.insertAssignmentType(assignmentType);
-			return new ResponseEntity<>(assignmentType, HttpStatus.CREATED);
+			LearningMaterialTypes lmType = new ObjectMapper().readValue(body, LearningMaterialTypes.class);
+			lmTypesService.insertLearningMaterialType(lmType);
+			return new ResponseEntity<>(lmType, HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -40,11 +40,11 @@ public class AssignmentTypesController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<?> getAssignmentTypeById(@PathVariable("id") String id) {
-		AssignmentTypes assignmentType = new AssignmentTypes();
+	public ResponseEntity<?> getLearningMaterialTypeById(@PathVariable("id") String id) {
+		LearningMaterialTypes lmType = new LearningMaterialTypes();
 		try {
-			assignmentType = assignmentTypesService.getAssignmentTypeById(id);
-			return new ResponseEntity<>(assignmentType, HttpStatus.OK);
+			lmType = lmTypesService.getLearningMaterialTypeById(id);
+			return new ResponseEntity<>(lmType, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -52,11 +52,11 @@ public class AssignmentTypesController {
 	}
 
 	@GetMapping("/all")
-	public ResponseEntity<?> getAllAsignmentTypes() {
-		List<AssignmentTypes> assignmentTypesList = new ArrayList<AssignmentTypes>();
+	public ResponseEntity<?> getAllLearningMaterialTypes() {
+		List<LearningMaterialTypes> lmTypesList = new ArrayList<LearningMaterialTypes>();
 		try {
-			assignmentTypesList = assignmentTypesService.getAllAssignmentTypes();
-			return new ResponseEntity<>(assignmentTypesList, HttpStatus.OK);
+			lmTypesList = lmTypesService.getAllLearningMaterialTypes();
+			return new ResponseEntity<>(lmTypesList, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -64,9 +64,9 @@ public class AssignmentTypesController {
 	}
 
 	@DeleteMapping("{id}")
-	public ResponseEntity<?> deleteAssignmentTypeById(@PathVariable("id") String id) {
+	public ResponseEntity<?> deleteLearningMaterialTypeById(@PathVariable("id") String id) {
 		try {
-			assignmentTypesService.deleteAssignmentTypeById(id);
+			lmTypesService.deleteLearningMaterialTypeById(id);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();
@@ -78,11 +78,11 @@ public class AssignmentTypesController {
 	}
 
 	@PutMapping
-	public ResponseEntity<?> updateAssignmentType(@RequestBody String body) {
+	public ResponseEntity<?> updateLearningMaterialType(@RequestBody String body) {
 		try {
-			AssignmentTypes assignmentType = new ObjectMapper().readValue(body, AssignmentTypes.class);
-			assignmentTypesService.updateAssignmentType(assignmentType);
-			return new ResponseEntity<>(assignmentType, HttpStatus.OK);
+			LearningMaterialTypes lmType = new ObjectMapper().readValue(body, LearningMaterialTypes.class);
+			lmTypesService.updateLearningMaterialType(lmType);
+			return new ResponseEntity<>(lmType, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

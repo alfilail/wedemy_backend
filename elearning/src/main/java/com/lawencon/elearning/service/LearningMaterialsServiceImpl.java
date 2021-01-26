@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.elearning.dao.LearningMaterialsDao;
-import com.lawencon.elearning.helper.LearningMaterialHelper;
+import com.lawencon.elearning.helper.LearningMaterialsHelper;
 import com.lawencon.elearning.model.DetailModuleRegistrations;
 import com.lawencon.elearning.model.LearningMaterials;
 import com.lawencon.elearning.model.ModuleRegistrations;
@@ -19,34 +19,25 @@ import com.lawencon.elearning.model.ModuleRegistrations;
  */
 
 @Service
-public class LearningMaterialsServiceImpl extends BaseServiceImpl implements LearningMaterialsService {		
-	
+public class LearningMaterialsServiceImpl extends BaseServiceImpl implements LearningMaterialsService {
+
 	@Autowired
 	private LearningMaterialsDao learningMaterialsDao;
-	
+
 	@Autowired
 	private ModuleRegistrationsService moduleRegistrationsService;
-	
+
 	@Autowired
 	private DetailModuleRegistrationsService dtlModRegistService;
 
 	@Override
-	public void insertLearningMaterial(LearningMaterialHelper helper, 
-			MultipartFile file) throws Exception {
-		LearningMaterials learnMaterial = helper.getLearningMaterials();
-		learnMaterial.setCreatedAt(LocalDateTime.now());
-		learnMaterial.setFile(file.getBytes());
-		learnMaterial.setFileType(file.getContentType());
-		learningMaterialsDao.insertLearningMaterial(learnMaterial, () -> validateInsert(learnMaterial));
-		ModuleRegistrations modRegist = moduleRegistrationsService
-				.getByIdDetailClassAndIdModuleRegistration(helper.getModuleRegistrations().getIdDetailClass().getId(), 
-				helper.getModuleRegistrations().getIdModule().getId());
-		DetailModuleRegistrations dtlModRegist = new DetailModuleRegistrations();
-		dtlModRegist.setOrderNumber(helper.getDtlModuleRegistrations().getOrderNumber());
-		dtlModRegist.setScheduleDate(helper.getDtlModuleRegistrations().getScheduleDate());
-		dtlModRegist.setIdLearningMaterial(learnMaterial);
-		dtlModRegist.setIdModuleRegistration(modRegist);
-		dtlModRegistService.insertDetailModuleRegistration(dtlModRegist);
+	public void insertLearningMaterial(LearningMaterialsHelper helper, MultipartFile file) throws Exception {
+		helper.getLearningMaterial().setCreatedAt(LocalDateTime.now());
+		helper.getLearningMaterial().setFile(file.getBytes());
+		helper.getLearningMaterial().setFileType(file.getContentType());
+		learningMaterialsDao.insertLearningMaterial(helper.getLearningMaterial(),
+				() -> validateInsert(helper.getLearningMaterial()));
+		insertDetailModulRegistration(helper);
 	}
 
 	@Override
@@ -75,6 +66,16 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 	@Override
 	public LearningMaterials getLearningMaterialByCode(String code) throws Exception {
 		return learningMaterialsDao.getLearningMaterialByCode(code);
+	}
+
+	private void insertDetailModulRegistration(LearningMaterialsHelper helper) throws Exception {
+		ModuleRegistrations modRegist = moduleRegistrationsService.getByIdDetailClassAndIdModuleRegistration(
+				helper.getModuleRegistration().getIdDetailClass().getId(),
+				helper.getModuleRegistration().getIdModule().getId());
+		DetailModuleRegistrations dtlModRegist = new DetailModuleRegistrations();
+		dtlModRegist.setIdLearningMaterial(helper.getLearningMaterial());
+		dtlModRegist.setIdModuleRegistration(modRegist);
+		dtlModRegistService.insertDetailModuleRegistration(dtlModRegist);
 	}
 
 	private void validateInsert(LearningMaterials learningMaterial) throws Exception {

@@ -15,7 +15,5 @@ public interface AssignmentSubmissionsService {
 
 	AssignmentSubmissions getAssignmentSubmissionsByCode(String code) throws Exception;
 
-	void updateScore(AssignmentSubmissions assignmentSubmissions) throws Exception;
-
 	void deleteAssignmentSubmissionsById(String id) throws Exception;
 }

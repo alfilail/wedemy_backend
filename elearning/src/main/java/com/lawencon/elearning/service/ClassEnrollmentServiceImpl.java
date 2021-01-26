@@ -21,7 +21,7 @@ public class ClassEnrollmentServiceImpl extends ElearningBaseServiceImpl impleme
 	public void insertClassEnrollment(ClassEnrollments classEnrollment) throws Exception {
 		classEnrollment.setCreatedAt(LocalDateTime.now());
 		classEnrollment.setTrxNumber(generateTrxNumber());
-		classEnrollmentDao.insertClassEndrollment(classEnrollment, ()-> validateInsert(classEnrollment));
+		classEnrollmentDao.insertClassEnrollment(classEnrollment, ()-> validateInsert(classEnrollment));
 	}
 	
 	@Override

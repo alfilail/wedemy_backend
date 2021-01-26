@@ -14,18 +14,18 @@ import lombok.EqualsAndHashCode;
 @Entity
 @JsonInclude(Include.NON_NULL)
 @Table(name = "t_m_grades")
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 @Data
 public class Grades extends BaseMaster {
-	
+
 	private static final long serialVersionUID = 3275657850694097723L;
 
 	@Column(name = "code", length = 6, unique = true, nullable = false)
 	private String code;
 
-	@Column(name = "min_score", length = 3, nullable = false)
+	@Column(name = "min_score", nullable = false)
 	private Integer minScore;
-	
-	@Column(name = "max_score", length = 3, nullable = false)
+
+	@Column(name = "max_score", nullable = false)
 	private Integer maxScore;
 }

@@ -10,7 +10,7 @@ import com.lawencon.util.Callback;
 @Repository
 public class ClassEnrollmentsDaoImpl extends ElearningBaseDaoImpl<ClassEnrollments> implements ClassEnrollmentsDao {
 	@Override
-	public void insertClassEndrollment(ClassEnrollments classEnrollment, Callback before) throws Exception {
+	public void insertClassEnrollment(ClassEnrollments classEnrollment, Callback before) throws Exception {
 		save(classEnrollment, before, null, true, true);
 	}
 	

@@ -22,7 +22,7 @@ import com.lawencon.elearning.model.Roles;
 import com.lawencon.elearning.service.RolesService;
 
 @RestController
-@RequestMapping("roles")
+@RequestMapping("role")
 public class RolesController {
 	@Autowired
 	private RolesService rolesService;

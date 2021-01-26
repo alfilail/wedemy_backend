@@ -1,6 +1,5 @@
 package com.lawencon.elearning.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -13,24 +12,25 @@ import com.lawencon.model.BaseTransaction;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * @author Nur Alfilail
+ */
+
 @Entity
 @JsonInclude(Include.NON_NULL)
-@Table(name = "t_r_class_enrollments")
+@Table(name = "t_r_submission_status_renewal")
 @EqualsAndHashCode(callSuper = false)
 @Data
-public class ClassEnrollments extends BaseTransaction {
+public class SubmissionStatusRenewal extends BaseTransaction {
 
-	private static final long serialVersionUID = 7114555677950524878L;
-
-	@ManyToOne
-	@JoinColumn(name = "id_detail_class", nullable = false)
-	private DetailClasses idDetailClass;
+	private static final long serialVersionUID = -3615783902726023253L;
 
 	@ManyToOne
-	@JoinColumn(name = "id_user", nullable = false)
-	private Users idUser;
+	@JoinColumn(name = "id_assignment_submission")
+	private AssignmentSubmissions idAssignmentSubmission;
 
-	@Column(name = "is_ongoing")
-	private Boolean isOngoing;
+	@ManyToOne
+	@JoinColumn(name = "id_submission_status")
+	private SubmissionStatus idSubmissionStatus;
 
 }

@@ -16,8 +16,8 @@ import lombok.EqualsAndHashCode;
 @Table(name = "t_m_modules")
 @EqualsAndHashCode(callSuper = false)
 @Data
-public class Modules extends BaseMaster{
-	
+public class Modules extends BaseMaster {
+
 	private static final long serialVersionUID = -4360373789917580041L;
 
 	@Column(name = "code", length = 6, unique = true, nullable = false)

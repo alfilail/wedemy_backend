@@ -39,7 +39,7 @@ public class Profiles extends BaseMaster {
 	@Column(name = "phone", length = 13)
 	private String phone;
 
-	@Column(name = "address")
+	@Column(name = "address", columnDefinition = "text")
 	private String address;
 
 	@Column(name = "email", length = 30, nullable = false)

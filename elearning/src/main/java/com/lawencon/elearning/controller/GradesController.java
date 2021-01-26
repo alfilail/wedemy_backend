@@ -22,7 +22,7 @@ import com.lawencon.elearning.model.Grades;
 import com.lawencon.elearning.service.GradesService;
 
 @RestController
-@RequestMapping("grades")
+@RequestMapping("grade")
 public class GradesController {
 	@Autowired
 	private GradesService gradesService;

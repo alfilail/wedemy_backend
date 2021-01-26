@@ -2,6 +2,8 @@ package com.lawencon.elearning.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -26,12 +28,16 @@ public class LearningMaterials extends BaseMaster {
 	@Column(name = "learning_material_name", length = 35, nullable = false)
 	private String learningMaterialName;
 
+	@ManyToOne
+	@JoinColumn(name = "id_learning_material_type")
+	private LearningMaterialTypes idLearningMaterialType;
+
 	@Column(name = "description", nullable = false, columnDefinition = "text")
 	private String description;
 
 	@Column(name = "file", nullable = false)
 	private byte[] file;
-	
+
 	@Column(name = "file_type")
 	private String fileType;
 }

@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 @JsonInclude(Include.NON_NULL)
 @Table(name = "t_m_roles")
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 @Data
 public class Roles extends BaseMaster {
 
