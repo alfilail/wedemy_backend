@@ -19,4 +19,5 @@ public interface ProfilesDao {
 
 	void deleteProfileById(String id) throws Exception;
 
+	Profiles getProfileByEmail(String email) throws Exception;
 }

@@ -3,6 +3,7 @@ package com.lawencon.elearning.service;
 import java.util.List;
 
 import com.lawencon.elearning.helper.RegisterHelper;
+import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.Users;
 
 public interface UsersService {
@@ -18,5 +19,7 @@ public interface UsersService {
 	void updateUser(Users user) throws Exception;
 
 	void deleteUserById(String id) throws Exception;
-
+	
+	Users updateUserPassword (Profiles profile) throws Exception;
+	
 }

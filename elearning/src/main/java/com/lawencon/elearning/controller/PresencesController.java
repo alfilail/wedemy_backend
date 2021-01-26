@@ -1,11 +1,15 @@
 package com.lawencon.elearning.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.PersistenceException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lawencon.elearning.model.Presences;
 import com.lawencon.elearning.service.PresencesService;
+import com.lawencon.util.JasperUtil;
 
 /**
  * @author Nur Alfilail
@@ -63,6 +68,23 @@ public class PresencesController {
 			e.printStackTrace();
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+	
+	@GetMapping("report/certificate")
+	public HttpEntity<?> reportCertificate() {
+		List<?> listData = new ArrayList<>();
+		byte[] out;
+		try {
+			listData = presencesService.getPresenceReport();
+			out = JasperUtil.responseToByteArray(listData, "ReportPresence", null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_PDF);
+		return new HttpEntity<>(out, headers);
 	}
 
 	@DeleteMapping("{id}")

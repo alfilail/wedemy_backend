@@ -2,6 +2,7 @@ package com.lawencon.elearning.dao;
 
 import java.util.List;
 
+import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.Users;
 import com.lawencon.util.Callback;
 
@@ -18,5 +19,7 @@ public interface UsersDao {
 	void updateUser(Users user, Callback before) throws Exception;
 
 	void deleteUserById(String id) throws Exception;
+	
+	Users getUserByIdProfile(Profiles profile) throws Exception;
 
 }

@@ -3,7 +3,10 @@ package com.lawencon.elearning.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +23,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.lawencon.elearning.helper.ClassesHelper;
 import com.lawencon.elearning.model.Classes;
 import com.lawencon.elearning.service.ClassesService;
+import com.lawencon.util.JasperUtil;
 
 @RestController
 @RequestMapping("class")
@@ -89,6 +93,23 @@ public class ClassesController {
 			e.printStackTrace();
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+	
+	@GetMapping("report/certificate")
+	public HttpEntity<?> reportCertificate() {
+//		List<?> listData = new ArrayList<>();
+		byte[] out;
+		try {
+//			listData = presencesService.getPresenceReport();
+			out = JasperUtil.responseToByteArray(null, "Certificate", null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_PDF);
+		return new HttpEntity<>(out, headers);
 	}
 
 }

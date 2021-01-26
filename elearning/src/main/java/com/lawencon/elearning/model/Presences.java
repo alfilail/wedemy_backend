@@ -8,6 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.lawencon.model.BaseTransaction;
@@ -27,7 +28,8 @@ public class Presences extends BaseTransaction {
 	@ManyToOne
 	@JoinColumn(name = "id_detail_module_rgs", nullable = false)
 	private DetailModuleRegistrations idDetailModuleRegistration;
-
+	
+	@JsonFormat(pattern = "HH:mm")
 	@Column(name = "presence_time", nullable = false)
 	private LocalTime presenceTime;
 

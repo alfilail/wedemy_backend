@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lawencon.elearning.helper.RegisterHelper;
+import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.Users;
 import com.lawencon.elearning.service.UsersService;
 
@@ -54,6 +56,18 @@ public class UsersController {
 			RegisterHelper register = new ObjectMapper().readValue(body, RegisterHelper.class);
 			usersService.insertUser(register);
 			return new ResponseEntity<>(register, HttpStatus.CREATED);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@PatchMapping("/forget-password")
+	public ResponseEntity<?> resetPassword(@RequestBody String body) {
+		try {
+			Profiles profile = new ObjectMapper().readValue(body, Profiles.class);
+			Users user = usersService.updateUserPassword(profile);
+			return new ResponseEntity<>(user, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

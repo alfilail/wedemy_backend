@@ -45,6 +45,11 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 		profilesDao.deleteProfileById(id);
 	}
 	
+	@Override
+	public Profiles getProfileByEmail(String email) throws Exception {
+		return profilesDao.getProfileByEmail(email);
+	}
+	
 	private void validateInsert(Profiles profile) {
 
 	}

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.Users;
 import com.lawencon.util.Callback;
 
@@ -39,6 +40,12 @@ public class UsersDaoImpl extends ElearningBaseDaoImpl<Users> implements UsersDa
 	@Override
 	public void deleteUserById(String id) throws Exception {
 		deleteById(id);
+	}
+	
+	@Override
+	public Users getUserByIdProfile(Profiles profile) throws Exception {
+		Users user = createQuery("FROM Users WHERE idProfile.id = ?1 ", Users.class).setParameter(1, profile.getId()).getSingleResult();
+		return user;
 	}
 
 }

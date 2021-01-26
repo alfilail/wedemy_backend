@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.elearning.dao.ApprovementsDao;
 import com.lawencon.elearning.model.Approvements;
 
@@ -15,7 +14,7 @@ import com.lawencon.elearning.model.Approvements;
  */
 
 @Service
-public class ApprovementsServiceImpl extends BaseServiceImpl implements ApprovementsService {
+public class ApprovementsServiceImpl extends ElearningBaseServiceImpl implements ApprovementsService {
 
 	@Autowired
 	private ApprovementsDao approvementsDao;
@@ -54,12 +53,12 @@ public class ApprovementsServiceImpl extends BaseServiceImpl implements Approvem
 	}
 
 	private void validateInsert(Approvements approvement) throws Exception {
-		Approvements approve = getApprovementByCode(approvement.getCode());
-		if(approve != null) {
-			if(approve.getCode().equals(approvement.getCode())) {
-				
-			}
-		}
+//		Approvements approve = getApprovementByCode(approvement.getCode());
+//		if(approve != null) {
+//			if(approve.getCode().equals(approvement.getCode())) {
+//				
+//			}
+//		}
 	}
 
 	private void validateUpdate(Approvements approvement) throws Exception {

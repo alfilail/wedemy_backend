@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4_Landscape" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="428f3a04-8707-4b23-9398-8a95db4c374b">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="126" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="200" y="-17" width="400" height="62" uuid="417978a2-cede-421a-9d35-17ebbd538317"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="34"/>
+				</textElement>
+				<text><![CDATA[Wedemy Elearning]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="101" y="58" width="662" height="42" uuid="8d2fb28f-bec3-4fef-b253-45935ba7b9b9"/>
+				<textElement textAlignment="Center">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Jalan Casablanca Kav. 18, Jakarta 12870. Phone : +62218317113, +62218317112 Fax : +62218317115.]]></text>
+			</staticText>
+			<image>
+				<reportElement x="15" y="0" width="82" height="82" uuid="48bdbc09-fa57-48f6-89c1-d49a29e79be6"/>
+				<imageExpression><![CDATA["src/main/resources/report/logo-02.png"]]></imageExpression>
+			</image>
+			<frame>
+				<reportElement mode="Opaque" x="-20" y="102" width="843" height="24" forecolor="#D0B48E" backcolor="#F2EBDF" uuid="09174c7a-7d10-4270-ae3d-587396347563"/>
+			</frame>
+			<staticText>
+				<reportElement x="80" y="30" width="662" height="42" uuid="00f07f80-3f60-4413-bcd7-fa58f1376b98"/>
+				<textElement textAlignment="Center">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Powered by Lawencon]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="210" splitType="Stretch">
+			<staticText>
+				<reportElement x="184" y="-10" width="395" height="40" uuid="bec23a0f-2c8f-4509-bd37-d3ae41c3b098"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="30" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Certificate of Excellence]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="236" y="41" width="290" height="30" uuid="c0243d98-514d-4db1-a00b-74a4cb36aa94"/>
+				<textElement textAlignment="Center">
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[This certificate is proudly present to]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="240" y="80" width="283" height="40" uuid="5c39fcc0-ba05-46c3-994c-c1f4ec17618f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="24" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cha Eun Wo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="162" y="130" width="439" height="30" uuid="17c6f5ac-2eea-4022-8f9b-1141b6674300"/>
+				<textElement textAlignment="Center">
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[For successfully passing the final exam on online course]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="240" y="152" width="283" height="40" uuid="837abff7-259d-4d52-8a7a-8e4fc41d2d53"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Java Fullstack]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="331" y="190" width="100" height="20" uuid="7d5bbfc0-a9a5-4b83-a10e-10eecb5ccd40"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[25 Januari 2021]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<columnFooter>
+		<band height="130" splitType="Stretch">
+			<componentElement>
+				<reportElement x="674" y="18" width="107" height="90" uuid="62af33ff-08c1-4a83-9be9-7f1b7c08aa57"/>
+				<jr:QRCode xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<jr:codeExpression><![CDATA["123456789"]]></jr:codeExpression>
+				</jr:QRCode>
+			</componentElement>
+			<image>
+				<reportElement x="337" y="9" width="89" height="99" uuid="347ed23b-6b51-43c0-b7d6-0ebd28fac3d9"/>
+				<imageExpression><![CDATA["src/main/resources/report/tandatangan.png"]]></imageExpression>
+			</image>
+		</band>
+	</columnFooter>
+</jasperReport>

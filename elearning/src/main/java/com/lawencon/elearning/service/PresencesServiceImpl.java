@@ -28,7 +28,7 @@ public class PresencesServiceImpl extends ElearningBaseServiceImpl implements Pr
 
 	@Override
 	public void insertPresence(Presences presence) throws Exception {
-		Approvements approvement = approvementsService.getApprovementByCode(presence.getIdApprovement().getCode());
+		Approvements approvement = approvementsService.getApprovementsById(presence.getIdApprovement().getId());
 		presence.setIdApprovement(approvement);
 		presence.setTrxNumber(generateTrxNumber());
 		presence.setPresenceTime(LocalTime.now());
@@ -61,6 +61,11 @@ public class PresencesServiceImpl extends ElearningBaseServiceImpl implements Pr
 	public Presences getPresenceByCode(String code) throws Exception {
 		return presencesDao.getPresenceByCode(code);
 	}
+	
+	@Override
+		public List<?> getPresenceReport() throws Exception {
+			return presencesDao.getPresenceReport();
+		}
 
 	private void validateInsert(Presences presence) throws Exception {
 

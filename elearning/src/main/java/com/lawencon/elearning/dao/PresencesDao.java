@@ -18,4 +18,6 @@ public interface PresencesDao {
 	void deletePresenceById(String id) throws Exception;
 
 	Presences getPresenceByCode(String code) throws Exception;
+	
+	List<?> getPresenceReport() throws Exception;
 }
