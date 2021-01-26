@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.lawencon.elearning.helper.LearningMaterialHelper;
 import com.lawencon.elearning.model.LearningMaterials;
 import com.lawencon.elearning.service.LearningMaterialsService;
@@ -37,7 +38,9 @@ public class LearningMaterialsController {
 	public ResponseEntity<?> insertLearningMaterial(@RequestPart String body, 
 			@RequestPart("file") MultipartFile file) {
 		try {
-			LearningMaterialHelper helper = new ObjectMapper().readValue(body, LearningMaterialHelper.class);
+			ObjectMapper obj = new ObjectMapper();
+			obj.registerModule(new JavaTimeModule());
+			LearningMaterialHelper helper = obj.readValue(body, LearningMaterialHelper.class);
 			learningMaterialsService.insertLearningMaterial(helper, file);
 			return new ResponseEntity<>(helper, HttpStatus.CREATED);
 		} catch (Exception e) {
@@ -86,7 +89,9 @@ public class LearningMaterialsController {
 	public ResponseEntity<?> updateLearningMaterial(@RequestPart String body, 
 			@RequestPart("file") MultipartFile file) {
 		try {
-			LearningMaterials learningMaterial = new ObjectMapper().readValue(body, LearningMaterials.class);
+			ObjectMapper obj = new ObjectMapper();
+			obj.registerModule(new JavaTimeModule());
+			LearningMaterials learningMaterial = obj.readValue(body, LearningMaterials.class);
 			learningMaterialsService.updateLearningMaterial(learningMaterial, file);
 			return new ResponseEntity<>(learningMaterial, HttpStatus.OK);
 		} catch (Exception e) {

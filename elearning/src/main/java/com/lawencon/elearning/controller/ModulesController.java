@@ -1,9 +1,13 @@
 package com.lawencon.elearning.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lawencon.elearning.model.Modules;
 import com.lawencon.elearning.service.ModulesService;
+import com.lawencon.util.JasperUtil;
 
 @RestController
 @RequestMapping("module")
@@ -34,6 +39,23 @@ public class ModulesController {
 			e.printStackTrace();
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+	
+	@GetMapping("/report")
+	public HttpEntity<?> reportModule() {
+		List<Modules> listData = new ArrayList<>();
+		byte[] out;
+		try {
+			listData = moduleService.getAllModules();
+			out = JasperUtil.responseToByteArray(listData, "ScoreReport", null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_PDF);
+		return new HttpEntity<>(out, headers);
 	}
 	
 	@GetMapping("{id}")

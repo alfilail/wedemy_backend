@@ -47,7 +47,7 @@ public class ApiSecurity extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers(HttpMethod.POST, "/user");
+		web.ignoring().antMatchers(HttpMethod.POST, "/user").antMatchers(HttpMethod.GET, "/module/**");
 	}
 
 	@Bean
@@ -57,7 +57,7 @@ public class ApiSecurity extends WebSecurityConfigurerAdapter {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**").allowedOrigins("http://localhost:4200")
-						.allowedMethods(HttpMethod.POST.name());
+						.allowedMethods(HttpMethod.POST.name(), HttpMethod.GET.name());
 			}
 		};
 	}

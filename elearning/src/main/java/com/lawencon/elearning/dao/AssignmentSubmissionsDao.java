@@ -17,4 +17,5 @@ public interface AssignmentSubmissionsDao {
 	void updateAssignmentSubmission(AssignmentSubmissions assignmentSubmission, Callback before) throws Exception;
 	
 	void deleteAssignmentSubmissionById(String id) throws Exception;
+
 }
