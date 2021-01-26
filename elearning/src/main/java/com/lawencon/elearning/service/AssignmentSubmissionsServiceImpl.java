@@ -14,6 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.lawencon.elearning.dao.AssignmentSubmissionsDao;
 import com.lawencon.elearning.model.AssignmentSubmissions;
+import com.lawencon.elearning.model.SubmissionStatus;
+import com.lawencon.elearning.model.SubmissionStatusRenewal;
 
 @Service
 public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl implements AssignmentSubmissionsService {
@@ -24,6 +26,12 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 	@Autowired
 	private AssignmentSubmissionsDao assignmentSubmissionsDao;
 
+	@Autowired
+	private SubmissionStatusRenewalsService statusRenewalService;
+
+	@Autowired
+	private SubmissionStatusService statusService;
+
 	@Override
 	public void insertAssignmentSubmissions(AssignmentSubmissions assignmentSubmission, MultipartFile file)
 			throws Exception {
@@ -33,6 +41,7 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 		assignmentSubmission.setTrxNumber(generateTrxNumber());
 		assignmentSubmissionsDao.insertAssignmentSubmission(assignmentSubmission,
 				() -> validateInsert(assignmentSubmission));
+		insertStatusRenewal(assignmentSubmission);
 		System.out.println("Sending Email...");
 		sendEmail(assignmentSubmission);
 		System.out.println("Done");
@@ -67,6 +76,14 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 				+ "Wait for updated score of your assignment submissions. "
 				+ "Have a nice day. \n \n Best Regards, \n Elearning Alfione");
 		javaMailSender.send(msg);
+	}
+
+	private void insertStatusRenewal(AssignmentSubmissions assignmentSubmission) throws Exception {
+		SubmissionStatus submissionStatus = statusService.getSubmissionStatusByCode("SNT");
+		SubmissionStatusRenewal statusRenewal = new SubmissionStatusRenewal();
+		statusRenewal.setIdAssignmentSubmission(assignmentSubmission);
+		statusRenewal.setIdSubmissionStatus(submissionStatus);
+		statusRenewalService.insertSubmissionStatusRenewal(statusRenewal);
 	}
 
 	private void validateInsert(AssignmentSubmissions assignmentSubmissions) {
