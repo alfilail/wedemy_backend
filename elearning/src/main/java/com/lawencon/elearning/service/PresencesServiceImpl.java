@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 
 import com.lawencon.elearning.dao.PresencesDao;
 import com.lawencon.elearning.model.Approvements;
+import com.lawencon.elearning.model.ApprovementsRenewal;
 import com.lawencon.elearning.model.Presences;
+import com.lawencon.elearning.model.Users;
 
 /**
  * @author Nur Alfilail
@@ -22,17 +24,25 @@ public class PresencesServiceImpl extends ElearningBaseServiceImpl implements Pr
 
 	@Autowired
 	private PresencesDao presencesDao;
-
+	
 	@Autowired
 	private ApprovementsService approvementsService;
+	
+	@Autowired
+	private ApprovementsRenewalService approvementsRenewalService;
+	
+	@Autowired
+	private UsersService usersService;
 
 	@Override
 	public void insertPresence(Presences presence) throws Exception {
-		Approvements approvement = approvementsService.getApprovementsById(presence.getIdApprovement().getId());
-		presence.setIdApprovement(approvement);
 		presence.setTrxNumber(generateTrxNumber());
 		presence.setPresenceTime(LocalTime.now());
 		presencesDao.insertPresence(presence, () -> validateInsert(presence));
+		Users user = usersService.getUserById(presence.getIdUser().getId());
+		if(user.getIdRole().getCode() == "std") {
+			insertApprovementRenewal(presence);
+		}
 	}
 
 	@Override
@@ -44,11 +54,17 @@ public class PresencesServiceImpl extends ElearningBaseServiceImpl implements Pr
 	public Presences getPresenceById(String id) throws Exception {
 		return presencesDao.getPresenceById(id);
 	}
+	
+	private void insertApprovementRenewal(Presences presence) throws Exception {
+		Approvements approvements = approvementsService.getApprovementByCode("PNDG");
+		ApprovementsRenewal approvementsRenewal = new ApprovementsRenewal();
+		approvementsRenewal.setIdPresence(presence);
+		approvementsRenewal.setIdApprovement(approvements);
+		approvementsRenewalService.insertApprovementsRenewal(approvementsRenewal);
+	}
 
 	@Override
 	public void updatePresence(Presences presence) throws Exception {
-		Approvements approvement = approvementsService.getApprovementByCode(presence.getIdApprovement().getCode());
-		presence.setIdApprovement(approvement);
 		presencesDao.updatePresence(presence, () -> validateUpdate(presence));
 	}
 

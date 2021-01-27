@@ -36,8 +36,4 @@ public class Presences extends BaseTransaction {
 	@ManyToOne
 	@JoinColumn(name = "id_user", nullable = false)
 	private Users idUser;
-
-	@ManyToOne
-	@JoinColumn(name = "id_approvement", nullable = false)
-	private Approvements idApprovement;
 }
