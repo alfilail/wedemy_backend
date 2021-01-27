@@ -18,6 +18,7 @@ public class ModuleRegistrationsServiceImpl extends BaseServiceImpl implements M
 
 	@Override
 	public void insertModuleRegistration(ClassesHelper clazzHelper) throws Exception {
+		System.out.println("module : "+clazzHelper.getModule());
 		Modules[] modulesList = clazzHelper.getModule();
 		for (Modules modules : modulesList) {
 			ModuleRegistrations moduleRegistrations = new ModuleRegistrations();
