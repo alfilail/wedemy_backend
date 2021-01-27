@@ -30,7 +30,7 @@ public class RolesController {
 	@PostMapping
 	public ResponseEntity<?> insertRole(@RequestBody String body) {
 		try {
-			Roles role= new ObjectMapper().readValue(body, Roles.class);
+			Roles role = new ObjectMapper().readValue(body, Roles.class);
 			rolesService.insertRole(role);
 			return new ResponseEntity<>(role, HttpStatus.CREATED);
 		} catch (Exception e) {

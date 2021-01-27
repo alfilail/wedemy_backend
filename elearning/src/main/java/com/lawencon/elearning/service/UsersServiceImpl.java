@@ -12,6 +12,7 @@ import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.elearning.dao.UsersDao;
 import com.lawencon.elearning.helper.RegisterHelper;
 import com.lawencon.elearning.model.Profiles;
+import com.lawencon.elearning.model.Roles;
 import com.lawencon.elearning.model.Users;
 
 import net.bytebuddy.utility.RandomString;
@@ -29,14 +30,19 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 	private ProfilesService profilesService;
 	
 	@Autowired
+	private RolesService rolesService;
+	
+	@Autowired
 	JavaMailSender javaMailSender;
 
 	@Override
 	public void insertUser(RegisterHelper register) throws Exception {
 		profilesService.insertProfile(register.getProfile());
 		Users user = register.getUser();
+		Roles role = rolesService.getRoleById(user.getIdRole().getId());
 		user.setIdProfile(register.getProfile());
 		user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
+		user.setIdRole(role);
 		usersDao.insertUser(user, () -> validateInsert(user));
 	}
 
