@@ -16,4 +16,6 @@ public interface ClassEnrollmentService {
 	void updateClassEnrollments(ClassEnrollments classEnrollment) throws Exception;
 	
 	ClassEnrollments getClassEnrollmentByCode(String code) throws Exception;
+	
+	List<?> getCertificate (String idUser, String idClass) throws Exception;
 }

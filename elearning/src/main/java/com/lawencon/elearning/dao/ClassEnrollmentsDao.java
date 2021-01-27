@@ -17,4 +17,6 @@ public interface ClassEnrollmentsDao {
 	void deleteclassEnrollmentById(String id) throws Exception;
 	
 	ClassEnrollments getclassEnrollmentByCode(String code) throws Exception;
+	
+	List<?> getCertificate (String idUser, String idClass) throws Exception;
 }

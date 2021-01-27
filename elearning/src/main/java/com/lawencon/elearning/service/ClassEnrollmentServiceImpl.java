@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.elearning.dao.ClassEnrollmentsDao;
+import com.lawencon.elearning.helper.CertificateHelper;
 import com.lawencon.elearning.model.ClassEnrollments;
 
 @Service
@@ -47,6 +48,11 @@ public class ClassEnrollmentServiceImpl extends ElearningBaseServiceImpl impleme
 	@Override
 	public void deleteClassEnrollmentsById(String id) throws Exception {
 		classEnrollmentDao.deleteclassEnrollmentById(id);
+	}
+	
+	@Override
+	public List<?> getCertificate(String idUser, String idClass) throws Exception {
+		return classEnrollmentDao.getCertificate(idUser, idClass);
 	}
 	
 	private void validateInsert(ClassEnrollments classEnrollment) throws Exception {

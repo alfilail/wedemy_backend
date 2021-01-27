@@ -1,5 +1,6 @@
 package com.lawencon.elearning.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.lawencon.elearning.model.Presences;
@@ -22,5 +23,5 @@ public interface PresencesService {
 
 	Presences getPresenceByCode(String code) throws Exception;
 	
-	List<?> getPresenceReport() throws Exception;
+	List<?> getPresenceReport(String idClass, LocalDate scheduleDateStart, LocalDate scheduleDateEnd) throws Exception;
 }

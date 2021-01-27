@@ -19,8 +19,8 @@ public abstract class BaseEntity implements Serializable {
 
 	@Id
 	@Column(name = "id", columnDefinition = "varchar DEFAULT uuid_generate_v4()")
-	@GeneratedValue(generator = "UUID")
-	@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+	@GeneratedValue(generator = "uuid")
+	@GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
 	private String id;
 
 	@Column(name = "created_by")
@@ -36,6 +36,11 @@ public abstract class BaseEntity implements Serializable {
 	@Column(name = "updated_at")
 	private LocalDateTime updatedAt;
 
+	public BaseEntity() {
+		if (version == null)
+			version = 0L;
+	}
+
 	@PreUpdate
 	public void preUpdate() {
 		updatedAt = LocalDateTime.now();
@@ -46,9 +51,6 @@ public abstract class BaseEntity implements Serializable {
 	private Long version;
 
 	public Long getVersion() {
-		if(version == null) {
-			version = 0L;
-		}
 		return version;
 	}
 

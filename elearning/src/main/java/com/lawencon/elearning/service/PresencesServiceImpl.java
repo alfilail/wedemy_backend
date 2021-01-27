@@ -79,9 +79,9 @@ public class PresencesServiceImpl extends ElearningBaseServiceImpl implements Pr
 	}
 	
 	@Override
-		public List<?> getPresenceReport() throws Exception {
-			return presencesDao.getPresenceReport();
-		}
+	public List<?> getPresenceReport(String idClass, LocalDate scheduleDateStart, LocalDate scheduleDateEnd) throws Exception {
+		return presencesDao.getPresenceReport(idClass, scheduleDateStart, scheduleDateEnd);
+	}
 
 	private void validateInsert(Presences presence) throws Exception {
 
