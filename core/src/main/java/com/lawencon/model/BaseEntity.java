@@ -7,7 +7,10 @@ import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.PreUpdate;
+import javax.persistence.Version;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 
 @MappedSuperclass
@@ -15,18 +18,31 @@ public abstract class BaseEntity implements Serializable {
 	public static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "id")
-	@GeneratedValue(generator = "UUID")
-	@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+	@Column(name = "id", columnDefinition = "varchar DEFAULT uuid_generate_v4()")
+	@GeneratedValue(generator = "uuid")
+	@GenericGenerator(name = "uuid", strategy = "uuid")
 	private String id;
 
 	@Column(name = "created_by")
 	private String createdBy;
 
 	@Column(name = "created_at")
+	@CreationTimestamp
 	private LocalDateTime createdAt;
 
+	@Column(name = "updated_by")
+	private String updatedBy;
+
+	@Column(name = "updated_at")
+	private LocalDateTime updatedAt;
+
+	@PreUpdate
+	public void preUpdate() {
+		updatedAt = LocalDateTime.now();
+	}
+
 	@Column(name = "version")
+	@Version
 	private Long version;
 
 	public Long getVersion() {
@@ -34,11 +50,7 @@ public abstract class BaseEntity implements Serializable {
 	}
 
 	public void setVersion(Long version) {
-		if (version == null) {
-			this.version = 0L;
-		} else {
-			this.version = version;
-		}
+		this.version = version;
 	}
 
 	public String getId() {
@@ -63,5 +75,21 @@ public abstract class BaseEntity implements Serializable {
 
 	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
+	}
+
+	public String getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(String updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(LocalDateTime updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 }
