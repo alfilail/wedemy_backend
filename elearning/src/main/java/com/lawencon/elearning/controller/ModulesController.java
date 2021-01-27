@@ -41,23 +41,6 @@ public class ModulesController {
 		}
 	}
 	
-	@GetMapping("/report")
-	public HttpEntity<?> reportModule() {
-		List<Modules> listData = new ArrayList<>();
-		byte[] out;
-		try {
-			listData = moduleService.getAllModules();
-			out = JasperUtil.responseToByteArray(listData, "ScoreReport", null);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		}
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_PDF);
-		return new HttpEntity<>(out, headers);
-	}
-	
 	@GetMapping("{id}")
 	public ResponseEntity<?> getModuleById(@PathVariable("id") String id) {
 		try {

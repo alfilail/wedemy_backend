@@ -20,5 +20,9 @@ public interface EvaluationsDao {
 	Evaluations getEvaluationByCode(String code) throws Exception;
 
 	String getParticipantEmail(Evaluations evaluation) throws Exception;
+	
+	List<?> reportAllScore() throws Exception;
+	
+	List<?> reportScore(String idDtlClass, String idParticipant) throws Exception;
 
 }

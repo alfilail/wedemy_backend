@@ -86,4 +86,14 @@ public class EvaluationsServiceImpl extends BaseServiceImpl implements Evaluatio
 		javaMailSender.send(msg);
 	}
 
+	@Override
+	public List<?> reportAllScore() throws Exception {
+		return evaluationsDao.reportAllScore();
+	}
+
+	@Override
+	public List<?> reportScore(String idDtlClass, String idParticipant) throws Exception {
+		return evaluationsDao.reportScore(idDtlClass, idParticipant);
+	}
+
 }
