@@ -2,6 +2,7 @@ package com.lawencon.elearning.service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,9 @@ import com.lawencon.elearning.dao.DetailModuleRegistrationsDao;
 import com.lawencon.elearning.model.DetailModuleRegistrations;
 
 @Service
-public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceImpl implements DetailModuleRegistrationsService {
-	
+public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceImpl
+		implements DetailModuleRegistrationsService {
+
 	@Autowired
 	private DetailModuleRegistrationsDao dtlModRegistDao;
 
@@ -21,11 +23,17 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 		dtlModRegist.setTrxNumber(generateTrxNumber());
 		dtlModRegistDao.insertDetailModuleRegistration(dtlModRegist, () -> validateInput(dtlModRegist));
 	}
-	
-	private void validateInput(DetailModuleRegistrations dtlModRegist) {
-		
+
+	@Override
+	public List<DetailModuleRegistrations> getDetailModuleRegistrationsByIdModuleRgs(String idModuleRgs)
+			throws Exception {
+		return dtlModRegistDao.getDetailModuleRegistrationsByIdModuleRgs(idModuleRgs);
 	}
-	
+
+	private void validateInput(DetailModuleRegistrations dtlModRegist) {
+
+	}
+
 	private String generateTrxNumber() {
 		Random random = new Random();
 		LocalDate localDate = LocalDate.now();
@@ -34,7 +42,7 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 		String trxCodeValue = String.valueOf(random.nextInt((999 + 1 - 100) + 100));
 		String trx = bBuilder(formattedDate).toString();
 		trx = trx.replaceAll("-", "");
-		String trxNumber= bBuilder("ASB-", trx, "-",trxCodeValue).toString();
+		String trxNumber = bBuilder("ASB-", trx, "-", trxCodeValue).toString();
 		return trxNumber;
 	}
 
