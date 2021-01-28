@@ -36,12 +36,17 @@ public class PresencesServiceImpl extends ElearningBaseServiceImpl implements Pr
 
 	@Override
 	public void insertPresence(Presences presence) throws Exception {
-		presence.setTrxNumber(generateTrxNumber());
-		presence.setPresenceTime(LocalTime.now());
-		presencesDao.insertPresence(presence, () -> validateInsert(presence));
-		Users user = usersService.getUserById(presence.getIdUser().getId());
-		if(user.getIdRole().getCode() == "std") {
-			insertApprovementRenewal(presence);
+		try {
+			presence.setTrxNumber(generateTrxNumber());
+			presence.setPresenceTime(LocalTime.now());
+			presencesDao.insertPresence(presence, () -> validateInsert(presence));
+			Users user = usersService.getUserById(presence.getIdUser().getId());
+			if(user.getIdRole().getCode().equals("PCP")) {
+				insertApprovementRenewal(presence);
+			}			
+		} catch (Exception e) {
+			rollback();
+			throw new Exception(e);
 		}
 	}
 
@@ -56,7 +61,7 @@ public class PresencesServiceImpl extends ElearningBaseServiceImpl implements Pr
 	}
 	
 	private void insertApprovementRenewal(Presences presence) throws Exception {
-		Approvements approvements = approvementsService.getApprovementByCode("PNDG");
+		Approvements approvements = approvementsService.getApprovementByCode("PND");
 		ApprovementsRenewal approvementsRenewal = new ApprovementsRenewal();
 		approvementsRenewal.setIdPresence(presence);
 		approvementsRenewal.setIdApprovement(approvements);

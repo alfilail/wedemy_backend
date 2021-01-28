@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.lawencon.elearning.model.Presences;
 import com.lawencon.elearning.service.PresencesService;
 import com.lawencon.util.JasperUtil;
@@ -42,7 +43,9 @@ public class PresencesController {
 	@PostMapping
 	public ResponseEntity<?> insertPresence(@RequestBody String body) {
 		try {
-			Presences presence = new ObjectMapper().readValue(body, Presences.class);
+			ObjectMapper obj = new ObjectMapper();
+			obj.registerModule(new JavaTimeModule());
+			Presences presence = obj.readValue(body, Presences.class);
 			presencesService.insertPresence(presence);
 			return new ResponseEntity<>(presence, HttpStatus.CREATED);
 		} catch (Exception e) {

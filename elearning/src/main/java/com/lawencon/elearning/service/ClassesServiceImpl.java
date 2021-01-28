@@ -79,8 +79,25 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 		classesDao.deleteClassById(id);
 	}
 
-	private void validateInsert(Classes clazz) {
-
+	private void validateInsert(Classes clazz) throws Exception {
+		if(clazz.getCode() == null || clazz.getCode().equals("")) {
+			throw new Exception("Class code can't be empty!");
+		} else {
+			Classes cls = getClassByCode(clazz.getCode());
+			if(cls != null) {
+				throw new Exception("Class code you've inputted is exist!");
+			} else {
+				String[] type = clazz.getFileType().split("/");
+				String ext = type[1];
+				if (clazz.getClassName() == null) {
+					throw new Exception("Class name can't be empty!");
+				} else if (clazz.getDescription() == null) {
+					throw new Exception("Class description can't be empty!");
+				}else if(ext != "jpg" || ext!= "png" || ext != "jpeg") {
+					throw new Exception("File type must be image!");
+				}
+			}	
+		}
 	}
 
 	private void validateUpdate(Classes clazz) {

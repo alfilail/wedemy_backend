@@ -24,10 +24,10 @@ import com.lawencon.elearning.service.ClassesService;
 @RestController
 @RequestMapping("class")
 public class ClassesController {
-	
+
 	@Autowired
 	private ClassesService classesService;
-	
+
 	@GetMapping("all")
 	public ResponseEntity<?> getAllClasses() {
 		try {
@@ -38,7 +38,7 @@ public class ClassesController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	@GetMapping("{id}")
 	public ResponseEntity<?> getClassById(@PathVariable("id") String id) {
 		try {
@@ -49,10 +49,9 @@ public class ClassesController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	@PostMapping
-	public ResponseEntity<?> insertClass(@RequestPart String body, 
-			@RequestPart("file") MultipartFile file) {
+	public ResponseEntity<?> insertClass(@RequestPart String body, @RequestPart("file") MultipartFile file) {
 		try {
 			ObjectMapper obj = new ObjectMapper();
 			obj.registerModule(new JavaTimeModule());
@@ -64,10 +63,9 @@ public class ClassesController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	@PutMapping
-	public ResponseEntity<?> updateClass(@RequestPart String body, 
-			@RequestPart("file") MultipartFile file) {
+	public ResponseEntity<?> updateClass(@RequestPart String body, @RequestPart("file") MultipartFile file) {
 		try {
 			ObjectMapper obj = new ObjectMapper();
 			obj.registerModule(new JavaTimeModule());

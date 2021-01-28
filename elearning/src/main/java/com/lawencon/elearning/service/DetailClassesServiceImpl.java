@@ -1,5 +1,7 @@
 package com.lawencon.elearning.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,5 +23,10 @@ public class DetailClassesServiceImpl extends BaseServiceImpl implements DetailC
 
 	private void validateInsert(DetailClasses detailClass) {
 
+	}
+
+	@Override
+	public List<DetailClasses> getAllDetailClass() throws Exception {
+		return detailClassesDao.getAllDetailClass();
 	}
 }

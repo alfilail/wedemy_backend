@@ -11,7 +11,7 @@ import com.lawencon.util.Callback;
 public class ApprovementsRenewalDaoImpl extends ElearningBaseDaoImpl<ApprovementsRenewal> implements ApprovementsRenewalDao {
 	@Override
 	public void insertApprovementsRenewal(ApprovementsRenewal approvementsRenewal, Callback before) throws Exception {
-		save(approvementsRenewal, before, null, true, true);
+		save(approvementsRenewal, before, null);
 	}
 	
 	@Override
