@@ -7,10 +7,11 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.elearning.dao.EvaluationsDao;
+import com.lawencon.elearning.model.AssignmentSubmissions;
 import com.lawencon.elearning.model.Evaluations;
 import com.lawencon.elearning.model.Grades;
+import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.SubmissionStatus;
 import com.lawencon.elearning.model.SubmissionStatusRenewal;
 
@@ -19,7 +20,7 @@ import com.lawencon.elearning.model.SubmissionStatusRenewal;
  */
 
 @Service
-public class EvaluationsServiceImpl extends BaseServiceImpl implements EvaluationsService {
+public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements EvaluationsService {
 
 	@Autowired
 	JavaMailSender javaMailSender;
@@ -35,6 +36,9 @@ public class EvaluationsServiceImpl extends BaseServiceImpl implements Evaluatio
 
 	@Autowired
 	private SubmissionStatusService statusService;
+	
+	@Autowired
+	private AssignmentSubmissionsService assignmentSubmissionsService;
 
 	@Override
 	public void insertEvaluation(Evaluations evaluation) throws Exception {
@@ -75,12 +79,20 @@ public class EvaluationsServiceImpl extends BaseServiceImpl implements Evaluatio
 	}
 
 	private void sendEmail(Evaluations evaluation) throws Exception {
-		String participantEmail = evaluationsDao.getParticipantEmail(evaluation);
+		AssignmentSubmissions assignmentSubmissions = 
+				assignmentSubmissionsService
+				.getAssignmentSubmissionsById(evaluation.getIdAssignmentSubmission().getId());
+		evaluation.setIdAssignmentSubmission(assignmentSubmissions);
+		Profiles participant = evaluationsDao.getParticipantProfile(evaluation);
 		SimpleMailMessage msg = new SimpleMailMessage();
-		msg.setTo(participantEmail);
+		msg.setTo(participant.getEmail());
 		msg.setSubject("Score of Assignment Submission Has Updated");
-		msg.setText("Dear You, \n Score of your assignment submissions has updated. "
-				+ "Have a nice day. \n \n Best Regards, \n Elearning Alfione");
+		msg.setText(bBuilder(
+				"Dear ",
+				participant.getFullName(),
+				", \nScore of your assignment submissions has updated. ",
+				"Have a nice day. \n \nBest Regards, \nElearning Alfione"
+				).toString());
 		javaMailSender.send(msg);
 	}
 

@@ -12,7 +12,7 @@ import lombok.Data;
 @Data
 public class ReportPresences {
 	Profiles fullname;
-	Integer presentDay;
 	Modules module;
+	Double presentDay;
 	Classes clazz;
 }

@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.lawencon.elearning.dao.AssignmentSubmissionsDao;
 import com.lawencon.elearning.model.AssignmentSubmissions;
+import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.SubmissionStatus;
 import com.lawencon.elearning.model.SubmissionStatusRenewal;
 
@@ -43,7 +44,8 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 				() -> validateInsert(assignmentSubmission));
 		insertStatusRenewal(assignmentSubmission);
 		System.out.println("Sending Email...");
-		sendEmail(assignmentSubmission);
+		sendEmailTutor(assignmentSubmission);
+		sendEmailParticipant(assignmentSubmission);
 		System.out.println("Done");
 	}
 
@@ -67,14 +69,37 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 		assignmentSubmissionsDao.deleteAssignmentSubmissionById(id);
 	}
 
-	private void sendEmail(AssignmentSubmissions assignmentSubmission) throws Exception {
-		String tutorEmail = assignmentSubmissionsDao.getTutorEmail(assignmentSubmission);
+	private void sendEmailTutor(AssignmentSubmissions assignmentSubmission) throws Exception {
+		Profiles tutor = assignmentSubmissionsDao.getTutorProfile(assignmentSubmission);
+		Profiles participant = assignmentSubmissionsDao.getParticipantProfile(assignmentSubmission);
 		SimpleMailMessage msg = new SimpleMailMessage();
-		msg.setTo(tutorEmail);
+		msg.setTo(tutor.getEmail());
 		msg.setSubject("Assignment Submission Has Sent");
-		msg.setText("Dear You, \n Your Assignment Submissions has sent. "
-				+ "Wait for updated score of your assignment submissions. "
-				+ "Have a nice day. \n \n Best Regards, \n Elearning Alfione");
+		msg.setText(bBuilder(
+				"Dear ", 
+				tutor.getFullName(),
+				",\n\n",
+				participant.getFullName(),
+				" have sent assignment submissions. ",
+				"Have a nice day.",
+				"\n \nBest Regards, \nElearning Alfione"
+				).toString());
+		javaMailSender.send(msg);
+	}
+	
+	private void sendEmailParticipant(AssignmentSubmissions assignmentSubmission) throws Exception {
+		Profiles participant = assignmentSubmissionsDao.getParticipantProfile(assignmentSubmission);
+		SimpleMailMessage msg = new SimpleMailMessage();
+		msg.setTo(participant.getEmail());
+		msg.setSubject("Assignment Submission Has Sent");
+		msg.setText(bBuilder(
+				"Dear ",
+				participant.getFullName(),
+				",\n Your Assignment Submissions has sent. ",
+				"Wait for updated score of your assignment submissions. ",
+				"Have a nice day. ",
+				"\n \n Best Regards, \n Elearning Alfione"
+				).toString());
 		javaMailSender.send(msg);
 	}
 

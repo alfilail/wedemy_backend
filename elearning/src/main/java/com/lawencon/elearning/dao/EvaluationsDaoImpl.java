@@ -46,18 +46,19 @@ public class EvaluationsDaoImpl extends ElearningBaseDaoImpl<Evaluations> implem
 	}
 
 	@Override
-	public String getParticipantEmail(Evaluations evaluation) throws Exception {
+	public Profiles getParticipantProfile(Evaluations evaluation) throws Exception {
 		Profiles participant = new Profiles();
-		String sql = sqlBuilder("SELECT p.email FROM t_r_evaluations e INNER JOIN t_r_assignment_submissions asm ",
+		String sql = sqlBuilder("SELECT p.fullname, p.email FROM t_r_evaluations e INNER JOIN t_r_assignment_submissions asm ",
 				"ON e.id_assignment_submission = asm.id INNER JOIN t_m_users u ON asm.id_participant = u.id ",
 				"INNER JOIN t_m_profiles p ON u.id_profile = p.id WHERE asm.id_participant =?1").toString();
 		List<?> listObj = createNativeQuery(sql)
 				.setParameter(1, evaluation.getIdAssignmentSubmission().getIdParticipant().getId()).getResultList();
 		listObj.forEach(val -> {
-			Object obj = (Object) val;
-			participant.setEmail((String) obj);
+			Object[] objArr = (Object[]) val;
+			participant.setFullName((String) objArr[0]);
+			participant.setEmail((String) objArr[1]);
 		});
-		return participant.getEmail();
+		return participant;
 	}
 	
 	@Override

@@ -28,7 +28,7 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="fullname.Fullname" class="java.lang.String"/>
+	<field name="fullname.fullName" class="java.lang.String"/>
 	<field name="className.className" class="java.lang.String"/>
 	<title>
 		<band height="116" splitType="Stretch">
@@ -91,7 +91,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="24" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{fullname.Fullname}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{fullname.fullName}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="303" y="156" width="157" height="30" uuid="b3c42b2f-7dba-45a0-acab-d6cf23e146a8"/>

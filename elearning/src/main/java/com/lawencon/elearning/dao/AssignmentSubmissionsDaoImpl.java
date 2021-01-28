@@ -33,9 +33,9 @@ public class AssignmentSubmissionsDaoImpl extends ElearningBaseDaoImpl<Assignmen
 	}
 
 	@Override
-	public String getTutorEmail(AssignmentSubmissions assignmentSubmission) throws Exception {
+	public Profiles getTutorProfile(AssignmentSubmissions assignmentSubmission) throws Exception {
 		Profiles tutor = new Profiles();
-		String sql = sqlBuilder("SELECT p.email FROM t_r_assignment_submissions asm ",
+		String sql = sqlBuilder("SELECT p.fullname, p.email FROM t_r_assignment_submissions asm ",
 				"INNER JOIN t_r_detail_module_registrations dmr ON asm.id_dtl_module_rgs = dmr.id ",
 				"INNER JOIN t_r_module_registrations mr ON dmr.id_module_rgs = mr.id ",
 				"INNER JOIN t_m_detail_classes dc ON mr.id_detail_class = dc.id ",
@@ -44,10 +44,30 @@ public class AssignmentSubmissionsDaoImpl extends ElearningBaseDaoImpl<Assignmen
 		List<?> listObj = createNativeQuery(sql)
 				.setParameter(1, assignmentSubmission.getIdDetailModuleRegistration().getId()).getResultList();
 		listObj.forEach(val -> {
-			Object obj = (Object) val;
-			tutor.setEmail((String) obj);
+			Object[] objArr = (Object[]) val;
+			tutor.setFullName((String) objArr[0]);
+			tutor.setEmail((String) objArr[1]);
 		});
-		return tutor.getEmail();
+		return tutor;
+	}
+	
+	@Override
+	public Profiles getParticipantProfile(AssignmentSubmissions assignmentSubmission) throws Exception {
+		Profiles participant = new Profiles();
+		String sql = sqlBuilder(
+				" SELECT p.fullname, p.email FROM t_r_assignment_submissions asm ",
+				" INNER JOIN t_m_users u ON asm.id_participant = u.id ",
+				" INNER JOIN t_m_profiles p ON u.id_profile = p.id ",
+				" WHERE asm.id_dtl_module_rgs = ?1 "
+				).toString();
+		List<?> listObj = createNativeQuery(sql)
+				.setParameter(1, assignmentSubmission.getIdDetailModuleRegistration().getId()).getResultList();
+		listObj.forEach(val -> {
+			Object[] objArr = (Object[]) val;
+			participant.setFullName((String) objArr[0]);
+			participant.setEmail((String) objArr[1]);
+		});
+		return participant;
 	}
 
 	@Override

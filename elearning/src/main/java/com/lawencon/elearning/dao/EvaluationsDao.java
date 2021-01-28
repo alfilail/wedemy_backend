@@ -3,6 +3,7 @@ package com.lawencon.elearning.dao;
 import java.util.List;
 
 import com.lawencon.elearning.model.Evaluations;
+import com.lawencon.elearning.model.Profiles;
 import com.lawencon.util.Callback;
 
 /**
@@ -19,7 +20,7 @@ public interface EvaluationsDao {
 
 	Evaluations getEvaluationByCode(String code) throws Exception;
 
-	String getParticipantEmail(Evaluations evaluation) throws Exception;
+	Profiles getParticipantProfile(Evaluations evaluation) throws Exception;
 	
 	List<?> reportAllScore(String idClass) throws Exception;
 	

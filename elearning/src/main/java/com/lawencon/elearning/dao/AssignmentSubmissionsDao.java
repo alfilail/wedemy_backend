@@ -3,6 +3,7 @@ package com.lawencon.elearning.dao;
 import java.util.List;
 
 import com.lawencon.elearning.model.AssignmentSubmissions;
+import com.lawencon.elearning.model.Profiles;
 import com.lawencon.util.Callback;
 
 public interface AssignmentSubmissionsDao {
@@ -14,7 +15,9 @@ public interface AssignmentSubmissionsDao {
 	
 	AssignmentSubmissions getAssignmentSubmissionByCode(String code) throws Exception;
 	
-	String getTutorEmail(AssignmentSubmissions assignmentSubmission) throws Exception;
+	Profiles getTutorProfile(AssignmentSubmissions assignmentSubmission) throws Exception;
+	
+	Profiles getParticipantProfile(AssignmentSubmissions assignmentSubmission) throws Exception;
 	
 	void updateAssignmentSubmission(AssignmentSubmissions assignmentSubmission, Callback before) throws Exception;
 	
