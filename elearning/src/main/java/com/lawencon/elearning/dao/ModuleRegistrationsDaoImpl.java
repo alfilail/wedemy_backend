@@ -31,7 +31,7 @@ public class ModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<ModuleRegis
 	}
 
 	@Override
-	public List<ModuleRegistrations> getByIdClass(String idClass) throws Exception {
+	public List<ModuleRegistrations> getByIdDtlClass(String idClass) throws Exception {
 		List<ModuleRegistrations> listResult = new ArrayList<>();
 		String sql = sqlBuilder("SELECT mr.id, m.id idmodule, m.code, m.module_name FROM t_r_module_registrations mr ",
 				"INNER JOIN t_m_modules m ON mr.id_module = m.id ",

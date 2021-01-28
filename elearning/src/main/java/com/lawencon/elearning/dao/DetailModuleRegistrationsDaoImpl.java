@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.elearning.model.DetailModuleRegistrations;
+import com.lawencon.elearning.model.LearningMaterialTypes;
+import com.lawencon.elearning.model.LearningMaterials;
 import com.lawencon.util.Callback;
 
 @Repository
@@ -27,15 +29,25 @@ public class DetailModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<Detai
 	public List<DetailModuleRegistrations> getDetailModuleRegistrationsByIdModuleRgs(String idModuleRgs)
 			throws Exception {
 		List<DetailModuleRegistrations> listResult = new ArrayList<>();
-		String sql = sqlBuilder("SELECT module_name, learning_material_name FROM t_r_detail_module_registrations dmr ",
+		String sql = sqlBuilder(
+				"SELECT lm.id, lm.learning_material_name, lmt.code FROM t_r_detail_module_registrations dmr ",
 				"INNER JOIN t_m_learning_materials lm ON dmr.id_learning_material = lm.id ",
-				"INNER JOIN t_r_module_registrations mr ON dmr.id_learning_material = mr.id ",
-				"INNER JOIN t_m_modules m ON mr.id_module = m.id ",
-				"INNER JOIN t_m_detail_classes dc ON mr.id_detail_class = dc.id ",
-				"INNER JOIN t_m_classes c ON dc.id_class = c.id ",
-				"INNER JOIN t_r_class_enrollments ce ON ce.id_detail_class = dc.id ", "WHERE c.id = ?1 GROUP BY ")
-						.toString();
-		return null;
+				"INNER JOIN t_m_learning_material_types lmt ON lm.id_learning_material_type = lmt.id ",
+				"WHERE dmr.id_module_rgs =?1").toString();
+		List<?> listObj = createNativeQuery(sql).setParameter(1, idModuleRgs).getResultList();
+		listObj.forEach(val -> {
+			Object[] objArr = (Object[]) val;
+			LearningMaterials learningMaterial = new LearningMaterials();
+			learningMaterial.setId((String) objArr[0]);
+			learningMaterial.setLearningMaterialName((String) objArr[1]);
+			LearningMaterialTypes lmType = new LearningMaterialTypes();
+			lmType.setCode((String) objArr[2]);
+			learningMaterial.setIdLearningMaterialType(lmType);
+			DetailModuleRegistrations dtlModuleRgs = new DetailModuleRegistrations();
+			dtlModuleRgs.setIdLearningMaterial(learningMaterial);
+			listResult.add(dtlModuleRgs);
+		});
+		return listResult;
 	}
 
 }

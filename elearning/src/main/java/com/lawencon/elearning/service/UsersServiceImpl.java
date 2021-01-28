@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.elearning.dao.UsersDao;
-import com.lawencon.elearning.helper.RegisterHelper;
 import com.lawencon.elearning.model.Profiles;
 //import com.lawencon.elearning.model.Roles;
 import com.lawencon.elearning.model.Users;
@@ -36,13 +35,11 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 	JavaMailSender javaMailSender;
 
 	@Override
-	public void insertUser(RegisterHelper register) throws Exception {
+	public void insertUser(Users user) throws Exception {
 		try {
 			begin();
-			profilesService.insertProfile(register.getProfile());
-			Users user = register.getUser();
-			user.setIdProfile(register.getProfile());
-			user.setIdRole(rolesService.getRoleByCode(register.getUser().getIdRole().getCode()));
+			profilesService.insertProfile(user.getIdProfile());
+			user.setIdRole(rolesService.getRoleByCode(user.getIdRole().getCode()));
 			user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
 			usersDao.insertUser(user, () -> validateInsert(user));
 			commit();

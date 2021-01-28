@@ -19,6 +19,7 @@ public class ClassEnrollmentServiceImpl extends ElearningBaseServiceImpl impleme
 	@Override
 	public void insertClassEnrollment(ClassEnrollments classEnrollment) throws Exception {
 		classEnrollment.setTrxNumber(generateTrxNumber());
+		classEnrollment.setIsOngoing(true);
 		classEnrollmentDao.insertClassEnrollment(classEnrollment, () -> validateInsert(classEnrollment));
 	}
 

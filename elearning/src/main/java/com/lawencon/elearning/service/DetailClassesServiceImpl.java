@@ -15,6 +15,9 @@ public class DetailClassesServiceImpl extends BaseServiceImpl implements DetailC
 	@Autowired
 	private DetailClassesDao detailClassesDao;
 
+	@Autowired
+	ClassesService classService;
+
 	@Override
 	public void insertDetailClass(ClassesHelper clazzHelper) throws Exception {
 		DetailClasses detailClass = clazzHelper.getDetailClass();
@@ -28,5 +31,10 @@ public class DetailClassesServiceImpl extends BaseServiceImpl implements DetailC
 	@Override
 	public List<DetailClasses> getAllDetailClass() throws Exception {
 		return detailClassesDao.getAllDetailClass();
+	}
+
+	@Override
+	public DetailClasses getDetailClassById(String id) throws Exception {
+		return detailClassesDao.getDetailClassById(id);
 	}
 }

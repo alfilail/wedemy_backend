@@ -11,4 +11,6 @@ public interface DetailClassesDao {
 	
 	void insertDetailClass(DetailClasses detailClass, Callback before) throws Exception;
 	
+	DetailClasses getDetailClassById(String id) throws Exception;
+	
 }

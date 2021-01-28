@@ -9,4 +9,6 @@ public interface DetailClassesService {
 	void insertDetailClass(ClassesHelper clazzHelper) throws Exception;
 	
 	List<DetailClasses> getAllDetailClass() throws Exception;
+	
+	DetailClasses getDetailClassById(String id) throws Exception;
 }

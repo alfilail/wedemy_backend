@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lawencon.elearning.helper.RegisterHelper;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.Users;
 import com.lawencon.elearning.service.UsersService;
@@ -24,10 +23,10 @@ import com.lawencon.elearning.service.UsersService;
 @RestController
 @RequestMapping("user")
 public class UsersController {
-	
+
 	@Autowired
 	private UsersService usersService;
-	
+
 	@GetMapping("all")
 	public ResponseEntity<?> getAllUsers() {
 		try {
@@ -38,7 +37,7 @@ public class UsersController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	@GetMapping("{id}")
 	public ResponseEntity<?> getUserById(@PathVariable("id") String id) {
 		try {
@@ -49,19 +48,19 @@ public class UsersController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	@PostMapping
 	public ResponseEntity<?> insertUser(@RequestBody String body) {
 		try {
-			RegisterHelper register = new ObjectMapper().readValue(body, RegisterHelper.class);
-			usersService.insertUser(register);
-			return new ResponseEntity<>(register, HttpStatus.CREATED);
+			Users user = new ObjectMapper().readValue(body, Users.class);
+			usersService.insertUser(user);
+			return new ResponseEntity<>(user, HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	@PatchMapping("/forget-password")
 	public ResponseEntity<?> resetPassword(@RequestBody String body) {
 		try {
@@ -73,7 +72,7 @@ public class UsersController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	@PutMapping
 	public ResponseEntity<?> updateUser(@RequestBody String body) {
 		try {

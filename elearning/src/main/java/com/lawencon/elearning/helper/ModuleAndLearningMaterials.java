@@ -12,8 +12,8 @@ import lombok.Data;
  */
 
 @Data
-public class ModuleAndListLearningMaterial {
+public class ModuleAndLearningMaterials {
 
 	private ModuleRegistrations module;
-	private List<DetailModuleRegistrations> learningMaterialList;
+	private List<DetailModuleRegistrations> learningMaterials;
 }

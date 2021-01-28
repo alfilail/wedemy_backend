@@ -8,7 +8,7 @@ import com.lawencon.elearning.model.DetailClasses;
 import com.lawencon.util.Callback;
 
 @Repository
-public class DetailClassesDaoImpl extends ElearningBaseDaoImpl<DetailClasses> implements DetailClassesDao{
+public class DetailClassesDaoImpl extends ElearningBaseDaoImpl<DetailClasses> implements DetailClassesDao {
 	@Override
 	public void insertDetailClass(DetailClasses detailClass, Callback before) throws Exception {
 		save(detailClass, before, null);
@@ -16,7 +16,11 @@ public class DetailClassesDaoImpl extends ElearningBaseDaoImpl<DetailClasses> im
 
 	@Override
 	public List<DetailClasses> getAllDetailClass() throws Exception {
-		String sql = sqlBuilder("").toString();
 		return getAll();
+	}
+
+	@Override
+	public DetailClasses getDetailClassById(String id) throws Exception {
+		return getById(id);
 	}
 }

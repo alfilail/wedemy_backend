@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.lawencon.elearning.dao.ModuleRegistrationsDao;
 import com.lawencon.elearning.helper.ClassesHelper;
-import com.lawencon.elearning.helper.ModuleAndListLearningMaterial;
+import com.lawencon.elearning.helper.ModuleAndLearningMaterials;
 import com.lawencon.elearning.model.ModuleRegistrations;
 import com.lawencon.elearning.model.Modules;
 
@@ -46,20 +46,21 @@ public class ModuleRegistrationsServiceImpl extends ElearningBaseServiceImpl imp
 	}
 
 	@Override
-	public List<ModuleRegistrations> getByIdClass(String idClass) throws Exception {
-		return moduleRegistrationDao.getByIdClass(idClass);
+	public List<ModuleRegistrations> getByIdDtlClass(String idClass) throws Exception {
+		return moduleRegistrationDao.getByIdDtlClass(idClass);
 	}
 
 	@Override
-	public List<ModuleAndListLearningMaterial> getModuleAndListLearningMaterialByIdClass(String idClass)
+	public List<ModuleAndLearningMaterials> getModuleAndLearningMaterialsByIdDtlClass(String idDtlClass)
 			throws Exception {
-		List<ModuleAndListLearningMaterial> listResult = new ArrayList<>();
-		List<ModuleRegistrations> moduleRgsList = moduleRegistrationDao.getByIdClass(idClass);
+		List<ModuleAndLearningMaterials> listResult = new ArrayList<>();
+		List<ModuleRegistrations> moduleRgsList = moduleRegistrationDao.getByIdDtlClass(idDtlClass);
 		for (ModuleRegistrations moduleRgs : moduleRgsList) {
-			ModuleAndListLearningMaterial result = new ModuleAndListLearningMaterial();
+			ModuleAndLearningMaterials result = new ModuleAndLearningMaterials();
 			result.setModule(moduleRgs);
-			result.setLearningMaterialList(
+			result.setLearningMaterials(
 					dtlModuleRgsService.getDetailModuleRegistrationsByIdModuleRgs(moduleRgs.getId()));
+			listResult.add(result);
 		}
 		return listResult;
 	}
