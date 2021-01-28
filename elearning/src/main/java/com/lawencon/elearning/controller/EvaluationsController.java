@@ -44,13 +44,13 @@ public class EvaluationsController {
 		}
 	}
 	
-	@GetMapping("/report/score/all")
-	public HttpEntity<?> reportAllScores() {
+	@GetMapping("/report/scores")
+	public HttpEntity<?> reportAllScores(@RequestParam("idClass") String idClass) {
 		List<?> listData = new ArrayList<>();
 		byte[] out;
 		try {
-			listData = evaluationsService.reportAllScore();
-			out = JasperUtil.responseToByteArray(listData, "ScoreReport", null);
+			listData = evaluationsService.reportAllScore(idClass);
+			out = JasperUtil.responseToByteArray(listData, "ScoresReport", null);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -62,12 +62,12 @@ public class EvaluationsController {
 	}
 	
 	@GetMapping("/report/score")
-	public HttpEntity<?> reportScore(@RequestParam("idDtlClass") String idDtlClass,
+	public HttpEntity<?> reportScore(@RequestParam("idClass") String idClass,
 			@RequestParam("idParticipant") String idParticipant) {
 		List<?> listData = new ArrayList<>();
 		byte[] out;
 		try {
-			listData = evaluationsService.reportScore(idDtlClass, idParticipant);
+			listData = evaluationsService.reportScore(idClass, idParticipant);
 			out = JasperUtil.responseToByteArray(listData, "ScoreReport", null);
 		} catch (Exception e) {
 			e.printStackTrace();

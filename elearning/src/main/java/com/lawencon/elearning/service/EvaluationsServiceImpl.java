@@ -87,8 +87,8 @@ public class EvaluationsServiceImpl extends BaseServiceImpl implements Evaluatio
 	}
 
 	@Override
-	public List<?> reportAllScore() throws Exception {
-		return evaluationsDao.reportAllScore();
+	public List<?> reportAllScore(String idClass) throws Exception {
+		return evaluationsDao.reportAllScore(idClass);
 	}
 
 	@Override

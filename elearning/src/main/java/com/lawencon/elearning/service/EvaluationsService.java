@@ -18,7 +18,7 @@ public interface EvaluationsService {
 
 	Evaluations getEvaluationByCode(String code) throws Exception;
 	
-	List<?> reportAllScore() throws Exception;
+	List<?> reportAllScore(String idClass) throws Exception;
 	
 	List<?> reportScore(String idDtlClass, String idParticipant) throws Exception;
 

@@ -207,7 +207,7 @@
 		<band splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="60" splitType="Stretch">
+		<band height="58" splitType="Stretch">
 			<staticText>
 				<reportElement x="224" y="33" width="200" height="20" uuid="1a1bde7f-235d-48d5-9d9d-adf7ab42c688"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -258,7 +258,7 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="37" splitType="Stretch">
+		<band height="33" splitType="Stretch">
 			<line>
 				<reportElement x="0" y="31" width="553" height="1" forecolor="#808080" uuid="859188df-c6de-4a1e-a609-68ebad04db4e"/>
 			</line>
@@ -308,42 +308,36 @@
 				<textElement textAlignment="Left"/>
 				<textFieldExpression><![CDATA[" of " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="429" y="13" width="124" height="30" uuid="daaea26a-375b-4161-818c-ba0223f3c8a5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{score1}]]></textFieldExpression>
+			</textField>
 			<staticText>
-				<reportElement x="0" y="6" width="410" height="30" forecolor="#000000" backcolor="#FFFFFF" uuid="60c4cef3-4696-45f8-af04-f34f17df68f2"/>
-				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
+				<reportElement x="1" y="13" width="407" height="30" uuid="e98dbd29-f939-466b-ba36-5ad9dc7452b6"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Total Nilai Rata-rata]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="410" y="6" width="19" height="30" forecolor="#000000" backcolor="#FFFFFF" uuid="3f7575dd-0272-4592-a0a8-ddd6a777b5df"/>
-				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
+				<reportElement x="408" y="13" width="21" height="30" uuid="79a78d10-95af-4c36-9980-5aa95b3c5842"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[:]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="429" y="6" width="124" height="30" uuid="daaea26a-375b-4161-818c-ba0223f3c8a5"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" size="12" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{score1}]]></textFieldExpression>
-			</textField>
+			<line>
+				<reportElement x="1" y="13" width="553" height="1" uuid="4dbc6616-197d-44a0-94bf-849243d4d597"/>
+			</line>
+			<line>
+				<reportElement x="0" y="43" width="553" height="1" uuid="14b98440-25c7-4ebf-9841-757657009d86"/>
+			</line>
 		</band>
 	</pageFooter>
 	<summary>
-		<band splitType="Stretch"/>
+		<band height="50"/>
 	</summary>
 </jasperReport>
