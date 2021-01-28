@@ -20,7 +20,7 @@ public class LearningMaterialTypes extends BaseMaster {
 
 	private static final long serialVersionUID = 7963551211706180316L;
 
-	@Column(name = "code", length = 6, unique = true, nullable = false)
+	@Column(name = "code", length = 7, unique = true, nullable = false)
 	private String code;
 
 	@Column(name = "learning_material_type_name", length = 35, nullable = false)

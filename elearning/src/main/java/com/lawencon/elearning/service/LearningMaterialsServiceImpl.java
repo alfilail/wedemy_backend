@@ -77,6 +77,7 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 				helper.getModuleRegistration().getIdDetailClass().getId(),
 				helper.getModuleRegistration().getIdModule().getId());
 		DetailModuleRegistrations dtlModRegist = helper.getDtlModuleRegistration();
+		dtlModRegist.setCreatedBy(helper.getLearningMaterial().getCreatedBy());
 		dtlModRegist.setIdLearningMaterial(helper.getLearningMaterial());
 		dtlModRegist.setIdModuleRegistration(modRegist);
 		dtlModRegistService.insertDetailModuleRegistration(dtlModRegist);

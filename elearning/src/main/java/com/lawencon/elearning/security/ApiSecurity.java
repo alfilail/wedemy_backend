@@ -16,10 +16,10 @@ import com.lawencon.elearning.service.UsersService;
 
 @EnableWebSecurity
 public class ApiSecurity extends WebSecurityConfigurerAdapter {
-	
+
 	@Autowired
 	private ApiSecurityServiceImpl apiSecurityImpl;
-	
+
 	@Autowired
 	private UsersService usersService;
 
@@ -47,9 +47,7 @@ public class ApiSecurity extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers(HttpMethod.POST, "/role").antMatchers(HttpMethod.POST, "/user").antMatchers(HttpMethod.GET, "/module/**")
-		.antMatchers(HttpMethod.GET, "/presence/**")
-		.antMatchers(HttpMethod.GET, "/class/**");
+		web.ignoring().antMatchers(HttpMethod.POST, "/**").antMatchers(HttpMethod.GET, "/**");
 	}
 
 	@Bean

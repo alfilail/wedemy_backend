@@ -16,24 +16,26 @@ public class ModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<ModuleRegis
 
 	@Override
 	public void insertModuleRegistration(ModuleRegistrations moduleRegistration, Callback before) throws Exception {
-		save(moduleRegistration, before, null, true, true);
+		save(moduleRegistration, before, null);
 	}
 
 	@Override
 	public ModuleRegistrations getByIdDetailClassAndIdModuleRegistration(String idDtlClass, String idModRegist)
 			throws Exception {
-		String sql = sqlBuilder("SELECT id, version FROM t_r_module_registrations WHERE id_detail_class = ?1 and id_module = ?2").toString();
-		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlClass)
-				.setParameter(2, idModRegist).getResultList();
+		String sql = sqlBuilder(
+				"SELECT id, version FROM t_r_module_registrations WHERE id_detail_class = ?1 and id_module = ?2")
+						.toString();
+		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlClass).setParameter(2, idModRegist)
+				.getResultList();
 		return HibernateUtils.bMapperList(listObj, ModuleRegistrations.class, "id", "version").get(0);
 	}
 
 	@Override
 	public List<ModuleRegistrations> getByIdClass(String idClass) throws Exception {
 		List<ModuleRegistrations> listResult = new ArrayList<>();
-		String sql = sqlBuilder("SELECT id, m.id, m.module_name FROM t_r_module_registrations mr ",
+		String sql = sqlBuilder("SELECT mr.id, m.id idmodule, m.code, m.module_name FROM t_r_module_registrations mr ",
 				"INNER JOIN t_m_modules m ON mr.id_module = m.id ",
-				"INNER JOIN t_m_detail_classes dc ON mr.id_detail_class = dc.id WHERE dc.id_class = ?1").toString();
+				"INNER JOIN t_m_detail_classes dc ON mr.id_detail_class = dc.id WHERE dc.id = ?1").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, idClass).getResultList();
 		listObj.forEach(val -> {
 			Object[] objArr = (Object[]) val;
@@ -41,7 +43,8 @@ public class ModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<ModuleRegis
 			moduleRgs.setId((String) objArr[0]);
 			Modules module = new Modules();
 			module.setId((String) objArr[1]);
-			module.setModuleName((String) objArr[2]);
+			module.setCode((String) objArr[2]);
+			module.setModuleName((String) objArr[3]);
 			moduleRgs.setIdModule(module);
 			listResult.add(moduleRgs);
 		});

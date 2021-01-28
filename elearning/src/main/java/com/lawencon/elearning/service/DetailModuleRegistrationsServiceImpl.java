@@ -42,7 +42,7 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 		String trxCodeValue = String.valueOf(random.nextInt((999 + 1 - 100) + 100));
 		String trx = bBuilder(formattedDate).toString();
 		trx = trx.replaceAll("-", "");
-		String trxNumber = bBuilder("ASB-", trx, "-", trxCodeValue).toString();
+		String trxNumber = bBuilder("DMRG-", trx, "-", trxCodeValue).toString();
 		return trxNumber;
 	}
 

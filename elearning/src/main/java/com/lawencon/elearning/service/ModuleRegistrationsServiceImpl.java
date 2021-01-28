@@ -1,13 +1,14 @@
 package com.lawencon.elearning.service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.elearning.dao.ModuleRegistrationsDao;
 import com.lawencon.elearning.helper.ClassesHelper;
 import com.lawencon.elearning.helper.ModuleAndListLearningMaterial;
@@ -15,7 +16,7 @@ import com.lawencon.elearning.model.ModuleRegistrations;
 import com.lawencon.elearning.model.Modules;
 
 @Service
-public class ModuleRegistrationsServiceImpl extends BaseServiceImpl implements ModuleRegistrationsService {
+public class ModuleRegistrationsServiceImpl extends ElearningBaseServiceImpl implements ModuleRegistrationsService {
 
 	@Autowired
 	private ModuleRegistrationsDao moduleRegistrationDao;
@@ -29,7 +30,8 @@ public class ModuleRegistrationsServiceImpl extends BaseServiceImpl implements M
 		Modules[] modulesList = clazzHelper.getModule();
 		for (Modules modules : modulesList) {
 			ModuleRegistrations moduleRegistrations = new ModuleRegistrations();
-			moduleRegistrations.setCreatedAt(LocalDateTime.now());
+			moduleRegistrations.setCreatedBy(clazzHelper.getClazz().getCreatedBy());
+			moduleRegistrations.setTrxNumber(generateTrxNumber());
 			moduleRegistrations.setIdDetailClass(clazzHelper.getDetailClass());
 			moduleRegistrations.setIdModule(modules);
 			moduleRegistrationDao.insertModuleRegistration(moduleRegistrations,
@@ -44,7 +46,13 @@ public class ModuleRegistrationsServiceImpl extends BaseServiceImpl implements M
 	}
 
 	@Override
-	public List<ModuleAndListLearningMaterial> getByIdClass(String idClass) throws Exception {
+	public List<ModuleRegistrations> getByIdClass(String idClass) throws Exception {
+		return moduleRegistrationDao.getByIdClass(idClass);
+	}
+
+	@Override
+	public List<ModuleAndListLearningMaterial> getModuleAndListLearningMaterialByIdClass(String idClass)
+			throws Exception {
 		List<ModuleAndListLearningMaterial> listResult = new ArrayList<>();
 		List<ModuleRegistrations> moduleRgsList = moduleRegistrationDao.getByIdClass(idClass);
 		for (ModuleRegistrations moduleRgs : moduleRgsList) {
@@ -58,6 +66,18 @@ public class ModuleRegistrationsServiceImpl extends BaseServiceImpl implements M
 
 	private void validateInsert(ModuleRegistrations moduleRegistration) {
 
+	}
+
+	private String generateTrxNumber() {
+		Random random = new Random();
+		LocalDate localDate = LocalDate.now();
+		DateTimeFormatter myFormat = DateTimeFormatter.ofPattern("yy-MM-dd");
+		String formattedDate = localDate.format(myFormat);
+		String trxCodeValue = String.valueOf(random.nextInt((999 + 1 - 100) + 100));
+		String trx = bBuilder(formattedDate).toString();
+		trx = trx.replaceAll("-", "");
+		String trxNumber = bBuilder("MRG-", trx, "-", trxCodeValue).toString();
+		return trxNumber;
 	}
 
 }

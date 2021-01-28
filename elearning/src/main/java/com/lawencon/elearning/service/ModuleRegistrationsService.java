@@ -13,6 +13,8 @@ public interface ModuleRegistrationsService {
 	ModuleRegistrations getByIdDetailClassAndIdModuleRegistration(String idDtlClass, String idModRegist)
 			throws Exception;
 
-	List<ModuleAndListLearningMaterial> getByIdClass(String idClass) throws Exception;
+	List<ModuleRegistrations> getByIdClass(String idClass) throws Exception;
+
+	List<ModuleAndListLearningMaterial> getModuleAndListLearningMaterialByIdClass(String idClass) throws Exception;
 
 }

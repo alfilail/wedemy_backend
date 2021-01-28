@@ -30,6 +30,9 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 	private ProfilesService profilesService;
 
 	@Autowired
+	private RolesService rolesService;
+
+	@Autowired
 	JavaMailSender javaMailSender;
 
 	@Override
@@ -39,6 +42,7 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 			profilesService.insertProfile(register.getProfile());
 			Users user = register.getUser();
 			user.setIdProfile(register.getProfile());
+			user.setIdRole(rolesService.getRoleByCode(register.getUser().getIdRole().getCode()));
 			user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
 			usersDao.insertUser(user, () -> validateInsert(user));
 			commit();
