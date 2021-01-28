@@ -1,6 +1,5 @@
 package com.lawencon.elearning.service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +40,6 @@ public class EvaluationsServiceImpl extends BaseServiceImpl implements Evaluatio
 	public void insertEvaluation(Evaluations evaluation) throws Exception {
 		Grades grade = gradesService.getGradeByScore(evaluation.getScore());
 		evaluation.setIdGrade(grade);
-		evaluation.setCreatedAt(LocalDateTime.now());
 		evaluationsDao.insertEvaluation(evaluation, () -> validateInsert(evaluation));
 		insertStatusRenewal(evaluation);
 		System.out.println("Sending Email...");

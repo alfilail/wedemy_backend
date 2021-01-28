@@ -1,6 +1,5 @@
 package com.lawencon.elearning.service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +16,7 @@ public class LearningMaterialTypesServiceImpl extends BaseServiceImpl implements
 
 	@Override
 	public void insertLearningMaterialType(LearningMaterialTypes assignmentType) throws Exception {
-		assignmentType.setCreatedAt(LocalDateTime.now());
-		assignmentTypesDao.insertAssignmentType(assignmentType, 
-				() -> validateInsert(assignmentType));
+		assignmentTypesDao.insertAssignmentType(assignmentType, () -> validateInsert(assignmentType));
 	}
 
 	@Override
@@ -39,9 +36,7 @@ public class LearningMaterialTypesServiceImpl extends BaseServiceImpl implements
 
 	@Override
 	public void updateLearningMaterialType(LearningMaterialTypes assignmentType) throws Exception {
-		assignmentType.setUpdatedAt(LocalDateTime.now());
-		assignmentTypesDao.updateAssignmentType(assignmentType, 
-				()-> validateUpdate(assignmentType));
+		assignmentTypesDao.updateAssignmentType(assignmentType, () -> validateUpdate(assignmentType));
 	}
 
 	@Override
@@ -54,7 +49,7 @@ public class LearningMaterialTypesServiceImpl extends BaseServiceImpl implements
 			throw new Exception("Invalid Input Assignment Type Code");
 		}
 	}
-	
+
 	private void validateUpdate(LearningMaterialTypes assignmentType) throws Exception {
 		if (assignmentType.getCode() == null) {
 			throw new Exception("Invalid Input Assignment Type Code");

@@ -28,10 +28,7 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 
 	@Autowired
 	private ProfilesService profilesService;
-	
-//	@Autowired
-//	private RolesService rolesService;
-	
+
 	@Autowired
 	JavaMailSender javaMailSender;
 
@@ -41,8 +38,6 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 			begin();
 			profilesService.insertProfile(register.getProfile());
 			Users user = register.getUser();
-//		Roles role = rolesService.getRoleById(user.getIdRole().getId());
-//		user.setIdRole(role);
 			user.setIdProfile(register.getProfile());
 			user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
 			usersDao.insertUser(user, () -> validateInsert(user));
@@ -77,7 +72,7 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 	public void deleteUserById(String id) throws Exception {
 		usersDao.deleteUserById(id);
 	}
-	
+
 	@Override
 	public Users updateUserPassword(Profiles profile) throws Exception {
 		Profiles profiles = profilesService.getProfileByEmail(profile.getEmail());
@@ -91,23 +86,21 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 		System.out.println("Done");
 		return user;
 	}
-	
+
 	private String generatePassword() {
 		RandomString random = new RandomString(5);
 		String pass = random.nextString();
 		return pass;
 	}
-	
+
 	private void sendEmail(String pass, Profiles profile) throws Exception {
 		SimpleMailMessage msg = new SimpleMailMessage();
 		msg.setTo(profile.getEmail());
 		msg.setSubject("Password has been reset");
-		msg.setText("Dear "+ profile.getFullName() +",\nPassword has been reset. Here is your new password."
-				+ "\nPassword : " + pass
-				+ "\n\nClick http://localhost:8080/api/login to login. \n"
-				+ "\n Save information of your account and "
-				+" change your password soon for your security account."
-				+" \n \n Best Regards, \n Elearning Alfione");
+		msg.setText("Dear " + profile.getFullName() + ",\nPassword has been reset. Here is your new password."
+				+ "\nPassword : " + pass + "\n\nClick http://localhost:8080/api/login to login. \n"
+				+ "\n Save information of your account and " + " change your password soon for your security account."
+				+ " \n \n Best Regards, \n Elearning Alfione");
 		javaMailSender.send(msg);
 	}
 

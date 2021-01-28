@@ -25,7 +25,7 @@ public class ModuleRegistrationsServiceImpl extends BaseServiceImpl implements M
 
 	@Override
 	public void insertModuleRegistration(ClassesHelper clazzHelper) throws Exception {
-		System.out.println("module : "+clazzHelper.getModule());
+		System.out.println("module : " + clazzHelper.getModule());
 		Modules[] modulesList = clazzHelper.getModule();
 		for (Modules modules : modulesList) {
 			ModuleRegistrations moduleRegistrations = new ModuleRegistrations();
@@ -43,18 +43,18 @@ public class ModuleRegistrationsServiceImpl extends BaseServiceImpl implements M
 		return moduleRegistrationDao.getByIdDetailClassAndIdModuleRegistration(idDtlClass, idModRegist);
 	}
 
-//	@Override
-//	public List<ModuleAndListLearningMaterial> getByIdClass(String idClass) throws Exception {
-//		List<ModuleAndListLearningMaterial> listResult = new ArrayList<>();
-//		List<ModuleRegistrations> moduleRgsList = moduleRegistrationDao.getByIdClass(idClass);
-//		for (ModuleRegistrations moduleRgs : moduleRgsList) {
-//			ModuleAndListLearningMaterial result = new ModuleAndListLearningMaterial();
-//			result.setModule(moduleRgs);
-//			result.setLearningMaterialList(
-//					dtlModuleRgsService.getDetailModuleRegistrationsByIdModuleRgs(moduleRgs.getId()));
-//		}
-//		return listResult;
-//	}
+	@Override
+	public List<ModuleAndListLearningMaterial> getByIdClass(String idClass) throws Exception {
+		List<ModuleAndListLearningMaterial> listResult = new ArrayList<>();
+		List<ModuleRegistrations> moduleRgsList = moduleRegistrationDao.getByIdClass(idClass);
+		for (ModuleRegistrations moduleRgs : moduleRgsList) {
+			ModuleAndListLearningMaterial result = new ModuleAndListLearningMaterial();
+			result.setModule(moduleRgs);
+			result.setLearningMaterialList(
+					dtlModuleRgsService.getDetailModuleRegistrationsByIdModuleRgs(moduleRgs.getId()));
+		}
+		return listResult;
+	}
 
 	private void validateInsert(ModuleRegistrations moduleRegistration) {
 

@@ -24,7 +24,7 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 
 	@Autowired
 	private DetailClassesService detailClassesService;
-	
+
 	@Autowired
 	private UsersService usersService;
 
@@ -36,19 +36,15 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 				Classes clazz = helper.getClazz();
 				Users tutor = usersService.getUserById(clazz.getIdTutor().getId());
 				clazz.setIdTutor(tutor);
-//				clazz.setCreatedAt(LocalDateTime.now());
 				clazz.setThumbnailImg(file.getBytes());
 				clazz.setFileType(file.getContentType());
-				
 				classesDao.insertClass(clazz, () -> validateInsert(clazz));
-				
 				DetailClasses detailClass = helper.getDetailClass();
 				detailClass.setIdClass(clazz);
 				helper.setDetailClass(detailClass);
 			}
 			detailClassesService.insertDetailClass(helper);
-			
-			moduleRegistrationsService.insertModuleRegistration(helper);	
+			moduleRegistrationsService.insertModuleRegistration(helper);
 			commit();
 		} catch (Exception e) {
 			rollback();

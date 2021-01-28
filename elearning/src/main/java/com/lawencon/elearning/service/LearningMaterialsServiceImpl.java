@@ -1,7 +1,5 @@
 package com.lawencon.elearning.service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +33,6 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 	public void insertLearningMaterial(LearningMaterialsHelper helper, MultipartFile file) throws Exception {
 		try {
 			begin();
-			helper.getLearningMaterial().setCreatedAt(LocalDateTime.now());
 			helper.getLearningMaterial().setFile(file.getBytes());
 			helper.getLearningMaterial().setFileType(file.getContentType());
 			learningMaterialsDao.insertLearningMaterial(helper.getLearningMaterial(),
@@ -60,7 +57,6 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 
 	@Override
 	public void updateLearningMaterial(LearningMaterials learningMaterial, MultipartFile file) throws Exception {
-		learningMaterial.setUpdatedAt(LocalDateTime.now());
 		learningMaterial.setFile(file.getBytes());
 		learningMaterial.setFileType(file.getContentType());
 		learningMaterialsDao.updateLearningMaterial(learningMaterial, () -> validateUpdate(learningMaterial));

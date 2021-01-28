@@ -1,6 +1,5 @@
 package com.lawencon.elearning.service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,6 @@ public class GradesServiceImpl extends BaseServiceImpl implements GradesService 
 
 	@Override
 	public void insertGrade(Grades grade) throws Exception {
-		grade.setCreatedAt(LocalDateTime.now());
 		gradeDao.insertGrade(grade, () -> validateInsert(grade));
 	}
 
@@ -49,7 +47,6 @@ public class GradesServiceImpl extends BaseServiceImpl implements GradesService 
 
 	@Override
 	public void updateGrades(Grades grade) throws Exception {
-		grade.setUpdatedAt(LocalDateTime.now());
 		gradeDao.updateGrades(grade, () -> validateUpdate(grade));
 	}
 

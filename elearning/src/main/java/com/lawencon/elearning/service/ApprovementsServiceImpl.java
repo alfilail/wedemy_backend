@@ -1,6 +1,5 @@
 package com.lawencon.elearning.service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +20,6 @@ public class ApprovementsServiceImpl extends ElearningBaseServiceImpl implements
 
 	@Override
 	public void insertApprovement(Approvements approvement) throws Exception {
-		approvement.setCreatedAt(LocalDateTime.now());
-		approvement.setUpdatedAt(LocalDateTime.now());
 		approvementsDao.insertApprovement(approvement, () -> validateInsert(approvement));
 	}
 
@@ -38,7 +35,6 @@ public class ApprovementsServiceImpl extends ElearningBaseServiceImpl implements
 
 	@Override
 	public void updateApprovement(Approvements approvement) throws Exception {
-		approvement.setUpdatedAt(LocalDateTime.now());
 		approvementsDao.updateApprovement(approvement, () -> validateUpdate(approvement));
 	}
 
