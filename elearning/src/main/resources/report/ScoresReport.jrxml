@@ -56,7 +56,7 @@
 		<band splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="133" splitType="Stretch">
+		<band height="134" splitType="Stretch">
 			<staticText>
 				<reportElement x="1" y="10" width="89" height="20" uuid="ea2f2ad0-21fb-4fff-9001-e1a359ebcc30"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
@@ -163,8 +163,8 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="26" splitType="Stretch">
-			<textField>
+		<band height="28" splitType="Stretch">
+			<textField pattern="###0.00#;(###0.00#-)">
 				<reportElement x="300" y="0" width="254" height="20" uuid="c8ed13d4-dcd4-44cb-85a9-83ce51bbcc61">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d17a2363-939f-4733-a184-e0bcf172e454"/>
 				</reportElement>
@@ -172,13 +172,6 @@
 					<font fontName="Arial" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{score}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="0" y="0" width="46" height="20" uuid="31fa1d67-5408-4700-ade7-c66108a643c1"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{COLUMN_NUMBER}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="46" y="0" width="254" height="20" uuid="777633d4-bd7b-4d52-ba67-ed2a825c8dea"/>
@@ -190,6 +183,13 @@
 			<line>
 				<reportElement x="1" y="23" width="553" height="1" forecolor="#808080" uuid="74d278e6-8284-4b99-902c-835a7f5b369a"/>
 			</line>
+			<textField>
+				<reportElement x="0" y="0" width="46" height="20" uuid="65cd23d0-a1f6-488c-be29-6ddcb3ad3379"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{COLUMN_COUNT}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<columnFooter>
