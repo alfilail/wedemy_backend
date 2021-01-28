@@ -1,5 +1,6 @@
 package com.lawencon.elearning.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -32,12 +33,19 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 
 	@Override
 	public void insertLearningMaterial(LearningMaterialsHelper helper, MultipartFile file) throws Exception {
-		helper.getLearningMaterial().setCreatedAt(LocalDateTime.now());
-		helper.getLearningMaterial().setFile(file.getBytes());
-		helper.getLearningMaterial().setFileType(file.getContentType());
-		learningMaterialsDao.insertLearningMaterial(helper.getLearningMaterial(),
-				() -> validateInsert(helper.getLearningMaterial()));
-		insertDetailModulRegistration(helper);
+		try {
+			begin();
+			helper.getLearningMaterial().setCreatedAt(LocalDateTime.now());
+			helper.getLearningMaterial().setFile(file.getBytes());
+			helper.getLearningMaterial().setFileType(file.getContentType());
+			learningMaterialsDao.insertLearningMaterial(helper.getLearningMaterial(),
+					() -> validateInsert(helper.getLearningMaterial()));
+			insertDetailModulRegistration(helper);
+			commit();
+		} catch (Exception e) {
+			rollback();
+			throw new Exception(e);
+		}
 	}
 
 	@Override
@@ -72,7 +80,7 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 		ModuleRegistrations modRegist = moduleRegistrationsService.getByIdDetailClassAndIdModuleRegistration(
 				helper.getModuleRegistration().getIdDetailClass().getId(),
 				helper.getModuleRegistration().getIdModule().getId());
-		DetailModuleRegistrations dtlModRegist = new DetailModuleRegistrations();
+		DetailModuleRegistrations dtlModRegist = helper.getDtlModuleRegistration();
 		dtlModRegist.setIdLearningMaterial(helper.getLearningMaterial());
 		dtlModRegist.setIdModuleRegistration(modRegist);
 		dtlModRegistService.insertDetailModuleRegistration(dtlModRegist);

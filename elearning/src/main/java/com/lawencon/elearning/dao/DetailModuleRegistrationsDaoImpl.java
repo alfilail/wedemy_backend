@@ -15,7 +15,7 @@ public class DetailModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<Detai
 	@Override
 	public void insertDetailModuleRegistration(DetailModuleRegistrations dtlModRegist, Callback before)
 			throws Exception {
-		save(dtlModRegist, before, null, true, true);
+		save(dtlModRegist, before, null);
 	}
 
 	@Override

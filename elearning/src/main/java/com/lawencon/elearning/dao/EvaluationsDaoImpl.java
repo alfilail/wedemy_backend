@@ -60,7 +60,7 @@ public class EvaluationsDaoImpl extends ElearningBaseDaoImpl<Evaluations> implem
 	
 	@Override
 	public List<?> reportAllScore() throws Exception {
-		String sql = sqlBuilder("SELECT p.fullname, m.module_name, AVG(e.score) ",
+		String sql = sqlBuilder("SELECT p.fullname, p.email, p.address, p.phone, m.code, m.module_name, AVG(e.score) ",
 				" FROM t_r_evaluations e ",
 				" INNER JOIN t_r_assignment_submissions ams ON ams.id = e.id_assignment_submission ",
 				" INNER JOIN t_m_users u ON u.id = ams.id_participant ",
@@ -68,19 +68,23 @@ public class EvaluationsDaoImpl extends ElearningBaseDaoImpl<Evaluations> implem
 				" INNER JOIN t_r_detail_module_registrations dmr ON dmr.id = ams.id_dtl_module_rgs ",
 				" INNER JOIN t_r_module_registrations mr ON mr.id = dmr.id_module_rgs ",
 				" INNER JOIN t_m_modules m ON m.id = mr.id_module ",
-				" GROUP BY p.fullname, m.module_name").toString();
+				" GROUP BY p.fullname, p.email, p.address, p.phone, m.code, m.module_name").toString();
 		List<?> listObj = createNativeQuery(sql).getResultList();
 		List<Evaluations> listEvaluations = new ArrayList<>();
 		listObj.forEach(val -> {
 			Object[] objArr = (Object[]) val;
 			Profiles profile = new Profiles();
 			profile.setFullName((String) objArr[0]);
+			profile.setEmail((String) objArr[1]);
+			profile.setAddress((String) objArr[2]);
+			profile.setPhone((String) objArr[3]);
 			
 			Users user = new Users();
 			user.setIdProfile(profile);
 			
 			Modules module = new Modules();
-			module.setModuleName((String) objArr[1]);
+			module.setCode((String) objArr[4]);
+			module.setModuleName((String) objArr[5]);
 			
 			ModuleRegistrations modRegist = new ModuleRegistrations();
 			modRegist.setIdModule(module);
@@ -94,7 +98,7 @@ public class EvaluationsDaoImpl extends ElearningBaseDaoImpl<Evaluations> implem
 			
 			Evaluations evaluation = new Evaluations();
 			evaluation.setIdAssignmentSubmission(assignmentSubmission);
-			evaluation.setScore((Double) objArr[2]);
+			evaluation.setScore((Double) objArr[6]);
 			
 			listEvaluations.add(evaluation);
 		});

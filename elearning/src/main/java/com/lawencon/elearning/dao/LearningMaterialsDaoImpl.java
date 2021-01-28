@@ -12,7 +12,7 @@ public class LearningMaterialsDaoImpl extends ElearningBaseDaoImpl<LearningMater
 
 	@Override
 	public void insertLearningMaterial(LearningMaterials learningMaterial, Callback before) throws Exception {
-		save(learningMaterial, before, null, true, true);
+		save(learningMaterial, before, null);
 	}
 
 	@Override

@@ -9,6 +9,6 @@ import com.lawencon.util.Callback;
 public class DetailClassesDaoImpl extends ElearningBaseDaoImpl<DetailClasses> implements DetailClassesDao{
 	@Override
 	public void insertDetailClass(DetailClasses detailClass, Callback before) throws Exception {
-		save(detailClass, before, null, true, true);
+		save(detailClass, before, null);
 	}
 }

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4_Landscape" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="428f3a04-8707-4b23-9398-8a95db4c374b">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="fullname.Fullname" class="java.lang.String"/>
+	<field name="className.className" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="115" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="200" y="-17" width="400" height="62" uuid="417978a2-cede-421a-9d35-17ebbd538317"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="34"/>
+				</textElement>
+				<text><![CDATA[Wedemy Elearning]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="101" y="58" width="662" height="42" uuid="8d2fb28f-bec3-4fef-b253-45935ba7b9b9"/>
+				<textElement textAlignment="Center">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Jalan Casablanca Kav. 18, Jakarta 12870. Phone : +62218317113, +62218317112 Fax : +62218317115.]]></text>
+			</staticText>
+			<image>
+				<reportElement x="15" y="0" width="82" height="82" uuid="48bdbc09-fa57-48f6-89c1-d49a29e79be6"/>
+				<imageExpression><![CDATA["src/main/resources/report/logo-02.png"]]></imageExpression>
+			</image>
+			<frame>
+				<reportElement mode="Opaque" x="-16" y="83" width="832" height="24" forecolor="#D0B48E" backcolor="#F2EBDF" uuid="09174c7a-7d10-4270-ae3d-587396347563"/>
+			</frame>
+			<staticText>
+				<reportElement x="80" y="30" width="662" height="42" uuid="00f07f80-3f60-4413-bcd7-fa58f1376b98"/>
+				<textElement textAlignment="Center">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Powered by Lawencon]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="195" splitType="Stretch">
+			<staticText>
+				<reportElement x="184" y="-10" width="395" height="40" uuid="bec23a0f-2c8f-4509-bd37-d3ae41c3b098"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="30" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Certificate of Excellence]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="236" y="41" width="290" height="30" uuid="c0243d98-514d-4db1-a00b-74a4cb36aa94"/>
+				<textElement textAlignment="Center">
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[This certificate is proudly present to]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="162" y="130" width="439" height="30" uuid="17c6f5ac-2eea-4022-8f9b-1141b6674300"/>
+				<textElement textAlignment="Center">
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[For successfully passing the final exam on online course]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="227" y="70" width="309" height="50" uuid="14bc819c-8225-4f00-9522-0afd033f5bfe"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="24" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fullname.Fullname}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="303" y="156" width="157" height="30" uuid="c075e4d4-ee75-47e4-9034-4579aa2b8347"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="20" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{className.className}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<columnFooter>
+		<band height="141" splitType="Stretch">
+			<componentElement>
+				<reportElement x="674" y="18" width="107" height="90" uuid="62af33ff-08c1-4a83-9be9-7f1b7c08aa57"/>
+				<jr:QRCode xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<jr:codeExpression><![CDATA["123456789"]]></jr:codeExpression>
+				</jr:QRCode>
+			</componentElement>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="330" y="3" width="100" height="30" uuid="45f6f74f-07db-448e-9d2b-d6ab655bce55"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="354" y="31" width="70" height="68" uuid="ca349b08-bab5-48e1-98b6-02651da40326"/>
+				<imageExpression><![CDATA["src/main/resources/report/ttd alfi.png.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="331" y="91" width="100" height="30" uuid="3a7d908d-93b3-45fe-9d31-f2244e6f3f35"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="18"/>
+				</textElement>
+				<text><![CDATA[Nur Alfilail]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
+</jasperReport>

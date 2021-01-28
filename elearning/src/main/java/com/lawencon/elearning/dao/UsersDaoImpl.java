@@ -13,7 +13,7 @@ public class UsersDaoImpl extends ElearningBaseDaoImpl<Users> implements UsersDa
 
 	@Override
 	public void insertUser(Users user, Callback before) throws Exception {
-		save(user, before, null, true, true);
+		save(user, before, null);
 	}
 
 	@Override

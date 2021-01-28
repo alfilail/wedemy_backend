@@ -33,9 +33,9 @@ public class GradesDaoImpl extends ElearningBaseDaoImpl<Grades> implements Grade
 
 	@Override
 	public Grades getGradeByScore(Double score) throws Exception {
-		String sql = sqlBuilder("SELECT id FROM t_m_grades WHERE min_score <= ?1 AND max_score >= ?1").toString();
+		String sql = sqlBuilder("SELECT id, version FROM t_m_grades WHERE min_score <= ?1 AND max_score >= ?1").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, score).getResultList();
-		return HibernateUtils.bMapperList(listObj, Grades.class, "id").get(0);
+		return HibernateUtils.bMapperList(listObj, Grades.class, "id", "version").get(0);
 	}
 
 	@Override

@@ -35,8 +35,9 @@
 	<field name="fullname.fullName" class="java.lang.String"/>
 	<field name="presentDay" class="java.lang.Integer"/>
 	<field name="module.moduleName" class="java.lang.String"/>
+	<field name="clazz.className" class="java.lang.String"/>
 	<title>
-		<band height="126" splitType="Stretch">
+		<band height="108" splitType="Stretch">
 			<staticText>
 				<reportElement style="Title" x="200" y="-17" width="400" height="62" uuid="a080d2ca-6207-4d8e-87c9-d3b61fb495a9"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -56,7 +57,7 @@
 				<imageExpression><![CDATA["src/main/resources/report/logo-02.png"]]></imageExpression>
 			</image>
 			<frame>
-				<reportElement mode="Opaque" x="-20" y="102" width="843" height="24" forecolor="#D0B48E" backcolor="#F2EBDF" uuid="f2324113-3563-4f48-b688-ed82b3098434"/>
+				<reportElement mode="Opaque" x="-20" y="79" width="843" height="24" forecolor="#D0B48E" backcolor="#F2EBDF" uuid="f2324113-3563-4f48-b688-ed82b3098434"/>
 			</frame>
 			<staticText>
 				<reportElement x="80" y="30" width="662" height="42" uuid="ea9d4654-8101-4059-bfb1-e9db687d7b44"/>
@@ -68,38 +69,75 @@
 		</band>
 	</title>
 	<columnHeader>
-		<band height="36">
+		<band height="67">
+			<line>
+				<reportElement x="0" y="35" width="800" height="1" uuid="e117b6f7-ce84-4860-90a7-6fb3f2d67d07"/>
+			</line>
+			<line>
+				<reportElement x="0" y="62" width="800" height="1" uuid="e73de48a-9f8f-4581-923f-13e601c02f01"/>
+			</line>
 			<staticText>
-				<reportElement x="20" y="3" width="100" height="30" uuid="f198b161-0fbd-4c51-8803-945cea169b1d"/>
+				<reportElement x="97" y="35" width="100" height="30" uuid="f198b161-0fbd-4c51-8803-945cea169b1d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Fullname]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="260" y="0" width="100" height="30" uuid="5227cfd7-b0f2-4a35-a1db-91a2a3008f13"/>
+				<reportElement x="586" y="34" width="100" height="30" uuid="5227cfd7-b0f2-4a35-a1db-91a2a3008f13"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Present Day]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="500" y="3" width="100" height="30" uuid="0b164fce-5d01-4ae0-8fa1-5be3d58c83f2"/>
+				<reportElement x="339" y="34" width="100" height="30" uuid="0b164fce-5d01-4ae0-8fa1-5be3d58c83f2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Module Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="39" width="60" height="20" uuid="b8b42d7c-bce6-471d-8226-f90629e75990"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[No]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="98" y="-3" width="139" height="30" uuid="d43a6f4a-346f-4a00-bd6e-aa3492d8a5a1"/>
+				<textElement verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{clazz.className}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="-3" width="100" height="30" uuid="29a10bce-18f0-4cd8-915b-334bb43b328f"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Class Name :]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="44">
+		<band height="55">
 			<textField>
-				<reportElement x="20" y="10" width="100" height="30" uuid="d7f43c1f-48a5-4fa1-bb96-bcf88fdc3aae"/>
+				<reportElement x="123" y="-2" width="100" height="30" uuid="d7f43c1f-48a5-4fa1-bb96-bcf88fdc3aae"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{fullname.fullName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="260" y="10" width="100" height="30" uuid="dff52be4-706d-427f-aba8-6eed49ce0fb5"/>
+				<reportElement x="592" y="-2" width="100" height="30" uuid="dff52be4-706d-427f-aba8-6eed49ce0fb5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{presentDay}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="500" y="10" width="100" height="30" uuid="0232ddf3-5e33-4651-b98a-cc4f8df6f3da"/>
+				<reportElement x="357" y="-1" width="100" height="30" uuid="0232ddf3-5e33-4651-b98a-cc4f8df6f3da"/>
 				<textFieldExpression><![CDATA[$F{module.moduleName}]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement x="36" y="2" width="100" height="30" uuid="4fb2300d-3eab-4a0c-9b53-bc81c7188d39"/>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="1" y="29" width="798" height="1" forecolor="#808080" uuid="45baf678-d576-4f72-b25a-027d29f6b4ac"/>
+			</line>
 		</band>
 	</detail>
 	<pageFooter>
-		<band height="43" splitType="Stretch"/>
+		<band height="73" splitType="Stretch"/>
 	</pageFooter>
 </jasperReport>

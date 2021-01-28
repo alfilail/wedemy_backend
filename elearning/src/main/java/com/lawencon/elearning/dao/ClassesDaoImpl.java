@@ -12,7 +12,7 @@ public class ClassesDaoImpl extends ElearningBaseDaoImpl<Classes> implements Cla
 
 	@Override
 	public void insertClass(Classes clazz, Callback before) throws Exception {
-		save(clazz, before, null, true, true);
+		save(clazz, before, null);
 	}
 
 	@Override
