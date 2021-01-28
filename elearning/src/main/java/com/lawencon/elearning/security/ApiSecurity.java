@@ -47,8 +47,8 @@ public class ApiSecurity extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers(HttpMethod.POST, "/roles").antMatchers(HttpMethod.POST, "/user").antMatchers(HttpMethod.GET, "/module/**")
-		.antMatchers(HttpMethod.GET, "/presences/**")
+		web.ignoring().antMatchers(HttpMethod.POST, "/role").antMatchers(HttpMethod.POST, "/user").antMatchers(HttpMethod.GET, "/module/**")
+		.antMatchers(HttpMethod.GET, "/presence/**")
 		.antMatchers(HttpMethod.GET, "/class/**");
 	}
 
