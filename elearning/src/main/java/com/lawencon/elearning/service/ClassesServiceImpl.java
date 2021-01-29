@@ -32,19 +32,33 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 	public void insertClass(ClassesHelper helper, MultipartFile file) throws Exception {
 		try {
 			begin();
-			if (helper.getClazz().getCode() != null) {
+			if (null != helper.getClazz().getCode()) {
 				Classes clazz = helper.getClazz();
-				Users tutor = usersService.getUserById(clazz.getIdTutor().getId());
-				clazz.setIdTutor(tutor);
-				clazz.setThumbnailImg(file.getBytes());
-				clazz.setFileType(file.getContentType());
-				classesDao.insertClass(clazz, () -> validateInsert(clazz));
-				DetailClasses detailClass = helper.getDetailClass();
-				detailClass.setIdClass(clazz);
-				helper.setDetailClass(detailClass);
+				if (null != helper.getClazz().getIdTutor()) {
+					Users tutor = usersService.getUserById(clazz.getIdTutor().getId());
+					if (null != tutor) {
+						clazz.setIdTutor(tutor);
+						clazz.setThumbnailImg(file.getBytes());
+						clazz.setFileType(file.getContentType());
+						classesDao.insertClass(clazz, () -> validateInsert(clazz));
+						if(helper.getDetailClass() != null) {
+							DetailClasses detailClass = helper.getDetailClass();
+							detailClass.setIdClass(clazz);
+							helper.setDetailClass(detailClass);
+							detailClassesService.insertDetailClass(helper.getDetailClass());
+							if(helper.getModule() != null) {
+								moduleRegistrationsService.insertModuleRegistration(helper);
+							}
+						}
+					} else {
+						validateInsert(helper.getClazz());
+					}
+				} else {
+					validateInsert(helper.getClazz());
+				}
+			} else {
+				validateInsert(helper.getClazz());
 			}
-			detailClassesService.insertDetailClass(helper);
-			moduleRegistrationsService.insertModuleRegistration(helper);
 			commit();
 		} catch (Exception e) {
 			rollback();
@@ -78,26 +92,45 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 	public void deleteClassById(String id) throws Exception {
 		classesDao.deleteClassById(id);
 	}
-	
+
 	private void validateInsert(Classes clazz) throws Exception {
-//		if(clazz.getCode() == null || clazz.getCode().equals("")) {
-//			throw new Exception("Class code can't be empty!");
-//		} else {
-//			Classes cls = getClassByCode(clazz.getCode());
-//			if(cls != null) {
-//				throw new Exception("Class code you've inputted is exist!");
-//			} else {
-//				String[] type = clazz.getFileType().split("/");
-//				String ext = type[1];
-//				if (clazz.getClassName() == null) {
-//					throw new Exception("Class name can't be empty!");
-//				} else if (clazz.getDescription() == null) {
-//					throw new Exception("Class description can't be empty!");
-//				}else if(ext != "jpg" || ext!= "png" || ext != "jpeg") {
-//					throw new Exception("File type must be image!");
-//				}
-//			}	
-//		}
+		if (clazz.getCode() == null || clazz.getCode().trim().equals("")) {
+			throw new Exception("Kode kelas tidak boleh kosong!");
+		} else {
+			Classes cls = getClassByCode(clazz.getCode());
+			if (cls != null) {
+				throw new Exception("Kode kelas yang dimasukkan sudah ada!");
+			} else {
+				if (clazz.getIdTutor() == null) {
+					throw new Exception("Tutor tidak boleh kosong!");
+				} else {
+					Users user = usersService.getUserById(clazz.getIdTutor().getId());
+					if (user == null) {
+						throw new Exception("Id Tutor tidak ada!");
+					} else {
+						String[] type = clazz.getFileType().split("/");
+						String ext = type[1];
+						System.out.println("type" + clazz.getFileType());
+						System.out.println("test" + ext);
+						if (ext != null) {
+							if(ext.equalsIgnoreCase("png") || 
+									ext.equalsIgnoreCase("png") || 
+									ext.equalsIgnoreCase("jpeg")) {
+							}
+							else {
+								throw new Exception("File harus gambar!");
+							}
+						} else if (clazz.getClassName() == null) {
+							throw new Exception("Nama kelas tidak boleh kosong!");
+						} else if (clazz.getDescription() == null) {
+							throw new Exception("Dekripsi kelas tidak boleh kosong!");
+						} else if (clazz.getQuota() == null) {
+							throw new Exception("Quota kelas tidak boleh kosong!");
+						}
+					}
+				}
+			}
+		}
 	}
 
 	private void validateUpdate(Classes clazz) {

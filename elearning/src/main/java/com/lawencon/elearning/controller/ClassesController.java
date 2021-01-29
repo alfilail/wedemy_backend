@@ -57,7 +57,7 @@ public class ClassesController {
 			obj.registerModule(new JavaTimeModule());
 			ClassesHelper clazzHelper = obj.readValue(body, ClassesHelper.class);
 			classesService.insertClass(clazzHelper, file);
-			return new ResponseEntity<>(clazzHelper, HttpStatus.CREATED);
+			return new ResponseEntity<>(clazzHelper.getClazz(), HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

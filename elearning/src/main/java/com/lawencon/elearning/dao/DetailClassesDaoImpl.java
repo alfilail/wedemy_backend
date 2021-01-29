@@ -23,4 +23,12 @@ public class DetailClassesDaoImpl extends ElearningBaseDaoImpl<DetailClasses> im
 	public DetailClasses getDetailClassById(String id) throws Exception {
 		return getById(id);
 	}
+	
+	@Override
+	public DetailClasses getDetailClassByCode(String code) throws Exception {
+		List<DetailClasses> detailClassList = 
+				createQuery("FROM DetailClasses WHERE code = ?1 ", DetailClasses.class)
+				.setParameter(1, code).getResultList();
+		return detailClassList.size() > 0 ? detailClassList.get(0) : null;
+	}
 }

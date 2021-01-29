@@ -13,4 +13,6 @@ public interface DetailClassesDao {
 	
 	DetailClasses getDetailClassById(String id) throws Exception;
 	
+	DetailClasses getDetailClassByCode(String code) throws Exception;
+	
 }
