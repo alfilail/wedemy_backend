@@ -50,12 +50,28 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 		return profilesDao.getProfileByEmail(email);
 	}
 	
-	private void validateInsert(Profiles profile) {
+	private void validateInsert(Profiles profile) throws Exception {
 
 	}
 
-	private void validateUpdate(Profiles profile) {
-
+	private void validateUpdate(Profiles profile) throws Exception {
+		if(profile.getId() == null || profile.getId().trim().equals("")) {
+			throw new Exception("Id tidak boleh kosong");
+		} else if(profile.getFullName() == null || profile.getFullName().trim().equals("")) {
+			throw new Exception("Nama Lengkap tidak boleh kosong");
+		} else if(profile.getIdNumber() == null || profile.getIdNumber().trim().equals("")) {
+			throw new Exception("Nomor Kartu Penduduk tidak boleh kosong");
+		} else if(profile.getBirthPlace() == null || profile.getBirthPlace().trim().equals("")) {
+			throw new Exception("Tempat Lahir tidak boleh kosong");
+		} else if(profile.getBirthDate() == null || profile.getBirthDate().toString().trim().equals("")) {
+			throw new Exception("Tanggal Lahir tidak boleh kosong");
+		} else if(profile.getEmail() == null || profile.getEmail().trim().equals("")) {
+			throw new Exception("Email tidak boleh kosong");
+		} else if(profile.getPhone() == null || profile.getPhone().trim().equals("")) {
+			throw new Exception("Nomor Handphone tidak boleh kosong");
+		} else if(profile.getAddress() == null || profile.getAddress().trim().equals("")) {
+			throw new Exception("Alamat tidak boleh kosong");
+		}
 	}
 
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.elearning.dao.UsersDao;
 import com.lawencon.elearning.model.Profiles;
+import com.lawencon.elearning.model.Roles;
 //import com.lawencon.elearning.model.Roles;
 import com.lawencon.elearning.model.Users;
 
@@ -38,10 +39,13 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 	public void insertUser(Users user) throws Exception {
 		try {
 			begin();
-			profilesService.insertProfile(user.getIdProfile());
-			user.setIdRole(rolesService.getRoleByCode(user.getIdRole().getCode()));
-			user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
-			usersDao.insertUser(user, () -> validateInsert(user));
+			usersDao.insertUser(user, () -> {
+				validateInsert(user);
+				Roles role = rolesService.getRoleByCode(user.getIdRole().getCode());
+				user.setIdRole(role);
+				profilesService.insertProfile(user.getIdProfile());
+				user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
+			});
 			commit();
 		} catch (Exception e) {
 			rollback();
@@ -66,7 +70,10 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 
 	@Override
 	public void updateUser(Users user) throws Exception {
-		usersDao.updateUser(user, () -> validateUpdate(user));
+		usersDao.updateUser(user, () -> {
+			validateUpdate(user);
+			user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
+		});
 	}
 
 	@Override
@@ -105,12 +112,66 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 		javaMailSender.send(msg);
 	}
 
-	private void validateInsert(Users user) {
+	private void validateInsert(Users user) throws Exception {
+		if (user.getUsername() == null || user.getUsername().trim().equals("")) {
+			throw new Exception("Username tidak boleh kosong");
+		} else if (user.getUsername() != null) {
+			Users usr = getUserByUsername(user.getUsername());
+			if (usr != null) {
+				throw new Exception("Username sudah ada");
+			} else {
+				if (user.getUserPassword() == null || user.getUserPassword().trim().equals("")) {
+					throw new Exception("Password tidak boleh kosong");
+				} else if (user.getIdProfile().getFullName() == null
+						|| user.getIdProfile().getFullName().trim().equals("")) {
+					throw new Exception("Nama Lengkap tidak boleh kosong");
+				} else if (user.getIdProfile().getEmail() == null || user.getIdProfile().getEmail().trim().equals("")) {
+					throw new Exception("Email tidak boleh kosong");
+				} else if (user.getIdRole().getCode() != null) {
+					Roles role = rolesService.getRoleByCode(user.getIdRole().getCode());
+					if (role.getCode().equals("TTR") || role.getCode().equals("ADM")) {
+						validateInsertExceptParticipant(user);
+					}
+				}
+			}
+		}
 
 	}
 
-	private void validateUpdate(Users user) {
+	private void validateInsertExceptParticipant(Users user) throws Exception {
+		if (user.getIdProfile().getIdNumber() == null || user.getIdProfile().getIdNumber().trim().equals("")) {
+			throw new Exception("Nomor Kartu Penduduk tidak boleh kosong");
+		} else if (user.getIdProfile().getBirthPlace() == null || user.getIdProfile().getBirthPlace().trim().equals("")) {
+			throw new Exception("Tempat Lahir tidak boleh kosong");
+		} else if (user.getIdProfile().getBirthDate() == null || user.getIdProfile().getBirthDate().toString().trim().equals("")) {
+			throw new Exception("Tanggal Lahir tidak boleh kosong");
+		} else if (user.getIdProfile().getPhone() == null) {
+			throw new Exception("Nomor Handphone tidak boleh kosong");
+		} else if (user.getIdProfile().getEmail() == null) {
+			throw new Exception("Email tidak boleh kosong");
+		} 
+	}
 
+	private void validateUpdate(Users user) throws Exception {
+		if(user.getId() == null || user.getId().trim().equals("")) {
+			throw new Exception("Id user tidak boleh kosong");
+		} else if (user.getId() != null) {
+			Users usr = getUserById(user.getId());
+			if(user.getUsername() == null || user.getUsername().trim().equals("")) {
+				throw new Exception("Username tidak boleh kosong");
+			} else if(user.getUserPassword() == null || user.getUserPassword().trim().equals("")) {
+				throw new Exception("Password tidak boleh kosong");
+			} else if(user.getUserPassword() != null) {
+				if(passwordEncoder.matches(user.getUserPassword(), usr.getUserPassword())) {
+					throw new Exception("Password tidak boleh sama dengan sebelumnya");
+				}				
+			}
+		}
+	}
+
+	@Override
+	public List<Users> getUsersByRoleCode(String code) throws Exception {
+		return usersDao.getUsersByRoleCode(code);
 	}
 
 }

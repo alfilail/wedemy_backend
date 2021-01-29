@@ -20,5 +20,7 @@ public interface UsersService {
 	void deleteUserById(String id) throws Exception;
 
 	Users updateUserPassword(Profiles profile) throws Exception;
+	
+	List<Users> getUsersByRoleCode(String code) throws Exception;
 
 }

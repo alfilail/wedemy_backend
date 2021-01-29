@@ -21,5 +21,7 @@ public interface UsersDao {
 	void deleteUserById(String id) throws Exception;
 	
 	Users getUserByIdProfile(Profiles profile) throws Exception;
+	
+	List<Users> getUsersByRoleCode(String code) throws Exception;
 
 }

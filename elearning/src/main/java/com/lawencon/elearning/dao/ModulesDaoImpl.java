@@ -37,8 +37,8 @@ public class ModulesDaoImpl extends ElearningBaseDaoImpl<Modules> implements Mod
 
 	@Override
 	public Modules getModuleByCode(String code) throws Exception {
-		Modules module = createQuery("FROM Modules WHERE code = ?1 ", Modules.class).setParameter(1, code).getSingleResult();
-		return module;
+		List<Modules> module = createQuery("FROM Modules WHERE code = ?1 ", Modules.class).setParameter(1, code).getResultList();
+		return module.size() > 0 ? module.get(0) : null;
 	}
 
 }

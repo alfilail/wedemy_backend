@@ -15,13 +15,12 @@ import java.util.Map;
  * <ul>
  * <li>Java 8+ required</li>
  * <li>Pure java utils and reflections</li>
- * <li>Support for super class of model</li>
- * <li>Support 1 nest for variable type model</li>
+ * <li>Support for super class</li>
+ * <li>Support for nest variable model</li>
  * </ul>
  * 
- * @author Annisa
+ * @author imam farisi
  */
-
 public class HibernateUtils {
 
 	/**
@@ -55,9 +54,7 @@ public class HibernateUtils {
 	 */
 	public static <T> List<T> bMapperList(List<?> listMapping, Class<T> clazz, String... columns) throws Exception {
 		Map<String, Object> mapObject = new HashMap<>();
-
 		List<T> listResult = new ArrayList<>();
-
 		listMapping.forEach(val -> {
 
 			try {
@@ -109,75 +106,109 @@ public class HibernateUtils {
 			Map<String, Object> mapObject) throws Exception {
 
 		for (int j = 0; j < listMethod.size(); j++) {
-
 			Method m = listMethod.get(j);
 
 			if (m.getName().startsWith("set")) {
 
 				Parameter p = m.getParameters()[0];
 
-				if (mapping.equalsIgnoreCase(p.getName()) || mapping.contains(".") && mapping.startsWith(p.getName())) {
+				if (mapping.equalsIgnoreCase(p.getName()) || mapping.contains(".")
+						&& p.getName().equalsIgnoreCase(mapping.substring(0, mapping.indexOf(".")))) {
 
 					Class<?> classVariable = p.getType();
-
-					if (classVariable.getPackageName().equals(newClass.getClass().getPackageName())) {
-						Object objVariable = classVariable.getDeclaredConstructor().newInstance();
-						Object objMap = mapObject.get(p.getName());
-
-						if (objMap == null) {
-							mapObject.put(p.getName(), objVariable);
-							objMap = mapObject.get(p.getName());
-						}
-
-						Method[] methods = classVariable.getDeclaredMethods();
-
-						if (mapping.contains(".")) {
-							String[] mapSplit = mapping.split("\\.");
-
-							for (Method method : methods) {
-								Class<?>[] param = method.getParameterTypes();
-								if (method.getName().equalsIgnoreCase("set" + mapSplit[1])) {
-									setValueToSetter(method, objMap, param[0], value);
-									break;
-								}
-							}
-
-							m.invoke(newClass, objMap);
-						}
+					if (classVariable.getPackage().getName().equals(newClass.getClass().getPackage().getName())
+							&& !classVariable.isEnum()) {
+						getRelatedModel(newClass, mapping, classVariable, mapObject, p, m, value);
 					} else {
 						Class<?>[] param = m.getParameterTypes();
 						setValueToSetter(m, newClass, param[0], value);
 					}
-
 					break;
 				}
 			}
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	private static <T> void getRelatedModel(T newClass, String mapping, Class<?> classVariable,
+			Map<String, Object> mapObject, Parameter p, Method m, Object value) throws Exception {
+
+		Class<?> relatedClazz = classVariable;
+		while (true) {
+			Object objVariable = relatedClazz.getDeclaredConstructor().newInstance();
+			Object objMap = mapObject.get(p.getName());
+
+			if (objMap == null) {
+				mapObject.put(p.getName(), objVariable);
+				objMap = mapObject.get(p.getName());
+			}
+
+			setValueToSetter(m, newClass, relatedClazz, objMap);
+
+			if (mapping.contains(".")) {
+				String[] mapSplit = mapping.split("\\.");
+				
+				Method[] methodArr = relatedClazz.getDeclaredMethods();
+				List<Method> methodList = new ArrayList<>(Arrays.asList(methodArr));
+				getSuperMethod(relatedClazz, methodList);
+
+				boolean isDeepModel = false;
+
+				for (int i = 1; i < mapSplit.length; i++) {
+
+					for (Method method : methodList) {
+
+						Class<?>[] param = method.getParameterTypes();
+
+						if (method.getName().equalsIgnoreCase("set" + mapSplit[i])) {
+
+							if (param[0].getPackage().getName().equals(newClass.getClass().getPackage().getName())
+									&& !relatedClazz.isEnum()) {
+								isDeepModel = true;
+								relatedClazz = param[0];
+								p = method.getParameters()[0];
+								m = method;
+								newClass = (T) objMap;
+
+								break;
+							} else {
+								setValueToSetter(method, objMap, param[0], value);
+							}
+						}
+					}
+				}
+
+				if (isDeepModel)
+					continue;
+			}
+
+			break;
+		}
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static <T> void setValueToSetter(Method m, T newClass, Class<?> clazz, Object value) throws Exception {
 		if (value != null) {
 			if (clazz.equals(java.time.LocalDate.class) && value instanceof java.sql.Date) {
-				m.invoke(newClass, value != null ? ((java.sql.Date) value).toLocalDate() : null);
+				m.invoke(newClass, ((java.sql.Date) value).toLocalDate());
 			} else if (clazz.equals(java.time.LocalDateTime.class) && value instanceof java.sql.Timestamp) {
-				m.invoke(newClass, value != null ? ((java.sql.Timestamp) value).toLocalDateTime() : null);
+				m.invoke(newClass, ((java.sql.Timestamp) value).toLocalDateTime());
 			} else if (clazz.equals(java.time.LocalTime.class) && value instanceof java.sql.Time) {
-				m.invoke(newClass, value != null ? ((java.sql.Time) value).toLocalTime() : null);
+				m.invoke(newClass, ((java.sql.Time) value).toLocalTime());
 			} else if (clazz.equals(java.util.Date.class) && value instanceof java.sql.Date) {
-				m.invoke(newClass, value != null ? new java.util.Date(((java.sql.Date) value).getTime()) : null);
+				m.invoke(newClass, new java.util.Date(((java.sql.Date) value).getTime()));
 			} else if (clazz.equals(java.util.Date.class) && value instanceof java.sql.Timestamp) {
-				m.invoke(newClass, value != null ? new java.util.Date(((java.sql.Timestamp) value).getTime()) : null);
+				m.invoke(newClass, new java.util.Date(((java.sql.Timestamp) value).getTime()));
 			} else if (clazz.equals(BigDecimal.class)) {
-				m.invoke(newClass, value != null ? new BigDecimal(value.toString()) : null);
+				m.invoke(newClass, new BigDecimal(value.toString()));
 			} else if (clazz.equals(Long.class)) {
-				m.invoke(newClass, value != null ? Long.valueOf(value.toString()) : null);
+				m.invoke(newClass, Long.valueOf(value.toString()));
+			} else if (clazz.isEnum()) {
+				m.invoke(newClass, Enum.valueOf((Class) clazz, value.toString()));
 			} else {
-				m.invoke(newClass, value != null ? value : null);
+				m.invoke(newClass, value);
 			}
-		} else {
-			m.invoke(newClass, value != null ? value : null);
 		}
 	}
 }
-
 

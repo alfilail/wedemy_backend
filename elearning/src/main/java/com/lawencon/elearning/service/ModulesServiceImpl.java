@@ -45,11 +45,21 @@ public class ModulesServiceImpl extends BaseServiceImpl implements ModulesServic
 		return modulesDao.getModuleByCode(code);
 	}
 
-	private void validateInsert(Modules module) {
-
+	private void validateInsert(Modules module) throws Exception {
+		if(module.getCode() == null || module.getCode().trim().equals("")) {
+			throw new Exception("Kode Modul tidak boleh kosong");
+		} else if(module.getModuleName() == null || module.getModuleName().trim().equals("")) {
+			throw new Exception("Nama Modul tidak boleh kosong");
+		}
 	}
 
-	private void validateUpdate(Modules module) {
-
+	private void validateUpdate(Modules module) throws Exception {
+		if(module.getId() == null || module.getId().trim().equals("")) {
+			throw new Exception("Id Modul tidak boleh kosong");
+		} else if(module.getCode() == null || module.getCode().trim().equals("")) {
+			throw new Exception("Kode Modul tidak boleh kosong");
+		} else if(module.getModuleName() == null || module.getModuleName().trim().equals("")) {
+			throw new Exception("Nama Modul tidak boleh kosong");
+		}
 	}
 }
