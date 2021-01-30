@@ -41,12 +41,12 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 						clazz.setThumbnailImg(file.getBytes());
 						clazz.setFileType(file.getContentType());
 						classesDao.insertClass(clazz, () -> validateInsert(clazz));
-						if(helper.getDetailClass() != null) {
+						if (helper.getDetailClass() != null) {
 							DetailClasses detailClass = helper.getDetailClass();
 							detailClass.setIdClass(clazz);
 							helper.setDetailClass(detailClass);
 							detailClassesService.insertDetailClass(helper.getDetailClass());
-							if(helper.getModule() != null) {
+							if (helper.getModule() != null) {
 								moduleRegistrationsService.insertModuleRegistration(helper);
 							}
 						}
@@ -110,14 +110,10 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 					} else {
 						String[] type = clazz.getFileType().split("/");
 						String ext = type[1];
-						System.out.println("type" + clazz.getFileType());
-						System.out.println("test" + ext);
 						if (ext != null) {
-							if(ext.equalsIgnoreCase("png") || 
-									ext.equalsIgnoreCase("png") || 
-									ext.equalsIgnoreCase("jpeg")) {
-							}
-							else {
+							if (ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("png")
+									|| ext.equalsIgnoreCase("jpeg")) {
+							} else {
 								throw new Exception("File harus gambar!");
 							}
 						} else if (clazz.getClassName() == null) {
@@ -133,8 +129,56 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 		}
 	}
 
-	private void validateUpdate(Classes clazz) {
-
+	private void validateUpdate(Classes clazz) throws Exception {
+		if (clazz.getId() == null || clazz.getId().trim().equals("")) {
+			throw new Exception("Id kelas tidak boleh kosong!");
+		} else {
+			Classes cls = classesDao.getClassById(clazz.getId());
+			if (clazz.getVersion() == null) {
+				throw new Exception("Kelas version tidak boleh kosong!");
+			} else {
+				if (clazz.getVersion() != cls.getVersion()) {
+					throw new Exception("Kelas version tidak sama!");
+				}
+				else {
+					if(clazz.getCode() == null || clazz.getCode().trim().equals("")) {
+						throw new Exception("Kode kelas tidak boleh kosong!");
+					}
+					else {
+						Classes clz = classesDao.getClassByCode(clazz.getCode());
+						if(clz != null) {
+							throw new Exception("Kode kelas tidak boleh sama");
+						}
+						else {
+							if (clazz.getIdTutor() == null) {
+								throw new Exception("Tutor tidak boleh kosong!");
+							} else {
+								Users user = usersService.getUserById(clazz.getIdTutor().getId());
+								if (user == null) {
+									throw new Exception("Id Tutor tidak ada!");
+								} else {
+									String[] type = clazz.getFileType().split("/");
+									String ext = type[1];
+									if (ext != null) {
+										if (ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("png")
+												|| ext.equalsIgnoreCase("jpeg")) {
+										} else {
+											throw new Exception("File harus gambar!");
+										}
+									} else if (clazz.getClassName() == null) {
+										throw new Exception("Nama kelas tidak boleh kosong!");
+									} else if (clazz.getDescription() == null) {
+										throw new Exception("Dekripsi kelas tidak boleh kosong!");
+									} else if (clazz.getQuota() == null) {
+										throw new Exception("Quota kelas tidak boleh kosong!");
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 }

@@ -44,15 +44,54 @@ public class LearningMaterialTypesServiceImpl extends BaseServiceImpl implements
 		return assignmentTypesDao.getAssignmentTypeByCode(code);
 	}
 
-	private void validateInsert(LearningMaterialTypes assignmentType) throws Exception {
-		if (assignmentType.getCode() == null) {
-			throw new Exception("Invalid Input Assignment Type Code");
+	private void validateInsert(LearningMaterialTypes learningMaterialTypes) throws Exception {
+		if (learningMaterialTypes.getCode() == null || learningMaterialTypes.getCode().trim().equals("")) {
+			throw new Exception("Kode tipe bahan ajar tidak boleh kosong!");
+		} else {
+			LearningMaterialTypes learningMaterialType = getLearningMaterialTypeByCode(learningMaterialTypes.getCode());
+			if (learningMaterialType != null) {
+				throw new Exception("Kode tipe bahan ajar tidak boleh sama!");
+			} else {
+				if (learningMaterialTypes.getLearningMaterialTypeName() == null
+						|| learningMaterialTypes.getLearningMaterialTypeName().trim().equals("")) {
+					throw new Exception("Nama tipe bahan ajar tidak boleh kosong!");
+				}
+			}
 		}
 	}
 
-	private void validateUpdate(LearningMaterialTypes assignmentType) throws Exception {
-		if (assignmentType.getCode() == null) {
-			throw new Exception("Invalid Input Assignment Type Code");
+	private void validateUpdate(LearningMaterialTypes learningMaterialTypes) throws Exception {
+		if (learningMaterialTypes.getId() == null || learningMaterialTypes.getId().trim().equals("")) {
+			throw new Exception("Id tipe bahan ajar tidak boleh kosong!");
+		} else {
+			LearningMaterialTypes learningType = getLearningMaterialTypeById(learningMaterialTypes.getId());
+			if (learningType == null) {
+				throw new Exception("Id tipe bahan ajar tidak ada!");
+			} else {
+				if (learningType.getVersion() == null) {
+					throw new Exception("Tipe bahan ajar version tidak boleh kosong!");
+				} else {
+					if (learningMaterialTypes.getVersion() != learningType.getVersion()) {
+						throw new Exception("Tipe bahan ajar version tidak sama!");
+					} else {
+						if (learningMaterialTypes.getCode() == null
+								|| learningMaterialTypes.getCode().trim().equals("")) {
+							throw new Exception("Kode tipe bahan ajar tidak boleh kosong!");
+						} else {
+							LearningMaterialTypes learningMaterialType = getLearningMaterialTypeByCode(
+									learningMaterialTypes.getCode());
+							if (learningMaterialType != null) {
+								throw new Exception("Kode tipe bahan tidak boleh sama!");
+							} else {
+								if (learningMaterialTypes.getLearningMaterialTypeName() == null
+										|| learningMaterialTypes.getLearningMaterialTypeName().trim().equals("")) {
+									throw new Exception("Name tipe bahan ajar tidak boleh kosong!");
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 }
