@@ -39,6 +39,21 @@ public class ClassEnrollmentServiceImpl extends ElearningBaseServiceImpl impleme
 	}
 
 	@Override
+	public List<ClassEnrollments> getAllClassEnrollmentsByIdUser(String id) throws Exception {
+		return classEnrollmentDao.getAllClassEnrollmentsByIdUser(id);
+	}
+
+	@Override
+	public ClassEnrollments getClassEnrollmentByIdDtlClassAndIdUser(String idDtlClass, String idUser) {
+		return classEnrollmentDao.getClassEnrollmentByIdDtlClassAndIdUser(idDtlClass, idUser);
+	}
+
+	@Override
+	public Integer getTotalParticipantsByIdDtlClass(String id) throws Exception {
+		return classEnrollmentDao.getTotalParticipantsByIdDtlClass(id);
+	}
+
+	@Override
 	public void updateClassEnrollments(ClassEnrollments classEnrollment) throws Exception {
 		classEnrollmentDao.updateClassEnrollment(classEnrollment, () -> validateUpdate(classEnrollment));
 	}

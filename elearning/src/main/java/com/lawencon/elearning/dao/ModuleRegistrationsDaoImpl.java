@@ -1,13 +1,14 @@
 package com.lawencon.elearning.dao;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.lawencon.elearning.model.DetailClasses;
 import com.lawencon.elearning.model.ModuleRegistrations;
 import com.lawencon.elearning.model.Modules;
-import com.lawencon.elearning.util.HibernateUtils;
 import com.lawencon.util.Callback;
 
 @Repository
@@ -22,12 +23,23 @@ public class ModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<ModuleRegis
 	@Override
 	public ModuleRegistrations getByIdDetailClassAndIdModuleRegistration(String idDtlClass, String idModRegist)
 			throws Exception {
+		List<ModuleRegistrations> listResult = new ArrayList<>();
 		String sql = sqlBuilder(
-				"SELECT id, version FROM t_r_module_registrations WHERE id_detail_class = ?1 and id_module = ?2")
-						.toString();
+				"SELECT mr.id, dc.start_date, dc.end_date FROM t_r_module_registrations INNER JOIN t_m_detail_classes dc ",
+				"ON mr.id_detail_class = dc.id WHERE mr.id = ?1 AND dc.id = ?2").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlClass).setParameter(2, idModRegist)
 				.getResultList();
-		return HibernateUtils.bMapperList(listObj, ModuleRegistrations.class, "id", "version").get(0);
+		listObj.forEach(val -> {
+			Object[] objArr = (Object[]) val;
+			ModuleRegistrations moduleRgs = new ModuleRegistrations();
+			moduleRgs.setId((String) objArr[0]);
+			DetailClasses dtlClass = new DetailClasses();
+			dtlClass.setStartDate((LocalDate) objArr[1]);
+			dtlClass.setEndDate((LocalDate) objArr[2]);
+			moduleRgs.setIdDetailClass(dtlClass);
+			listResult.add(moduleRgs);
+		});
+		return listResult.size() > 0 ? listResult.get(0) : null;
 	}
 
 	@Override

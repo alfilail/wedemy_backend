@@ -21,17 +21,13 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 	@Override
 	public void insertDetailModuleRegistration(DetailModuleRegistrations dtlModRegist) throws Exception {
 		dtlModRegist.setTrxNumber(generateTrxNumber());
-		dtlModRegistDao.insertDetailModuleRegistration(dtlModRegist, () -> validateInput(dtlModRegist));
+		dtlModRegistDao.insertDetailModuleRegistration(dtlModRegist, () -> validateInsert(dtlModRegist));
 	}
 
 	@Override
 	public List<DetailModuleRegistrations> getDetailModuleRegistrationsByIdModuleRgs(String idModuleRgs)
 			throws Exception {
 		return dtlModRegistDao.getDetailModuleRegistrationsByIdModuleRgs(idModuleRgs);
-	}
-
-	private void validateInput(DetailModuleRegistrations dtlModRegist) {
-
 	}
 
 	private String generateTrxNumber() {
@@ -44,6 +40,29 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 		trx = trx.replaceAll("-", "");
 		String trxNumber = bBuilder("DMRG-", trx, "-", trxCodeValue).toString();
 		return trxNumber;
+	}
+
+	private void validateInsert(DetailModuleRegistrations dtlModRegist) throws Exception {
+		if (dtlModRegist.getScheduleDate() != null) {
+			if (dtlModRegist.getScheduleDate()
+					.isAfter(dtlModRegist.getIdModuleRegistration().getIdDetailClass().getEndDate())) {
+				throw new Exception("Jadwal materi tidak bisa melewati masa berlangsung kelas");
+			}
+			if (dtlModRegist.getScheduleDate()
+					.isBefore(dtlModRegist.getIdModuleRegistration().getIdDetailClass().getStartDate())) {
+				throw new Exception("Jadwal materi tidak bisa mendahului masa berlangsung kelas");
+			}
+		} else {
+			throw new Exception("Jadwal materi tidak boleh kosong");
+		}
+		if (dtlModRegist.getOrderNumber() != null) {
+			DetailModuleRegistrations dtlModuleRgs = dtlModRegistDao.getByOrderNumber(dtlModRegist.getOrderNumber());
+			if (dtlModuleRgs != null) {
+				throw new Exception("Order number dalam satu modul tidak boleh sama");
+			}
+		} else {
+			throw new Exception("Order number tidak boleh kosong");
+		}
 	}
 
 }

@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -52,5 +53,8 @@ public class DetailClasses extends BaseMaster {
 	@JsonFormat(pattern = "HH:mm")
 	@Column(name = "end_time", nullable = false)
 	private LocalTime endTime;
+
+	@Transient
+	private Integer totalParticipant;
 
 }

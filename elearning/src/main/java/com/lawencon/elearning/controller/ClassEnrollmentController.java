@@ -31,7 +31,7 @@ import com.lawencon.util.JasperUtil;
 public class ClassEnrollmentController {
 	@Autowired
 	private ClassEnrollmentService classEnrollmentService;
-	
+
 	@PostMapping
 	public ResponseEntity<?> insertClassEnrollment(@RequestBody String body) {
 		try {
@@ -68,6 +68,31 @@ public class ClassEnrollmentController {
 		}
 	}
 
+	@GetMapping("user/{id}")
+	public ResponseEntity<?> getAllClassEnrollmentsByIdUser(@PathVariable("id") String id) {
+		List<ClassEnrollments> classEnrollmentList = new ArrayList<>();
+		try {
+			classEnrollmentList = classEnrollmentService.getAllClassEnrollmentsByIdUser(id);
+			return new ResponseEntity<>(classEnrollmentList, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@GetMapping("user/detail-class")
+	public ResponseEntity<?> getAllClassEnrollmentsByIdDtlClassAndIdUser(@RequestParam("idDtlClass") String idDtlClass,
+			@RequestParam("idUser") String idUser) {
+		ClassEnrollments classEnrollment = new ClassEnrollments();
+		try {
+			classEnrollment = classEnrollmentService.getClassEnrollmentByIdDtlClassAndIdUser(idDtlClass, idUser);
+			return new ResponseEntity<>(classEnrollment, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 	@DeleteMapping("{id}")
 	public ResponseEntity<?> deleteClassEnrollmentById(@PathVariable("id") String id) {
 		try {
@@ -93,10 +118,9 @@ public class ClassEnrollmentController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	@GetMapping("certificate")
-	public HttpEntity<?> reportCertificate(@RequestParam String idUser, 
-			@RequestParam String idClass) {
+	public HttpEntity<?> reportCertificate(@RequestParam String idUser, @RequestParam String idClass) {
 		List<?> data = new ArrayList<>();
 		byte[] out;
 		try {

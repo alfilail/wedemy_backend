@@ -10,6 +10,8 @@ public interface DetailModuleRegistrationsDao {
 	void insertDetailModuleRegistration(DetailModuleRegistrations dtlModRegist, Callback before) throws Exception;
 
 	DetailModuleRegistrations getDetailModuleRegistrationsById(String id) throws Exception;
+	
+	DetailModuleRegistrations getByOrderNumber(Integer orderNumber) throws Exception;
 
 	List<DetailModuleRegistrations> getDetailModuleRegistrationsByIdModuleRgs(String idModuleRgs) throws Exception;
 

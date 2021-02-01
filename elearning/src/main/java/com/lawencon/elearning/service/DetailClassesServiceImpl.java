@@ -17,7 +17,10 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 	private DetailClassesDao detailClassesDao;
 
 	@Autowired
-	ClassesService classService;
+	private ClassesService classService;
+	
+	@Autowired
+	private ClassEnrollmentService classEnrollmentService;
 
 	@Override
 	public void insertDetailClass(DetailClasses detailClass) throws Exception {
@@ -33,7 +36,9 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 
 	@Override
 	public DetailClasses getDetailClassById(String id) throws Exception {
-		return detailClassesDao.getDetailClassById(id);
+		DetailClasses dtlClass = detailClassesDao.getDetailClassById(id);
+		dtlClass.setTotalParticipant(classEnrollmentService.getTotalParticipantsByIdDtlClass(id));
+		return dtlClass;
 	}
 	
 	@Override

@@ -49,16 +49,24 @@ public class ApprovementsServiceImpl extends ElearningBaseServiceImpl implements
 	}
 
 	private void validateInsert(Approvements approvement) throws Exception {
-//		Approvements approve = getApprovementByCode(approvement.getCode());
-//		if(approve != null) {
-//			if(approve.getCode().equals(approvement.getCode())) {
-//				
-//			}
-//		}
+		if (approvement.getApprovementName() == null || approvement.getApprovementName().trim().equals("")) {
+			throw new Exception("Nama approvement tidak boleh kosong");
+		}
+		if (approvement.getCode() == null || approvement.getCode().trim().equals("")) {
+			throw new Exception("Kode approvement tidak boleh kosong");
+		}
 	}
 
 	private void validateUpdate(Approvements approvement) throws Exception {
-
+		if (approvement.getId() == null || approvement.getId().trim().equals("")) {
+			throw new Exception("Id approvement tidak boleh kosong");
+		}
+		if (approvement.getApprovementName() == null || approvement.getApprovementName().trim().equals("")) {
+			throw new Exception("Nama approvement tidak boleh kosong");
+		}
+		if (approvement.getCode() == null || approvement.getCode().trim().equals("")) {
+			throw new Exception("Kode approvement tidak boleh kosong");
+		}
 	}
 
 }

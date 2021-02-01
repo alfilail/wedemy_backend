@@ -26,6 +26,13 @@ public class DetailModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<Detai
 	}
 
 	@Override
+	public DetailModuleRegistrations getByOrderNumber(Integer orderNumber) throws Exception {
+		DetailModuleRegistrations approvement = createQuery("FROM DetailModuleRegistrations WHERE orderNumber = ?1",
+				DetailModuleRegistrations.class).setParameter(1, orderNumber).getSingleResult();
+		return approvement;
+	}
+
+	@Override
 	public List<DetailModuleRegistrations> getDetailModuleRegistrationsByIdModuleRgs(String idModuleRgs)
 			throws Exception {
 		List<DetailModuleRegistrations> listResult = new ArrayList<>();

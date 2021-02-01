@@ -51,14 +51,31 @@ public class GradesServiceImpl extends BaseServiceImpl implements GradesService 
 	}
 
 	private void validateInsert(Grades grade) throws Exception {
-		if (grade.getCode() == null) {
-			throw new Exception("Invalid Input Grade Code");
+		if (grade.getCode() == null || grade.getCode().trim().equals("")) {
+			throw new Exception("Kode grade tidak boleh kosong");
+		}
+		if (grade.getMinScore() == null || grade.getMaxScore() == null) {
+			throw new Exception("Minimum dan maximum score harus diisi");
+		} else {
+			if (grade.getMinScore() >= grade.getMaxScore()) {
+				throw new Exception("Minimum score harus lebih kecil dari maximum score");
+			}
 		}
 	}
 
 	private void validateUpdate(Grades grade) throws Exception {
-		if (grade.getCode() == null) {
-			throw new Exception("Invalid Input Grade Code");
+		if (grade.getId() == null || grade.getId().trim().equals("")) {
+			throw new Exception("Id grade tidak boleh kosong");
+		}
+		if (grade.getCode() == null || grade.getCode().trim().equals("")) {
+			throw new Exception("Kode grade tidak boleh kosong");
+		}
+		if (grade.getMinScore() == null || grade.getMaxScore() == null) {
+			throw new Exception("Minimum dan maximum score harus diisi");
+		} else {
+			if (grade.getMinScore() >= grade.getMaxScore()) {
+				throw new Exception("Minimum score harus lebih kecil dari maximum score");
+			}
 		}
 	}
 
