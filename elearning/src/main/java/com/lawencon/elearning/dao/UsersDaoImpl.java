@@ -42,7 +42,8 @@ public class UsersDaoImpl extends ElearningBaseDaoImpl<Users> implements UsersDa
 
 	@Override
 	public void deleteUserById(String id) throws Exception {
-		deleteById(id);
+		String sql = sqlBuilder("DELETE FROM t_m_users WHERE id = ?1").toString();
+		createNativeQuery(sql).setParameter(1, id).executeUpdate();
 	}
 	
 	@Override
@@ -86,6 +87,43 @@ public class UsersDaoImpl extends ElearningBaseDaoImpl<Users> implements UsersDa
 		return HibernateUtils.bMapperList(listObj, Users.class, "username", "idRole.code", "idProfile.fullName",
 				 "idProfile.idNumber", "idProfile.birthPlace", "idProfile.birthDate", "idProfile.email", "idProfile.phone",
 				 "idProfile.address");
+	}
+	
+	@Override
+	public void softDeleteUserById(String id) throws Exception {
+		updateNativeSQL("UPDATE t_m_users SET is_active = false", id, "mas imam");
+	}
+	
+	@Override
+	public List<?> validateDeleteUser(String id) throws Exception {
+		String sql = sqlBuilder("select ",
+				" tmc.id as id_class, ",
+				" trp.id as id_presence, ",
+				" tras.id as id_assignment_submission, ",
+				" trf.id as id_forum, ",
+				" trdf.id as id_detail_forum, ",
+				" trce.id as id_class_enrollment ",
+				" from t_m_users tmu ",
+				" full join t_m_classes tmc on tmu.id = tmc.id_tutor ",
+				" full join t_r_presences trp on tmu.id = trp.id_user ",
+				" full join t_r_assignment_submissions tras on tmu.id = tras.id_participant ",
+				" full join t_r_forums trf on tmu.id = trf.id_user ",
+				" full join t_r_dtl_forums trdf on tmu.id = trdf.id_user ",
+				" full join t_r_class_enrollments trce on tmu.id = trce.id_user ",
+				" where tmu.id = ?1 ").toString();
+		List<?> listObj = createNativeQuery(sql).setParameter(1, id)
+				.setMaxResults(1).getResultList();
+		List<String> result = new ArrayList<String>();
+		listObj.forEach(val -> {
+			Object[] objArr = (Object[]) val;
+			result.add(objArr[0] != null ? objArr[0].toString() : null);
+			result.add(objArr[1] != null ? objArr[1].toString() : null);
+			result.add(objArr[2] != null ? objArr[2].toString() : null);
+			result.add(objArr[3] != null ? objArr[3].toString() : null);
+			result.add(objArr[4] != null ? objArr[4].toString() : null);
+			result.add(objArr[5] != null ? objArr[5].toString() : null);
+		});
+		return result;
 	}
 
 }

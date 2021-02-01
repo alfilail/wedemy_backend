@@ -27,7 +27,7 @@ public class ModuleRegistrationsServiceImpl extends ElearningBaseServiceImpl imp
 
 	@Autowired
 	private ModulesService modulesService;
-	
+
 	@Autowired
 	private DetailClassesService detailClassService;
 
@@ -79,19 +79,20 @@ public class ModuleRegistrationsServiceImpl extends ElearningBaseServiceImpl imp
 				throw new Exception("Id Module tidak boleh kosong!");
 			} else {
 				Modules module = modulesService.getModuleById(moduleRegistration.getIdModule().getId());
+				System.out.println("Test " + moduleRegistration.getIdModule().getId());
+				System.out.println("Testtt" + module);
 				if (module == null) {
 					throw new Exception("Module tidak ada!");
 				} else {
 					if (moduleRegistration.getIdDetailClass() == null) {
 						throw new Exception("Detail kelas tidak boleh kosong!");
-					}
-					else {
-						if(moduleRegistration.getIdDetailClass().getId() == null) {
+					} else {
+						if (moduleRegistration.getIdDetailClass().getId() == null) {
 							throw new Exception("Id Detail Class tidak boleh kosong!");
-						}
-						else {
-							DetailClasses dtlClazz = detailClassService.getDetailClassById(moduleRegistration.getIdDetailClass().getId());
-							if(dtlClazz == null) {
+						} else {
+							DetailClasses dtlClazz = detailClassService
+									.getDetailClassById(moduleRegistration.getIdDetailClass().getId());
+							if (dtlClazz == null) {
 								throw new Exception("Detail Class tidak ada!");
 							}
 						}

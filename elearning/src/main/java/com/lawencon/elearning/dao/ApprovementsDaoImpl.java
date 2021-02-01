@@ -33,7 +33,7 @@ public class ApprovementsDaoImpl extends ElearningBaseDaoImpl<Approvements> impl
 	@Override
 	public void deleteApprovementById(String id) throws Exception {
 		deleteById(id);
-	}
+	}	
 
 	@Override
 	public Approvements getApprovementByCode(String code) throws Exception {

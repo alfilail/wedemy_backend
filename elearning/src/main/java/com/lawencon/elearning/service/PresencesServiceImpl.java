@@ -24,13 +24,13 @@ public class PresencesServiceImpl extends ElearningBaseServiceImpl implements Pr
 
 	@Autowired
 	private PresencesDao presencesDao;
-	
+
 	@Autowired
 	private ApprovementsService approvementsService;
-	
+
 	@Autowired
 	private ApprovementsRenewalService approvementsRenewalService;
-	
+
 	@Autowired
 	private UsersService usersService;
 
@@ -41,9 +41,9 @@ public class PresencesServiceImpl extends ElearningBaseServiceImpl implements Pr
 			presence.setPresenceTime(LocalTime.now());
 			presencesDao.insertPresence(presence, () -> validateInsert(presence));
 			Users user = usersService.getUserById(presence.getIdUser().getId());
-			if(user.getIdRole().getCode().equals("std")) {
+			if (user.getIdRole().getCode().equals("std")) {
 				insertApprovementRenewal(presence);
-			}			
+			}
 		} catch (Exception e) {
 			rollback();
 			throw new Exception(e);
@@ -59,7 +59,7 @@ public class PresencesServiceImpl extends ElearningBaseServiceImpl implements Pr
 	public Presences getPresenceById(String id) throws Exception {
 		return presencesDao.getPresenceById(id);
 	}
-	
+
 	private void insertApprovementRenewal(Presences presence) throws Exception {
 		Approvements approvements = approvementsService.getApprovementByCode("PND");
 		ApprovementsRenewal approvementsRenewal = new ApprovementsRenewal();
@@ -82,9 +82,10 @@ public class PresencesServiceImpl extends ElearningBaseServiceImpl implements Pr
 	public Presences getPresenceByCode(String code) throws Exception {
 		return presencesDao.getPresenceByCode(code);
 	}
-	
+
 	@Override
-	public List<?> getPresenceReport(String idClass, LocalDate scheduleDateStart, LocalDate scheduleDateEnd) throws Exception {
+	public List<?> getPresenceReport(String idClass, LocalDate scheduleDateStart, LocalDate scheduleDateEnd)
+			throws Exception {
 		return presencesDao.getPresenceReport(idClass, scheduleDateStart, scheduleDateEnd);
 	}
 
@@ -95,7 +96,7 @@ public class PresencesServiceImpl extends ElearningBaseServiceImpl implements Pr
 	private void validateUpdate(Presences presence) throws Exception {
 
 	}
-	
+
 	private String generateTrxNumber() {
 		Random random = new Random();
 		LocalDate localDate = LocalDate.now();
@@ -104,7 +105,7 @@ public class PresencesServiceImpl extends ElearningBaseServiceImpl implements Pr
 		String trxCodeValue = String.valueOf(random.nextInt((999 + 1 - 100) + 100));
 		String trx = bBuilder(formattedDate).toString();
 		trx = trx.replaceAll("-", "");
-		String trxNumber= bBuilder("ASB-", trx, "-",trxCodeValue).toString();
+		String trxNumber = bBuilder("ASB-", trx, "-", trxCodeValue).toString();
 		return trxNumber;
 	}
 

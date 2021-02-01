@@ -80,5 +80,4 @@ public class AssignmentSubmissionsDaoImpl extends ElearningBaseDaoImpl<Assignmen
 	public void deleteAssignmentSubmissionById(String id) throws Exception {
 		deleteById(id);
 	}
-
 }

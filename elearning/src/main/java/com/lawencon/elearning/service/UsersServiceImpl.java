@@ -1,6 +1,7 @@
 package com.lawencon.elearning.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -78,7 +79,14 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 
 	@Override
 	public void deleteUserById(String id) throws Exception {
-		usersDao.deleteUserById(id);
+		begin();
+		if(validateDelete(id) == true) {
+			usersDao.softDeleteUserById(id);
+		}
+		else {
+			usersDao.deleteUserById(id);
+		}
+		commit();
 	}
 
 	@Override
@@ -172,6 +180,15 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 	@Override
 	public List<Users> getUsersByRoleCode(String code) throws Exception {
 		return usersDao.getUsersByRoleCode(code);
+	}
+	
+	private boolean validateDelete(String idUser) throws Exception {
+		List<?> listObj = usersDao.validateDeleteUser(idUser);
+		listObj.forEach(System.out::println);
+		List<?> list =  listObj.stream().filter(val -> val != null)
+				.collect(Collectors.toList());
+		System.out.println(list.size());
+		return list.size() > 0 ? true : false;
 	}
 
 }

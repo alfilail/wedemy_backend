@@ -23,5 +23,9 @@ public interface UsersDao {
 	Users getUserByIdProfile(Profiles profile) throws Exception;
 	
 	List<Users> getUsersByRoleCode(String code) throws Exception;
+	
+	void softDeleteUserById(String id) throws Exception;
+	
+	List<?> validateDeleteUser(String id) throws Exception;
 
 }
