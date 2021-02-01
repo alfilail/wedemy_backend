@@ -5,7 +5,7 @@ import java.util.List;
 import com.lawencon.elearning.model.Profiles;
 
 public interface ProfilesService {
-	
+
 	void insertProfile(Profiles profile) throws Exception;
 
 	List<Profiles> getAllProfiles() throws Exception;
@@ -17,7 +17,9 @@ public interface ProfilesService {
 	void updateProfile(Profiles profile) throws Exception;
 
 	void deleteProfileById(String id) throws Exception;
-	
+
 	Profiles getProfileByEmail(String email) throws Exception;
+
+	Profiles getProfileByIdNumber(String idNumber) throws Exception;
 
 }

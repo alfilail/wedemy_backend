@@ -18,7 +18,7 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 
 	@Autowired
 	private ClassesService classService;
-	
+
 	@Autowired
 	private ClassEnrollmentService classEnrollmentService;
 
@@ -40,27 +40,29 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 		dtlClass.setTotalParticipant(classEnrollmentService.getTotalParticipantsByIdDtlClass(id));
 		return dtlClass;
 	}
-	
+
 	@Override
 	public DetailClasses getDetailClassByCode(String code) throws Exception {
 		return detailClassesDao.getDetailClassByCode(code);
 	}
-	
+
+	@Override
+	public List<DetailClasses> getTutorClasses(String idTutor) throws Exception {
+		return detailClassesDao.getTutorClasses(idTutor);
+	}
+
 	private void validateInsert(DetailClasses detailClass) throws Exception {
-		if(detailClass.getStartDate() == null) {
+		if (detailClass.getStartDate() == null) {
 			throw new Exception("Tanggal mulai detail kelas tidak boleh kosong!");
-		}
-		else if(detailClass.getEndDate() == null) {
+		} else if (detailClass.getEndDate() == null) {
 			throw new Exception("Tanggal akhir detail kelas tidak boleh kosong!");
-		}
-		else if(detailClass.getStartTime() == null) {
+		} else if (detailClass.getStartTime() == null) {
 			throw new Exception("Waktu mulai detail kelas tidak boleh kosong!");
-		}
-		else if(detailClass.getEndTime() == null) {
+		} else if (detailClass.getEndTime() == null) {
 			throw new Exception("Waktu akhir detail kelas tidak boleh kosong!");
 		}
 	}
-	
+
 	private String generateCodeDetailClass(String classCode) {
 		LocalDate localDate = LocalDate.now();
 		DateTimeFormatter myFormat = DateTimeFormatter.ofPattern("yy-MM-dd");

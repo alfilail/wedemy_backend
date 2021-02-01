@@ -89,14 +89,6 @@ public class PresencesServiceImpl extends ElearningBaseServiceImpl implements Pr
 		return presencesDao.getPresenceReport(idClass, scheduleDateStart, scheduleDateEnd);
 	}
 
-	private void validateInsert(Presences presence) throws Exception {
-
-	}
-
-	private void validateUpdate(Presences presence) throws Exception {
-
-	}
-
 	private String generateTrxNumber() {
 		Random random = new Random();
 		LocalDate localDate = LocalDate.now();
@@ -107,6 +99,21 @@ public class PresencesServiceImpl extends ElearningBaseServiceImpl implements Pr
 		trx = trx.replaceAll("-", "");
 		String trxNumber = bBuilder("ASB-", trx, "-", trxCodeValue).toString();
 		return trxNumber;
+	}
+
+	private void validateInsert(Presences presence) throws Exception {
+		Users user = usersService.getUserById(presence.getIdUser().getId());
+		if (user.getIdRole().getCode().equals("PCP")) {
+			Presences tutorPresence = presencesDao
+					.getPresenceByIdDetailModuleRgs(presence.getIdDetailModuleRegistration().getId());
+			if (tutorPresence != null) {
+				
+			}
+		}
+	}
+
+	private void validateUpdate(Presences presence) throws Exception {
+
 	}
 
 }

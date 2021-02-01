@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.lawencon.elearning.helper.LearningMaterialsHelper;
+import com.lawencon.elearning.model.DetailModuleRegistrations;
 import com.lawencon.elearning.model.LearningMaterials;
 
 /**
@@ -13,7 +13,7 @@ import com.lawencon.elearning.model.LearningMaterials;
 
 public interface LearningMaterialsService {
 
-	void insertLearningMaterial(LearningMaterialsHelper helper, MultipartFile file) throws Exception;
+	void insertLearningMaterial(DetailModuleRegistrations dtlModuleRgs, MultipartFile file) throws Exception;
 
 	List<LearningMaterials> getAllLearningMaterials() throws Exception;
 
@@ -24,4 +24,5 @@ public interface LearningMaterialsService {
 	void deleteLearningMaterialById(String id) throws Exception;
 
 	LearningMaterials getLearningMaterialByCode(String code) throws Exception;
+
 }

@@ -30,18 +30,6 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 		return dtlModRegistDao.getDetailModuleRegistrationsByIdModuleRgs(idModuleRgs);
 	}
 
-	private String generateTrxNumber() {
-		Random random = new Random();
-		LocalDate localDate = LocalDate.now();
-		DateTimeFormatter myFormat = DateTimeFormatter.ofPattern("yy-MM-dd");
-		String formattedDate = localDate.format(myFormat);
-		String trxCodeValue = String.valueOf(random.nextInt((999 + 1 - 100) + 100));
-		String trx = bBuilder(formattedDate).toString();
-		trx = trx.replaceAll("-", "");
-		String trxNumber = bBuilder("DMRG-", trx, "-", trxCodeValue).toString();
-		return trxNumber;
-	}
-
 	private void validateInsert(DetailModuleRegistrations dtlModRegist) throws Exception {
 		if (dtlModRegist.getScheduleDate() != null) {
 			if (dtlModRegist.getScheduleDate()
@@ -63,6 +51,18 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 		} else {
 			throw new Exception("Order number tidak boleh kosong");
 		}
+	}
+
+	private String generateTrxNumber() {
+		Random random = new Random();
+		LocalDate localDate = LocalDate.now();
+		DateTimeFormatter myFormat = DateTimeFormatter.ofPattern("yy-MM-dd");
+		String formattedDate = localDate.format(myFormat);
+		String trxCodeValue = String.valueOf(random.nextInt((999 + 1 - 100) + 100));
+		String trx = bBuilder(formattedDate).toString();
+		trx = trx.replaceAll("-", "");
+		String trxNumber = bBuilder("DMRG-", trx, "-", trxCodeValue).toString();
+		return trxNumber;
 	}
 
 }

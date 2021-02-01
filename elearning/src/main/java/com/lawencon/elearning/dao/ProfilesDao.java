@@ -6,7 +6,7 @@ import com.lawencon.elearning.model.Profiles;
 import com.lawencon.util.Callback;
 
 public interface ProfilesDao {
-	
+
 	void insertProfile(Profiles profile, Callback before) throws Exception;
 
 	List<Profiles> getAllProfiles() throws Exception;
@@ -20,4 +20,6 @@ public interface ProfilesDao {
 	void deleteProfileById(String id) throws Exception;
 
 	Profiles getProfileByEmail(String email) throws Exception;
+
+	Profiles getProfileByIdNumber(String idNumber) throws Exception;
 }

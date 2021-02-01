@@ -19,6 +19,9 @@ public interface PresencesDao {
 	void deletePresenceById(String id) throws Exception;
 
 	Presences getPresenceByCode(String code) throws Exception;
-	
+
 	List<?> getPresenceReport(String idClass, LocalDate scheduleDateStart, LocalDate scheduleDateEnd) throws Exception;
+
+	Presences getPresenceByIdDetailModuleRgs(String idDtlModuleRgs) throws Exception;
+
 }

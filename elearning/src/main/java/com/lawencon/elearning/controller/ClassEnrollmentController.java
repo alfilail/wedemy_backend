@@ -80,7 +80,7 @@ public class ClassEnrollmentController {
 		}
 	}
 
-	@GetMapping("user/detail-class")
+	@GetMapping("participant/detail-class")
 	public ResponseEntity<?> getAllClassEnrollmentsByIdDtlClassAndIdUser(@RequestParam("idDtlClass") String idDtlClass,
 			@RequestParam("idUser") String idUser) {
 		ClassEnrollments classEnrollment = new ClassEnrollments();

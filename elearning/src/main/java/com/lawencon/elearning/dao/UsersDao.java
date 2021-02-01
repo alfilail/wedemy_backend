@@ -19,15 +19,16 @@ public interface UsersDao {
 	void updateUser(Users user, Callback before) throws Exception;
 
 	void deleteUserById(String id) throws Exception;
-	
-	Users getUserByIdProfile(Profiles profile) throws Exception;
-	
-	List<Users> getUsersByRoleCode(String code) throws Exception;
-	
-	void softDeleteUserById(String id) throws Exception;
-	
-	List<?> validateDeleteUser(String id) throws Exception;
-	
-	Users getUserByIdNumber(String idNumber) throws Exception;
 
+	Users getUserByIdProfile(Profiles profile) throws Exception;
+
+	List<Users> getUsersByRoleCode(String code) throws Exception;
+
+	Users getUserByIdDetailClass(String idDtlClass) throws Exception;
+
+	void softDeleteUserById(String id) throws Exception;
+
+	List<?> validateDeleteUser(String id) throws Exception;
+
+	Users getUserByIdNumber(String idNumber) throws Exception;
 }
