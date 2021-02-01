@@ -51,7 +51,7 @@ public class ClassesController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> insertClass(@RequestPart String body, @RequestPart("file") MultipartFile file) {
+	public ResponseEntity<?> insertClass(@RequestPart("body") String body, @RequestPart("file") MultipartFile file) {
 		try {
 			ObjectMapper obj = new ObjectMapper();
 			obj.registerModule(new JavaTimeModule());

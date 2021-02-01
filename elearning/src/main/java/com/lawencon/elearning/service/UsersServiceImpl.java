@@ -182,6 +182,11 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 		return usersDao.getUsersByRoleCode(code);
 	}
 	
+	@Override
+	public Users getUserByIdNumber(String idNumber) throws Exception {
+		return usersDao.getUserByIdNumber(idNumber);
+	}
+	
 	private boolean validateDelete(String idUser) throws Exception {
 		List<?> listObj = usersDao.validateDeleteUser(idUser);
 		listObj.forEach(System.out::println);

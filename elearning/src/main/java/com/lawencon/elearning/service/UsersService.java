@@ -21,6 +21,8 @@ public interface UsersService {
 
 	Users updateUserPassword(Profiles profile) throws Exception;
 	
+	Users getUserByIdNumber(String idNumber) throws Exception;
+	
 	List<Users> getUsersByRoleCode(String code) throws Exception;
 
 }

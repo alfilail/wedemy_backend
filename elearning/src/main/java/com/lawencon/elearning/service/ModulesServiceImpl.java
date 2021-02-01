@@ -31,8 +31,20 @@ public class ModulesServiceImpl extends BaseServiceImpl implements ModulesServic
 	}
 
 	@Override
-	public void deleteModuleById(String id) throws Exception {
-		modulesDao.deleteModuleById(id);
+	public void deleteModuleById(String id, String idUser) throws Exception {
+		try {
+			begin();
+			modulesDao.deleteModuleById(id);
+			commit();
+		} catch(Exception e) {
+			e.printStackTrace();
+			if(e.getMessage().equals("ID Not Found")) {
+				throw new Exception("Id tidak ada");
+			}
+			begin();
+			updateIsActive(id, idUser);
+			commit();
+		}
 	}
 
 	@Override
@@ -62,4 +74,10 @@ public class ModulesServiceImpl extends BaseServiceImpl implements ModulesServic
 			throw new Exception("Nama Modul tidak boleh kosong");
 		}
 	}
+
+	@Override
+	public void updateIsActive(String id, String idUser) throws Exception {
+		modulesDao.updateIsActive(id, idUser);
+	}
+
 }

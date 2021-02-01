@@ -164,7 +164,7 @@
 	</columnHeader>
 	<detail>
 		<band height="28" splitType="Stretch">
-			<textField pattern="###0.00#;(###0.00#-)">
+			<textField pattern="#,##0.00">
 				<reportElement x="300" y="0" width="254" height="20" uuid="c8ed13d4-dcd4-44cb-85a9-83ce51bbcc61">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d17a2363-939f-4733-a184-e0bcf172e454"/>
 				</reportElement>

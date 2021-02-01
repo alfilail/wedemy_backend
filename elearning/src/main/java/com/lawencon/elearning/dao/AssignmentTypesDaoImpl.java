@@ -35,8 +35,8 @@ public class AssignmentTypesDaoImpl extends ElearningBaseDaoImpl<LearningMateria
 	
 	@Override
 	public LearningMaterialTypes getAssignmentTypeByCode(String code) throws Exception {
-		LearningMaterialTypes assignmentTypes = createQuery("FROM AssignmentTypes WHERE code = ?1", LearningMaterialTypes.class)
-				.setParameter(1, code).getSingleResult();
-		return assignmentTypes;
+		List<LearningMaterialTypes> assignmentTypes = createQuery("FROM LearningMaterialTypes WHERE code = ?1", LearningMaterialTypes.class)
+				.setParameter(1, code).getResultList();
+		return assignmentTypes.size() > 0 ? assignmentTypes.get(0) : null;
 	}
 }

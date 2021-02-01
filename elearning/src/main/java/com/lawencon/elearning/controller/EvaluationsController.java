@@ -61,6 +61,17 @@ public class EvaluationsController {
 		return new HttpEntity<>(out, headers);
 	}
 	
+	@GetMapping("/scores")
+	public ResponseEntity<?> getScores(@RequestParam("idClass") String idClass) {
+		try {
+			List<?> scoreList = evaluationsService.reportAllScore(idClass);
+			return new ResponseEntity<>(scoreList, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
 	@GetMapping("/report/score")
 	public HttpEntity<?> reportScore(@RequestParam("idClass") String idClass,
 			@RequestParam("idParticipant") String idParticipant) {

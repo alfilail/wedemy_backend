@@ -124,6 +124,6 @@ public class ClassEnrollmentsDaoImpl extends ElearningBaseDaoImpl<ClassEnrollmen
 			Object obj = (Object) val;
 			total.add(Integer.valueOf(obj.toString()));
 		});
-		return total.get(0);
+		return total.size() > 0 ? total.get(0) : null;
 	}
 }

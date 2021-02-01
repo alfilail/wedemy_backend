@@ -37,9 +37,9 @@ public class ApprovementsDaoImpl extends ElearningBaseDaoImpl<Approvements> impl
 
 	@Override
 	public Approvements getApprovementByCode(String code) throws Exception {
-		Approvements approvement = createQuery("FROM Approvements WHERE code = ?1", Approvements.class)
-				.setParameter(1, code).getSingleResult();
-		return approvement;
+		List<Approvements> approvement = createQuery("FROM Approvements WHERE code = ?1", Approvements.class)
+				.setParameter(1, code).getResultList();
+		return approvement.size() > 0 ? approvement.get(0) : null;
 	}
 
 }

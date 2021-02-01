@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -71,10 +72,11 @@ public class ModulesController {
 		}
 	}
 
-	@DeleteMapping("{id}")
-	public ResponseEntity<?> deleteModuleById(@PathVariable("id") String id) {
+	@DeleteMapping
+	public ResponseEntity<?> deleteModuleById(@RequestParam("id") String id,
+			@RequestParam("idUser") String idUser) {
 		try {
-			moduleService.deleteModuleById(id);
+			moduleService.deleteModuleById(id, idUser);
 			return new ResponseEntity<>("Module Successfully Deleted!", HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();

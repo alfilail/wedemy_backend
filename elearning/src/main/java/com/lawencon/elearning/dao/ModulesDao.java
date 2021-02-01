@@ -18,5 +18,7 @@ public interface ModulesDao {
 	void updateModule(Modules module, Callback before) throws Exception;
 
 	void deleteModuleById(String id) throws Exception;
+	
+	void updateIsActive(String id, String idUser) throws Exception;
 
 }

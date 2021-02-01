@@ -41,4 +41,10 @@ public class ModulesDaoImpl extends ElearningBaseDaoImpl<Modules> implements Mod
 		return module.size() > 0 ? module.get(0) : null;
 	}
 
+	@Override
+	public void updateIsActive(String id, String idUser) throws Exception {
+		String sql = "UPDATE t_m_modules SET is_active = FALSE";
+		updateNativeSQL(sql, id, idUser);
+	}
+
 }

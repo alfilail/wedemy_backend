@@ -271,7 +271,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{idAssignmentSubmission.idDetailModuleRegistration.idModuleRegistration.idModule.moduleName}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00#;(#,##0.00#-)">
+			<textField pattern="#,##0.00">
 				<reportElement x="424" y="0" width="128" height="30" uuid="c92814d4-2a0a-45e7-b5fd-e1180fc4ed62">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c992e288-3fbb-4bf5-b6fa-7243b84211ae"/>
 				</reportElement>
@@ -308,7 +308,7 @@
 				<textElement textAlignment="Left"/>
 				<textFieldExpression><![CDATA[" of " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00#;(#,##0.00#-)">
+			<textField pattern="#,##0.00">
 				<reportElement isPrintRepeatedValues="false" x="429" y="13" width="124" height="30" uuid="daaea26a-375b-4161-818c-ba0223f3c8a5"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="12" isBold="true"/>

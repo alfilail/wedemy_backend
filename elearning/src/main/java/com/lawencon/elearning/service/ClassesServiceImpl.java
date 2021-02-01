@@ -35,7 +35,7 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 			if (null != helper.getClazz().getCode()) {
 				Classes clazz = helper.getClazz();
 				if (null != helper.getClazz().getIdTutor()) {
-					Users tutor = usersService.getUserById(clazz.getIdTutor().getId());
+					Users tutor = usersService.getUserByIdNumber(clazz.getIdTutor().getIdProfile().getIdNumber());
 					if (null != tutor) {
 						clazz.setIdTutor(tutor);
 						clazz.setThumbnailImg(file.getBytes());
@@ -104,7 +104,7 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 				if (clazz.getIdTutor() == null) {
 					throw new Exception("Tutor tidak boleh kosong!");
 				} else {
-					Users user = usersService.getUserById(clazz.getIdTutor().getId());
+					Users user = usersService.getUserByIdNumber(clazz.getIdTutor().getIdProfile().getIdNumber());
 					if (user == null) {
 						throw new Exception("Id Tutor tidak ada!");
 					} else {

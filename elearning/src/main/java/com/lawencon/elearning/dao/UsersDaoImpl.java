@@ -125,5 +125,19 @@ public class UsersDaoImpl extends ElearningBaseDaoImpl<Users> implements UsersDa
 		});
 		return result;
 	}
+	
+	@Override
+	public Users getUserByIdNumber(String idNumber) throws Exception {
+		String sql = sqlBuilder("SELECT u.id, u.username, r.code, p.fullname, p.id_number, p.birth_place, p.birth_date,",
+				" p.email, p.phone, p.address FROM t_m_users u",
+				" INNER JOIN t_m_profiles p ON p.id = u.id_profile",
+				" INNER JOIN t_m_roles r ON r.id = u.id_role",
+				" WHERE p.id_number = ?1 ").toString();
+		List<?> listObj = createNativeQuery(sql).setParameter(1, idNumber).getResultList();
+		List<Users> listUsers = HibernateUtils.bMapperList(listObj, Users.class, "id", "username", "idRole.code", "idProfile.fullName",
+				 "idProfile.idNumber", "idProfile.birthPlace", "idProfile.birthDate", "idProfile.email", "idProfile.phone",
+				 "idProfile.address");
+		return listUsers.size() > 0 ? listUsers.get(0) : null;
+	}
 
 }
