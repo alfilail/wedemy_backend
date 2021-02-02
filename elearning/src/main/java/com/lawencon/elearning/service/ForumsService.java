@@ -10,7 +10,7 @@ public interface ForumsService {
 	
 	void updateContentForum(Forums forum) throws Exception;
 	
-	void deleteForumById(String id) throws Exception;
+	void deleteForumById(String id, String idUser) throws Exception;
 	
 	List<Forums> getAllForums() throws Exception;
 	

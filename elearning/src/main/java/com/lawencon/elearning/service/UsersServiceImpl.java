@@ -78,10 +78,10 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 	}
 
 	@Override
-	public void deleteUserById(String id) throws Exception {
+	public void deleteUserById(String id, String idUser) throws Exception {
 		begin();
 		if(validateDelete(id) == true) {
-			usersDao.softDeleteUserById(id);
+			usersDao.softDeleteUserById(id, idUser);
 		}
 		else {
 			usersDao.deleteUserById(id);

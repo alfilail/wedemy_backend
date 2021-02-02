@@ -22,9 +22,9 @@ public class SubmissionStatusDaoImpl extends ElearningBaseDaoImpl<SubmissionStat
 
 	@Override
 	public SubmissionStatus getSubmissionStatusByCode(String code) throws Exception {
-		SubmissionStatus submissionStatus = createQuery("FROM SubmissionStatus WHERE code = ?1", SubmissionStatus.class)
-				.setParameter(1, code).getSingleResult();
-		return submissionStatus;
+		List<SubmissionStatus> submissionStatus = createQuery("FROM SubmissionStatus WHERE code = ?1", SubmissionStatus.class)
+				.setParameter(1, code).getResultList();
+		return submissionStatus.size() > 0 ? submissionStatus.get(0) : null;
 	}
 
 	@Override

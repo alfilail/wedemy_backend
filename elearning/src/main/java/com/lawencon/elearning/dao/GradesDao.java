@@ -19,4 +19,8 @@ public interface GradesDao {
 	void deleteGradeById(String id) throws Exception;
 	
 	Grades getGradeByCode(String code) throws Exception;
+	
+	List<?> validateDeleteGrade(String id) throws Exception;
+	
+	void softDeleteGradeById(String id, String idUser) throws Exception;
 }

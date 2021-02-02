@@ -17,7 +17,7 @@ public interface UsersService {
 
 	void updateUser(Users user) throws Exception;
 
-	void deleteUserById(String id) throws Exception;
+	void deleteUserById(String id, String idUser) throws Exception;
 
 	Users updateUserPassword(Profiles profile) throws Exception;
 	

@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,8 +46,15 @@ public class ForumsServiceImpl extends ElearningBaseServiceImpl implements Forum
 	}
 
 	@Override
-	public void deleteForumById(String id) throws Exception {
-		forumsDao.deleteForumById(id);
+	public void deleteForumById(String id, String idUser) throws Exception {
+		begin();
+		if(validateDelete(id) == true) {
+			forumsDao.softDeleteForumById(id, idUser);
+		}
+		else {
+			forumsDao.deleteForumById(id);
+		}
+		commit();
 	}
 
 	@Override
@@ -82,6 +90,15 @@ public class ForumsServiceImpl extends ElearningBaseServiceImpl implements Forum
 		trx = trx.replaceAll("-", "");
 		String trxNumber= bBuilder("ASB-", trx, "-",trxCodeValue).toString();
 		return trxNumber;
+	}
+	
+	private boolean validateDelete(String id) throws Exception {
+		List<?> listObj = forumsDao.validateDeleteForum(id);
+		listObj.forEach(System.out::println);
+		List<?> list =  listObj.stream().filter(val -> val != null)
+				.collect(Collectors.toList());
+		System.out.println(list.size());
+		return list.size() > 0 ? true : false;
 	}
 
 }

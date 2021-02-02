@@ -31,26 +31,26 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 	}
 
 	private void validateInsert(DetailModuleRegistrations dtlModRegist) throws Exception {
-		if (dtlModRegist.getScheduleDate() != null) {
-			if (dtlModRegist.getScheduleDate()
-					.isAfter(dtlModRegist.getIdModuleRegistration().getIdDetailClass().getEndDate())) {
-				throw new Exception("Jadwal materi tidak bisa melewati masa berlangsung kelas");
-			}
-			if (dtlModRegist.getScheduleDate()
-					.isBefore(dtlModRegist.getIdModuleRegistration().getIdDetailClass().getStartDate())) {
-				throw new Exception("Jadwal materi tidak bisa mendahului masa berlangsung kelas");
-			}
-		} else {
-			throw new Exception("Jadwal materi tidak boleh kosong");
-		}
-		if (dtlModRegist.getOrderNumber() != null) {
-			DetailModuleRegistrations dtlModuleRgs = dtlModRegistDao.getByOrderNumber(dtlModRegist.getOrderNumber());
-			if (dtlModuleRgs != null) {
-				throw new Exception("Order number dalam satu modul tidak boleh sama");
-			}
-		} else {
-			throw new Exception("Order number tidak boleh kosong");
-		}
+//		if (dtlModRegist.getScheduleDate() != null) {
+//			if (dtlModRegist.getScheduleDate()
+//					.isAfter(dtlModRegist.getIdModuleRegistration().getIdDetailClass().getEndDate())) {
+//				throw new Exception("Jadwal materi tidak bisa melewati masa berlangsung kelas");
+//			}
+//			if (dtlModRegist.getScheduleDate()
+//					.isBefore(dtlModRegist.getIdModuleRegistration().getIdDetailClass().getStartDate())) {
+//				throw new Exception("Jadwal materi tidak bisa mendahului masa berlangsung kelas");
+//			}
+//		} else {
+//			throw new Exception("Jadwal materi tidak boleh kosong");
+//		}
+//		if (dtlModRegist.getOrderNumber() != null) {
+//			DetailModuleRegistrations dtlModuleRgs = dtlModRegistDao.getByOrderNumber(dtlModRegist.getOrderNumber());
+//			if (dtlModuleRgs != null) {
+//				throw new Exception("Order number dalam satu modul tidak boleh sama");
+//			}
+//		} else {
+//			throw new Exception("Order number tidak boleh kosong");
+//		}
 	}
 
 	private String generateTrxNumber() {

@@ -1,6 +1,7 @@
 package com.lawencon.elearning.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,8 +42,15 @@ public class GradesServiceImpl extends BaseServiceImpl implements GradesService 
 	}
 
 	@Override
-	public void deleteGradeById(String id) throws Exception {
-		gradeDao.deleteGradeById(id);
+	public void deleteGradeById(String id, String idUser) throws Exception {
+		begin();
+		if(validateDelete(id) == true) {
+			gradeDao.softDeleteGradeById(id, idUser);
+		}
+		else {
+			gradeDao.deleteGradeById(id);
+		}
+		commit();
 	}
 
 	@Override
@@ -77,6 +85,15 @@ public class GradesServiceImpl extends BaseServiceImpl implements GradesService 
 				throw new Exception("Minimum score harus lebih kecil dari maximum score");
 			}
 		}
+	}
+	
+	private boolean validateDelete(String id) throws Exception {
+		List<?> listObj = gradeDao.validateDeleteGrade(id);
+		listObj.forEach(System.out::println);
+		List<?> list =  listObj.stream().filter(val -> val != null)
+				.collect(Collectors.toList());
+		System.out.println(list.size());
+		return list.size() > 0 ? true : false;
 	}
 
 }

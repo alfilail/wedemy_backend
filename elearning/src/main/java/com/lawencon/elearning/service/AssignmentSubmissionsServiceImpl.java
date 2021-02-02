@@ -7,17 +7,19 @@ import java.util.List;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.lawencon.elearning.dao.AssignmentSubmissionsDao;
+import com.lawencon.elearning.helper.MailHelper;
 import com.lawencon.elearning.model.AssignmentSubmissions;
 import com.lawencon.elearning.model.Files;
+import com.lawencon.elearning.model.General;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.SubmissionStatus;
 import com.lawencon.elearning.model.SubmissionStatusRenewal;
+import com.lawencon.elearning.util.MailUtil;
 
 @Service
 public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl implements AssignmentSubmissionsService {
@@ -36,6 +38,12 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 
 	@Autowired
 	private FilesService filesService;
+	
+	@Autowired
+	private GeneralService generalService;
+	
+	@Autowired
+	private MailUtil mailUtil;
 
 	@Override
 	public void insertAssignmentSubmissions(AssignmentSubmissions assignmentSubmission, MultipartFile fileInput)
@@ -79,24 +87,33 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 	private void sendEmailTutor(AssignmentSubmissions assignmentSubmission) throws Exception {
 		Profiles tutor = assignmentSubmissionsDao.getTutorProfile(assignmentSubmission);
 		Profiles participant = assignmentSubmissionsDao.getParticipantProfile(assignmentSubmission);
-		SimpleMailMessage msg = new SimpleMailMessage();
-		msg.setTo(tutor.getEmail());
-		msg.setSubject("Assignment Submission Has Sent");
-		msg.setText(bBuilder("Dear ", tutor.getFullName(), ",\n\n", participant.getFullName(),
-				" have sent assignment submissions. ", "Have a nice day.", "\n \nBest Regards, \nElearning Alfione")
-						.toString());
-		javaMailSender.send(msg);
+		
+		General general = generalService.getTemplateEmail("assignment_tutor");
+		String text = general.getTemplateHtml();
+		
+		text = text.replace("#1#", tutor.getFullName());
+		text = text.replace("#2#", participant.getFullName());
+		
+		MailHelper mailHelper = new MailHelper();
+		mailHelper.setTo(tutor.getEmail());
+		mailHelper.setSubject("Assignment Submission Has Sent");
+		mailHelper.setText(text);
+		new MailServiceImpl(mailUtil, mailHelper);
 	}
 
 	private void sendEmailParticipant(AssignmentSubmissions assignmentSubmission) throws Exception {
 		Profiles participant = assignmentSubmissionsDao.getParticipantProfile(assignmentSubmission);
-		SimpleMailMessage msg = new SimpleMailMessage();
-		msg.setTo(participant.getEmail());
-		msg.setSubject("Assignment Submission Has Sent");
-		msg.setText(bBuilder("Dear ", participant.getFullName(), ",\n Your Assignment Submissions has sent. ",
-				"Wait for updated score of your assignment submissions. ", "Have a nice day. ",
-				"\n \n Best Regards, \n Elearning Alfione").toString());
-		javaMailSender.send(msg);
+		
+		General general = generalService.getTemplateEmail("assignment_participant");
+		String text = general.getTemplateHtml();
+		
+		text = text.replace("#1#", participant.getFullName());
+		
+		MailHelper mailHelper = new MailHelper();
+		mailHelper.setTo(participant.getEmail());
+		mailHelper.setSubject("Assignment Submission Has Sent");
+		mailHelper.setText(text);
+		new MailServiceImpl(mailUtil, mailHelper);
 	}
 
 	private void insertStatusRenewal(AssignmentSubmissions assignmentSubmission) throws Exception {

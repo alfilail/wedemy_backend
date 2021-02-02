@@ -1,6 +1,7 @@
 package com.lawencon.elearning.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.elearning.dao.FilesDao;
@@ -10,6 +11,7 @@ import com.lawencon.elearning.model.Files;
  * @author Nur Alfilail
  */
 
+@Service
 public class FilesServiceImpl extends BaseServiceImpl implements FilesService {
 
 	@Autowired

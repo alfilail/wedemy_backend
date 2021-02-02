@@ -37,9 +37,9 @@ public class LearningMaterialsDaoImpl extends ElearningBaseDaoImpl<LearningMater
 
 	@Override
 	public LearningMaterials getLearningMaterialByCode(String code) throws Exception {
-		LearningMaterials learningMaterial = createQuery("FROM LearningMaterials WHERE code =?1",
-				LearningMaterials.class).setParameter(1, code).getSingleResult();
-		return learningMaterial;
+		List<LearningMaterials> learningMaterial = createQuery("FROM LearningMaterials WHERE code =?1",
+				LearningMaterials.class).setParameter(1, code).getResultList();
+		return learningMaterial.size() > 0 ? learningMaterial.get(0) : null;
 	}
 
 }

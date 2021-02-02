@@ -90,8 +90,8 @@ public class UsersDaoImpl extends ElearningBaseDaoImpl<Users> implements UsersDa
 	}
 
 	@Override
-	public void softDeleteUserById(String id) throws Exception {
-		updateNativeSQL("UPDATE t_m_users SET is_active = false", id, "mas imam");
+	public void softDeleteUserById(String id, String idUser) throws Exception {
+		updateNativeSQL("UPDATE t_m_users SET is_active = false", id, idUser);
 	}
 
 	@Override

@@ -13,7 +13,7 @@ public interface GradesService {
 
 	Grades getGradeByScore(Double score) throws Exception;
 
-	void deleteGradeById(String id) throws Exception;
+	void deleteGradeById(String id, String idUser) throws Exception;
 
 	void updateGrades(Grades grade) throws Exception;
 

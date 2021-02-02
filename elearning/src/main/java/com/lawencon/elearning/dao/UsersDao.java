@@ -26,7 +26,7 @@ public interface UsersDao {
 
 	Users getUserByIdDetailClass(String idDtlClass) throws Exception;
 
-	void softDeleteUserById(String id) throws Exception;
+	void softDeleteUserById(String id, String idUser) throws Exception;
 
 	List<?> validateDeleteUser(String id) throws Exception;
 

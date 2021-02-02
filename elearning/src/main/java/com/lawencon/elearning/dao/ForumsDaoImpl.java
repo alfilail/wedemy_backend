@@ -1,5 +1,6 @@
 package com.lawencon.elearning.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -49,6 +50,24 @@ public class ForumsDaoImpl extends ElearningBaseDaoImpl<Forums> implements Forum
 		List<?> listObj = createNativeQuery(sql).setParameter(1, id).getResultList();
 		return HibernateUtils.bMapperList(listObj, Forums.class, "createdAt", "createdBy", "updatedAt", "updatedBy", "version", 
 				"trxDate", "trxNumber", "contentText", "forumDateTime", "fullName").get(0);
+	}
+	
+	@Override
+	public void softDeleteForumById(String id, String idUser) throws Exception {
+		updateNativeSQL("UPDATE t_r_forums SET is_active = false", id, idUser);
+	}
+	
+	@Override
+	public List<?> validateDeleteForum(String id) throws Exception {
+		String sql = sqlBuilder("select from t_r_forums trf full join t_r_dtl_forums trdf ",
+				" on trf.id = trdf.id_forum where trf.id = ?1 ").toString();
+		List<?> listObj = createNativeQuery(sql).setParameter(1, id).setMaxResults(1).getResultList();
+		List<String> result = new ArrayList<String>();
+		listObj.forEach(val -> {
+			Object obj = (Object) val;
+			result.add(obj != null ? obj.toString() : null);
+		});
+		return result;
 	}
 
 }

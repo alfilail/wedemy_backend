@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -63,10 +64,11 @@ public class GradesController {
 		}
 	}
 
-	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteGradeById(@PathVariable("id") String id) {
+	@DeleteMapping
+	public ResponseEntity<?> deleteGradeById(@RequestParam("id") String id, 
+			@RequestParam("idUser") String idUser) {
 		try {
-			gradesService.deleteGradeById(id);
+			gradesService.deleteGradeById(id, idUser);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();
