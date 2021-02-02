@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.lawencon.elearning.dao.ClassEnrollmentsDao;
 import com.lawencon.elearning.model.ClassEnrollments;
+import com.lawencon.elearning.model.DetailClasses;
 
 @Service
 public class ClassEnrollmentServiceImpl extends ElearningBaseServiceImpl implements ClassEnrollmentService {
@@ -39,7 +40,7 @@ public class ClassEnrollmentServiceImpl extends ElearningBaseServiceImpl impleme
 	}
 
 	@Override
-	public List<ClassEnrollments> getAllClassEnrollmentsByIdUser(String id) throws Exception {
+	public List<DetailClasses> getAllClassEnrollmentsByIdUser(String id) throws Exception {
 		return classEnrollmentDao.getAllClassEnrollmentsByIdUser(id);
 	}
 

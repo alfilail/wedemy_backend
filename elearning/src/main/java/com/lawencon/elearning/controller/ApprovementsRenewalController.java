@@ -17,7 +17,7 @@ import com.lawencon.elearning.service.ApprovementsRenewalService;
 public class ApprovementsRenewalController {
 	@Autowired
 	private ApprovementsRenewalService approvementsRenewalService;
-	
+
 	@PostMapping
 	public ResponseEntity<?> insertApprovementsRenewal(@RequestBody String body) {
 		try {
@@ -29,4 +29,15 @@ public class ApprovementsRenewalController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
+//	@GetMapping("participant")
+//	public ResponseEntity<?> getassignmentSubmissionsById(@RequestParam("id") String id) {
+//		try {
+//			AssignmentSubmissions assignmentSubmissions = assignmentSubmissionsService.getAssignmentSubmissionsById(id);
+//			return new ResponseEntity<>(assignmentSubmissions, HttpStatus.OK);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+//		}
+//	}
 }

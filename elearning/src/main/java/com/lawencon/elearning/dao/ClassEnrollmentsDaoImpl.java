@@ -37,8 +37,8 @@ public class ClassEnrollmentsDaoImpl extends ElearningBaseDaoImpl<ClassEnrollmen
 	}
 
 	@Override
-	public List<ClassEnrollments> getAllClassEnrollmentsByIdUser(String id) throws Exception {
-		List<ClassEnrollments> listResult = new ArrayList<>();
+	public List<DetailClasses> getAllClassEnrollmentsByIdUser(String id) throws Exception {
+		List<DetailClasses> listResult = new ArrayList<>();
 		String sql = sqlBuilder("SELECT dc.id, c.class_name, c.description, f.file, c.id_tutor, p.fullname ",
 				"FROM t_r_class_enrollments ce INNER JOIN t_m_detail_classes dc ON ce.id_detail_class = dc.id ",
 				"INNER JOIN t_m_classes c ON dc.id_class = c.id INNER JOIN t_m_files f ON c.id_file = f.id ",
@@ -62,9 +62,7 @@ public class ClassEnrollmentsDaoImpl extends ElearningBaseDaoImpl<ClassEnrollmen
 			user.setIdProfile(profile);
 			clazz.setIdTutor(user);
 			detailClass.setIdClass(clazz);
-			ClassEnrollments classEnrollment = new ClassEnrollments();
-			classEnrollment.setIdDetailClass(detailClass);
-			listResult.add(classEnrollment);
+			listResult.add(detailClass);
 		});
 		return listResult;
 	}

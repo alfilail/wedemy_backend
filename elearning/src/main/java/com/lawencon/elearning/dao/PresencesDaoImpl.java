@@ -32,13 +32,6 @@ public class PresencesDaoImpl extends ElearningBaseDaoImpl<Presences> implements
 	}
 
 	@Override
-	public Presences getPresenceByIdDetailModuleRgs(String idDtlModuleRgs) throws Exception {
-		List<Presences> listResult = createQuery("FROM Presences WHERE idDetailModuleRegistration.id = ?1",
-				Presences.class).setParameter(1, idDtlModuleRgs).getResultList();
-		return listResult.size() > 0 ? listResult.get(0) : null;
-	}
-
-	@Override
 	public void updatePresence(Presences presence, Callback before) throws Exception {
 		save(presence, before, null, true, true);
 	}

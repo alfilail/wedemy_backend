@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lawencon.elearning.model.ClassEnrollments;
+import com.lawencon.elearning.model.DetailClasses;
 import com.lawencon.elearning.service.ClassEnrollmentService;
 import com.lawencon.util.JasperUtil;
 
@@ -70,7 +71,7 @@ public class ClassEnrollmentController {
 
 	@GetMapping("user/{id}")
 	public ResponseEntity<?> getAllClassEnrollmentsByIdUser(@PathVariable("id") String id) {
-		List<ClassEnrollments> classEnrollmentList = new ArrayList<>();
+		List<DetailClasses> classEnrollmentList = new ArrayList<>();
 		try {
 			classEnrollmentList = classEnrollmentService.getAllClassEnrollmentsByIdUser(id);
 			return new ResponseEntity<>(classEnrollmentList, HttpStatus.OK);

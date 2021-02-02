@@ -3,6 +3,7 @@ package com.lawencon.elearning.service;
 import java.util.List;
 
 import com.lawencon.elearning.model.ClassEnrollments;
+import com.lawencon.elearning.model.DetailClasses;
 
 public interface ClassEnrollmentService {
 	void insertClassEnrollment(ClassEnrollments classEnrollment) throws Exception;
@@ -11,7 +12,7 @@ public interface ClassEnrollmentService {
 
 	ClassEnrollments getClassEnrollmentsById(String id) throws Exception;
 
-	List<ClassEnrollments> getAllClassEnrollmentsByIdUser(String id) throws Exception;
+	List<DetailClasses> getAllClassEnrollmentsByIdUser(String id) throws Exception;
 
 	ClassEnrollments getClassEnrollmentByIdDtlClassAndIdUser(String idDtlClass, String idUser);
 

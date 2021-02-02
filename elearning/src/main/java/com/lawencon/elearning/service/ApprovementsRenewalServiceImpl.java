@@ -31,4 +31,10 @@ public class ApprovementsRenewalServiceImpl extends ElearningBaseServiceImpl imp
 	private void validateInsert(ApprovementsRenewal approvementsRenewal) throws Exception {
 
 	}
+
+	@Override
+	public ApprovementsRenewal checkUsersPresence(String idDtlModuleRgs, String idUser) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

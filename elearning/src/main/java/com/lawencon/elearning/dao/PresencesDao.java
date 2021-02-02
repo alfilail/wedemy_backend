@@ -22,6 +22,4 @@ public interface PresencesDao {
 
 	List<?> getPresenceReport(String idClass, LocalDate scheduleDateStart, LocalDate scheduleDateEnd) throws Exception;
 
-	Presences getPresenceByIdDetailModuleRgs(String idDtlModuleRgs) throws Exception;
-
 }

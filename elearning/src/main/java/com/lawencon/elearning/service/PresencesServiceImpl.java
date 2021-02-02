@@ -102,14 +102,7 @@ public class PresencesServiceImpl extends ElearningBaseServiceImpl implements Pr
 	}
 
 	private void validateInsert(Presences presence) throws Exception {
-		Users user = usersService.getUserById(presence.getIdUser().getId());
-		if (user.getIdRole().getCode().equals("PCP")) {
-			Presences tutorPresence = presencesDao
-					.getPresenceByIdDetailModuleRgs(presence.getIdDetailModuleRegistration().getId());
-			if (tutorPresence != null) {
-				
-			}
-		}
+
 	}
 
 	private void validateUpdate(Presences presence) throws Exception {

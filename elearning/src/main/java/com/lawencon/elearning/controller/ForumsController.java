@@ -1,5 +1,6 @@
 package com.lawencon.elearning.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lawencon.elearning.helper.ForumAndDetailForums;
 import com.lawencon.elearning.model.Forums;
 import com.lawencon.elearning.service.ForumsService;
 
@@ -40,8 +42,9 @@ public class ForumsController {
 	@GetMapping("material/{id}")
 	public ResponseEntity<?> getForumByIdDetailModuleRegistration(@PathVariable("id") String id) {
 		try {
-			Forums forum = forumsService.getForumByIdDetailModuleRegistration(id);
-			return new ResponseEntity<>(forum, HttpStatus.OK);
+			List<ForumAndDetailForums> listResult = new ArrayList<>();
+			listResult = forumsService.getForumByIdDetailModuleRegistration(id);
+			return new ResponseEntity<>(listResult, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

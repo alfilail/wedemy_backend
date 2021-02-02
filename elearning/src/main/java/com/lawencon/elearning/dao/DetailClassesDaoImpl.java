@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 import com.lawencon.elearning.model.Classes;
 import com.lawencon.elearning.model.DetailClasses;
 import com.lawencon.elearning.model.Files;
+import com.lawencon.elearning.model.Profiles;
+import com.lawencon.elearning.model.Users;
 import com.lawencon.util.Callback;
 
 @Repository
@@ -37,9 +39,10 @@ public class DetailClassesDaoImpl extends ElearningBaseDaoImpl<DetailClasses> im
 	@Override
 	public List<DetailClasses> getTutorClasses(String idTutor) throws Exception {
 		List<DetailClasses> listResult = new ArrayList<>();
-		String sql = sqlBuilder("SELECT dc.id, c.class_name, c.description, f.file ",
+		String sql = sqlBuilder("SELECT dc.id, c.class_name, c.description, f.file, c.id_tutor, p.fullname ",
 				"FROM t_m_detail_classes dc INNER JOIN t_m_classes c ON dc.id_class = c.id ",
-				"INNER JOIN t_m_files f ON c.id_file = f.id WHERE c.id_tutor = ?1").toString();
+				"INNER JOIN t_m_files f ON c.id_file = f.id INNER JOIN t_m_users u ON c.id_tutor = u.id ",
+				"INNER JOIN t_m_profiles p ON u.id_profile = p.id WHERE c.id_tutor = ?1").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, idTutor).getResultList();
 		listObj.forEach(val -> {
 			Object[] objArr = (Object[]) val;
@@ -51,6 +54,12 @@ public class DetailClassesDaoImpl extends ElearningBaseDaoImpl<DetailClasses> im
 			Files file = new Files();
 			file.setFile((byte[]) objArr[3]);
 			clazz.setIdFile(file);
+			Users user = new Users();
+			user.setId((String) objArr[4]);
+			Profiles profile = new Profiles();
+			profile.setFullName((String) objArr[5]);
+			user.setIdProfile(profile);
+			clazz.setIdTutor(user);
 			detailClass.setIdClass(clazz);
 			listResult.add(detailClass);
 		});

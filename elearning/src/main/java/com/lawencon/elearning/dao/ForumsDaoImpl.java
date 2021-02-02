@@ -1,12 +1,14 @@
 package com.lawencon.elearning.dao;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.elearning.model.Forums;
-import com.lawencon.elearning.util.HibernateUtils;
+import com.lawencon.elearning.model.Profiles;
+import com.lawencon.elearning.model.Users;
 import com.lawencon.util.Callback;
 
 @Repository
@@ -40,16 +42,26 @@ public class ForumsDaoImpl extends ElearningBaseDaoImpl<Forums> implements Forum
 	}
 
 	@Override
-	public Forums getForumByIdDetailModuleRegistration(String id) throws Exception {
-		String sql = sqlBuilder("SELECT f.created_at, f.created_by, f.updated_at, f.updated_by, f.version, f.trx_date, f.trx_number, "
-				 ,"f.content_text, f.forum_datetime, p.fullname from t_r_forums f "
-				 ,"inner join t_r_detail_module_registrations dmr on dmr.id = f.id_dtl_module_registration "
-				 ,"inner join t_m_users u on u.id = f.id_user "
-				 ,"inner join t_m_profiles p on p.id = u.id_profile "
-				 ,"where dmr.id = ?1 ").toString();
+	public List<Forums> getForumByIdDetailModuleRegistration(String id) throws Exception {
+		List<Forums> listResult = new ArrayList<>();
+		String sql = sqlBuilder("SELECT f.id, f.forum_datetime, f.content_text, p.fullname FROM t_r_forums f ",
+				"INNER JOIN t_m_users u ON f.id_user = u.id INNER JOIN t_m_profiles p ON u.id_profile = p.id ",
+				"WHERE f.id_dtl_module_registration =?1").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, id).getResultList();
-		return HibernateUtils.bMapperList(listObj, Forums.class, "createdAt", "createdBy", "updatedAt", "updatedBy", "version", 
-				"trxDate", "trxNumber", "contentText", "forumDateTime", "fullName").get(0);
+		listObj.forEach(val -> {
+			Object[] objArr = (Object[]) val;
+			Forums forum = new Forums();
+			forum.setId((String) objArr[0]);
+			forum.setForumDateTime(((Timestamp) objArr[1]).toLocalDateTime());
+			forum.setContentText((String) objArr[2]);
+			Profiles profile = new Profiles();
+			profile.setFullName((String) objArr[3]);
+			Users user = new Users();
+			user.setIdProfile(profile);
+			forum.setIdUser(user);
+			listResult.add(forum);
+		});
+		return listResult;
 	}
 	
 	@Override

@@ -3,6 +3,7 @@ package com.lawencon.elearning.dao;
 import java.util.List;
 
 import com.lawencon.elearning.model.ClassEnrollments;
+import com.lawencon.elearning.model.DetailClasses;
 import com.lawencon.util.Callback;
 
 public interface ClassEnrollmentsDao {
@@ -12,7 +13,7 @@ public interface ClassEnrollmentsDao {
 
 	ClassEnrollments getClassEnrollmentById(String id) throws Exception;
 
-	List<ClassEnrollments> getAllClassEnrollmentsByIdUser(String id) throws Exception;
+	List<DetailClasses> getAllClassEnrollmentsByIdUser(String id) throws Exception;
 
 	ClassEnrollments getClassEnrollmentByIdDtlClassAndIdUser(String idDtlClass, String idUser);
 

@@ -3,6 +3,7 @@ package com.lawencon.elearning.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -10,7 +11,10 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lawencon.elearning.dao.DetailForumsDao;
 import com.lawencon.elearning.dao.ForumsDao;
+import com.lawencon.elearning.helper.ForumAndDetailForums;
+import com.lawencon.elearning.model.DetailForums;
 import com.lawencon.elearning.model.Forums;
 
 @Service
@@ -18,6 +22,9 @@ public class ForumsServiceImpl extends ElearningBaseServiceImpl implements Forum
 
 	@Autowired
 	private ForumsDao forumsDao;
+	
+	@Autowired
+	private DetailForumsDao dtlForumsDao;
 
 	@Override
 	public void insertForum(Forums forum) throws Exception {
@@ -68,8 +75,17 @@ public class ForumsServiceImpl extends ElearningBaseServiceImpl implements Forum
 	}
 
 	@Override
-	public Forums getForumByIdDetailModuleRegistration(String id) throws Exception {
-		return forumsDao.getForumByIdDetailModuleRegistration(id);
+	public List<ForumAndDetailForums> getForumByIdDetailModuleRegistration(String id) throws Exception {
+		List<ForumAndDetailForums> listResult = new ArrayList<>();
+		List<Forums> forums = forumsDao.getForumByIdDetailModuleRegistration(id);
+		for (Forums forum : forums) {
+			List<DetailForums> detailForums = dtlForumsDao.getAllDetailForumsByIdForum(forum.getId());
+			ForumAndDetailForums result = new ForumAndDetailForums();
+			result.setForum(forum);
+			result.setDetailForums(detailForums);
+			listResult.add(result);
+		}
+		return listResult;
 	}
 
 	private void validateInsert(Forums forum) throws Exception {

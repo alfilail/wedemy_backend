@@ -17,7 +17,7 @@ public interface ForumsDao {
 	
 	Forums getForumById(String id) throws Exception;
 	
-	Forums getForumByIdDetailModuleRegistration(String id) throws Exception;
+	List<Forums> getForumByIdDetailModuleRegistration(String id) throws Exception;
 	
 	void softDeleteForumById(String id, String idUser) throws Exception;
 

@@ -11,4 +11,6 @@ public interface ApprovementsRenewalService {
 
 	ApprovementsRenewal getApprovementsRenewalById(String id) throws Exception;
 	
+	ApprovementsRenewal checkUsersPresence(String idDtlModuleRgs, String idUser) throws Exception;
+	
 }
