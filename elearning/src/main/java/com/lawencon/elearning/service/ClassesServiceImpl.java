@@ -101,7 +101,14 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 
 	@Override
 	public void deleteClassById(String id) throws Exception {
-		classesDao.deleteClassById(id);
+		try {
+			begin();
+			classesDao.deleteClassById(id);
+			commit();
+		} catch(Exception e) {
+			e.getMessage();
+			rollback();
+		}
 	}
 
 	private void validateInsert(Classes clazz) throws Exception {

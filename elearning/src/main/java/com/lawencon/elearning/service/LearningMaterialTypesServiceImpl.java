@@ -31,7 +31,14 @@ public class LearningMaterialTypesServiceImpl extends BaseServiceImpl implements
 
 	@Override
 	public void deleteLearningMaterialTypeById(String id) throws Exception {
-		assignmentTypesDao.deleteAssignmentTypeById(id);
+		try {
+			begin();
+			assignmentTypesDao.deleteAssignmentTypeById(id);
+			commit();
+		} catch(Exception e) {
+			e.getMessage();
+			rollback();
+		}
 	}
 
 	@Override
@@ -81,7 +88,9 @@ public class LearningMaterialTypesServiceImpl extends BaseServiceImpl implements
 							LearningMaterialTypes learningMaterialType = getLearningMaterialTypeByCode(
 									learningMaterialTypes.getCode());
 							if (learningMaterialType != null) {
-								throw new Exception("Kode tipe bahan tidak boleh sama!");
+								if(!learningMaterialType.getCode().equals(learningMaterialTypes.getCode())) {
+									throw new Exception("Kode tipe bahan tidak boleh sama!");									
+								}
 							} else {
 								if (learningMaterialTypes.getLearningMaterialTypeName() == null
 										|| learningMaterialTypes.getLearningMaterialTypeName().trim().equals("")) {

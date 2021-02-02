@@ -90,7 +90,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Nama Participant]]></text>
+				<text><![CDATA[Participant]]></text>
 			</staticText>
 			<line>
 				<reportElement x="2" y="130" width="553" height="1" uuid="42d07c16-320b-4285-a75c-c19df25bbdbe"/>

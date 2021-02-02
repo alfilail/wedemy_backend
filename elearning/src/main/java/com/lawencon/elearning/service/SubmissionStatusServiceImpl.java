@@ -5,11 +5,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.elearning.dao.SubmissionStatusDao;
 import com.lawencon.elearning.model.SubmissionStatus;
 
 @Service
-public class SubmissionStatusServiceImpl implements SubmissionStatusService {
+public class SubmissionStatusServiceImpl extends BaseServiceImpl implements SubmissionStatusService {
 
 	@Autowired
 	private SubmissionStatusDao submissionStatusDao;
@@ -36,7 +37,14 @@ public class SubmissionStatusServiceImpl implements SubmissionStatusService {
 
 	@Override
 	public void deleteSubmissionStatusById(String id) throws Exception {
-		submissionStatusDao.deleteSubmissionStatusById(id);
+		try {
+			begin();
+			submissionStatusDao.deleteSubmissionStatusById(id);
+			commit();
+		} catch(Exception e) {
+			e.getMessage();
+			rollback();
+		}
 	}
 
 	@Override
@@ -45,12 +53,17 @@ public class SubmissionStatusServiceImpl implements SubmissionStatusService {
 	}
 
 	private void validateInsert(SubmissionStatus submissionStatus) throws Exception {
-		if (submissionStatus.getSubmissionStatusName() == null
-				|| submissionStatus.getSubmissionStatusName().trim().equals("")) {
-			throw new Exception("Nama status tidak boleh kosong");
-		}
 		if (submissionStatus.getCode() == null || submissionStatus.getCode().trim().equals("")) {
 			throw new Exception("Kode status tidak boleh kosong");
+		} else {
+			SubmissionStatus submissionStat = getSubmissionStatusByCode(submissionStatus.getCode());
+			if(submissionStat != null) {
+				throw new Exception("Kode status sudah ada");
+			}
+			if (submissionStatus.getSubmissionStatusName() == null
+					|| submissionStatus.getSubmissionStatusName().trim().equals("")) {
+				throw new Exception("Nama status tidak boleh kosong");
+			}
 		}
 	}
 
@@ -58,12 +71,19 @@ public class SubmissionStatusServiceImpl implements SubmissionStatusService {
 		if (submissionStatus.getId() == null || submissionStatus.getId().trim().equals("")) {
 			throw new Exception("Id status tidak boleh kosong");
 		}
-		if (submissionStatus.getSubmissionStatusName() == null
-				|| submissionStatus.getSubmissionStatusName().trim().equals("")) {
-			throw new Exception("Nama status tidak boleh kosong");
-		}
 		if (submissionStatus.getCode() == null || submissionStatus.getCode().trim().equals("")) {
 			throw new Exception("Kode status tidak boleh kosong");
+		} else {
+			SubmissionStatus submissionStat = getSubmissionStatusByCode(submissionStatus.getCode());
+			if(submissionStat != null) {
+				if(!submissionStat.getCode().equals(submissionStatus.getCode())) {
+					throw new Exception("Kode status sudah ada");					
+				}
+			}
+			if (submissionStatus.getSubmissionStatusName() == null
+					|| submissionStatus.getSubmissionStatusName().trim().equals("")) {
+				throw new Exception("Nama status tidak boleh kosong");
+			}
 		}
 	}
 }

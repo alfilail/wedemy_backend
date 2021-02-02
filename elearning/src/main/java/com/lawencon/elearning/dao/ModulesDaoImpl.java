@@ -1,5 +1,6 @@
 package com.lawencon.elearning.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -45,6 +46,25 @@ public class ModulesDaoImpl extends ElearningBaseDaoImpl<Modules> implements Mod
 	public void updateIsActive(String id, String idUser) throws Exception {
 		String sql = "UPDATE t_m_modules SET is_active = FALSE";
 		updateNativeSQL(sql, id, idUser);
+	}
+
+	@Override
+	public void softDeleteModuleById(String id, String idUser) throws Exception {
+		updateNativeSQL("UPDATE t_m_modules SET is_active = FALSE", id, idUser);
+	}
+
+	@Override
+	public List<?> validateDeleteModule(String id) throws Exception {
+		String sql = sqlBuilder("SELECT mr.id FROM t_m_modules m ",
+				" FULL JOIN t_r_module_registrations mr ON mr.id_module = m.id ",
+				" WHERE m.id = ? ").toString();
+		List<?> listObj = createNativeQuery(sql).setParameter(1, id).setMaxResults(1).getResultList();
+		List<String> result = new ArrayList<>();
+		listObj.forEach(val -> {
+			Object obj = (Object) val;
+			result.add(obj != null ? obj.toString() : null);
+		});
+		return result;
 	}
 
 }

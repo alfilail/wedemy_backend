@@ -77,13 +77,18 @@ public class GradesServiceImpl extends BaseServiceImpl implements GradesService 
 		}
 		if (grade.getCode() == null || grade.getCode().trim().equals("")) {
 			throw new Exception("Kode grade tidak boleh kosong");
-		}
-		if (grade.getMinScore() == null || grade.getMaxScore() == null) {
-			throw new Exception("Minimum dan maximum score harus diisi");
 		} else {
-			if (grade.getMinScore() >= grade.getMaxScore()) {
-				throw new Exception("Minimum score harus lebih kecil dari maximum score");
+			Grades grd = getGradeById(grade.getId());
+			if(!grd.getCode().equals(grade.getCode())) {
+				throw new Exception("Kode grade sudah ada");
 			}
+			if (grade.getMinScore() == null || grade.getMaxScore() == null) {
+				throw new Exception("Minimum dan maximum score harus diisi");
+			} else {
+				if (grade.getMinScore() >= grade.getMaxScore()) {
+					throw new Exception("Minimum score harus lebih kecil dari maximum score");
+				}
+			}			
 		}
 	}
 	

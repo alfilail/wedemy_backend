@@ -49,11 +49,16 @@ public class ApprovementsServiceImpl extends ElearningBaseServiceImpl implements
 	}
 
 	private void validateInsert(Approvements approvement) throws Exception {
-		if (approvement.getApprovementName() == null || approvement.getApprovementName().trim().equals("")) {
-			throw new Exception("Nama approvement tidak boleh kosong");
-		}
 		if (approvement.getCode() == null || approvement.getCode().trim().equals("")) {
 			throw new Exception("Kode approvement tidak boleh kosong");
+		} else if (approvement.getCode() != null) {
+			Approvements approve = getApprovementByCode(approvement.getCode());
+			if(approve != null) {
+				throw new Exception("Kode Approvement sudah ada");
+			}
+			if (approvement.getApprovementName() == null || approvement.getApprovementName().trim().equals("")) {
+				throw new Exception("Nama approvement tidak boleh kosong");
+			}			
 		}
 	}
 
@@ -61,11 +66,18 @@ public class ApprovementsServiceImpl extends ElearningBaseServiceImpl implements
 		if (approvement.getId() == null || approvement.getId().trim().equals("")) {
 			throw new Exception("Id approvement tidak boleh kosong");
 		}
-		if (approvement.getApprovementName() == null || approvement.getApprovementName().trim().equals("")) {
-			throw new Exception("Nama approvement tidak boleh kosong");
-		}
 		if (approvement.getCode() == null || approvement.getCode().trim().equals("")) {
 			throw new Exception("Kode approvement tidak boleh kosong");
+		} else if (approvement.getCode() != null) {
+			Approvements approve = getApprovementByCode(approvement.getCode());
+			if(approve != null) {
+				if(!approve.getCode().equals(approvement.getCode())) {
+					throw new Exception("Kode Approvement sudah ada");					
+				}
+			}
+			if (approvement.getApprovementName() == null || approvement.getApprovementName().trim().equals("")) {
+				throw new Exception("Nama approvement tidak boleh kosong");
+			}			
 		}
 	}
 
