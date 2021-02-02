@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.lawencon.elearning.dao.AssignmentSubmissionsDao;
 import com.lawencon.elearning.model.AssignmentSubmissions;
+import com.lawencon.elearning.model.Files;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.SubmissionStatus;
 import com.lawencon.elearning.model.SubmissionStatusRenewal;
@@ -33,11 +34,17 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 	@Autowired
 	private SubmissionStatusService statusService;
 
+	@Autowired
+	private FilesService filesService;
+
 	@Override
-	public void insertAssignmentSubmissions(AssignmentSubmissions assignmentSubmission, MultipartFile file)
+	public void insertAssignmentSubmissions(AssignmentSubmissions assignmentSubmission, MultipartFile fileInput)
 			throws Exception {
-		assignmentSubmission.setFile(file.getBytes());
-		assignmentSubmission.setFileType(file.getContentType());
+		Files file = new Files();
+		file.setFile(fileInput.getBytes());
+		file.setType(fileInput.getContentType());
+		filesService.insertFile(file);
+		assignmentSubmission.setIdFile(file);
 		assignmentSubmission.setSubmitDateTime(LocalDateTime.now());
 		assignmentSubmission.setTrxNumber(generateTrxNumber());
 		assignmentSubmissionsDao.insertAssignmentSubmission(assignmentSubmission,
@@ -75,31 +82,20 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 		SimpleMailMessage msg = new SimpleMailMessage();
 		msg.setTo(tutor.getEmail());
 		msg.setSubject("Assignment Submission Has Sent");
-		msg.setText(bBuilder(
-				"Dear ", 
-				tutor.getFullName(),
-				",\n\n",
-				participant.getFullName(),
-				" have sent assignment submissions. ",
-				"Have a nice day.",
-				"\n \nBest Regards, \nElearning Alfione"
-				).toString());
+		msg.setText(bBuilder("Dear ", tutor.getFullName(), ",\n\n", participant.getFullName(),
+				" have sent assignment submissions. ", "Have a nice day.", "\n \nBest Regards, \nElearning Alfione")
+						.toString());
 		javaMailSender.send(msg);
 	}
-	
+
 	private void sendEmailParticipant(AssignmentSubmissions assignmentSubmission) throws Exception {
 		Profiles participant = assignmentSubmissionsDao.getParticipantProfile(assignmentSubmission);
 		SimpleMailMessage msg = new SimpleMailMessage();
 		msg.setTo(participant.getEmail());
 		msg.setSubject("Assignment Submission Has Sent");
-		msg.setText(bBuilder(
-				"Dear ",
-				participant.getFullName(),
-				",\n Your Assignment Submissions has sent. ",
-				"Wait for updated score of your assignment submissions. ",
-				"Have a nice day. ",
-				"\n \n Best Regards, \n Elearning Alfione"
-				).toString());
+		msg.setText(bBuilder("Dear ", participant.getFullName(), ",\n Your Assignment Submissions has sent. ",
+				"Wait for updated score of your assignment submissions. ", "Have a nice day. ",
+				"\n \n Best Regards, \n Elearning Alfione").toString());
 		javaMailSender.send(msg);
 	}
 

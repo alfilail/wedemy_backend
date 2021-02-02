@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.lawencon.elearning.model.Classes;
 import com.lawencon.elearning.model.DetailClasses;
+import com.lawencon.elearning.model.Files;
 import com.lawencon.util.Callback;
 
 @Repository
@@ -36,9 +37,9 @@ public class DetailClassesDaoImpl extends ElearningBaseDaoImpl<DetailClasses> im
 	@Override
 	public List<DetailClasses> getTutorClasses(String idTutor) throws Exception {
 		List<DetailClasses> listResult = new ArrayList<>();
-		String sql = sqlBuilder("SELECT dc.id, c.class_name, c.description, c.thumbnail_img ",
-				"FROM t_m_detail_classes dc INNER JOIN t_m_classes c ON dc.id_class = c.id WHERE c.id_tutor = ?1")
-						.toString();
+		String sql = sqlBuilder("SELECT dc.id, c.class_name, c.description, f.file ",
+				"FROM t_m_detail_classes dc INNER JOIN t_m_classes c ON dc.id_class = c.id ",
+				"INNER JOIN t_m_files f ON c.id_file = f.id WHERE c.id_tutor = ?1").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, idTutor).getResultList();
 		listObj.forEach(val -> {
 			Object[] objArr = (Object[]) val;
@@ -47,7 +48,9 @@ public class DetailClassesDaoImpl extends ElearningBaseDaoImpl<DetailClasses> im
 			Classes clazz = new Classes();
 			clazz.setClassName((String) objArr[1]);
 			clazz.setDescription((String) objArr[2]);
-			clazz.setThumbnailImg((byte[]) objArr[3]);
+			Files file = new Files();
+			file.setFile((byte[]) objArr[3]);
+			clazz.setIdFile(file);
 			detailClass.setIdClass(clazz);
 			listResult.add(detailClass);
 		});

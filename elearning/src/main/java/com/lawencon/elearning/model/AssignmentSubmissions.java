@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -24,12 +25,6 @@ public class AssignmentSubmissions extends BaseTransaction {
 
 	private static final long serialVersionUID = -4540610639400514155L;
 
-	@Column(name = "file", nullable = false)
-	private byte[] file;
-
-	@Column(name = "file_type")
-	private String fileType;
-
 	@Column(name = "submit_datetime", nullable = false)
 	private LocalDateTime submitDateTime;
 
@@ -40,5 +35,9 @@ public class AssignmentSubmissions extends BaseTransaction {
 	@ManyToOne
 	@JoinColumn(name = "id_dtl_module_rgs")
 	private DetailModuleRegistrations idDetailModuleRegistration;
+
+	@OneToOne
+	@JoinColumn(name = "id_file")
+	private Files idFile;
 
 }

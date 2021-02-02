@@ -11,6 +11,7 @@ import com.lawencon.elearning.dao.ClassesDao;
 import com.lawencon.elearning.helper.ClassesHelper;
 import com.lawencon.elearning.model.Classes;
 import com.lawencon.elearning.model.DetailClasses;
+import com.lawencon.elearning.model.Files;
 import com.lawencon.elearning.model.Users;
 
 @Service
@@ -28,6 +29,9 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 	@Autowired
 	private UsersService usersService;
 
+	@Autowired
+	private FilesService filesService;
+
 	@Override
 	public void insertClass(ClassesHelper helper, MultipartFile file) throws Exception {
 		try {
@@ -38,8 +42,12 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 					Users tutor = usersService.getUserByIdNumber(clazz.getIdTutor().getIdProfile().getIdNumber());
 					if (null != tutor) {
 						clazz.setIdTutor(tutor);
-						clazz.setThumbnailImg(file.getBytes());
-						clazz.setFileType(file.getContentType());
+						Files thumbnailImg = new Files();
+						thumbnailImg.setCreatedBy(helper.getClazz().getCreatedBy());
+						thumbnailImg.setFile(file.getBytes());
+						thumbnailImg.setType(file.getContentType());
+						filesService.insertFile(thumbnailImg);
+						clazz.setIdFile(thumbnailImg);
 						classesDao.insertClass(clazz, () -> validateInsert(clazz));
 						if (helper.getDetailClass() != null) {
 							DetailClasses detailClass = helper.getDetailClass();
@@ -83,8 +91,11 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 
 	@Override
 	public void updateClass(Classes clazz, MultipartFile file) throws Exception {
-		clazz.setThumbnailImg(file.getBytes());
-		clazz.setFileType(file.getContentType());
+		Files thumbnailImg = new Files();
+		thumbnailImg.setFile(file.getBytes());
+		thumbnailImg.setType(file.getContentType());
+		filesService.insertFile(thumbnailImg);
+		clazz.setIdFile(thumbnailImg);
 		classesDao.updateClass(clazz, () -> validateUpdate(clazz));
 	}
 
@@ -108,7 +119,7 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 					if (user == null) {
 						throw new Exception("Id Tutor tidak ada!");
 					} else {
-						String[] type = clazz.getFileType().split("/");
+						String[] type = clazz.getIdFile().getType().split("/");
 						String ext = type[1];
 						if (ext != null) {
 							if (ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("png")
@@ -139,17 +150,14 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 			} else {
 				if (clazz.getVersion() != cls.getVersion()) {
 					throw new Exception("Kelas version tidak sama!");
-				}
-				else {
-					if(clazz.getCode() == null || clazz.getCode().trim().equals("")) {
+				} else {
+					if (clazz.getCode() == null || clazz.getCode().trim().equals("")) {
 						throw new Exception("Kode kelas tidak boleh kosong!");
-					}
-					else {
+					} else {
 						Classes clz = classesDao.getClassByCode(clazz.getCode());
-						if(clz != null) {
+						if (clz != null) {
 							throw new Exception("Kode kelas tidak boleh sama");
-						}
-						else {
+						} else {
 							if (clazz.getIdTutor() == null) {
 								throw new Exception("Tutor tidak boleh kosong!");
 							} else {
@@ -157,7 +165,7 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 								if (user == null) {
 									throw new Exception("Id Tutor tidak ada!");
 								} else {
-									String[] type = clazz.getFileType().split("/");
+									String[] type = clazz.getIdFile().getType().split("/");
 									String ext = type[1];
 									if (ext != null) {
 										if (ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("png")

@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.elearning.dao.LearningMaterialsDao;
 import com.lawencon.elearning.model.DetailModuleRegistrations;
+import com.lawencon.elearning.model.Files;
 import com.lawencon.elearning.model.LearningMaterialTypes;
 import com.lawencon.elearning.model.LearningMaterials;
 
@@ -28,12 +29,20 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 	@Autowired
 	private LearningMaterialTypesService learningMaterialTypesService;
 
+	@Autowired
+	private FilesService filesService;
+
 	@Override
-	public void insertLearningMaterial(DetailModuleRegistrations dtlModuleRgs, MultipartFile file) throws Exception {
+	public void insertLearningMaterial(DetailModuleRegistrations dtlModuleRgs, MultipartFile fileInput)
+			throws Exception {
 		try {
 			begin();
-			dtlModuleRgs.getIdLearningMaterial().setFile(file.getBytes());
-			dtlModuleRgs.getIdLearningMaterial().setFileType(file.getContentType());
+			Files file = new Files();
+			file.setCreatedBy(dtlModuleRgs.getIdLearningMaterial().getCreatedBy());
+			file.setFile(fileInput.getBytes());
+			file.setType(fileInput.getContentType());
+			filesService.insertFile(file);
+			dtlModuleRgs.getIdLearningMaterial().setIdFile(file);
 			learningMaterialsDao.insertLearningMaterial(dtlModuleRgs.getIdLearningMaterial(),
 					() -> validateInsert(dtlModuleRgs.getIdLearningMaterial()));
 			insertDetailModulRegistration(dtlModuleRgs);
@@ -55,9 +64,12 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 	}
 
 	@Override
-	public void updateLearningMaterial(LearningMaterials learningMaterial, MultipartFile file) throws Exception {
-		learningMaterial.setFile(file.getBytes());
-		learningMaterial.setFileType(file.getContentType());
+	public void updateLearningMaterial(LearningMaterials learningMaterial, MultipartFile fileInput) throws Exception {
+		Files file = new Files();
+		file.setFile(fileInput.getBytes());
+		file.setType(fileInput.getContentType());
+		filesService.insertFile(file);
+		learningMaterial.setIdFile(file);
 		learningMaterialsDao.updateLearningMaterial(learningMaterial, () -> validateUpdate(learningMaterial));
 	}
 
@@ -72,10 +84,6 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 	}
 
 	private void insertDetailModulRegistration(DetailModuleRegistrations dtlModuleRgs) throws Exception {
-//		ModuleRegistrations modRegist = moduleRegistrationsService.getByIdDetailClassAndIdModuleRegistration(
-//				helper.getModuleRegistration().getIdDetailClass().getId(),
-//				helper.getModuleRegistration().getIdModule().getId());
-//		DetailModuleRegistrations dtlModRegist = helper.getDtlModuleRegistration();
 		dtlModuleRgs.setCreatedBy(dtlModuleRgs.getIdLearningMaterial().getCreatedBy());
 		dtlModuleRgs.setIdLearningMaterial(dtlModuleRgs.getIdLearningMaterial());
 		dtlModRegistService.insertDetailModuleRegistration(dtlModuleRgs);
@@ -95,7 +103,7 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 					if (materialType == null) {
 						throw new Exception("Id tipe bahan ajar tidak ada!");
 					} else {
-						String[] type = learningMaterial.getFileType().split("/");
+						String[] type = learningMaterial.getIdFile().getType().split("/");
 						String ext = type[1];
 						if (ext != null) {
 							if (ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("png")
@@ -141,7 +149,7 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 								if (materialType == null) {
 									throw new Exception("Id tipe bahan ajar tidak ada!");
 								} else {
-									String[] type = learningMaterial.getFileType().split("/");
+									String[] type = learningMaterial.getIdFile().getType().split("/");
 									String ext = type[1];
 									if (ext != null) {
 										if (ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("png")

@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -31,16 +32,14 @@ public class Classes extends BaseMaster {
 	@Column(name = "description", nullable = false, columnDefinition = "text")
 	private String description;
 
-	@Column(name = "thumbnail_img", nullable = false)
-	private byte[] thumbnailImg;
-
-	@Column(name = "file_type")
-	private String fileType;
-
 	@Column(name = "quota", length = 3, nullable = false)
 	private Integer quota;
 
 	@ManyToOne
 	@JoinColumn(name = "id_tutor", nullable = false)
 	private Users idTutor;
+	
+	@OneToOne
+	@JoinColumn(name = "id_file")
+	private Files idFile;
 }

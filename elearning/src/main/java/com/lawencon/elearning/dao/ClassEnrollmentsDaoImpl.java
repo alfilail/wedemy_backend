@@ -9,6 +9,7 @@ import com.lawencon.elearning.helper.CertificateHelper;
 import com.lawencon.elearning.model.ClassEnrollments;
 import com.lawencon.elearning.model.Classes;
 import com.lawencon.elearning.model.DetailClasses;
+import com.lawencon.elearning.model.Files;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.Users;
 import com.lawencon.util.Callback;
@@ -38,9 +39,10 @@ public class ClassEnrollmentsDaoImpl extends ElearningBaseDaoImpl<ClassEnrollmen
 	@Override
 	public List<ClassEnrollments> getAllClassEnrollmentsByIdUser(String id) throws Exception {
 		List<ClassEnrollments> listResult = new ArrayList<>();
-		String sql = sqlBuilder("SELECT dc.id, c.class_name, c.description, c.thumbnail_img, c.id_tutor, p.fullname ",
+		String sql = sqlBuilder("SELECT dc.id, c.class_name, c.description, f.file, c.id_tutor, p.fullname ",
 				"FROM t_r_class_enrollments ce INNER JOIN t_m_detail_classes dc ON ce.id_detail_class = dc.id ",
-				"INNER JOIN t_m_classes c ON dc.id_class = c.id INNER JOIN t_m_users u ON c.id_tutor = u.id ",
+				"INNER JOIN t_m_classes c ON dc.id_class = c.id INNER JOIN t_m_files f ON c.id_file = f.id ",
+				"INNER JOIN t_m_users u ON c.id_tutor = u.id ",
 				"INNER JOIN t_m_profiles p ON u.id_profile = p.id WHERE ce.id_user =?1").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, id).getResultList();
 		listObj.forEach(val -> {
@@ -50,7 +52,9 @@ public class ClassEnrollmentsDaoImpl extends ElearningBaseDaoImpl<ClassEnrollmen
 			Classes clazz = new Classes();
 			clazz.setClassName((String) objArr[1]);
 			clazz.setDescription((String) objArr[2]);
-			clazz.setThumbnailImg((byte[]) objArr[3]);
+			Files file = new Files();
+			file.setFile((byte[]) objArr[3]);
+			clazz.setIdFile(file);
 			Users user = new Users();
 			user.setId((String) objArr[4]);
 			Profiles profile = new Profiles();
