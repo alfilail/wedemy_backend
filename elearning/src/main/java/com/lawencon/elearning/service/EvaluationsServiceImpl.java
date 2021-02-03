@@ -3,17 +3,19 @@ package com.lawencon.elearning.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.elearning.dao.EvaluationsDao;
+import com.lawencon.elearning.helper.MailHelper;
 import com.lawencon.elearning.model.AssignmentSubmissions;
 import com.lawencon.elearning.model.Evaluations;
+import com.lawencon.elearning.model.General;
 import com.lawencon.elearning.model.Grades;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.SubmissionStatus;
 import com.lawencon.elearning.model.SubmissionStatusRenewal;
+import com.lawencon.elearning.util.MailUtil;
 
 /**
  * @author Nur Alfilail
@@ -39,6 +41,12 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 	
 	@Autowired
 	private AssignmentSubmissionsService assignmentSubmissionsService;
+	
+	@Autowired
+	private GeneralService generalService;
+	
+	@Autowired
+	private MailUtil mailUtil;
 
 	@Override
 	public void insertEvaluation(Evaluations evaluation) throws Exception {
@@ -84,16 +92,18 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 				.getAssignmentSubmissionsById(evaluation.getIdAssignmentSubmission().getId());
 		evaluation.setIdAssignmentSubmission(assignmentSubmissions);
 		Profiles participant = evaluationsDao.getParticipantProfile(evaluation);
-		SimpleMailMessage msg = new SimpleMailMessage();
-		msg.setTo(participant.getEmail());
-		msg.setSubject("Score of Assignment Submission Has Updated");
-		msg.setText(bBuilder(
-				"Dear ",
-				participant.getFullName(),
-				", \nScore of your assignment submissions has updated. ",
-				"Have a nice day. \n \nBest Regards, \nElearning Alfione"
-				).toString());
-		javaMailSender.send(msg);
+		
+		General general = generalService.getTemplateEmail("scrupd");
+		String text = general.getTemplateHtml();
+		
+		text = text.replace("#1#", participant.getFullName());
+		
+		MailHelper mailHelper = new MailHelper();
+		mailHelper.setFrom("elearningalfione@gmail.com");
+		mailHelper.setTo(participant.getEmail());
+		mailHelper.setSubject("Score of Your Assignment Submission Has Updated");
+		mailHelper.setText(text);
+		new MailServiceImpl(mailUtil, mailHelper).start();
 	}
 
 	@Override

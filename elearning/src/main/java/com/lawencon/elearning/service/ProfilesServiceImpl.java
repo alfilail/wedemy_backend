@@ -44,6 +44,11 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 	public void deleteProfileById(String id) throws Exception {
 		profilesDao.deleteProfileById(id);
 	}
+	
+	@Override
+	public void softDeleteProfileById(String id, String idUser) throws Exception {
+		profilesDao.softDeleteProfileById(id, idUser);
+	}
 
 	@Override
 	public Profiles getProfileByEmail(String email) throws Exception {

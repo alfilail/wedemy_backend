@@ -86,9 +86,11 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 		begin();
 		if(validateDelete(id) == true) {
 			usersDao.softDeleteUserById(id, idUser);
+			profilesService.softDeleteProfileById(id, idUser);
 		}
 		else {
 			usersDao.deleteUserById(id);
+			profilesService.deleteProfileById(id);
 		}
 		commit();
 	}

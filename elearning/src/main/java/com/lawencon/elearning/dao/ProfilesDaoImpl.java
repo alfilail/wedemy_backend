@@ -55,5 +55,10 @@ public class ProfilesDaoImpl extends ElearningBaseDaoImpl<Profiles> implements P
 				.getSingleResult();
 		return profile;
 	}
+	
+	@Override
+	public void softDeleteProfileById(String id, String idUser) throws Exception {
+		updateNativeSQL("UPDATE t_m_profiles SET is_active = false", id, idUser);
+	}
 
 }

@@ -22,4 +22,6 @@ public interface ProfilesDao {
 	Profiles getProfileByEmail(String email) throws Exception;
 
 	Profiles getProfileByIdNumber(String idNumber) throws Exception;
+	
+	void softDeleteProfileById(String id, String idUser) throws Exception;
 }

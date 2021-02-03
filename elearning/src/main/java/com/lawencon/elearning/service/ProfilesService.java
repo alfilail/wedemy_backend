@@ -17,6 +17,8 @@ public interface ProfilesService {
 	void updateProfile(Profiles profile) throws Exception;
 
 	void deleteProfileById(String id) throws Exception;
+	
+	void softDeleteProfileById(String id, String idUser) throws Exception;
 
 	Profiles getProfileByEmail(String email) throws Exception;
 
