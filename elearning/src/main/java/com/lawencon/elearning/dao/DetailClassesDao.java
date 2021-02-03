@@ -20,5 +20,9 @@ public interface DetailClassesDao {
 	List<DetailClasses> getPopularClasses() throws Exception;
 	
 	void updateViews(String id) throws Exception;
+	
+	void deleteClassById(String id, String idUser) throws Exception;
+	
+	List<DetailClasses> getAllDetailClassByIdClass(String idClass) throws Exception;
 
 }

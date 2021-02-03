@@ -33,6 +33,11 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 	public List<DetailClasses> getAllDetailClass() throws Exception {
 		return detailClassesDao.getAllDetailClass();
 	}
+	
+	@Override
+	public List<DetailClasses> getAllDetailClassByIdClass(String idClass) throws Exception {
+		return detailClassesDao.getAllDetailClassByIdClass(idClass);
+	}
 
 	@Override
 	public DetailClasses getDetailClassById(String id) throws Exception {
@@ -63,6 +68,11 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 	@Override
 	public List<DetailClasses> getPopularClasses() throws Exception {
 		return detailClassesDao.getPopularClasses();
+	}
+	
+	@Override
+	public void deleteDetailClassById(String id, String idUser) throws Exception {
+		detailClassesDao.deleteClassById(id, idUser);
 	}
 
 	private void validateInsert(DetailClasses detailClass) throws Exception {

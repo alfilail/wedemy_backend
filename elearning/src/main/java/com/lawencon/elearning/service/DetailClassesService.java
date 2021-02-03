@@ -16,4 +16,8 @@ public interface DetailClassesService {
 	List<DetailClasses> getTutorClasses(String idTutor) throws Exception;
 	
 	List<DetailClasses> getPopularClasses() throws Exception;
+	
+	void deleteDetailClassById(String id, String idUser) throws Exception;
+	
+	List<DetailClasses> getAllDetailClassByIdClass(String idClass) throws Exception;
 }

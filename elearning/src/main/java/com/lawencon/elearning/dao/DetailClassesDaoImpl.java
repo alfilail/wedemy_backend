@@ -94,4 +94,16 @@ public class DetailClassesDaoImpl extends ElearningBaseDaoImpl<DetailClasses> im
 		});
 		return listResult;
 	}
+	
+	@Override
+	public void deleteClassById(String id, String idUser) throws Exception {
+		updateNativeSQL("UPDATE t_m_detail_classes SET is_active = FALSE", id, idUser);
+	}
+	
+	@Override
+	public List<DetailClasses> getAllDetailClassByIdClass(String idClass) throws Exception {
+		List<DetailClasses> detailClassList = createQuery("FROM DetailClasses WHERE idClass.id = ?1 ", DetailClasses.class)
+				.setParameter(1, idClass).getResultList();
+		return detailClassList.size() > 0 ? detailClassList : null;
+	}
 }

@@ -1,7 +1,6 @@
 package com.lawencon.elearning.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -190,10 +189,10 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 	public void deleteClassById(String id, String idUser) throws Exception {
 		try {
 			begin();
-			if(validateDelete(id)) {
-				classesDao.softDeleteClassById(id, idUser);
-			} else {
-				classesDao.deleteClassById(id);				
+			classesDao.softDeleteClassById(id, idUser);
+			List<DetailClasses> dtlClass = detailClassesService.getAllDetailClassByIdClass(id);
+			for(DetailClasses dtl : dtlClass) {
+				detailClassesService.deleteDetailClassById(dtl.getId(), idUser);
 			}
 			commit();
 		} catch(Exception e) {
@@ -202,13 +201,13 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 		}
 	}
 	
-	private boolean validateDelete(String id) throws Exception {
-		List<?> listObj = classesDao.validateDeleteClass(id);
-		listObj.forEach(System.out::println);
-		List<?> list =  listObj.stream().filter(val -> val != null)
-				.collect(Collectors.toList());
-		System.out.println(list.size());
-		return list.size() > 0 ? true : false;
-	}
+//	private boolean validateDelete(String id) throws Exception {
+//		List<?> listObj = classesDao.validateDeleteClass(id);
+//		listObj.forEach(System.out::println);
+//		List<?> list =  listObj.stream().filter(val -> val != null)
+//				.collect(Collectors.toList());
+//		System.out.println(list.size());
+//		return list.size() > 0 ? true : false;
+//	}
 
 }
