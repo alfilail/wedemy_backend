@@ -17,4 +17,8 @@ public interface SubmissionStatusDao {
 	void deleteSubmissionStatusById(String id) throws Exception;
 	
 	SubmissionStatus getSubmissionStatusByCode(String code) throws Exception;
+	
+	void softDeleteSubmissionStatById(String id, String idUser) throws Exception;
+
+	List<?> validateDeleteSubmissionStat(String id) throws Exception;
 }

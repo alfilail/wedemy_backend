@@ -1,5 +1,6 @@
 package com.lawencon.elearning.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -40,5 +41,24 @@ public class SubmissionStatusDaoImpl extends ElearningBaseDaoImpl<SubmissionStat
 	@Override
 	public void updateSubmissionStatus(SubmissionStatus submissionStatus, Callback before) throws Exception {
 		save(submissionStatus, before, null, true, true);
+	}
+
+	@Override
+	public void softDeleteSubmissionStatById(String id, String idUser) throws Exception {
+		updateNativeSQL("UPDATE t_m_submission_status SET is_active = FALSE", id, idUser);
+	}
+
+	@Override
+	public List<?> validateDeleteSubmissionStat(String id) throws Exception {
+		String sql = sqlBuilder("SELECT ssr.id FROM t_m_submission_status ss ",
+				" FULL JOIN t_r_submission_status_renewal ssr ON ssr.id_submission_status = ss.id ",
+				" WHERE ss.id = ?1 ").toString();
+		List<?> listObj = createNativeQuery(sql).setParameter(1, id).setMaxResults(1).getResultList();
+		List<String> result = new ArrayList<>();
+		listObj.forEach(val -> {
+			Object obj = (Object) val;
+			result.add(obj != null ? obj.toString() : null);
+		});
+		return result;
 	}
 }

@@ -11,7 +11,7 @@ public interface SubmissionStatusService {
 	
 	SubmissionStatus getSubmissionStatusById (String id) throws Exception;
 	
-	void deleteSubmissionStatusById (String id) throws Exception;
+	void deleteSubmissionStatusById (String id, String idUser) throws Exception;
 	
 	void updateSubmissionStatus(SubmissionStatus submissionStatus) throws Exception;
 	

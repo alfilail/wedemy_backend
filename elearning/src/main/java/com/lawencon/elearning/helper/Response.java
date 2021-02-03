@@ -1,5 +1,9 @@
 package com.lawencon.elearning.helper;
 
+import org.springframework.http.HttpStatus;
+
+import com.lawencon.elearning.util.MessageStat;
+
 import lombok.Data;
 
 /**
@@ -10,11 +14,11 @@ import lombok.Data;
 public class Response<T> {
 
 	private Boolean ok;
-	private String status;
-	private String message;
+	private HttpStatus status;
+	private MessageStat message;
 	private T data;
 
-	public Response(Boolean ok, String status, String message, T data) {
+	public Response(Boolean ok, HttpStatus status, MessageStat message, T data) {
 		this.ok = ok;
 		this.status = status;
 		this.message = message;

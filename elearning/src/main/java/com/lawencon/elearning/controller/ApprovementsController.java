@@ -14,11 +14,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lawencon.elearning.helper.Response;
 import com.lawencon.elearning.model.Approvements;
 import com.lawencon.elearning.service.ApprovementsService;
+import com.lawencon.elearning.util.MessageStat;
 
 /**
  * @author Nur Alfilail
@@ -32,14 +35,15 @@ public class ApprovementsController {
 	private ApprovementsService approvementsService;
 
 	@PostMapping
-	public ResponseEntity<?> insertApprovement(@RequestBody String body) {
+	public Response<?> insertApprovement(@RequestBody String body) {
 		try {
 			Approvements approvement = new ObjectMapper().readValue(body, Approvements.class);
 			approvementsService.insertApprovement(approvement);
-			return new ResponseEntity<>(approvement, HttpStatus.CREATED);
+//			return new ResponseEntity<>(approvement, HttpStatus.CREATED);
+			return new Response<>(true, HttpStatus.CREATED, MessageStat.SUCCESS_CREATED, approvement);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new Response<>(false, HttpStatus.INTERNAL_SERVER_ERROR, MessageStat.FAILED, null);
 		}
 	}
 
@@ -55,21 +59,24 @@ public class ApprovementsController {
 	}
 
 	@GetMapping("all")
-	public ResponseEntity<?> getAllApprovements() {
+	public Response<?> getAllApprovements() {
 		try {
 			List<Approvements> approvementsList = approvementsService.getAllApprovements();
-			return new ResponseEntity<>(approvementsList, HttpStatus.CREATED);
+//			return new Response<>(approvementsList, HttpStatus.CREATED);
+			return new Response<>(true, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE, approvementsList);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new Response<>(false, HttpStatus.INTERNAL_SERVER_ERROR, MessageStat.FAILED, null);
+//			return new Response<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
-	@DeleteMapping("{id}")
-	public ResponseEntity<?> deleteApprovementById(@PathVariable("id") String id) {
+	@DeleteMapping
+	public ResponseEntity<?> deleteApprovementById(@RequestParam("id") String id,
+			@RequestParam("idUser") String idUser) {
 		try {
-			approvementsService.deleteApprovementById(id);
-			return new ResponseEntity<>(HttpStatus.OK);
+			approvementsService.deleteApprovementById(id, idUser);
+			return new ResponseEntity<>("Approvement berhasil dihapus", HttpStatus.OK);
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();
 			return new ResponseEntity<>("Data used in another table", HttpStatus.BAD_REQUEST);

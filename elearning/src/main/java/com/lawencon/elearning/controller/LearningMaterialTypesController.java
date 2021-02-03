@@ -70,7 +70,7 @@ public class LearningMaterialTypesController {
 			@RequestParam("idUser") String idUser) {
 		try {
 			lmTypesService.deleteLearningMaterialTypeById(id, idUser);
-			return new ResponseEntity<>(HttpStatus.OK);
+			return new ResponseEntity<>("Tipe Materi berhasil dihapus" ,HttpStatus.OK);
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();
 			return new ResponseEntity<>("Data used in another table", HttpStatus.BAD_REQUEST);

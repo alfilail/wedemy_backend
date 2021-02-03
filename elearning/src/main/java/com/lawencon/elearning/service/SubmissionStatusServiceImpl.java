@@ -1,6 +1,7 @@
 package com.lawencon.elearning.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,10 +37,14 @@ public class SubmissionStatusServiceImpl extends BaseServiceImpl implements Subm
 	}
 
 	@Override
-	public void deleteSubmissionStatusById(String id) throws Exception {
+	public void deleteSubmissionStatusById(String id, String idUser) throws Exception {
 		try {
 			begin();
-			submissionStatusDao.deleteSubmissionStatusById(id);
+			if(validateDelete(id)) {
+				submissionStatusDao.softDeleteSubmissionStatById(id, idUser);
+			} else {
+				submissionStatusDao.deleteSubmissionStatusById(id);				
+			}
 			commit();
 		} catch(Exception e) {
 			e.getMessage();
@@ -85,5 +90,14 @@ public class SubmissionStatusServiceImpl extends BaseServiceImpl implements Subm
 				throw new Exception("Nama status tidak boleh kosong");
 			}
 		}
+	}
+	
+	private boolean validateDelete(String id) throws Exception {
+		List<?> listObj = submissionStatusDao.validateDeleteSubmissionStat(id);
+		listObj.forEach(System.out::println);
+		List<?> list =  listObj.stream().filter(val -> val != null)
+				.collect(Collectors.toList());
+		System.out.println(list.size());
+		return list.size() > 0 ? true : false;
 	}
 }

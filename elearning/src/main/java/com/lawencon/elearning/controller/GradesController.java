@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lawencon.elearning.helper.Response;
 import com.lawencon.elearning.model.Grades;
 import com.lawencon.elearning.service.GradesService;
+import com.lawencon.elearning.util.MessageStat;
 
 @RestController
 @RequestMapping("grade")
@@ -29,14 +31,16 @@ public class GradesController {
 	private GradesService gradesService;
 
 	@PostMapping
-	public ResponseEntity<?> insertGrade(@RequestBody String body) {
+	public Response<?> insertGrade(@RequestBody String body) {
 		try {
 			Grades grade = new ObjectMapper().readValue(body, Grades.class);
 			gradesService.insertGrade(grade);
-			return new ResponseEntity<>(grade, HttpStatus.CREATED);
+//			return new ResponseEntity<>(grade, HttpStatus.CREATED);
+			return new Response<>(true, HttpStatus.CREATED, MessageStat.SUCCESS_CREATED, grade);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+//			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new Response<>(false, HttpStatus.INTERNAL_SERVER_ERROR, MessageStat.FAILED, null);
 		}
 	}
 

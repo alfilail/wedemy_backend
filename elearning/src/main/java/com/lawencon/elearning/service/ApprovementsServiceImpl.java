@@ -1,6 +1,7 @@
 package com.lawencon.elearning.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,8 +40,17 @@ public class ApprovementsServiceImpl extends ElearningBaseServiceImpl implements
 	}
 
 	@Override
-	public void deleteApprovementById(String id) throws Exception {
-		approvementsDao.deleteApprovementById(id);
+	public void deleteApprovementById(String id, String idUser) throws Exception {
+		try {
+			if(validateDelete(id)) {
+				approvementsDao.softDeleteApprovementById(id, idUser);
+			} else {
+				approvementsDao.deleteApprovementById(id);				
+			}
+		} catch(Exception e) {
+			e.getMessage();
+			rollback();
+		}
 	}
 
 	@Override
@@ -79,6 +89,15 @@ public class ApprovementsServiceImpl extends ElearningBaseServiceImpl implements
 				throw new Exception("Nama approvement tidak boleh kosong");
 			}			
 		}
+	}
+	
+	private boolean validateDelete(String id) throws Exception {
+		List<?> listObj = approvementsDao.validateDeleteApprovement(id);
+		listObj.forEach(System.out::println);
+		List<?> list =  listObj.stream().filter(val -> val != null)
+				.collect(Collectors.toList());
+		System.out.println(list.size());
+		return list.size() > 0 ? true : false;
 	}
 
 }

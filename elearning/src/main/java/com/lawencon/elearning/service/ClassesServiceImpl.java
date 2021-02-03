@@ -1,6 +1,7 @@
 package com.lawencon.elearning.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -100,18 +101,6 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 		classesDao.updateClass(clazz, () -> validateUpdate(clazz));
 	}
 
-	@Override
-	public void deleteClassById(String id) throws Exception {
-		try {
-			begin();
-			classesDao.deleteClassById(id);
-			commit();
-		} catch(Exception e) {
-			e.getMessage();
-			rollback();
-		}
-	}
-
 	private void validateInsert(Classes clazz) throws Exception {
 		if (clazz.getCode() == null || clazz.getCode().trim().equals("")) {
 			throw new Exception("Kode kelas tidak boleh kosong!");
@@ -195,6 +184,31 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 				}
 			}
 		}
+	}
+
+	@Override
+	public void deleteClassById(String id, String idUser) throws Exception {
+		try {
+			begin();
+			if(validateDelete(id)) {
+				classesDao.softDeleteClassById(id, idUser);
+			} else {
+				classesDao.deleteClassById(id);				
+			}
+			commit();
+		} catch(Exception e) {
+			e.getMessage();
+			rollback();
+		}
+	}
+	
+	private boolean validateDelete(String id) throws Exception {
+		List<?> listObj = classesDao.validateDeleteClass(id);
+		listObj.forEach(System.out::println);
+		List<?> list =  listObj.stream().filter(val -> val != null)
+				.collect(Collectors.toList());
+		System.out.println(list.size());
+		return list.size() > 0 ? true : false;
 	}
 
 }

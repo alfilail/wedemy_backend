@@ -76,7 +76,7 @@ public class LearningMaterialsController {
 			@RequestParam("idUser") String idUser) {
 		try {
 			learningMaterialsService.deleteLearningMaterialById(id, idUser);
-			return new ResponseEntity<>(HttpStatus.OK);
+			return new ResponseEntity<>("Materi berhasil dihapus", HttpStatus.OK);
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();
 			return new ResponseEntity<>("Data used in another table", HttpStatus.BAD_REQUEST);

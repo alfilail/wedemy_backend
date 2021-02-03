@@ -18,7 +18,7 @@ public interface ApprovementsService {
 
 	void updateApprovement(Approvements approvement) throws Exception;
 
-	void deleteApprovementById(String id) throws Exception;
+	void deleteApprovementById(String id, String idUser) throws Exception;
 
 	Approvements getApprovementByCode(String code) throws Exception;
 }

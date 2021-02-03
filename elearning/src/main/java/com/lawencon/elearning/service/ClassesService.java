@@ -19,6 +19,6 @@ public interface ClassesService {
 
 	void updateClass(Classes clazz, MultipartFile file) throws Exception;
 
-	void deleteClassById(String id) throws Exception;
+	void deleteClassById(String id, String idUser) throws Exception;
 
 }

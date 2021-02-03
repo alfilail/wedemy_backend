@@ -28,8 +28,8 @@ public class GradesDaoImpl extends ElearningBaseDaoImpl<Grades> implements Grade
 
 	@Override
 	public Grades getGradeByCode(String code) throws Exception {
-		Grades grade = createQuery("FROM Grades WHERE code = ?1", Grades.class).setParameter(1, code).getSingleResult();
-		return grade;
+		List<Grades> grade = createQuery("FROM Grades WHERE code = ?1", Grades.class).setParameter(1, code).getResultList();
+		return resultCheck(grade);
 	}
 
 	@Override

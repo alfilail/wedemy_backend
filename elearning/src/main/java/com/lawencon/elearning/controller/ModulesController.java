@@ -77,7 +77,7 @@ public class ModulesController {
 			@RequestParam("idUser") String idUser) {
 		try {
 			moduleService.deleteModuleById(id, idUser);
-			return new ResponseEntity<>("Module Successfully Deleted!", HttpStatus.OK);
+			return new ResponseEntity<>("Modul berhasil dihapus", HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

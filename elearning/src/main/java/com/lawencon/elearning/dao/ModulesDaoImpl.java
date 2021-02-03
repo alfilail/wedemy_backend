@@ -51,7 +51,7 @@ public class ModulesDaoImpl extends ElearningBaseDaoImpl<Modules> implements Mod
 	public List<?> validateDeleteModule(String id) throws Exception {
 		String sql = sqlBuilder("SELECT mr.id FROM t_m_modules m ",
 				" FULL JOIN t_r_module_registrations mr ON mr.id_module = m.id ",
-				" WHERE m.id = ? ").toString();
+				" WHERE m.id = ?1 ").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, id).setMaxResults(1).getResultList();
 		List<String> result = new ArrayList<>();
 		listObj.forEach(val -> {

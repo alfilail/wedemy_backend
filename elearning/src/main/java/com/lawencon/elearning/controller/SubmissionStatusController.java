@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -63,11 +64,12 @@ public class SubmissionStatusController {
 		}
 	}
 
-	@DeleteMapping("{id}")
-	public ResponseEntity<?> deleteSubmissionStatusById(@PathVariable("id") String id) {
+	@DeleteMapping
+	public ResponseEntity<?> deleteSubmissionStatusById(@RequestParam("id") String id,
+			@RequestParam("idUser") String idUser) {
 		try {
-			submissionStatusService.deleteSubmissionStatusById(id);
-			return new ResponseEntity<>(HttpStatus.OK);
+			submissionStatusService.deleteSubmissionStatusById(id, idUser);
+			return new ResponseEntity<>("Status Submission berhasil dihapus" ,HttpStatus.OK);
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();
 			return new ResponseEntity<>("Data used in another table", HttpStatus.BAD_REQUEST);

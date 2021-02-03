@@ -18,5 +18,9 @@ public interface ApprovementsDao {
 	void deleteApprovementById(String id) throws Exception;
 
 	Approvements getApprovementByCode(String code) throws Exception;
+	
+	void softDeleteApprovementById(String id, String idUser) throws Exception;
+
+	List<?> validateDeleteApprovement(String id) throws Exception;
 
 }

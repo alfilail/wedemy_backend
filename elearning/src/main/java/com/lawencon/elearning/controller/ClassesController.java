@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -78,11 +79,12 @@ public class ClassesController {
 		}
 	}
 
-	@DeleteMapping("{id}")
-	public ResponseEntity<?> deleteClassById(@PathVariable("id") String id) {
+	@DeleteMapping
+	public ResponseEntity<?> deleteClassById(@RequestParam("id") String id,
+			@RequestParam("idUser") String idUser) {
 		try {
-			classesService.deleteClassById(id);
-			return new ResponseEntity<>("Class Succesfully Deleted", HttpStatus.OK);
+			classesService.deleteClassById(id, idUser);
+			return new ResponseEntity<>("Kelas berhasil dihapus", HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
