@@ -71,35 +71,35 @@ public class ModuleRegistrationsServiceImpl extends ElearningBaseServiceImpl imp
 	}
 
 	private void validateInsert(ModuleRegistrations moduleRegistration) throws Exception {
-		if (moduleRegistration.getIdModule() == null) {
-			throw new Exception("Module tidak boleh kosong!");
-		} else {
-			if (moduleRegistration.getIdModule().getId() == null
-					|| moduleRegistration.getIdModule().getId().equals("")) {
-				throw new Exception("Id Module tidak boleh kosong!");
-			} else {
-				Modules module = modulesService.getModuleById(moduleRegistration.getIdModule().getId());
-				System.out.println("Test " + moduleRegistration.getIdModule().getId());
-				System.out.println("Testtt" + module);
-				if (module == null) {
-					throw new Exception("Module tidak ada!");
-				} else {
-					if (moduleRegistration.getIdDetailClass() == null) {
-						throw new Exception("Detail kelas tidak boleh kosong!");
-					} else {
-						if (moduleRegistration.getIdDetailClass().getId() == null) {
-							throw new Exception("Id Detail Class tidak boleh kosong!");
-						} else {
-							DetailClasses dtlClazz = detailClassService
-									.getDetailClassById(moduleRegistration.getIdDetailClass().getId());
-							if (dtlClazz == null) {
-								throw new Exception("Detail Class tidak ada!");
-							}
-						}
-					}
-				}
-			}
-		}
+//		if (moduleRegistration.getIdModule() == null) {
+//			throw new Exception("Module tidak boleh kosong!");
+//		} else {
+//			if (moduleRegistration.getIdModule().getId() == null
+//					|| moduleRegistration.getIdModule().getId().equals("")) {
+//				throw new Exception("Id Module tidak boleh kosong!");
+//			} else {
+//				Modules module = modulesService.getModuleById(moduleRegistration.getIdModule().getId());
+//				System.out.println("Test " + moduleRegistration.getIdModule().getId());
+//				System.out.println("Testtt" + module);
+//				if (module == null) {
+//					throw new Exception("Module tidak ada!");
+//				} else {
+//					if (moduleRegistration.getIdDetailClass() == null) {
+//						throw new Exception("Detail kelas tidak boleh kosong!");
+//					} else {
+//						if (moduleRegistration.getIdDetailClass().getId() == null) {
+//							throw new Exception("Id Detail Class tidak boleh kosong!");
+//						} else {
+//							DetailClasses dtlClazz = detailClassService
+//									.getDetailClassById(moduleRegistration.getIdDetailClass().getId());
+//							if (dtlClazz == null) {
+//								throw new Exception("Detail Class tidak ada!");
+//							}
+//						}
+//					}
+//				}
+//			}
+//		}
 	}
 
 	private String generateTrxNumber() {

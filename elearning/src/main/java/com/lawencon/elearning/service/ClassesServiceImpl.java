@@ -52,6 +52,7 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 						if (helper.getDetailClass() != null) {
 							DetailClasses detailClass = helper.getDetailClass();
 							detailClass.setIdClass(clazz);
+							detailClass.setViews(0);
 							helper.setDetailClass(detailClass);
 							detailClassesService.insertDetailClass(helper.getDetailClass());
 							if (helper.getModule() != null) {

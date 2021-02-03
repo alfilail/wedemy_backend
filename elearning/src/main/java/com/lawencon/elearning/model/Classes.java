@@ -38,7 +38,7 @@ public class Classes extends BaseMaster {
 	@ManyToOne
 	@JoinColumn(name = "id_tutor", nullable = false)
 	private Users idTutor;
-	
+
 	@OneToOne
 	@JoinColumn(name = "id_file")
 	private Files idFile;

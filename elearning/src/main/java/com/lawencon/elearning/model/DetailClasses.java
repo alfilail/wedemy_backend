@@ -53,6 +53,9 @@ public class DetailClasses extends BaseMaster {
 	@JsonFormat(pattern = "HH:mm")
 	@Column(name = "end_time", nullable = false)
 	private LocalTime endTime;
+	
+	@Column(name = "views")
+	private Integer views;
 
 	@Transient
 	private Integer totalParticipant;

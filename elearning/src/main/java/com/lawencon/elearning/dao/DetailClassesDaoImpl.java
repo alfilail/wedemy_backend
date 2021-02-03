@@ -65,4 +65,10 @@ public class DetailClassesDaoImpl extends ElearningBaseDaoImpl<DetailClasses> im
 		});
 		return listResult;
 	}
+
+	@Override
+	public void updateViews(String id) throws Exception {
+		String sql = sqlBuilder("UPDATE t_m_detail_classes SET views = (views + 1) WHERE id = ?1").toString();
+		createNativeQuery(sql).setParameter(1, id).executeUpdate();
+	}
 }

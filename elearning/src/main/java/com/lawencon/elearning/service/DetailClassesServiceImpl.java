@@ -36,8 +36,17 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 
 	@Override
 	public DetailClasses getDetailClassById(String id) throws Exception {
-		DetailClasses dtlClass = detailClassesDao.getDetailClassById(id);
-		dtlClass.setTotalParticipant(classEnrollmentService.getTotalParticipantsByIdDtlClass(id));
+		DetailClasses dtlClass = new DetailClasses();
+		try {
+			begin();
+			dtlClass = detailClassesDao.getDetailClassById(id);
+			updateViews(id);
+			dtlClass.setTotalParticipant(classEnrollmentService.getTotalParticipantsByIdDtlClass(id));
+			commit();
+		} catch (Exception e) {
+			rollback();
+			e.printStackTrace();
+		}
 		return dtlClass;
 	}
 
@@ -71,5 +80,9 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 		date = date.replaceAll("-", "");
 		String detailClassCode = bBuilder(classCode, date).toString();
 		return detailClassCode;
+	}
+
+	private void updateViews(String id) throws Exception {
+		detailClassesDao.updateViews(id);
 	}
 }

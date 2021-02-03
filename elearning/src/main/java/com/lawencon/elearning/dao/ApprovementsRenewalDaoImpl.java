@@ -30,9 +30,9 @@ public class ApprovementsRenewalDaoImpl extends ElearningBaseDaoImpl<Approvement
 	@Override
 	public ApprovementsRenewal checkUsersPresence(String idDtlModuleRgs, String idUser) throws Exception {
 		List<ApprovementsRenewal> listResult = new ArrayList<>();
-		String sql = sqlBuilder("SELECT approvement_name FROM t_r_presences p LEFT JOIN t_r_approvement_renewal ar ",
+		String sql = sqlBuilder("SELECT approvement_name FROM t_r_presences p INNER JOIN t_r_approvement_renewal ar ",
 				"ON ar.id_presence = p.id INNER JOIN t_m_approvements a ON ar.id_approvement = a.id ",
-				"WHERE p.id_detail_module_rgs =?1 AND p.id_use =?2r ORDER BY created_at DESC LIMIT 1").toString();
+				"WHERE p.id_detail_module_rgs =?1 AND p.id_user =?2 ORDER BY ar.created_at DESC LIMIT 1").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlModuleRgs).setParameter(2, idUser)
 				.getResultList();
 		listObj.forEach(val -> {

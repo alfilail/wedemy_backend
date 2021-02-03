@@ -22,7 +22,7 @@ public class ForumsServiceImpl extends ElearningBaseServiceImpl implements Forum
 
 	@Autowired
 	private ForumsDao forumsDao;
-	
+
 	@Autowired
 	private DetailForumsDao dtlForumsDao;
 
@@ -30,35 +30,20 @@ public class ForumsServiceImpl extends ElearningBaseServiceImpl implements Forum
 	public void insertForum(Forums forum) throws Exception {
 		forum.setForumDateTime(LocalDateTime.now());
 		forum.setTrxNumber(generateTrxNumber());
-		try {
-			begin();
-			forumsDao.insertForum(forum, () -> validateInsert(forum));
-			commit();
-		} catch (Exception e) {
-			rollback();
-			throw new Exception(e);
-		}
+		forumsDao.insertForum(forum, () -> validateInsert(forum));
 	}
 
 	@Override
 	public void updateContentForum(Forums forum) throws Exception {
-		try {
-			begin();
-			forumsDao.updateContentForum(forum, () -> validateUpdate(forum));
-			commit();
-		} catch (Exception e) {
-			rollback();
-			throw new Exception(e);
-		}
+		forumsDao.updateContentForum(forum, () -> validateUpdate(forum));
 	}
 
 	@Override
 	public void deleteForumById(String id, String idUser) throws Exception {
 		begin();
-		if(validateDelete(id) == true) {
+		if (validateDelete(id) == true) {
 			forumsDao.softDeleteForumById(id, idUser);
-		}
-		else {
+		} else {
 			forumsDao.deleteForumById(id);
 		}
 		commit();
@@ -95,7 +80,7 @@ public class ForumsServiceImpl extends ElearningBaseServiceImpl implements Forum
 	private void validateUpdate(Forums forum) throws Exception {
 
 	}
-	
+
 	private String generateTrxNumber() {
 		Random random = new Random();
 		LocalDate localDate = LocalDate.now();
@@ -104,15 +89,14 @@ public class ForumsServiceImpl extends ElearningBaseServiceImpl implements Forum
 		String trxCodeValue = String.valueOf(random.nextInt((999 + 1 - 100) + 100));
 		String trx = bBuilder(formattedDate).toString();
 		trx = trx.replaceAll("-", "");
-		String trxNumber= bBuilder("ASB-", trx, "-",trxCodeValue).toString();
+		String trxNumber = bBuilder("ASB-", trx, "-", trxCodeValue).toString();
 		return trxNumber;
 	}
-	
+
 	private boolean validateDelete(String id) throws Exception {
 		List<?> listObj = forumsDao.validateDeleteForum(id);
 		listObj.forEach(System.out::println);
-		List<?> list =  listObj.stream().filter(val -> val != null)
-				.collect(Collectors.toList());
+		List<?> list = listObj.stream().filter(val -> val != null).collect(Collectors.toList());
 		System.out.println(list.size());
 		return list.size() > 0 ? true : false;
 	}

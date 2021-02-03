@@ -16,5 +16,7 @@ public interface DetailClassesDao {
 	DetailClasses getDetailClassByCode(String code) throws Exception;
 
 	List<DetailClasses> getTutorClasses(String idTutor) throws Exception;
+	
+	void updateViews(String id) throws Exception;
 
 }
