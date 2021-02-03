@@ -71,4 +71,27 @@ public class DetailClassesDaoImpl extends ElearningBaseDaoImpl<DetailClasses> im
 		String sql = sqlBuilder("UPDATE t_m_detail_classes SET views = (views + 1) WHERE id = ?1").toString();
 		createNativeQuery(sql).setParameter(1, id).executeUpdate();
 	}
+
+	@Override
+	public List<DetailClasses> getPopularClasses() throws Exception {
+		List<DetailClasses> listResult = new ArrayList<>();
+		String sql = sqlBuilder("SELECT c.class_name, c.description, f.file, dc.id ",
+				"FROM t_m_detail_classes dc INNER JOIN t_m_classes c ON dc.id_class = c.id ",
+				"INNER JOIN t_m_files f ON c.id_file = f.id ORDER BY dc.views DESC LIMIT 3").toString();
+		List<?> listObj = createNativeQuery(sql).getResultList();
+		listObj.forEach(val -> {
+			Object[] objArr = (Object[]) val;
+			Classes clazz = new Classes();
+			clazz.setClassName((String) objArr[0]);
+			clazz.setDescription((String) objArr[1]);
+			Files thumbnailImg = new Files();
+			thumbnailImg.setFile((byte[]) objArr[2]);
+			clazz.setIdFile(thumbnailImg);
+			DetailClasses detailClass = new DetailClasses();
+			detailClass.setId((String) objArr[3]);
+			detailClass.setIdClass(clazz);
+			listResult.add(detailClass);
+		});
+		return listResult;
+	}
 }

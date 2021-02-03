@@ -59,6 +59,11 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 	public List<DetailClasses> getTutorClasses(String idTutor) throws Exception {
 		return detailClassesDao.getTutorClasses(idTutor);
 	}
+	
+	@Override
+	public List<DetailClasses> getPopularClasses() throws Exception {
+		return detailClassesDao.getPopularClasses();
+	}
 
 	private void validateInsert(DetailClasses detailClass) throws Exception {
 		if (detailClass.getStartDate() == null) {
@@ -85,4 +90,5 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 	private void updateViews(String id) throws Exception {
 		detailClassesDao.updateViews(id);
 	}
+
 }

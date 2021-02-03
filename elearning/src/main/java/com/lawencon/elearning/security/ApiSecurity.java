@@ -50,7 +50,7 @@ public class ApiSecurity extends WebSecurityConfigurerAdapter {
 //		web.ignoring().antMatchers(HttpMethod.POST, "/**").antMatchers(HttpMethod.GET, "/**")
 //				.antMatchers(HttpMethod.PATCH, "/**").antMatchers(HttpMethod.PUT, "/**")
 //				.antMatchers(HttpMethod.DELETE, "/**");
-		web.ignoring().antMatchers(HttpMethod.POST, "/user").antMatchers(HttpMethod.GET, "/detail-class/**/",
+		web.ignoring().antMatchers(HttpMethod.POST, "/user", "/role").antMatchers(HttpMethod.GET, "/detail-class/**/",
 		"/module-registration/**/");
 	}
 

@@ -14,4 +14,6 @@ public interface DetailClassesService {
 	DetailClasses getDetailClassByCode(String code) throws Exception;
 
 	List<DetailClasses> getTutorClasses(String idTutor) throws Exception;
+	
+	List<DetailClasses> getPopularClasses() throws Exception;
 }

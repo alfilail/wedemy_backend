@@ -53,4 +53,15 @@ public class DetailClassesController {
 		}
 	}
 
+	@GetMapping("popular")
+	public ResponseEntity<?> getPopularClasses() {
+		try {
+			List<DetailClasses> listResult = dtlClassesService.getPopularClasses();
+			return new ResponseEntity<>(listResult, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 }

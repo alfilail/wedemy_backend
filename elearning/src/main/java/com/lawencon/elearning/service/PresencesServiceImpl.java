@@ -41,7 +41,7 @@ public class PresencesServiceImpl extends ElearningBaseServiceImpl implements Pr
 			presence.setPresenceTime(LocalTime.now());
 			presencesDao.insertPresence(presence, () -> validateInsert(presence));
 			Users user = usersService.getUserById(presence.getIdUser().getId());
-			if (user.getIdRole().getCode().equals("std")) {
+			if (user.getIdRole().getCode().equals("PCP")) {
 				insertApprovementRenewal(presence);
 			}
 		} catch (Exception e) {
