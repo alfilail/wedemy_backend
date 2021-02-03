@@ -2,8 +2,6 @@ package com.lawencon.elearning.dao;
 
 import java.util.List;
 
-import org.springframework.stereotype.Repository;
-
 import com.lawencon.elearning.model.LearningMaterialTypes;
 import com.lawencon.util.Callback;
 
@@ -11,7 +9,6 @@ import com.lawencon.util.Callback;
  * @author Nur Alfilail
  */
 
-@Repository
 public interface LearningMaterialTypesDao {
 
 	void insertLearningMaterialType(LearningMaterialTypes lmType, Callback before) throws Exception;
@@ -25,4 +22,8 @@ public interface LearningMaterialTypesDao {
 	void deleteLearningMaterialTypeById(String id) throws Exception;
 
 	LearningMaterialTypes getLearningMaterialTypeByCode(String code) throws Exception;
+
+	void softDeleteLearningMaterialTypeById(String id, String idUser) throws Exception;
+
+	List<?> validateDeleteLearningMaterialType(String id) throws Exception;
 }

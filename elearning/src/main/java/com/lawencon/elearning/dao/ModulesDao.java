@@ -19,8 +19,6 @@ public interface ModulesDao {
 
 	void deleteModuleById(String id) throws Exception;
 	
-	void updateIsActive(String id, String idUser) throws Exception;
-	
 	void softDeleteModuleById(String id, String idUser) throws Exception;
 
 	List<?> validateDeleteModule(String id) throws Exception;

@@ -13,11 +13,11 @@ public interface ModulesService {
 	Modules getModuleById(String id) throws Exception;
 	
 	Modules getModuleByCode(String code) throws Exception;
+	
+	void softDeleteModuleById(String id, String idUser) throws Exception;
 
 	void updateModule(Modules module) throws Exception;
 
 	void deleteModuleById(String id, String idUser) throws Exception;
-	
-	void updateIsActive(String id, String idUser) throws Exception;
 
 }

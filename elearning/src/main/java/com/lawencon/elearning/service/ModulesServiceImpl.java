@@ -35,8 +35,8 @@ public class ModulesServiceImpl extends BaseServiceImpl implements ModulesServic
 	public void deleteModuleById(String id, String idUser) throws Exception {
 		try {
 			begin();
-			if(validateDelete(idUser)) {
-				
+			if(validateDelete(id)) {
+				softDeleteModuleById(id, idUser);
 			} else {			
 				modulesDao.deleteModuleById(id);
 			}
@@ -45,19 +45,6 @@ public class ModulesServiceImpl extends BaseServiceImpl implements ModulesServic
 			e.getMessage();
 			rollback();
 		}
-//		try {
-//			begin();
-//			modulesDao.deleteModuleById(id);
-//			commit();
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//			if(e.getMessage().equals("ID Not Found")) {
-//				throw new Exception("Id tidak ada");
-//			}
-//			begin();
-//			updateIsActive(id, idUser);
-//			commit();
-//		}
 	}
 
 	@Override
@@ -102,11 +89,6 @@ public class ModulesServiceImpl extends BaseServiceImpl implements ModulesServic
 			}			
 		}
 	}
-
-	@Override
-	public void updateIsActive(String id, String idUser) throws Exception {
-		modulesDao.updateIsActive(id, idUser);
-	}
 	
 	private boolean validateDelete(String id) throws Exception {
 		List<?> listObj = modulesDao.validateDeleteModule(id);
@@ -115,6 +97,11 @@ public class ModulesServiceImpl extends BaseServiceImpl implements ModulesServic
 				.collect(Collectors.toList());
 		System.out.println(list.size());
 		return list.size() > 0 ? true : false;
+	}
+
+	@Override
+	public void softDeleteModuleById(String id, String idUser) throws Exception {
+		modulesDao.softDeleteModuleById(id, idUser);
 	}
 
 }

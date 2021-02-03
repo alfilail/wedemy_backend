@@ -11,7 +11,7 @@ public interface LearningMaterialTypesService {
 
 	LearningMaterialTypes getLearningMaterialTypeById(String id) throws Exception;
 
-	void deleteLearningMaterialTypeById(String id) throws Exception;
+	void deleteLearningMaterialTypeById(String id, String idUser) throws Exception;
 
 	void updateLearningMaterialType(LearningMaterialTypes lmType) throws Exception;
 

@@ -21,7 +21,7 @@ public interface LearningMaterialsService {
 
 	void updateLearningMaterial(LearningMaterials learningMaterial, MultipartFile file) throws Exception;
 
-	void deleteLearningMaterialById(String id) throws Exception;
+	void deleteLearningMaterialById(String id, String idUser) throws Exception;
 
 	LearningMaterials getLearningMaterialByCode(String code) throws Exception;
 

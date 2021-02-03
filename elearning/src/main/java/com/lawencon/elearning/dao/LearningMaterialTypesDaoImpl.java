@@ -1,6 +1,9 @@
 package com.lawencon.elearning.dao;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.stereotype.Repository;
 
 import com.lawencon.elearning.model.LearningMaterialTypes;
 import com.lawencon.util.Callback;
@@ -9,6 +12,7 @@ import com.lawencon.util.Callback;
  * @author Nur Alfilail
  */
 
+@Repository
 public class LearningMaterialTypesDaoImpl extends ElearningBaseDaoImpl<LearningMaterialTypes>
 		implements LearningMaterialTypesDao {
 
@@ -39,9 +43,28 @@ public class LearningMaterialTypesDaoImpl extends ElearningBaseDaoImpl<LearningM
 
 	@Override
 	public LearningMaterialTypes getLearningMaterialTypeByCode(String code) throws Exception {
-		LearningMaterialTypes lmType = createQuery("FROM LearningMaterialTypes WHERE code = ?1",
-				LearningMaterialTypes.class).setParameter(1, code).getSingleResult();
-		return lmType;
+		List<LearningMaterialTypes> lmType = createQuery("FROM LearningMaterialTypes WHERE code = ?1",
+				LearningMaterialTypes.class).setParameter(1, code).getResultList();
+		return resultCheck(lmType);
+	}
+
+	@Override
+	public void softDeleteLearningMaterialTypeById(String id, String idUser) throws Exception {
+		updateNativeSQL("UPDATE t_m_learning_material_types SET is_active = false", id, idUser);
+	}
+
+	@Override
+	public List<?> validateDeleteLearningMaterialType(String id) throws Exception {
+		String sql = sqlBuilder("SELECT lm.id FROM t_m_learning_material_types mt",
+				" FULL JOIN t_m_learning_materials lm ON mt.id = lm.id_learning_material_type",
+				" WHERE mt.id = ?1 ").toString();
+		List<?> listObj = createNativeQuery(sql).setParameter(1, id).setMaxResults(1).getResultList();
+		List<String> result = new ArrayList<String>();
+		listObj.forEach(val -> {
+			Object obj = (Object) val;
+			result.add(obj != null ? obj.toString() : null);
+		});
+		return result;
 	}
 
 }

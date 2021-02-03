@@ -18,4 +18,8 @@ public interface LearningMaterialsDao {
 	void deleteLearningMaterialById(String id) throws Exception;
 
 	LearningMaterials getLearningMaterialByCode(String code) throws Exception;
+	
+	void softDeleteLearningMaterialById(String id, String idUser) throws Exception;
+
+	List<?> validateDeleteLearningMaterial(String id) throws Exception;
 }
