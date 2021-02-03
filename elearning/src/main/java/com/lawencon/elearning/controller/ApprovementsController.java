@@ -40,10 +40,10 @@ public class ApprovementsController {
 			Approvements approvement = new ObjectMapper().readValue(body, Approvements.class);
 			approvementsService.insertApprovement(approvement);
 //			return new ResponseEntity<>(approvement, HttpStatus.CREATED);
-			return new Response<>(true, HttpStatus.CREATED, MessageStat.SUCCESS_CREATED, approvement);
+			return new Response<>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_CREATED.msg, approvement);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new Response<>(false, HttpStatus.INTERNAL_SERVER_ERROR, MessageStat.FAILED, null);
+			return new Response<>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), MessageStat.FAILED.msg, null);
 		}
 	}
 
@@ -63,10 +63,10 @@ public class ApprovementsController {
 		try {
 			List<Approvements> approvementsList = approvementsService.getAllApprovements();
 //			return new Response<>(approvementsList, HttpStatus.CREATED);
-			return new Response<>(true, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE, approvementsList);
+			return new Response<>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, approvementsList);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new Response<>(false, HttpStatus.INTERNAL_SERVER_ERROR, MessageStat.FAILED, null);
+			return new Response<>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), MessageStat.FAILED.msg, null);
 //			return new Response<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
