@@ -1,5 +1,7 @@
 package com.lawencon.elearning.helper;
 
+import com.lawencon.elearning.model.DetailModuleRegistrations;
+
 import lombok.Data;
 
 /**
@@ -7,8 +9,9 @@ import lombok.Data;
 */
 
 @Data
-public class Permission {
-
+public class LearningMaterialsAndPermissions {
+	
+	DetailModuleRegistrations learningMaterial;
 	private Boolean doesTutorPresent;
 	private Boolean isMissed;
 	private Boolean isRejected;

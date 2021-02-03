@@ -16,4 +16,5 @@ public class ModuleAndLearningMaterials {
 
 	private ModuleRegistrations module;
 	private List<DetailModuleRegistrations> learningMaterials;
+	
 }
