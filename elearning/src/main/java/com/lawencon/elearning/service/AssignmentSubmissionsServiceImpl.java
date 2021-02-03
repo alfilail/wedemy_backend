@@ -84,7 +84,7 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 		Profiles tutor = assignmentSubmissionsDao.getTutorProfile(assignmentSubmission);
 		Profiles participant = assignmentSubmissionsDao.getParticipantProfile(assignmentSubmission);
 		
-		General general = generalService.getTemplateEmail("assignment_tutor");
+		General general = generalService.getTemplateEmail("asgttr");
 		String text = general.getTemplateHtml();
 		
 		text = text.replace("#1#", tutor.getFullName());
@@ -101,7 +101,7 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 	private void sendEmailParticipant(AssignmentSubmissions assignmentSubmission) throws Exception {
 		Profiles participant = assignmentSubmissionsDao.getParticipantProfile(assignmentSubmission);
 		
-		General general = generalService.getTemplateEmail("assignment_participant");
+		General general = generalService.getTemplateEmail("asgpcp");
 		String text = general.getTemplateHtml();
 		
 		text = text.replace("#1#", participant.getFullName());

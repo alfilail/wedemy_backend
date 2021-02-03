@@ -114,7 +114,7 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 	}
 
 	private void sendEmailResetPassword(String pass, Profiles profile) throws Exception {
-		General general = generalService.getTemplateEmail("password_reset");
+		General general = generalService.getTemplateEmail("pwdrst");
 		String text = general.getTemplateHtml();
 		
 		text = text.replace("#1#", profile.getFullName());
@@ -122,7 +122,7 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 		
 		MailHelper mailHelper = new MailHelper();
 //		mailHelper.setFrom("elearningalfione@gmail.com");
-		mailHelper.setTo(profile.getFullName());
+		mailHelper.setTo(profile.getEmail());
 		mailHelper.setSubject("Password has been reset");
 		mailHelper.setText(text);
 		new MailServiceImpl(mailUtil, mailHelper).start();
@@ -210,7 +210,7 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 	}
 	
 	private void sendEmailRegister(Profiles profile) throws Exception {
-		General general = generalService.getTemplateEmail("register_participant");
+		General general = generalService.getTemplateEmail("rgs");
 		String text = general.getTemplateHtml();
 	
 		text = text.replace("#1#", profile.getFullName());
