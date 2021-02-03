@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -70,10 +71,11 @@ public class LearningMaterialsController {
 		}
 	}
 
-	@DeleteMapping("{id}")
-	public ResponseEntity<?> deleteLearningMaterialById(@PathVariable("id") String id) {
+	@DeleteMapping
+	public ResponseEntity<?> deleteLearningMaterialById(@RequestParam("id") String id,
+			@RequestParam("idUser") String idUser) {
 		try {
-			learningMaterialsService.deleteLearningMaterialById(id);
+			learningMaterialsService.deleteLearningMaterialById(id, idUser);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();

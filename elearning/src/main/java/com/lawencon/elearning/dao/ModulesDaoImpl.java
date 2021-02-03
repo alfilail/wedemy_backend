@@ -43,12 +43,6 @@ public class ModulesDaoImpl extends ElearningBaseDaoImpl<Modules> implements Mod
 	}
 
 	@Override
-	public void updateIsActive(String id, String idUser) throws Exception {
-		String sql = "UPDATE t_m_modules SET is_active = FALSE";
-		updateNativeSQL(sql, id, idUser);
-	}
-
-	@Override
 	public void softDeleteModuleById(String id, String idUser) throws Exception {
 		updateNativeSQL("UPDATE t_m_modules SET is_active = FALSE", id, idUser);
 	}

@@ -1,5 +1,6 @@
 package com.lawencon.elearning.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -40,6 +41,25 @@ public class LearningMaterialsDaoImpl extends ElearningBaseDaoImpl<LearningMater
 		List<LearningMaterials> learningMaterial = createQuery("FROM LearningMaterials WHERE code =?1",
 				LearningMaterials.class).setParameter(1, code).getResultList();
 		return resultCheck(learningMaterial);
+	}
+
+	@Override
+	public void softDeleteLearningMaterialById(String id, String idUser) throws Exception {
+		updateNativeSQL("UPDATE t_m_learning_materials SET is_active = false", id, idUser);
+	}
+
+	@Override
+	public List<?> validateDeleteLearningMaterial(String id) throws Exception {
+		String sql = sqlBuilder("SELECT dmr.id FROM t_m_learning_materials lm ",
+				"FULL JOIN t_r_detail_module_registrations dmr ON lm.id = dmr.id_learning_material ",
+				"WHERE lm.id = ?1 ").toString();
+		List<?> listObj = createNativeQuery(sql).setParameter(1, id).setMaxResults(1).getResultList();
+		List<String> result = new ArrayList<String>();
+		listObj.forEach(val -> {
+			Object obj = (Object) val;
+			result.add(obj != null ? obj.toString() : null);
+		});
+		return result;
 	}
 
 }

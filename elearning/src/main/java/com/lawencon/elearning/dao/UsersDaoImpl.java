@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.elearning.model.Profiles;
-import com.lawencon.elearning.model.Roles;
 import com.lawencon.elearning.model.Users;
 import com.lawencon.elearning.util.HibernateUtils;
 import com.lawencon.util.Callback;
@@ -60,29 +59,6 @@ public class UsersDaoImpl extends ElearningBaseDaoImpl<Users> implements UsersDa
 				" p.email, p.phone, p.address FROM t_m_users u", " INNER JOIN t_m_profiles p ON p.id = u.id_profile",
 				" INNER JOIN t_m_roles r ON r.id = u.id_role", " WHERE r.code = ?1 ").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, code).getResultList();
-		List<Users> listResult = new ArrayList<>();
-		listObj.forEach(val -> {
-			Object[] objArr = (Object[]) val;
-			Users user = new Users();
-			user.setUsername((String) objArr[0]);
-
-			Roles role = new Roles();
-			role.setCode((String) objArr[1]);
-
-			Profiles profile = new Profiles();
-			profile.setFullName((String) objArr[2]);
-//			profile.setIdNumber((String) objArr[3]);
-//			profile.setBirthPlace((String) objArr[4]);
-//			LocalDate birthDate = ((java.sql.Date) objArr[5]).toLocalDate();
-//			profile.setBirthDate(birthDate);
-//			profile.setEmail((String) objArr[6]);
-//			profile.setPhone((String) objArr[7]);
-//			profile.setAddress((String) objArr[8]);
-			user.setIdRole(role);
-			user.setIdProfile(profile);
-
-			listResult.add(user);
-		});
 		return HibernateUtils.bMapperList(listObj, Users.class, "id", "username", "idRole.code", "idProfile.fullName",
 				"idProfile.idNumber", "idProfile.birthPlace", "idProfile.birthDate", "idProfile.email",
 				"idProfile.phone", "idProfile.address");
@@ -136,7 +112,7 @@ public class UsersDaoImpl extends ElearningBaseDaoImpl<Users> implements UsersDa
 		List<Users> listResult = new ArrayList<>();
 //		String sql = sqlBuilder("SELECT p.fullname, p.address, p.birth_date, p.birth_place, p.id_number, p.email, "
 //				"p.phone FROM t_m_detail ").toString();
-		return null;
+		return resultCheck(listResult);
 	}
 
 }

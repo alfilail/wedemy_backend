@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.lawencon.elearning.model.LearningMaterialTypes;
 import com.lawencon.elearning.service.LearningMaterialTypesService;
 
@@ -63,10 +65,11 @@ public class LearningMaterialTypesController {
 		}
 	}
 
-	@DeleteMapping("{id}")
-	public ResponseEntity<?> deleteLearningMaterialTypeById(@PathVariable("id") String id) {
+	@DeleteMapping
+	public ResponseEntity<?> deleteLearningMaterialTypeById(@RequestParam("id") String id,
+			@RequestParam("idUser") String idUser) {
 		try {
-			lmTypesService.deleteLearningMaterialTypeById(id);
+			lmTypesService.deleteLearningMaterialTypeById(id, idUser);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();
@@ -80,7 +83,9 @@ public class LearningMaterialTypesController {
 	@PutMapping
 	public ResponseEntity<?> updateLearningMaterialType(@RequestBody String body) {
 		try {
-			LearningMaterialTypes lmType = new ObjectMapper().readValue(body, LearningMaterialTypes.class);
+			ObjectMapper obj = new ObjectMapper();
+			obj.registerModule(new JavaTimeModule());
+			LearningMaterialTypes lmType = obj.readValue(body, LearningMaterialTypes.class);
 			lmTypesService.updateLearningMaterialType(lmType);
 			return new ResponseEntity<>(lmType, HttpStatus.OK);
 		} catch (Exception e) {

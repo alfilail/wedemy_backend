@@ -7,6 +7,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.lawencon.model.BaseMaster;
@@ -16,6 +17,7 @@ import lombok.EqualsAndHashCode;
 
 @Entity
 @JsonInclude(Include.NON_NULL)
+@JsonIgnoreProperties(allowSetters = true, value = {"userPassword"})
 @Table(name = "t_m_users")
 @EqualsAndHashCode(callSuper = false)
 @Data

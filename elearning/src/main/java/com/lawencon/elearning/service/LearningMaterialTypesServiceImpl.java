@@ -1,39 +1,46 @@
 package com.lawencon.elearning.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.BaseServiceImpl;
-import com.lawencon.elearning.dao.AssignmentTypesDao;
+//import com.lawencon.elearning.dao.AssignmentTypesDao;
+import com.lawencon.elearning.dao.LearningMaterialTypesDao;
 import com.lawencon.elearning.model.LearningMaterialTypes;
 
 @Service
 public class LearningMaterialTypesServiceImpl extends BaseServiceImpl implements LearningMaterialTypesService {
+	
 	@Autowired
-	private AssignmentTypesDao assignmentTypesDao;
+	private LearningMaterialTypesDao learnMaterialTypeDao;
 
 	@Override
-	public void insertLearningMaterialType(LearningMaterialTypes assignmentType) throws Exception {
-		assignmentTypesDao.insertAssignmentType(assignmentType, () -> validateInsert(assignmentType));
+	public void insertLearningMaterialType(LearningMaterialTypes lmType) throws Exception {
+		learnMaterialTypeDao.insertLearningMaterialType(lmType, () -> validateInsert(lmType));
 	}
 
 	@Override
 	public List<LearningMaterialTypes> getAllLearningMaterialTypes() throws Exception {
-		return assignmentTypesDao.getAllAssignmentTypes();
+		return learnMaterialTypeDao.getAllLearningMaterialTypes();
 	}
 
 	@Override
 	public LearningMaterialTypes getLearningMaterialTypeById(String id) throws Exception {
-		return assignmentTypesDao.getAssignmentTypesById(id);
+		return learnMaterialTypeDao.getLearningMaterialTypeById(id);
 	}
 
 	@Override
-	public void deleteLearningMaterialTypeById(String id) throws Exception {
+	public void deleteLearningMaterialTypeById(String id, String idUser) throws Exception {
 		try {
 			begin();
-			assignmentTypesDao.deleteAssignmentTypeById(id);
+			if(validateDelete(id)) {
+				learnMaterialTypeDao.softDeleteLearningMaterialTypeById(id, idUser);
+			} else {				
+				learnMaterialTypeDao.deleteLearningMaterialTypeById(id);
+			}
 			commit();
 		} catch(Exception e) {
 			e.getMessage();
@@ -42,13 +49,13 @@ public class LearningMaterialTypesServiceImpl extends BaseServiceImpl implements
 	}
 
 	@Override
-	public void updateLearningMaterialType(LearningMaterialTypes assignmentType) throws Exception {
-		assignmentTypesDao.updateAssignmentType(assignmentType, () -> validateUpdate(assignmentType));
+	public void updateLearningMaterialType(LearningMaterialTypes lmType) throws Exception {
+		learnMaterialTypeDao.updateLearningMaterialType(lmType, () -> validateUpdate(lmType));
 	}
 
 	@Override
 	public LearningMaterialTypes getLearningMaterialTypeByCode(String code) throws Exception {
-		return assignmentTypesDao.getAssignmentTypeByCode(code);
+		return learnMaterialTypeDao.getLearningMaterialTypeByCode(code);
 	}
 
 	private void validateInsert(LearningMaterialTypes learningMaterialTypes) throws Exception {
@@ -102,5 +109,14 @@ public class LearningMaterialTypesServiceImpl extends BaseServiceImpl implements
 				}
 			}
 		}
+	}
+	
+	private boolean validateDelete(String id) throws Exception {
+		List<?> listObj = learnMaterialTypeDao.validateDeleteLearningMaterialType(id);
+		listObj.forEach(System.out::println);
+		List<?> list =  listObj.stream().filter(val -> val != null)
+				.collect(Collectors.toList());
+		System.out.println(list.size());
+		return list.size() > 0 ? true : false;
 	}
 }
