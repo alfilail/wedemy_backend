@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,9 +22,6 @@ import com.lawencon.elearning.util.MailUtil;
 
 @Service
 public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl implements AssignmentSubmissionsService {
-
-	@Autowired
-	JavaMailSender javaMailSender;
 
 	@Autowired
 	private AssignmentSubmissionsDao assignmentSubmissionsDao;
@@ -95,10 +91,11 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 		text = text.replace("#2#", participant.getFullName());
 		
 		MailHelper mailHelper = new MailHelper();
+		mailHelper.setFrom("elearningalfione@gmail.com");
 		mailHelper.setTo(tutor.getEmail());
 		mailHelper.setSubject("Assignment Submission Has Sent");
 		mailHelper.setText(text);
-		new MailServiceImpl(mailUtil, mailHelper);
+		new MailServiceImpl(mailUtil, mailHelper).start();
 	}
 
 	private void sendEmailParticipant(AssignmentSubmissions assignmentSubmission) throws Exception {
@@ -110,10 +107,11 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 		text = text.replace("#1#", participant.getFullName());
 		
 		MailHelper mailHelper = new MailHelper();
+		mailHelper.setFrom("elearningalfione@gmail.com");
 		mailHelper.setTo(participant.getEmail());
 		mailHelper.setSubject("Assignment Submission Has Sent");
 		mailHelper.setText(text);
-		new MailServiceImpl(mailUtil, mailHelper);
+		new MailServiceImpl(mailUtil, mailHelper).start();
 	}
 
 	private void insertStatusRenewal(AssignmentSubmissions assignmentSubmission) throws Exception {

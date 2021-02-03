@@ -4,17 +4,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.elearning.dao.UsersDao;
+import com.lawencon.elearning.helper.MailHelper;
+import com.lawencon.elearning.model.General;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.Roles;
 //import com.lawencon.elearning.model.Roles;
 import com.lawencon.elearning.model.Users;
+import com.lawencon.elearning.util.MailUtil;
 
 import net.bytebuddy.utility.RandomString;
 
@@ -34,7 +35,10 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 	private RolesService rolesService;
 
 	@Autowired
-	JavaMailSender javaMailSender;
+	private GeneralService generalService;
+	
+	@Autowired
+	private MailUtil mailUtil;
 
 	@Override
 	public void insertUser(Users user) throws Exception {
@@ -98,7 +102,7 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 		user.setUserPassword(passwordEncoder.encode(pass));
 		usersDao.updateUser(user, () -> validateUpdate(user));
 		System.out.println("Sending mail...");
-		sendEmail(pass, profiles);
+		sendEmailResetPassword(pass, profiles);
 		System.out.println("Done");
 		return user;
 	}
@@ -109,15 +113,19 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 		return pass;
 	}
 
-	private void sendEmail(String pass, Profiles profile) throws Exception {
-		SimpleMailMessage msg = new SimpleMailMessage();
-		msg.setTo(profile.getEmail());
-		msg.setSubject("Password has been reset");
-		msg.setText("Dear " + profile.getFullName() + ",\nPassword has been reset. Here is your new password."
-				+ "\nPassword : " + pass + "\n\nClick http://localhost:8080/api/login to login. \n"
-				+ "\n Save information of your account and " + " change your password soon for your security account."
-				+ " \n \n Best Regards, \n Elearning Alfione");
-		javaMailSender.send(msg);
+	private void sendEmailResetPassword(String pass, Profiles profile) throws Exception {
+		General general = generalService.getTemplateEmail("password_reset");
+		String text = general.getTemplateHtml();
+		
+		text = text.replace("#1#", profile.getFullName());
+		text = text.replace("#2#", pass);
+		
+		MailHelper mailHelper = new MailHelper();
+//		mailHelper.setFrom("elearningalfione@gmail.com");
+		mailHelper.setTo(profile.getFullName());
+		mailHelper.setSubject("Password has been reset");
+		mailHelper.setText(text);
+		new MailServiceImpl(mailUtil, mailHelper).start();
 	}
 
 	private void validateInsert(Users user) throws Exception {
@@ -139,6 +147,11 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 					Roles role = rolesService.getRoleByCode(user.getIdRole().getCode());
 					if (role.getCode().equals("TTR") || role.getCode().equals("ADM")) {
 						validateInsertExceptParticipant(user);
+					}
+					else {
+						System.out.println("Sending Email......");
+						sendEmailRegister(user.getIdProfile());
+						System.out.println("Done");
 					}
 				}
 			}
@@ -194,6 +207,20 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 				.collect(Collectors.toList());
 		System.out.println(list.size());
 		return list.size() > 0 ? true : false;
+	}
+	
+	private void sendEmailRegister(Profiles profile) throws Exception {
+		General general = generalService.getTemplateEmail("register_participant");
+		String text = general.getTemplateHtml();
+	
+		text = text.replace("#1#", profile.getFullName());
+		
+		MailHelper mailHelper = new MailHelper();
+//		mailHelper.setFrom("elearningalfione@gmail.com");
+		mailHelper.setTo(profile.getEmail());
+		mailHelper.setSubject("Your account has been registered");
+		mailHelper.setText(text);
+		new MailServiceImpl(mailUtil, mailHelper).start();
 	}
 
 }
