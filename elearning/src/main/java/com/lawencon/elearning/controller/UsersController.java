@@ -102,7 +102,9 @@ public class UsersController extends ElearningBaseController {
 	@PatchMapping
 	public ResponseEntity<?> updateUser(@RequestBody String body) {
 		try {
-			Users user = new ObjectMapper().readValue(body, Users.class);
+			ObjectMapper obj = new ObjectMapper();
+			obj.registerModule(new JavaTimeModule());
+			Users user = obj.readValue(body, Users.class);
 			usersService.updateUser(user);
 			Response<Users> response = new Response<Users>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_UPDATE.msg, user);
 			return new ResponseEntity<>(response, HttpStatus.CREATED);

@@ -69,6 +69,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 		response.setContentType("application/json");
 		response.getWriter().append("{\"token\" : \"" + token + "\",").append("\"profile\" : {")
 				.append("\"userId\" : \"" + user.getId() + "\",")
+				.append("\"profileId\" : \"" + user.getIdProfile().getId() + "\",")
 				.append("\"roleCode\" : \"" + user.getIdRole().getCode() + "\"}").append("}");
 	}
 
@@ -76,6 +77,9 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException failed) throws IOException, ServletException {
 		response.setStatus(HttpStatus.UNAUTHORIZED.value());
+		if(failed.getMessage().equals("Bad credentials")) {
+			response.getWriter().append("Username atau Password salah");
+		}
 	}
 
 }
