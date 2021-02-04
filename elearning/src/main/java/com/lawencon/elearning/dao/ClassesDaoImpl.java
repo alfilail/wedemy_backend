@@ -72,5 +72,17 @@ public class ClassesDaoImpl extends ElearningBaseDaoImpl<Classes> implements Cla
 				.getResultList();
 		return listClass;
 	}
+	
+	@Override
+	public void updateClassIsActive(String id, String idUser) throws Exception {
+		updateNativeSQL("UPDATE t_m_classes SET is_active = true", id, idUser);
+	}
+	
+	@Override
+	public Classes getInActiveClassById(String id) throws Exception {
+		List<Classes> listClass = createQuery("FROM Classes WHERE isActive = ?1 ", Classes.class).setParameter(1, false)
+				.getResultList();
+		return listClass.size() > 0 ? listClass.get(0) : null;
+	}
 
 }

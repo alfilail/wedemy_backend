@@ -87,6 +87,11 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 		clazz.setIdFile(thumbnailImg);
 		classesDao.updateClass(clazz, () -> validateUpdate(clazz));
 	}
+	
+	@Override
+	public void updateClassIsActive(String id, String idUser) throws Exception {
+		classesDao.updateClassIsActive(id, idUser);
+	}
 
 	private void validateInsert(Classes clazz) throws Exception {
 		if (clazz.getCode() == null || clazz.getCode().trim().equals("")) {
@@ -194,6 +199,11 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 	@Override
 	public List<Classes> getAllInactiveClass() throws Exception {
 		return classesDao.getAllInactiveClass();
+	}
+	
+	@Override
+	public Classes getInActiveClassById(String id) throws Exception {
+		return classesDao.getInActiveClassById(id);
 	}
 
 //	private boolean validateDelete(String id) throws Exception {

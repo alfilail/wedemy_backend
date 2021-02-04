@@ -24,5 +24,9 @@ public interface ClassesDao {
 	void softDeleteClassById(String id, String idUser) throws Exception;
 
 	List<?> validateDeleteClass(String id) throws Exception;
+	
+	void updateClassIsActive(String id, String idUser) throws Exception;
+	
+	Classes getInActiveClassById(String id) throws Exception;
 
 }

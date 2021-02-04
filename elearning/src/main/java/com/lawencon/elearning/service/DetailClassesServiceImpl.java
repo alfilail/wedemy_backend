@@ -94,9 +94,13 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 		try {
 		begin();
 		//get class by id class
-		Classes clazz = classService.getClassById(detailClass.getIdClass().getId());
+		Classes clazz = classService.getInActiveClassById(detailClass.getIdClass().getId());
+		
+		//update class is active
+		classService.updateClassIsActive(detailClass.getIdClass().getId(), detailClass.getCreatedBy());
 		
 		//set detail class
+		
 		detailClass.setCode(generateCodeDetailClass(clazz.getCode()));
 		detailClass.setViews(0);
 		detailClass.setIdClass(clazz);
