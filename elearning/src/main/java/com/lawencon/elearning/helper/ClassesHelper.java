@@ -1,5 +1,7 @@
 package com.lawencon.elearning.helper;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.lawencon.elearning.model.Classes;
@@ -13,5 +15,5 @@ import lombok.Data;
 public class ClassesHelper{
 	private Classes clazz;
 	private DetailClasses detailClass;
-	private Modules[] module;
+	private List<Modules> module;
 }

@@ -24,4 +24,6 @@ public interface DetailClassesService {
 	List<DetailClasses> getAllDetailClassByIdClass(String idClass) throws Exception;
 	
 	void updateDetailClass(DetailClasses dtlClass) throws Exception;
+	
+	void reactiveOldClass(DetailClasses detailClass) throws Exception;
 }

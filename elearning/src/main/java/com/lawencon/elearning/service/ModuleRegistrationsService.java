@@ -16,5 +16,6 @@ public interface ModuleRegistrationsService {
 	List<ModuleRegistrations> getByIdDtlClass(String idDtlClass) throws Exception;
 
 	List<ModuleAndLearningMaterials> getModuleAndLearningMaterialsByIdDtlClass(String idUser, String idDtlClass) throws Exception;
-
+	
+	List<ModuleRegistrations> getModuleRegistrationsByIdDetailClass (String idDetailClass) throws Exception;
 }

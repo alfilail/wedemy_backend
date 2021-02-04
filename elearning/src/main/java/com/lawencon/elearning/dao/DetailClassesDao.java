@@ -28,5 +28,7 @@ public interface DetailClassesDao {
 	void updateDetailClass(DetailClasses dtlClass, Callback before) throws Exception;
 	
 	List<DetailClasses> getAllDetailClassByIdClass(String idClass) throws Exception;
+	
+	DetailClasses getDetailClassByIdClass(String idClass) throws Exception;
 
 }

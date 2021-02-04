@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import com.lawencon.elearning.model.Classes;
 import com.lawencon.elearning.model.DetailClasses;
-import com.lawencon.elearning.model.Files;
 import com.lawencon.elearning.model.ModuleRegistrations;
 import com.lawencon.elearning.model.Modules;
 import com.lawencon.elearning.model.Profiles;
@@ -92,6 +91,12 @@ public class ModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<ModuleRegis
 			listResult.add(moduleRgs);
 		});
 		return listResult;
+	}
+	
+	@Override
+	public List<ModuleRegistrations> getIdModuleRegistrationByIdDetailClass(String idDetailClass) throws Exception {
+		List<ModuleRegistrations> moduleRegistrationList = createQuery("FROM ModuleRegistrations WHERE idDetailClass.id = ?1 ", ModuleRegistrations.class).setParameter(1, idDetailClass).getResultList();
+		return moduleRegistrationList.size() > 0 ? moduleRegistrationList : null;
 	}
 
 }

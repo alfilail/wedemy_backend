@@ -19,5 +19,4 @@ public interface ModulesService {
 	void updateModule(Modules module) throws Exception;
 
 	void deleteModuleById(String id, String idUser) throws Exception;
-
 }

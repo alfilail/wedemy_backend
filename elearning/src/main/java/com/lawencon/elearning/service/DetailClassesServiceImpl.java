@@ -2,14 +2,19 @@ package com.lawencon.elearning.service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.elearning.dao.DetailClassesDao;
+import com.lawencon.elearning.helper.ClassesHelper;
 import com.lawencon.elearning.model.Classes;
 import com.lawencon.elearning.model.DetailClasses;
+import com.lawencon.elearning.model.DetailModuleRegistrations;
+import com.lawencon.elearning.model.ModuleRegistrations;
+import com.lawencon.elearning.model.Modules;
 
 @Service
 public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implements DetailClassesService {
@@ -21,6 +26,15 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 
 	@Autowired
 	private ClassEnrollmentService classEnrollmentService;
+	
+	@Autowired
+	private ModulesService modulesService;
+	
+	@Autowired
+	private ModuleRegistrationsService moduleRegistrationsService;
+	
+	@Autowired
+	private DetailModuleRegistrationsService detailModuleRegistrationsService;
 
 	@Override
 	public void insertDetailClass(DetailClasses detailClass) throws Exception {
@@ -28,7 +42,7 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 		detailClass.setCode(generateCodeDetailClass(clazz.getCode()));
 		detailClassesDao.insertDetailClass(detailClass, () -> validateInsert(detailClass));
 	}
-
+	
 	@Override
 	public List<DetailClasses> getAllDetailClass() throws Exception {
 		return detailClassesDao.getAllDetailClass();
@@ -74,6 +88,70 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 	public void deleteDetailClassById(String id, String idUser) throws Exception {
 		detailClassesDao.deleteClassById(id, idUser);
 	}
+	
+	@Override
+	public void reactiveOldClass(DetailClasses detailClass) throws Exception {
+		try {
+		begin();
+		//get class by id class
+		Classes clazz = classService.getClassById(detailClass.getIdClass().getId());
+		
+		//set detail class
+		detailClass.setCode(generateCodeDetailClass(clazz.getCode()));
+		detailClass.setViews(0);
+		detailClass.setIdClass(clazz);
+		
+		//get detail class lama yang terbaru (end date tertinggi)
+		DetailClasses detailClassOld = detailClassesDao.getDetailClassByIdClass(detailClass.getIdClass().getId());
+		
+		//get all module registration by id detail class lama
+		List<ModuleRegistrations> modulesRegistrationListOld = 
+				moduleRegistrationsService.getModuleRegistrationsByIdDetailClass(detailClassOld.getId());
+		
+		// untuk menampung module list nya
+		List<Modules> modulesList = new ArrayList<Modules>();
+		
+		//untuk menampung module registrations list
+		List<DetailModuleRegistrations> detailModuleList = new ArrayList<DetailModuleRegistrations>();
+		
+		for(ModuleRegistrations moduleRegistration : modulesRegistrationListOld) {
+			//get module by id module yang ada di module registration
+			Modules module = modulesService.getModuleById(moduleRegistration.getIdModule().getId());
+			modulesList.add(module);
+			
+			List<DetailModuleRegistrations> detailModuleRegis = new ArrayList<DetailModuleRegistrations>();
+			
+			//get detail module registration by id module registration
+			detailModuleRegis = detailModuleRegistrationsService
+					.getDetailModuleRegistrationsByIdModuleRgs(moduleRegistration.getId());
+			
+			// memindahkan detail module registration by id module registration ke detail module registration list
+			for(DetailModuleRegistrations detailModule : detailModuleRegis) {
+				detailModule.setIdModuleRegistration(moduleRegistration);
+				detailModuleList.add(detailModule);
+			}
+		}	
+		
+		detailClassesDao.insertDetailClass(detailClass, ()->validateReactive(detailClass));
+		
+		//membuat clazz helper untuk insert module registration
+		ClassesHelper clazzHelper = new ClassesHelper();
+		clazzHelper.setClazz(clazz);
+		clazzHelper.setDetailClass(detailClass);
+		clazzHelper.setModule(modulesList);
+		moduleRegistrationsService.insertModuleRegistration(clazzHelper);
+		
+		//insert detail module registration
+		for(DetailModuleRegistrations detailModuleRegis : detailModuleList) {
+			detailModuleRegistrationsService.insertDetailModuleRegistration(detailModuleRegis);
+		}
+		commit();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			rollback();
+		}
+	}
 
 	private void validateInsert(DetailClasses detailClass) throws Exception {
 		if (detailClass.getStartDate() == null) {
@@ -85,6 +163,15 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 		} else if (detailClass.getEndTime() == null) {
 			throw new Exception("Waktu akhir detail kelas tidak boleh kosong!");
 		}
+	}
+	
+	private void validateReactive(DetailClasses detailClass) throws Exception {
+		validateInsert(detailClass);
+		DetailClasses detailClazz = detailClassesDao.getDetailClassByIdClass(detailClass.getIdClass().getId());
+		if(detailClass.getStartDate().compareTo(detailClazz.getEndDate())< 0) {
+			throw new Exception("Tanggal mulai detail kelas tidak boleh kurang dari tanggal akhir detail kelas sebelumnya");
+		}
+		
 	}
 
 	private String generateCodeDetailClass(String classCode) {
@@ -103,14 +190,7 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 
 	@Override
 	public void updateDetailClass(DetailClasses dtlClass) throws Exception {
-		try {
-			begin();
-			detailClassesDao.updateDetailClass(dtlClass, () -> validateUpdate(dtlClass));
-			commit();
-		} catch(Exception e) {
-			e.printStackTrace();
-			rollback();
-		}
+		detailClassesDao.updateDetailClass(dtlClass, () -> validateUpdate(dtlClass));
 	}
 	
 	private void validateUpdate(DetailClasses dtlClass) throws Exception {
@@ -135,10 +215,9 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 			}
 		}
 	}
-
+	
 	@Override
 	public List<DetailClasses> getAllInactiveDetailClass() throws Exception {
 		return detailClassesDao.getAllInactiveDetailClass();
 	}
-
 }

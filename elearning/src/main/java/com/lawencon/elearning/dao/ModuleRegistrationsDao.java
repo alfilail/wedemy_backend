@@ -13,4 +13,6 @@ public interface ModuleRegistrationsDao {
 			throws Exception;
 
 	List<ModuleRegistrations> getByIdDtlClass(String idDtlClass) throws Exception;
+	
+	List<ModuleRegistrations> getIdModuleRegistrationByIdDetailClass (String idDetailClass) throws Exception;
 }

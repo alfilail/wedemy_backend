@@ -19,7 +19,6 @@ import com.lawencon.elearning.model.DetailModuleRegistrations;
 import com.lawencon.elearning.model.ModuleRegistrations;
 import com.lawencon.elearning.model.Modules;
 import com.lawencon.elearning.model.Presences;
-import com.lawencon.elearning.model.Users;
 
 @Service
 public class ModuleRegistrationsServiceImpl extends ElearningBaseServiceImpl implements ModuleRegistrationsService {
@@ -42,12 +41,9 @@ public class ModuleRegistrationsServiceImpl extends ElearningBaseServiceImpl imp
 	@Autowired
 	private PresencesService presenceService;
 
-	@Autowired
-	private UsersService userService;
-
 	@Override
 	public void insertModuleRegistration(ClassesHelper clazzHelper) throws Exception {
-		Modules[] modulesList = clazzHelper.getModule();
+		List<Modules> modulesList = clazzHelper.getModule();
 		for (Modules modules : modulesList) {
 			ModuleRegistrations moduleRegistrations = new ModuleRegistrations();
 			moduleRegistrations.setTrxNumber(generateTrxNumber());
@@ -74,10 +70,8 @@ public class ModuleRegistrationsServiceImpl extends ElearningBaseServiceImpl imp
 			throws Exception {
 		List<ModuleAndLearningMaterials> listResult = new ArrayList<>();
 		List<ModuleRegistrations> moduleRgsList = moduleRegistrationDao.getByIdDtlClass(idDtlClass);
-		Users user = userService.getUserById(idUser);
 		for (ModuleRegistrations moduleRgs : moduleRgsList) {
 			LocalTime startTime = moduleRgs.getIdDetailClass().getStartTime();
-			LocalTime endTime = moduleRgs.getIdDetailClass().getEndTime();
 			ModuleAndLearningMaterials result = new ModuleAndLearningMaterials();
 			List<LearningMaterialsAndPermissions> learningMaterials = new ArrayList<>();
 			List<DetailModuleRegistrations> dtlModuleList = dtlModuleRgsService
@@ -85,35 +79,24 @@ public class ModuleRegistrationsServiceImpl extends ElearningBaseServiceImpl imp
 			for (DetailModuleRegistrations dtlModule : dtlModuleList) {
 				LearningMaterialsAndPermissions learningMaterial = new LearningMaterialsAndPermissions();
 				learningMaterial.setLearningMaterial(dtlModule);
-				Presences tutorPresent = presenceService
+				Presences tutorPresence = presenceService
 						.doesTutorPresent(learningMaterial.getLearningMaterial().getId());
-				Presences participantPresent = presenceService
-						.doesParticipantPresent(learningMaterial.getLearningMaterial().getId(), idUser);
-				ApprovementsRenewal participantApprovement = approvementRenewalService
+				ApprovementsRenewal participantPresence = approvementRenewalService
 						.checkParticipantPresence(learningMaterial.getLearningMaterial().getId(), idUser);
-				if (tutorPresent != null) {
+				if (tutorPresence != null) {
 					learningMaterial.setDoesTutorPresent(true);
 				} else {
 					learningMaterial.setDoesTutorPresent(false);
 				}
-				if (LocalDate.now().isEqual(dtlModule.getScheduleDate()) && LocalTime.now().isAfter(startTime)
-						&& LocalTime.now().isBefore(endTime)) {
+				if (participantPresence != null && participantPresence.getIdApprovement().getCode() == "ACC") {
+					learningMaterial.setIsParticipantAccepted(true);
+				} else {
+					learningMaterial.setIsParticipantAccepted(false);
+				}
+				if (LocalDate.now().isEqual(dtlModule.getScheduleDate()) && LocalTime.now().isBefore(startTime)) {
 					learningMaterial.setIsUserOnTime(true);
 				} else {
 					learningMaterial.setIsUserOnTime(false);
-				}
-				if (user.getIdRole().getCode().equals("PCP")) {
-					if (participantPresent != null) {
-						learningMaterial.setDoesParticipantPresent(true);
-					} else {
-						learningMaterial.setDoesParticipantPresent(false);
-					}
-					if (participantApprovement != null
-							&& participantApprovement.getIdApprovement().getCode().equals("ACC")) {
-						learningMaterial.setIsParticipantAccepted(true);
-					} else {
-						learningMaterial.setIsParticipantAccepted(false);
-					}
 				}
 				learningMaterials.add(learningMaterial);
 			}
@@ -122,6 +105,11 @@ public class ModuleRegistrationsServiceImpl extends ElearningBaseServiceImpl imp
 			listResult.add(result);
 		}
 		return listResult;
+	}
+	
+	@Override
+	public List<ModuleRegistrations> getModuleRegistrationsByIdDetailClass(String idDetailClass) throws Exception {
+		return moduleRegistrationDao.getIdModuleRegistrationByIdDetailClass(idDetailClass);
 	}
 
 	private void validateInsert(ModuleRegistrations moduleRegistration) throws Exception {
