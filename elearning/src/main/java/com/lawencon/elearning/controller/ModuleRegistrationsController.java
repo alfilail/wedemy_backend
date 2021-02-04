@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.elearning.helper.ModuleAndLearningMaterials;
@@ -36,11 +37,12 @@ public class ModuleRegistrationsController {
 		}
 	}
 
-	@GetMapping("module-and-materials/{id}")
-	public ResponseEntity<?> getModuleAndLearningMaterialsByIdDtlClass(@PathVariable("id") String id) {
+	@GetMapping("module-and-materials")
+	public ResponseEntity<?> getModuleAndLearningMaterialsByIdDtlClass(@RequestParam("idUser") String idUser,
+			@RequestParam("idDtlClass") String idDtlClass) {
 		try {
 			List<ModuleAndLearningMaterials> listResult = moduleRgsService
-					.getModuleAndLearningMaterialsByIdDtlClass(id);
+					.getModuleAndLearningMaterialsByIdDtlClass(idUser, idDtlClass);
 			return new ResponseEntity<>(listResult, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();

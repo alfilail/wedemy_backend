@@ -20,6 +20,8 @@ public interface PresencesDao {
 
 	Presences getPresenceByCode(String code) throws Exception;
 
+	Presences doesTutorPresent(String idDtlModuleRgs) throws Exception;
+
 	List<?> getPresenceReport(String idClass, LocalDate scheduleDateStart, LocalDate scheduleDateEnd) throws Exception;
 
 }

@@ -1,11 +1,14 @@
 package com.lawencon.elearning.dao;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.elearning.model.DetailForums;
-import com.lawencon.elearning.util.HibernateUtils;
+import com.lawencon.elearning.model.Profiles;
+import com.lawencon.elearning.model.Users;
 import com.lawencon.util.Callback;
 
 @Repository
@@ -44,10 +47,24 @@ public class DetailForumsDaoImpl extends ElearningBaseDaoImpl<DetailForums> impl
 
 	@Override
 	public List<DetailForums> getAllDetailForumsByIdForum(String idForum) throws Exception {
-		String sql = sqlBuilder(
-				"SELECT id, content_text, dtl_forum_datetime, id_user FROM t_r_dtl_forums WHERE id_forum =?1")
-						.toString();
+		List<DetailForums> listResult = new ArrayList<>();
+		String sql = sqlBuilder("SELECT df.id, df.created_at, df.content_text, p.fullname FROM t_r_dtl_forums df ",
+				"INNER JOIN t_m_users u ON df.id_user = u.id INNER JOIN t_m_profiles p ON u.id_profile = p.id ",
+				"WHERE df.id_forum =?1").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, idForum).getResultList();
-		return HibernateUtils.bMapperList(listObj, DetailForums.class, "id", "contentText");
+		listObj.forEach(val -> {
+			Object[] objArr = (Object[]) val;
+			DetailForums detailForum = new DetailForums();
+			detailForum.setId((String) objArr[0]);
+			detailForum.setCreatedAt(((Timestamp) objArr[1]).toLocalDateTime());
+			detailForum.setContentText((String) objArr[2]);
+			Profiles profile = new Profiles();
+			profile.setFullName((String) objArr[3]);
+			Users user = new Users();
+			user.setIdProfile(profile);
+			detailForum.setIdUser(user);
+			listResult.add(detailForum);
+		});
+		return listResult;
 	}
 }

@@ -60,6 +60,11 @@ public class PresencesServiceImpl extends ElearningBaseServiceImpl implements Pr
 		return presencesDao.getPresenceById(id);
 	}
 
+	@Override
+	public Presences doesTutorPresent(String idDtlModuleRgs) throws Exception {
+		return presencesDao.doesTutorPresent(idDtlModuleRgs);
+	}
+
 	private void insertApprovementRenewal(Presences presence) throws Exception {
 		Approvements approvements = approvementsService.getApprovementByCode("PND");
 		ApprovementsRenewal approvementsRenewal = new ApprovementsRenewal();

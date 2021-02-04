@@ -32,7 +32,7 @@ public class DetailModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<Detai
 				DetailModuleRegistrations.class).setParameter(1, orderNumber).getSingleResult();
 		return approvement;
 	}
-	
+
 	@Override
 	public void deleteDetailModuleRegistration(String id, String idUser) throws Exception {
 		updateNativeSQL("UPDATE t_r_detail_module_registrations SET is_active = FALSE", id, idUser);
@@ -55,7 +55,7 @@ public class DetailModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<Detai
 			learningMaterial.setId((String) objArr[0]);
 			learningMaterial.setCode((String) objArr[1]);
 			learningMaterial.setLearningMaterialName((String) objArr[2]);
-			learningMaterial.setDescription((String) objArr[3]);
+//			learningMaterial.setDescription((String) objArr[3]);
 			LearningMaterialTypes lmType = new LearningMaterialTypes();
 			lmType.setCode((String) objArr[4]);
 			learningMaterial.setIdLearningMaterialType(lmType);
@@ -67,11 +67,12 @@ public class DetailModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<Detai
 		});
 		return listResult;
 	}
-	
+
 	@Override
 	public DetailModuleRegistrations getDetailModuleRegistrationByIdLearningMaterial(String id) throws Exception {
-		List<DetailModuleRegistrations> detailModuleList = createQuery("FROM DetailModuleRegistrations WHERE idLearningMaterial = ?1",
-				DetailModuleRegistrations.class).setParameter(1, id).getResultList();
+		List<DetailModuleRegistrations> detailModuleList = createQuery(
+				"FROM DetailModuleRegistrations WHERE idLearningMaterial = ?1", DetailModuleRegistrations.class)
+						.setParameter(1, id).getResultList();
 		return detailModuleList.size() > 0 ? detailModuleList.get(0) : null;
 	}
 

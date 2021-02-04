@@ -1,6 +1,7 @@
 package com.lawencon.elearning.service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +12,13 @@ import org.springframework.stereotype.Service;
 
 import com.lawencon.elearning.dao.ModuleRegistrationsDao;
 import com.lawencon.elearning.helper.ClassesHelper;
+import com.lawencon.elearning.helper.LearningMaterialsAndPermissions;
 import com.lawencon.elearning.helper.ModuleAndLearningMaterials;
+import com.lawencon.elearning.model.ApprovementsRenewal;
+import com.lawencon.elearning.model.DetailModuleRegistrations;
 import com.lawencon.elearning.model.ModuleRegistrations;
 import com.lawencon.elearning.model.Modules;
+import com.lawencon.elearning.model.Presences;
 
 @Service
 public class ModuleRegistrationsServiceImpl extends ElearningBaseServiceImpl implements ModuleRegistrationsService {
@@ -29,6 +34,12 @@ public class ModuleRegistrationsServiceImpl extends ElearningBaseServiceImpl imp
 
 	@Autowired
 	private DetailClassesService detailClassService;
+
+	@Autowired
+	private ApprovementsRenewalService approvementRenewalService;
+
+	@Autowired
+	private PresencesService presenceService;
 
 	@Override
 	public void insertModuleRegistration(ClassesHelper clazzHelper) throws Exception {
@@ -55,15 +66,42 @@ public class ModuleRegistrationsServiceImpl extends ElearningBaseServiceImpl imp
 	}
 
 	@Override
-	public List<ModuleAndLearningMaterials> getModuleAndLearningMaterialsByIdDtlClass(String idDtlClass)
+	public List<ModuleAndLearningMaterials> getModuleAndLearningMaterialsByIdDtlClass(String idUser, String idDtlClass)
 			throws Exception {
 		List<ModuleAndLearningMaterials> listResult = new ArrayList<>();
 		List<ModuleRegistrations> moduleRgsList = moduleRegistrationDao.getByIdDtlClass(idDtlClass);
 		for (ModuleRegistrations moduleRgs : moduleRgsList) {
+			LocalTime startTime = moduleRgs.getIdDetailClass().getStartTime();
 			ModuleAndLearningMaterials result = new ModuleAndLearningMaterials();
+			List<LearningMaterialsAndPermissions> learningMaterials = new ArrayList<>();
+			List<DetailModuleRegistrations> dtlModuleList = dtlModuleRgsService
+					.getDetailModuleRegistrationsByIdModuleRgs(moduleRgs.getId());
+			for (DetailModuleRegistrations dtlModule : dtlModuleList) {
+				LearningMaterialsAndPermissions learningMaterial = new LearningMaterialsAndPermissions();
+				learningMaterial.setLearningMaterial(dtlModule);
+				Presences tutorPresence = presenceService
+						.doesTutorPresent(learningMaterial.getLearningMaterial().getId());
+				ApprovementsRenewal participantPresence = approvementRenewalService
+						.checkParticipantPresence(learningMaterial.getLearningMaterial().getId(), idUser);
+				if (tutorPresence != null) {
+					learningMaterial.setDoesTutorPresent(true);
+				} else {
+					learningMaterial.setDoesTutorPresent(false);
+				}
+				if (participantPresence != null && participantPresence.getIdApprovement().getCode() == "ACC") {
+					learningMaterial.setIsParticipantAccepted(true);
+				} else {
+					learningMaterial.setIsParticipantAccepted(false);
+				}
+				if (LocalDate.now().isEqual(dtlModule.getScheduleDate()) && LocalTime.now().isBefore(startTime)) {
+					learningMaterial.setIsUserOnTime(true);
+				} else {
+					learningMaterial.setIsUserOnTime(false);
+				}
+				learningMaterials.add(learningMaterial);
+			}
 			result.setModule(moduleRgs);
-			result.setLearningMaterials(
-					dtlModuleRgsService.getDetailModuleRegistrationsByIdModuleRgs(moduleRgs.getId()));
+			result.setLearningMaterials(learningMaterials);
 			listResult.add(result);
 		}
 		return listResult;

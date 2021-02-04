@@ -66,13 +66,13 @@ public class ModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<ModuleRegis
 			clazz.setClassName((String) objArr[0]);
 			clazz.setCode((String) objArr[1]);
 			clazz.setDescription((String) objArr[2]);
-			Files thumbnailImg = new Files();
-			thumbnailImg.setFile((byte[]) objArr[3]);
+//			Files thumbnailImg = new Files();
+//			thumbnailImg.setFile((byte[]) objArr[3]);
 			Profiles profile = new Profiles();
 			profile.setFullName((String) objArr[4]);
 			Users tutor = new Users();
 			tutor.setIdProfile(profile);
-			clazz.setIdFile(thumbnailImg);
+//			clazz.setIdFile(thumbnailImg);
 			clazz.setIdTutor(tutor);
 			DetailClasses detailClass = new DetailClasses();
 			detailClass.setCode((String) objArr[5]);

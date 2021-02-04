@@ -12,5 +12,5 @@ public interface ApprovementsRenewalDao {
 
 	ApprovementsRenewal getApprovementsRenewalById(String id) throws Exception;
 	
-	ApprovementsRenewal checkUsersPresence(String idDtlModuleRgs, String idUser) throws Exception;
+	ApprovementsRenewal checkParticipantPresence(String idDtlModuleRgs, String idUser) throws Exception;
 }

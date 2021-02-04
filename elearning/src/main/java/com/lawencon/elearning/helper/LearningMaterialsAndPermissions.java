@@ -13,7 +13,7 @@ public class LearningMaterialsAndPermissions {
 	
 	DetailModuleRegistrations learningMaterial;
 	private Boolean doesTutorPresent;
-	private Boolean isMissed;
-	private Boolean isRejected;
+	private Boolean isUserOnTime;
+	private Boolean isParticipantAccepted;
 	
 }

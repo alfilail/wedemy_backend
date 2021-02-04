@@ -2,7 +2,6 @@ package com.lawencon.elearning.helper;
 
 import java.util.List;
 
-import com.lawencon.elearning.model.DetailModuleRegistrations;
 import com.lawencon.elearning.model.ModuleRegistrations;
 
 import lombok.Data;
@@ -15,6 +14,6 @@ import lombok.Data;
 public class ModuleAndLearningMaterials {
 
 	private ModuleRegistrations module;
-	private List<DetailModuleRegistrations> learningMaterials;
-	
+	private List<LearningMaterialsAndPermissions> learningMaterials;
+
 }

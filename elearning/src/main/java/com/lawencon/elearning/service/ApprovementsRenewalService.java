@@ -10,7 +10,7 @@ public interface ApprovementsRenewalService {
 	List<ApprovementsRenewal> getAllApprovementsRenewal() throws Exception;
 
 	ApprovementsRenewal getApprovementsRenewalById(String id) throws Exception;
-	
-	ApprovementsRenewal checkUsersPresence(String idDtlModuleRgs, String idUser) throws Exception;
-	
+
+	ApprovementsRenewal checkParticipantPresence(String idDtlModuleRgs, String idUser) throws Exception;
+
 }
