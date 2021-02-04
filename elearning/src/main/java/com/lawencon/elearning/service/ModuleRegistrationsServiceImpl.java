@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import com.lawencon.elearning.dao.ModuleRegistrationsDao;
 import com.lawencon.elearning.helper.ClassesHelper;
 import com.lawencon.elearning.helper.ModuleAndLearningMaterials;
-import com.lawencon.elearning.model.DetailClasses;
 import com.lawencon.elearning.model.ModuleRegistrations;
 import com.lawencon.elearning.model.Modules;
 

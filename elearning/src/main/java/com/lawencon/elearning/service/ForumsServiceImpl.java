@@ -6,12 +6,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lawencon.elearning.dao.DetailForumsDao;
 import com.lawencon.elearning.dao.ForumsDao;
 import com.lawencon.elearning.helper.ForumAndDetailForums;
 import com.lawencon.elearning.model.DetailForums;
@@ -24,7 +22,7 @@ public class ForumsServiceImpl extends ElearningBaseServiceImpl implements Forum
 	private ForumsDao forumsDao;
 
 	@Autowired
-	private DetailForumsDao dtlForumsDao;
+	private DetailForumsService detailForumService;
 
 	@Override
 	public void insertForum(Forums forum) throws Exception {
@@ -39,13 +37,21 @@ public class ForumsServiceImpl extends ElearningBaseServiceImpl implements Forum
 	}
 
 	@Override
-	public void deleteForumById(String id, String idUser) throws Exception {
+	public void deleteForumByIdDetailModuleRegistration(String idDetailModuleRegistration, String idUser) throws Exception {
 		begin();
-		if (validateDelete(id) == true) {
-			forumsDao.softDeleteForumById(id, idUser);
-		} else {
-			forumsDao.deleteForumById(id);
+		List<Forums> forumList = forumsDao.getForumByIdDetailModuleRegistration(idDetailModuleRegistration);
+		for(Forums forum : forumList) {
+			forumsDao.softDeleteForumById(forum.getId(), idUser);
+			List<DetailForums> detailForumList = detailForumService.getAllDetailForumsByIdForum(forum.getId());
+			for(DetailForums detailForum : detailForumList) {
+				detailForumService.deleteDetailForumById(detailForum.getId());
+			}
 		}
+//		if (validateDelete(forum.getId()) == true) {
+//			forumsDao.softDeleteForumById(forum.getId(), idUser);
+//		} else {
+//			forumsDao.deleteForumById(forum.getId());
+//		}
 		commit();
 	}
 
@@ -64,7 +70,7 @@ public class ForumsServiceImpl extends ElearningBaseServiceImpl implements Forum
 		List<ForumAndDetailForums> listResult = new ArrayList<>();
 		List<Forums> forums = forumsDao.getForumByIdDetailModuleRegistration(id);
 		for (Forums forum : forums) {
-			List<DetailForums> detailForums = dtlForumsDao.getAllDetailForumsByIdForum(forum.getId());
+			List<DetailForums> detailForums = detailForumService.getAllDetailForumsByIdForum(forum.getId());
 			ForumAndDetailForums result = new ForumAndDetailForums();
 			result.setForum(forum);
 			result.setDetailForums(detailForums);
@@ -93,12 +99,12 @@ public class ForumsServiceImpl extends ElearningBaseServiceImpl implements Forum
 		return trxNumber;
 	}
 
-	private boolean validateDelete(String id) throws Exception {
-		List<?> listObj = forumsDao.validateDeleteForum(id);
-		listObj.forEach(System.out::println);
-		List<?> list = listObj.stream().filter(val -> val != null).collect(Collectors.toList());
-		System.out.println(list.size());
-		return list.size() > 0 ? true : false;
-	}
+//	private boolean validateDelete(String id) throws Exception {
+//		List<?> listObj = forumsDao.validateDeleteForum(id);
+//		listObj.forEach(System.out::println);
+//		List<?> list = listObj.stream().filter(val -> val != null).collect(Collectors.toList());
+//		System.out.println(list.size());
+//		return list.size() > 0 ? true : false;
+//	}
 
 }

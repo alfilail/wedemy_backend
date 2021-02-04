@@ -3,7 +3,6 @@ package com.lawencon.elearning.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.elearning.dao.EvaluationsDao;
@@ -23,9 +22,6 @@ import com.lawencon.elearning.util.MailUtil;
 
 @Service
 public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements EvaluationsService {
-
-	@Autowired
-	JavaMailSender javaMailSender;
 
 	@Autowired
 	private EvaluationsDao evaluationsDao;

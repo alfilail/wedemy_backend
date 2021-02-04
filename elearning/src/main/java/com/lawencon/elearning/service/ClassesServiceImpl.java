@@ -36,37 +36,25 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 	public void insertClass(ClassesHelper helper, MultipartFile file) throws Exception {
 		try {
 			begin();
-			if (null != helper.getClazz().getCode()) {
+			if(helper.getClazz() != null) {
 				Classes clazz = helper.getClazz();
-				if (null != helper.getClazz().getIdTutor()) {
-					Users tutor = usersService.getUserByIdNumber(clazz.getIdTutor().getIdProfile().getIdNumber());
-					if (null != tutor) {
-						clazz.setIdTutor(tutor);
-						Files thumbnailImg = new Files();
-						thumbnailImg.setCreatedBy(helper.getClazz().getCreatedBy());
-						thumbnailImg.setFile(file.getBytes());
-						thumbnailImg.setType(file.getContentType());
-						filesService.insertFile(thumbnailImg);
-						clazz.setIdFile(thumbnailImg);
-						classesDao.insertClass(clazz, () -> validateInsert(clazz));
-						if (helper.getDetailClass() != null) {
-							DetailClasses detailClass = helper.getDetailClass();
-							detailClass.setIdClass(clazz);
-							detailClass.setViews(0);
-							helper.setDetailClass(detailClass);
-							detailClassesService.insertDetailClass(helper.getDetailClass());
-							if (helper.getModule() != null) {
-								moduleRegistrationsService.insertModuleRegistration(helper);
-							}
-						}
-					} else {
-						validateInsert(helper.getClazz());
+				Files thumbnailImg = new Files();
+				thumbnailImg.setCreatedBy(helper.getClazz().getCreatedBy());
+				thumbnailImg.setFile(file.getBytes());
+				thumbnailImg.setType(file.getContentType());
+				filesService.insertFile(thumbnailImg);
+				clazz.setIdFile(thumbnailImg);
+				classesDao.insertClass(clazz, () -> validateInsert(clazz));
+				if (helper.getDetailClass() != null) {
+					DetailClasses detailClass = helper.getDetailClass();
+					detailClass.setIdClass(clazz);
+					detailClass.setViews(0);
+					helper.setDetailClass(detailClass);
+					detailClassesService.insertDetailClass(helper.getDetailClass());
+					if (helper.getModule() != null) {
+						moduleRegistrationsService.insertModuleRegistration(helper);
 					}
-				} else {
-					validateInsert(helper.getClazz());
 				}
-			} else {
-				validateInsert(helper.getClazz());
 			}
 			commit();
 		} catch (Exception e) {
@@ -191,16 +179,16 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 			begin();
 			classesDao.softDeleteClassById(id, idUser);
 			List<DetailClasses> dtlClass = detailClassesService.getAllDetailClassByIdClass(id);
-			for(DetailClasses dtl : dtlClass) {
+			for (DetailClasses dtl : dtlClass) {
 				detailClassesService.deleteDetailClassById(dtl.getId(), idUser);
 			}
 			commit();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.getMessage();
 			rollback();
 		}
 	}
-	
+
 //	private boolean validateDelete(String id) throws Exception {
 //		List<?> listObj = classesDao.validateDeleteClass(id);
 //		listObj.forEach(System.out::println);

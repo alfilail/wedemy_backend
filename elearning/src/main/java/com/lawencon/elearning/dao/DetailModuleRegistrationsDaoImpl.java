@@ -32,6 +32,11 @@ public class DetailModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<Detai
 				DetailModuleRegistrations.class).setParameter(1, orderNumber).getSingleResult();
 		return approvement;
 	}
+	
+	@Override
+	public void deleteDetailModuleRegistration(String id, String idUser) throws Exception {
+		updateNativeSQL("UPDATE t_r_detail_module_registrations SET is_active = FALSE", id, idUser);
+	}
 
 	@Override
 	public List<DetailModuleRegistrations> getDetailModuleRegistrationsByIdModuleRgs(String idModuleRgs)
@@ -61,6 +66,13 @@ public class DetailModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<Detai
 			listResult.add(dtlModuleRgs);
 		});
 		return listResult;
+	}
+	
+	@Override
+	public DetailModuleRegistrations getDetailModuleRegistrationByIdLearningMaterial(String id) throws Exception {
+		List<DetailModuleRegistrations> detailModuleList = createQuery("FROM DetailModuleRegistrations WHERE idLearningMaterial = ?1",
+				DetailModuleRegistrations.class).setParameter(1, id).getResultList();
+		return detailModuleList.size() > 0 ? detailModuleList.get(0) : null;
 	}
 
 }

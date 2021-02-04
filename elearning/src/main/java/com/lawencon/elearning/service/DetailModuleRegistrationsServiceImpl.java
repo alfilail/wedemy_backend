@@ -34,6 +34,16 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 	public DetailModuleRegistrations getDetailModuleRegistrationsById(String id) throws Exception {
 		return dtlModRegistDao.getDetailModuleRegistrationsById(id);
 	}
+	
+	@Override
+	public void deleteDetailModuleRegistration(String id, String idUser) throws Exception {
+		dtlModRegistDao.deleteDetailModuleRegistration(id, idUser);
+	}
+	
+	@Override
+	public DetailModuleRegistrations getDetailModuleRegistrationByIdLearningMaterial(String id) throws Exception {
+		return dtlModRegistDao.getDetailModuleRegistrationByIdLearningMaterial(id);
+	}
 
 	private void validateInsert(DetailModuleRegistrations dtlModRegist) throws Exception {
 //		if (dtlModRegist.getScheduleDate() != null) {

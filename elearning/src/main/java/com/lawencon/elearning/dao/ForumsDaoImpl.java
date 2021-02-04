@@ -52,7 +52,7 @@ public class ForumsDaoImpl extends ElearningBaseDaoImpl<Forums> implements Forum
 			Object[] objArr = (Object[]) val;
 			Forums forum = new Forums();
 			forum.setId((String) objArr[0]);
-			forum.setCreatedAt(((Timestamp) objArr[1]).toLocalDateTime());;
+			forum.setCreatedAt(((Timestamp) objArr[1]).toLocalDateTime());
 			forum.setContentText((String) objArr[2]);
 			Profiles profile = new Profiles();
 			profile.setFullName((String) objArr[3]);

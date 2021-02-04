@@ -1,7 +1,6 @@
 package com.lawencon.elearning.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +31,8 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 
 	@Autowired
 	private FilesService filesService;
+	
+	@Autowired ForumsService forumsService;
 
 	@Override
 	public void insertLearningMaterial(DetailModuleRegistrations dtlModuleRgs, MultipartFile fileInput)
@@ -78,11 +79,11 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 	public void deleteLearningMaterialById(String id, String idUser) throws Exception {
 		try {
 			begin();
-			if(validateDelete(id)) {
-				learningMaterialsDao.softDeleteLearningMaterialById(id, idUser);
-			} else {
-				learningMaterialsDao.deleteLearningMaterialById(id);				
-			}
+			learningMaterialsDao.softDeleteLearningMaterialById(id, idUser);
+			DetailModuleRegistrations detailModule = 
+					dtlModRegistService.getDetailModuleRegistrationByIdLearningMaterial(id);
+			dtlModRegistService.deleteDetailModuleRegistration(detailModule.getId(), idUser);
+			forumsService.deleteForumByIdDetailModuleRegistration(detailModule.getId(), idUser);
 			commit();
 		} catch(Exception e) {
 			e.getMessage();
@@ -185,12 +186,12 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 		}
 	}
 	
-	private boolean validateDelete(String id) throws Exception {
-		List<?> listObj = learningMaterialsDao.validateDeleteLearningMaterial(id);
-		listObj.forEach(System.out::println);
-		List<?> list =  listObj.stream().filter(val -> val != null)
-				.collect(Collectors.toList());
-		System.out.println(list.size());
-		return list.size() > 0 ? true : false;
-	}
+//	private boolean validateDelete(String id) throws Exception {
+//		List<?> listObj = learningMaterialsDao.validateDeleteLearningMaterial(id);
+//		listObj.forEach(System.out::println);
+//		List<?> list =  listObj.stream().filter(val -> val != null)
+//				.collect(Collectors.toList());
+//		System.out.println(list.size());
+//		return list.size() > 0 ? true : false;
+//	}
 }

@@ -11,5 +11,9 @@ public interface DetailModuleRegistrationsService {
 	List<DetailModuleRegistrations> getDetailModuleRegistrationsByIdModuleRgs(String idModuleRgs) throws Exception;
 
 	DetailModuleRegistrations getDetailModuleRegistrationsById(String id) throws Exception;
+	
+	void deleteDetailModuleRegistration(String id, String idUser) throws Exception;
+	
+	DetailModuleRegistrations getDetailModuleRegistrationByIdLearningMaterial(String id) throws Exception;
 
 }
