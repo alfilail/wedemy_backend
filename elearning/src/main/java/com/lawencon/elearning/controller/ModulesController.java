@@ -16,12 +16,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lawencon.elearning.helper.Response;
 import com.lawencon.elearning.model.Modules;
 import com.lawencon.elearning.service.ModulesService;
+import com.lawencon.elearning.util.MessageStat;
 
 @RestController
 @RequestMapping("module")
-public class ModulesController {
+public class ModulesController extends ElearningBaseController {
 	
 	@Autowired
 	private ModulesService moduleService;
@@ -29,11 +31,13 @@ public class ModulesController {
 	@GetMapping("all")
 	public ResponseEntity<?> getAllModules() {
 		try {
-			List<Modules> module = moduleService.getAllModules();
-			return new ResponseEntity<>(module, HttpStatus.OK);
+			List<Modules> listModules = moduleService.getAllModules();
+			Response<List<Modules>> response = new Response<List<Modules>>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, listModules);
+			return new ResponseEntity<>(response, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			Response<List<Modules>> response = new Response<List<Modules>>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
@@ -41,10 +45,12 @@ public class ModulesController {
 	public ResponseEntity<?> getModuleById(@PathVariable("id") String id) {
 		try {
 			Modules module = moduleService.getModuleById(id);
-			return new ResponseEntity<>(module, HttpStatus.OK);
+			Response<Modules> response = new Response<Modules>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, module);
+			return new ResponseEntity<>(response, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			Response<Modules> response = new Response<Modules>(true, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
@@ -53,10 +59,12 @@ public class ModulesController {
 		try {
 			Modules module = new ObjectMapper().readValue(body, Modules.class);
 			moduleService.insertModule(module);
-			return new ResponseEntity<>(module, HttpStatus.CREATED);
+			Response<Modules> response = new Response<Modules>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_CREATED.msg, module);
+			return new ResponseEntity<>(response, HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			Response<Modules> response = new Response<Modules>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
@@ -65,10 +73,12 @@ public class ModulesController {
 		try {
 			Modules module = new ObjectMapper().readValue(body, Modules.class);
 			moduleService.updateModule(module);
-			return new ResponseEntity<>(module, HttpStatus.CREATED);
+			Response<Modules> response = new Response<Modules>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_UPDATE.msg, module);
+			return new ResponseEntity<>(response, HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			Response<Modules> response = new Response<Modules>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -77,10 +87,12 @@ public class ModulesController {
 			@RequestParam("idUser") String idUser) {
 		try {
 			moduleService.deleteModuleById(id, idUser);
-			return new ResponseEntity<>("Modul berhasil dihapus", HttpStatus.OK);
+			Response<Modules> response = new Response<Modules>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_DELETE.msg, null);
+			return new ResponseEntity<>(response, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			Response<Modules> response = new Response<Modules>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 }

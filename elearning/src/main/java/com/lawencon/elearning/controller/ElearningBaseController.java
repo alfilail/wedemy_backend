@@ -1,12 +1,5 @@
 package com.lawencon.elearning.controller;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import com.lawencon.elearning.helper.Response;
-import com.lawencon.elearning.model.Approvements;
-import com.lawencon.model.BaseEntity;
-
 public class ElearningBaseController {
 	
 	protected String getMessage(Exception e) {

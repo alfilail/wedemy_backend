@@ -42,11 +42,13 @@ public class ApprovementsServiceImpl extends ElearningBaseServiceImpl implements
 	@Override
 	public void deleteApprovementById(String id, String idUser) throws Exception {
 		try {
+			begin();
 			if(validateDelete(id)) {
 				approvementsDao.softDeleteApprovementById(id, idUser);
 			} else {
 				approvementsDao.deleteApprovementById(id);				
 			}
+			commit();
 		} catch(Exception e) {
 			e.getMessage();
 			rollback();

@@ -17,13 +17,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.lawencon.elearning.helper.Response;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.Users;
 import com.lawencon.elearning.service.UsersService;
+import com.lawencon.elearning.util.MessageStat;
 
 @RestController
 @RequestMapping("user")
-public class UsersController {
+public class UsersController extends ElearningBaseController {
 
 	@Autowired
 	private UsersService usersService;
@@ -31,11 +33,13 @@ public class UsersController {
 	@GetMapping("all")
 	public ResponseEntity<?> getAllUsers() {
 		try {
-			List<Users> user = usersService.getAllUsers();
-			return new ResponseEntity<>(user, HttpStatus.OK);
+			List<Users> listUsers = usersService.getAllUsers();
+			Response<List<Users>> response = new Response<List<Users>>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, listUsers);
+			return new ResponseEntity<>(response, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			Response<List<Users>> response = new Response<List<Users>>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -43,10 +47,12 @@ public class UsersController {
 	public ResponseEntity<?> getUserById(@PathVariable("id") String id) {
 		try {
 			Users user = usersService.getUserById(id);
-			return new ResponseEntity<>(user, HttpStatus.OK);
+			Response<Users> response = new Response<Users>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, user);
+			return new ResponseEntity<>(response, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			Response<Users> response = new Response<Users>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
@@ -54,10 +60,12 @@ public class UsersController {
 	public ResponseEntity<?> getUsersByRoleCode(@PathVariable("roleCode") String roleCode) {
 		try {
 			List<Users> user = usersService.getUsersByRoleCode(roleCode);
-			return new ResponseEntity<>(user, HttpStatus.OK);
+			Response<List<Users>> response = new Response<List<Users>>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, user);
+			return new ResponseEntity<>(response, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			Response<List<Users>> response = new Response<List<Users>>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -68,10 +76,12 @@ public class UsersController {
 			obj.registerModule(new JavaTimeModule());
 			Users user = obj.readValue(body, Users.class);
 			usersService.insertUser(user);
-			return new ResponseEntity<>(user, HttpStatus.CREATED);
+			Response<Users> response = new Response<Users>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_CREATED.msg, user);
+			return new ResponseEntity<>(response, HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			Response<Users> response = new Response<Users>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -80,10 +90,12 @@ public class UsersController {
 		try {
 			Profiles profile = new ObjectMapper().readValue(body, Profiles.class);
 			Users user = usersService.updateUserPassword(profile);
-			return new ResponseEntity<>(user, HttpStatus.OK);
+			Response<Users> response = new Response<Users>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_UPDATE.msg, user);
+			return new ResponseEntity<>(response, HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			Response<Users> response = new Response<Users>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -92,10 +104,12 @@ public class UsersController {
 		try {
 			Users user = new ObjectMapper().readValue(body, Users.class);
 			usersService.updateUser(user);
-			return new ResponseEntity<>(user, HttpStatus.CREATED);
+			Response<Users> response = new Response<Users>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_UPDATE.msg, user);
+			return new ResponseEntity<>(response, HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			Response<Users> response = new Response<Users>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -104,10 +118,12 @@ public class UsersController {
 			@RequestParam("idUser") String idUser) {
 		try {
 			usersService.deleteUserById(id, idUser);
-			return new ResponseEntity<>("User Successfully Deleted!", HttpStatus.OK);
+			Response<Users> response = new Response<Users>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_DELETE.msg, null);
+			return new ResponseEntity<>(response, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			Response<Users> response = new Response<Users>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 

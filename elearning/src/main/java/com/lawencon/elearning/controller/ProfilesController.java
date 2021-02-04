@@ -16,12 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.lawencon.elearning.helper.Response;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.service.ProfilesService;
+import com.lawencon.elearning.util.MessageStat;
 
 @RestController
 @RequestMapping("profile")
-public class ProfilesController {
+public class ProfilesController extends ElearningBaseController {
 	
 	@Autowired
 	private ProfilesService profilesService;
@@ -29,11 +31,13 @@ public class ProfilesController {
 	@GetMapping("all")
 	public ResponseEntity<?> getAllProfiles() {
 		try {
-			List<Profiles> profile = profilesService.getAllProfiles();
-			return new ResponseEntity<>(profile, HttpStatus.OK);
+			List<Profiles> listProfiles = profilesService.getAllProfiles();
+			Response<List<Profiles>> response = new Response<List<Profiles>>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_CREATED.msg, listProfiles);
+			return new ResponseEntity<>(response, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			Response<List<Profiles>> response = new Response<List<Profiles>>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
@@ -41,10 +45,12 @@ public class ProfilesController {
 	public ResponseEntity<?> getProfileById(@PathVariable("id") String id) {
 		try {
 			Profiles profile = profilesService.getProfileById(id);
-			return new ResponseEntity<>(profile, HttpStatus.OK);
+			Response<Profiles> response = new Response<Profiles>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, profile);
+			return new ResponseEntity<>(response, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			Response<Profiles> response = new Response<Profiles>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
@@ -55,10 +61,12 @@ public class ProfilesController {
 			obj.registerModule(new JavaTimeModule());
 			Profiles profile = obj.readValue(body, Profiles.class);
 			profilesService.insertProfile(profile);
-			return new ResponseEntity<>(profile, HttpStatus.CREATED);
+			Response<Profiles> response = new Response<Profiles>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_CREATED.msg, profile);
+			return new ResponseEntity<>(response, HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			Response<Profiles> response = new Response<Profiles>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
@@ -69,10 +77,12 @@ public class ProfilesController {
 			obj.registerModule(new JavaTimeModule());
 			Profiles profile = obj.readValue(body, Profiles.class);
 			profilesService.updateProfile(profile);
-			return new ResponseEntity<>(profile, HttpStatus.CREATED);
+			Response<Profiles> response = new Response<Profiles>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_UPDATE.msg, profile);
+			return new ResponseEntity<>(response, HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			Response<Profiles> response = new Response<Profiles>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -80,10 +90,12 @@ public class ProfilesController {
 	public ResponseEntity<?> deleteProfileById(@PathVariable("id") String id) {
 		try {
 			profilesService.deleteProfileById(id);
-			return new ResponseEntity<>("Profile Successfully Deleted!", HttpStatus.OK);
+			Response<Profiles> response = new Response<Profiles>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_DELETE.msg, null);
+			return new ResponseEntity<>(response, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			Response<Profiles> response = new Response<Profiles>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 

@@ -3,8 +3,6 @@ package com.lawencon.elearning.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.PersistenceException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,12 +17,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lawencon.elearning.helper.Response;
 import com.lawencon.elearning.model.SubmissionStatus;
 import com.lawencon.elearning.service.SubmissionStatusService;
+import com.lawencon.elearning.util.MessageStat;
 
 @RestController
 @RequestMapping("submission-status")
-public class SubmissionStatusController {
+public class SubmissionStatusController extends ElearningBaseController {
 	@Autowired
 	private SubmissionStatusService submissionStatusService;
 
@@ -33,10 +33,12 @@ public class SubmissionStatusController {
 		try {
 			SubmissionStatus submissionStatus= new ObjectMapper().readValue(body, SubmissionStatus.class);
 			submissionStatusService.insertSubmissionStatus(submissionStatus);
-			return new ResponseEntity<>(submissionStatus, HttpStatus.CREATED);
+			Response<SubmissionStatus> response = new Response<SubmissionStatus>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_CREATED.msg, submissionStatus);
+			return new ResponseEntity<>(response, HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			Response<SubmissionStatus> response = new Response<SubmissionStatus>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -45,10 +47,12 @@ public class SubmissionStatusController {
 		SubmissionStatus submissionStatus = new SubmissionStatus();
 		try {
 			submissionStatus = submissionStatusService.getSubmissionStatusById(id);
-			return new ResponseEntity<>(submissionStatus, HttpStatus.OK);
+			Response<SubmissionStatus> response = new Response<SubmissionStatus>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, submissionStatus);
+			return new ResponseEntity<>(response, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			Response<SubmissionStatus> response = new Response<SubmissionStatus>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -57,10 +61,12 @@ public class SubmissionStatusController {
 		List<SubmissionStatus> submissionStatusList = new ArrayList<SubmissionStatus>();
 		try {
 			submissionStatusList = submissionStatusService.getAllSubmissionStatus();
-			return new ResponseEntity<>(submissionStatusList, HttpStatus.OK);
+			Response<List<SubmissionStatus>> response = new Response<List<SubmissionStatus>>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, submissionStatusList);
+			return new ResponseEntity<>(response, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			Response<List<SubmissionStatus>> response = new Response<List<SubmissionStatus>>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), submissionStatusList);
+			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -69,13 +75,12 @@ public class SubmissionStatusController {
 			@RequestParam("idUser") String idUser) {
 		try {
 			submissionStatusService.deleteSubmissionStatusById(id, idUser);
-			return new ResponseEntity<>("Status Submission berhasil dihapus" ,HttpStatus.OK);
-		} catch (PersistenceException pe) {
-			pe.printStackTrace();
-			return new ResponseEntity<>("Data used in another table", HttpStatus.BAD_REQUEST);
+			Response<SubmissionStatus> response = new Response<SubmissionStatus>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_DELETE.msg, null);
+			return new ResponseEntity<>(response, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			Response<SubmissionStatus> response = new Response<SubmissionStatus>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -84,10 +89,12 @@ public class SubmissionStatusController {
 		try {
 			SubmissionStatus submissionStatus = new ObjectMapper().readValue(body, SubmissionStatus.class);
 			submissionStatusService.updateSubmissionStatus(submissionStatus);
-			return new ResponseEntity<>(submissionStatus, HttpStatus.OK);
+			Response<SubmissionStatus> response = new Response<SubmissionStatus>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_UPDATE.msg, submissionStatus);
+			return new ResponseEntity<>(response, HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			Response<SubmissionStatus> response = new Response<SubmissionStatus>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 }
