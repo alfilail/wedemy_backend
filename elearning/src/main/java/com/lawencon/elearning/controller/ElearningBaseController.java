@@ -23,7 +23,7 @@ public class ElearningBaseController {
 		return new ResponseEntity<>(res, httpStat);
 	}
 	
-	protected <T> ResponseEntity<?> responseError(T model, Exception e) {
+	protected <T> ResponseEntity<?> responseError(Exception e) {
 		Response<T> res = new Response<T>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
 		return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 	}

@@ -25,5 +25,7 @@ public interface PresencesService {
 	
 	Presences doesTutorPresent(String idDtlModuleRgs) throws Exception;
 	
+	Presences doesParticipantPresent(String idDtlModuleRgs, String idParticipant) throws Exception;
+	
 	List<?> getPresenceReport(String idClass, LocalDate scheduleDateStart, LocalDate scheduleDateEnd) throws Exception;
 }

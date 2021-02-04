@@ -17,10 +17,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.lawencon.elearning.model.DetailForums;
 import com.lawencon.elearning.service.DetailForumsService;
+import com.lawencon.elearning.util.MessageStat;
 
 @RestController
 @RequestMapping("detail-forum")
-public class DetailForumsController {
+public class DetailForumsController extends ElearningBaseController {
 	@Autowired
 	private DetailForumsService detailForumService;
 	
@@ -28,10 +29,10 @@ public class DetailForumsController {
 	public ResponseEntity<?> getAllDetailForum() {
 		try {
 			List<DetailForums> detailForums = detailForumService.getAllDetailForums();
-			return new ResponseEntity<>(detailForums, HttpStatus.OK);
+			return responseSuccess(detailForums, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 	
@@ -39,10 +40,10 @@ public class DetailForumsController {
 	public ResponseEntity<?> getDetailForumById(@PathVariable("id") String id) {
 		try {
 			DetailForums detailForum = detailForumService.getDetailForumById(id);
-			return new ResponseEntity<>(detailForum, HttpStatus.OK);
+			return responseSuccess(detailForum, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 	

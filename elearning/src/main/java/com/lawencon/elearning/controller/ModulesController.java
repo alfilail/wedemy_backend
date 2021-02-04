@@ -37,7 +37,7 @@ public class ModulesController extends ElearningBaseController {
 			return responseSuccess(listModules, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return responseError(listModules, e);
+			return responseError(e);
 		}
 	}
 	
@@ -49,7 +49,7 @@ public class ModulesController extends ElearningBaseController {
 			return responseSuccess(module, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return responseError(module, e);
+			return responseError(e);
 		}
 	}
 	

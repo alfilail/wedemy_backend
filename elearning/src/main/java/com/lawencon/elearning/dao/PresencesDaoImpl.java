@@ -65,6 +65,23 @@ public class PresencesDaoImpl extends ElearningBaseDaoImpl<Presences> implements
 	}
 
 	@Override
+	public Presences doesParticipantPresent(String idDtlModuleRgs, String idParticipant) throws Exception {
+		List<Presences> listResult = new ArrayList<>();
+		String sql = sqlBuilder("SELECT pr.id_user FROM t_r_presences pr INNER JOIN t_m_users u ON pr.id_user = u.id ",
+				"INNER JOIN t_m_profiles p ON u.id_profile = p.id INNER JOIN t_m_roles r ON u.id_role = r.id ",
+				"WHERE pr.id_detail_module_rgs = ?1 AND pr.id_user = ?2").toString();
+		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlModuleRgs).setParameter(2, idParticipant)
+				.getResultList();
+		listObj.forEach(val -> {
+			Object[] objArr = (Object[]) val;
+			Presences presence = new Presences();
+			presence.setId((String) objArr[0]);
+			listResult.add(presence);
+		});
+		return listResult.size() > 0 ? listResult.get(0) : null;
+	}
+
+	@Override
 	public List<?> getPresenceReport(String idClass, LocalDate scheduleDateStart, LocalDate scheduleDateEnd)
 			throws Exception {
 		String query = sqlBuilder(" select tmp.fullname, tmm.module_name , tmc.class_name, ",

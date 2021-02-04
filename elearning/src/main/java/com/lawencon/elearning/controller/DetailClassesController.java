@@ -89,7 +89,7 @@ public class DetailClassesController extends ElearningBaseController {
 			return responseSuccess(dtlClass, HttpStatus.CREATED, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return responseError(dtlClass, e);
+			return responseError(e);
 		}
 	}
 

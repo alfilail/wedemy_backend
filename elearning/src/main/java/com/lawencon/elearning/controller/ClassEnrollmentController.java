@@ -25,11 +25,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lawencon.elearning.model.ClassEnrollments;
 import com.lawencon.elearning.model.DetailClasses;
 import com.lawencon.elearning.service.ClassEnrollmentService;
+import com.lawencon.elearning.util.MessageStat;
 import com.lawencon.util.JasperUtil;
 
 @RestController
 @RequestMapping("class-enrollment")
-public class ClassEnrollmentController {
+public class ClassEnrollmentController extends ElearningBaseController{
 	@Autowired
 	private ClassEnrollmentService classEnrollmentService;
 
@@ -41,7 +42,7 @@ public class ClassEnrollmentController {
 			return new ResponseEntity<>(classEnrollment, HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -50,10 +51,10 @@ public class ClassEnrollmentController {
 		ClassEnrollments classEnrollment = new ClassEnrollments();
 		try {
 			classEnrollment = classEnrollmentService.getClassEnrollmentsById(id);
-			return new ResponseEntity<>(classEnrollment, HttpStatus.OK);
+			return responseSuccess(classEnrollment, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -62,10 +63,10 @@ public class ClassEnrollmentController {
 		List<ClassEnrollments> classEnrollmentList = new ArrayList<ClassEnrollments>();
 		try {
 			classEnrollmentList = classEnrollmentService.getAllClassEnrollments();
-			return new ResponseEntity<>(classEnrollmentList, HttpStatus.OK);
+			return responseSuccess(classEnrollmentList, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -74,10 +75,10 @@ public class ClassEnrollmentController {
 		List<DetailClasses> classEnrollmentList = new ArrayList<>();
 		try {
 			classEnrollmentList = classEnrollmentService.getAllClassEnrollmentsByIdUser(id);
-			return new ResponseEntity<>(classEnrollmentList, HttpStatus.OK);
+			return responseSuccess(classEnrollmentList, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -87,10 +88,10 @@ public class ClassEnrollmentController {
 		ClassEnrollments classEnrollment = new ClassEnrollments();
 		try {
 			classEnrollment = classEnrollmentService.getClassEnrollmentByIdDtlClassAndIdUser(idDtlClass, idUser);
-			return new ResponseEntity<>(classEnrollment, HttpStatus.OK);
+			return responseSuccess(classEnrollment, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 

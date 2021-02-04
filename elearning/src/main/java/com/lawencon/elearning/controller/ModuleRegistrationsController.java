@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawencon.elearning.helper.ModuleAndLearningMaterials;
 import com.lawencon.elearning.model.ModuleRegistrations;
 import com.lawencon.elearning.service.ModuleRegistrationsService;
+import com.lawencon.elearning.util.MessageStat;
 
 /**
  * @author Nur Alfilail
@@ -21,7 +22,7 @@ import com.lawencon.elearning.service.ModuleRegistrationsService;
 
 @RestController
 @RequestMapping("module-registration")
-public class ModuleRegistrationsController {
+public class ModuleRegistrationsController extends ElearningBaseController {
 
 	@Autowired
 	private ModuleRegistrationsService moduleRgsService;
@@ -30,10 +31,10 @@ public class ModuleRegistrationsController {
 	public ResponseEntity<?> getModuleByIdDtlClass(@PathVariable("id") String id) {
 		try {
 			List<ModuleRegistrations> moduleRgsList = moduleRgsService.getByIdDtlClass(id);
-			return new ResponseEntity<>(moduleRgsList, HttpStatus.OK);
+			return responseSuccess(moduleRgsList, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -43,10 +44,10 @@ public class ModuleRegistrationsController {
 		try {
 			List<ModuleAndLearningMaterials> listResult = moduleRgsService
 					.getModuleAndLearningMaterialsByIdDtlClass(idUser, idDtlClass);
-			return new ResponseEntity<>(listResult, HttpStatus.OK);
+			return responseSuccess(listResult, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 }
