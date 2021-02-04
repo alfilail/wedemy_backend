@@ -18,12 +18,16 @@ public class ClassesDaoImpl extends ElearningBaseDaoImpl<Classes> implements Cla
 
 	@Override
 	public List<Classes> getAllClasses() throws Exception {
-		return getAll();
+		List<Classes> listClass = createQuery("FROM Classes WHERE isActive = ?1 ", Classes.class).setParameter(1, true)
+				.getResultList();
+		return listClass;
 	}
 
 	@Override
 	public Classes getClassById(String id) throws Exception {
-		return getById(id);
+		List<Classes> listClass = createQuery("FROM Classes WHERE id = ?1 AND isActive = ?2 ", Classes.class).setParameter(1, id)
+				.setParameter(2, true).getResultList();
+		return resultCheck(listClass);
 	}
 
 	@Override
@@ -60,6 +64,13 @@ public class ClassesDaoImpl extends ElearningBaseDaoImpl<Classes> implements Cla
 			result.add(obj != null ? obj.toString() : null);
 		});
 		return result;
+	}
+
+	@Override
+	public List<Classes> getAllInactiveClass() throws Exception {
+		List<Classes> listClass = createQuery("FROM Classes WHERE isActive = ?1 ", Classes.class).setParameter(1, false)
+				.getResultList();
+		return listClass;
 	}
 
 }

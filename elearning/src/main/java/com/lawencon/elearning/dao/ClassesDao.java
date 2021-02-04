@@ -10,6 +10,8 @@ public interface ClassesDao {
 	void insertClass(Classes clazz, Callback before) throws Exception;
 
 	List<Classes> getAllClasses() throws Exception;
+	
+	List<Classes> getAllInactiveClass() throws Exception;
 
 	Classes getClassById(String id) throws Exception;
 

@@ -140,7 +140,9 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 					} else {
 						Classes clz = classesDao.getClassByCode(clazz.getCode());
 						if (clz != null) {
-							throw new Exception("Kode kelas tidak boleh sama");
+							if(!clz.getCode().equals(clazz.getCode())) {
+								throw new Exception("Kode kelas tidak boleh sama");								
+							}
 						} else {
 							if (clazz.getIdTutor() == null) {
 								throw new Exception("Tutor tidak boleh kosong!");
@@ -187,6 +189,11 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 			e.getMessage();
 			rollback();
 		}
+	}
+
+	@Override
+	public List<Classes> getAllInactiveClass() throws Exception {
+		return classesDao.getAllInactiveClass();
 	}
 
 //	private boolean validateDelete(String id) throws Exception {

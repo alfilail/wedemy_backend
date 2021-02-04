@@ -18,12 +18,16 @@ public class ApprovementsDaoImpl extends ElearningBaseDaoImpl<Approvements> impl
 
 	@Override
 	public List<Approvements> getAllApprovements() throws Exception {
-		return getAll();
+		List<Approvements> listApprove = createQuery("FROM Approvements WHERE isActive = ?1", Approvements.class)
+				.setParameter(1, true).getResultList();
+		return listApprove;
 	}
 
 	@Override
 	public Approvements getApprovementsById(String id) throws Exception {
-		return getById(id);
+		List<Approvements> listApprove = createQuery("FROM Approvements WHERE isActive = ?1", Approvements.class)
+				.setParameter(1, true).getResultList();
+		return resultCheck(listApprove);
 	}
 
 	@Override
@@ -38,8 +42,8 @@ public class ApprovementsDaoImpl extends ElearningBaseDaoImpl<Approvements> impl
 
 	@Override
 	public Approvements getApprovementByCode(String code) throws Exception {
-		List<Approvements> approvement = createQuery("FROM Approvements WHERE code = ?1", Approvements.class)
-				.setParameter(1, code).getResultList();
+		List<Approvements> approvement = createQuery("FROM Approvements WHERE code = ?1 AND isActive = ?2 ", Approvements.class)
+				.setParameter(1, code).setParameter(2, true).getResultList();
 		return resultCheck(approvement);
 	}
 

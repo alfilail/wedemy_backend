@@ -31,10 +31,23 @@ public class ClassesController extends ElearningBaseController{
 	@Autowired
 	private ClassesService classesService;
 
-	@GetMapping("all")
+	@GetMapping("active")
 	public ResponseEntity<?> getAllClasses() {
 		try {
 			List<Classes> clazz = classesService.getAllClasses();
+			Response<List<Classes> > res = new Response<List<Classes> >(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, clazz);
+			return new ResponseEntity<>(res, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Response<List<Classes> > res = new Response<List<Classes> >(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@GetMapping("inactive")
+	public ResponseEntity<?> getAllInactiveClasses() {
+		try {
+			List<Classes> clazz = classesService.getAllInactiveClass();
 			Response<List<Classes> > res = new Response<List<Classes> >(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, clazz);
 			return new ResponseEntity<>(res, HttpStatus.OK);
 		} catch (Exception e) {

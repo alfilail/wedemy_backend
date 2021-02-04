@@ -21,7 +21,9 @@ public class DetailClassesDaoImpl extends ElearningBaseDaoImpl<DetailClasses> im
 
 	@Override
 	public List<DetailClasses> getAllDetailClass() throws Exception {
-		return getAll();
+		List<DetailClasses> listDtlClasses = createQuery("FROM DetailClasses WHERE isActive = ?1 ", DetailClasses.class).setParameter(1, true)
+				.getResultList();
+		return listDtlClasses;
 	}
 
 	@Override
@@ -110,5 +112,12 @@ public class DetailClassesDaoImpl extends ElearningBaseDaoImpl<DetailClasses> im
 	@Override
 	public void updateDetailClass(DetailClasses dtlClass, Callback before) throws Exception {
 		save(dtlClass, before, null);
+	}
+
+	@Override
+	public List<DetailClasses> getAllInactiveDetailClass() throws Exception {
+		List<DetailClasses> listDtlClasses = createQuery("FROM DetailClasses WHERE isActive = ?1 ", DetailClasses.class).setParameter(1, false)
+				.getResultList();
+		return listDtlClasses;
 	}
 }

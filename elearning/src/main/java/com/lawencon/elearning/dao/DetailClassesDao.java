@@ -8,6 +8,8 @@ import com.lawencon.util.Callback;
 public interface DetailClassesDao {
 
 	List<DetailClasses> getAllDetailClass() throws Exception;
+	
+	List<DetailClasses> getAllInactiveDetailClass() throws Exception;
 
 	void insertDetailClass(DetailClasses detailClass, Callback before) throws Exception;
 

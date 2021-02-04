@@ -20,19 +20,23 @@ public class UsersDaoImpl extends ElearningBaseDaoImpl<Users> implements UsersDa
 
 	@Override
 	public List<Users> getAllUsers() throws Exception {
-		return getAll();
+		List<Users> listUsers = createQuery("FROM Users WHERE isActive = ?1", Users.class).setParameter(1, true)
+				.getResultList();
+		return listUsers;
 	}
 
 	@Override
 	public Users getUserById(String id) throws Exception {
-		return getById(id);
+		List<Users> users = createQuery("FROM Users WHERE id = ?1 AND isActive = ?2 ", Users.class).setParameter(1, id).setParameter(2, true)
+				.getResultList();
+		return resultCheck(users);
 	}
 
 	@Override
 	public Users getUserByUsername(String username) throws Exception {
-		List<Users> user = createQuery("FROM Users WHERE username = ?1 ", Users.class).setParameter(1, username)
-				.getResultList();
-		return user.size() > 0 ? user.get(0) : null;
+		List<Users> user = createQuery("FROM Users WHERE username = ?1 AND isActive = ?2 ", Users.class).setParameter(1, username)
+				.setParameter(2, true).getResultList();
+		return resultCheck(user);
 	}
 
 	@Override
@@ -48,8 +52,8 @@ public class UsersDaoImpl extends ElearningBaseDaoImpl<Users> implements UsersDa
 
 	@Override
 	public Users getUserByIdProfile(Profiles profile) throws Exception {
-		Users user = createQuery("FROM Users WHERE idProfile.id = ?1 ", Users.class).setParameter(1, profile.getId())
-				.getSingleResult();
+		Users user = createQuery("FROM Users WHERE idProfile.id = ?1 AND isActive = ?2 ", Users.class).setParameter(1, profile.getId())
+				.setParameter(2, true).getSingleResult();
 		return user;
 	}
 
@@ -57,8 +61,8 @@ public class UsersDaoImpl extends ElearningBaseDaoImpl<Users> implements UsersDa
 	public List<Users> getUsersByRoleCode(String code) throws Exception {
 		String sql = sqlBuilder("SELECT u.id, u.username, r.code, p.fullname, p.id_number, p.birth_place, p.birth_date,",
 				" p.email, p.phone, p.address FROM t_m_users u", " INNER JOIN t_m_profiles p ON p.id = u.id_profile",
-				" INNER JOIN t_m_roles r ON r.id = u.id_role", " WHERE r.code = ?1 ").toString();
-		List<?> listObj = createNativeQuery(sql).setParameter(1, code).getResultList();
+				" INNER JOIN t_m_roles r ON r.id = u.id_role WHERE r.code = ?1 AND u.is_active = ?2").toString();
+		List<?> listObj = createNativeQuery(sql).setParameter(1, code).setParameter(2, true).getResultList();
 		return HibernateUtils.bMapperList(listObj, Users.class, "id", "username", "idRole.code", "idProfile.fullName",
 				"idProfile.idNumber", "idProfile.birthPlace", "idProfile.birthDate", "idProfile.email",
 				"idProfile.phone", "idProfile.address");
@@ -99,12 +103,12 @@ public class UsersDaoImpl extends ElearningBaseDaoImpl<Users> implements UsersDa
 		String sql = sqlBuilder(
 				"SELECT u.id, u.username, r.code, p.fullname, p.id_number, p.birth_place, p.birth_date,",
 				" p.email, p.phone, p.address FROM t_m_users u", " INNER JOIN t_m_profiles p ON p.id = u.id_profile",
-				" INNER JOIN t_m_roles r ON r.id = u.id_role", " WHERE p.id_number = ?1 ").toString();
-		List<?> listObj = createNativeQuery(sql).setParameter(1, idNumber).getResultList();
+				" INNER JOIN t_m_roles r ON r.id = u.id_role", " WHERE p.id_number = ?1 AND u.is_active = ?2 ").toString();
+		List<?> listObj = createNativeQuery(sql).setParameter(1, idNumber).setParameter(2, true).getResultList();
 		List<Users> listUsers = HibernateUtils.bMapperList(listObj, Users.class, "id", "username", "idRole.code",
 				"idProfile.fullName", "idProfile.idNumber", "idProfile.birthPlace", "idProfile.birthDate",
 				"idProfile.email", "idProfile.phone", "idProfile.address");
-		return listUsers.size() > 0 ? listUsers.get(0) : null;
+		return resultCheck(listUsers);
 	}
 
 	@Override

@@ -103,7 +103,14 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 
 	@Override
 	public void updateDetailClass(DetailClasses dtlClass) throws Exception {
-		detailClassesDao.updateDetailClass(dtlClass, () -> validateUpdate(dtlClass));
+		try {
+			begin();
+			detailClassesDao.updateDetailClass(dtlClass, () -> validateUpdate(dtlClass));
+			commit();
+		} catch(Exception e) {
+			e.printStackTrace();
+			rollback();
+		}
 	}
 	
 	private void validateUpdate(DetailClasses dtlClass) throws Exception {
@@ -127,6 +134,11 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 				throw new Exception("Waktu akhir detail kelas tidak boleh kurang dari waktu akhir");
 			}
 		}
+	}
+
+	@Override
+	public List<DetailClasses> getAllInactiveDetailClass() throws Exception {
+		return detailClassesDao.getAllInactiveDetailClass();
 	}
 
 }

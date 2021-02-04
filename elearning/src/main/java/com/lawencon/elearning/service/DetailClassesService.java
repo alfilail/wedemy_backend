@@ -8,6 +8,8 @@ public interface DetailClassesService {
 	void insertDetailClass(DetailClasses detailClass) throws Exception;
 
 	List<DetailClasses> getAllDetailClass() throws Exception;
+	
+	List<DetailClasses> getAllInactiveDetailClass() throws Exception;
 
 	DetailClasses getDetailClassById(String id) throws Exception;
 

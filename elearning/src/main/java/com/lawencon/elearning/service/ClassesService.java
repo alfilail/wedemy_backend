@@ -12,6 +12,8 @@ public interface ClassesService {
 	void insertClass(ClassesHelper clazzHelper, MultipartFile file) throws Exception;
 
 	List<Classes> getAllClasses() throws Exception;
+	
+	List<Classes> getAllInactiveClass() throws Exception;
 
 	Classes getClassById(String id) throws Exception;
 
