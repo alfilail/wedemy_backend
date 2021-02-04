@@ -1,5 +1,11 @@
 package com.lawencon.elearning.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import com.lawencon.elearning.helper.Response;
+import com.lawencon.elearning.util.MessageStat;
+
 public class ElearningBaseController {
 	
 	protected String getMessage(Exception e) {
@@ -12,8 +18,13 @@ public class ElearningBaseController {
 		}
 	}
 	
-//	protected <T extends BaseEntity> ResponseEntity responseData(T data, Exception e) {
-//		Response res = new Response<data>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-//		return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
-//	}
+	protected <T> ResponseEntity<?> responseSuccess(T model, HttpStatus httpStat, MessageStat msgStat) {		
+		Response<T> res = new Response<T>(true, httpStat.toString(), msgStat.msg, model);
+		return new ResponseEntity<>(res, httpStat);
+	}
+	
+	protected <T> ResponseEntity<?> responseError(T model, Exception e) {
+		Response<T> res = new Response<T>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+		return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 }

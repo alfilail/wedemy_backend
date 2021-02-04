@@ -106,4 +106,9 @@ public class DetailClassesDaoImpl extends ElearningBaseDaoImpl<DetailClasses> im
 				.setParameter(1, idClass).getResultList();
 		return detailClassList.size() > 0 ? detailClassList : null;
 	}
+
+	@Override
+	public void updateDetailClass(DetailClasses dtlClass, Callback before) throws Exception {
+		save(dtlClass, before, null);
+	}
 }

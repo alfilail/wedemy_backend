@@ -147,17 +147,34 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 					throw new Exception("Nama Lengkap tidak boleh kosong");
 				} else if (user.getIdProfile().getEmail() == null || user.getIdProfile().getEmail().trim().equals("")) {
 					throw new Exception("Email tidak boleh kosong");
-				} else if (user.getIdRole().getCode() != null) {
-					Roles role = rolesService.getRoleByCode(user.getIdRole().getCode());
-					if (role.getCode().equals("TTR") || role.getCode().equals("ADM")) {
-						validateInsertExceptParticipant(user);
+				} else if (user.getIdProfile().getEmail() != null) {
+					Profiles profile = profilesService.getProfileByEmail(user.getIdProfile().getEmail());
+					if(profile != null) {
+						throw new Exception("Email sudah ada");
 					}
-					else {
-						System.out.println("Sending Email......");
-						sendEmailRegister(user.getIdProfile());
-						System.out.println("Done");
+					if (user.getIdRole().getCode() != null) {
+						Roles role = rolesService.getRoleByCode(user.getIdRole().getCode());
+						if (role.getCode().equals("TTR") || role.getCode().equals("ADM")) {
+							validateInsertExceptParticipant(user);
+						}
+						else {
+							System.out.println("Sending Email......");
+							sendEmailRegister(user.getIdProfile());
+							System.out.println("Done");
+						}
 					}
 				}
+//				} else if (user.getIdRole().getCode() != null) {
+//					Roles role = rolesService.getRoleByCode(user.getIdRole().getCode());
+//					if (role.getCode().equals("TTR") || role.getCode().equals("ADM")) {
+//						validateInsertExceptParticipant(user);
+//					}
+//					else {
+//						System.out.println("Sending Email......");
+//						sendEmailRegister(user.getIdProfile());
+//						System.out.println("Done");
+//					}
+//				}
 			}
 		}
 

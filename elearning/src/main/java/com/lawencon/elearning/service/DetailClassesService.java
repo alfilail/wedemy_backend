@@ -20,4 +20,6 @@ public interface DetailClassesService {
 	void deleteDetailClassById(String id, String idUser) throws Exception;
 	
 	List<DetailClasses> getAllDetailClassByIdClass(String idClass) throws Exception;
+	
+	void updateDetailClass(DetailClasses dtlClass) throws Exception;
 }

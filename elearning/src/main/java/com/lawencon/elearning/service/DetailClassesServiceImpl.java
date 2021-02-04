@@ -101,4 +101,32 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 		detailClassesDao.updateViews(id);
 	}
 
+	@Override
+	public void updateDetailClass(DetailClasses dtlClass) throws Exception {
+		detailClassesDao.updateDetailClass(dtlClass, () -> validateUpdate(dtlClass));
+	}
+	
+	private void validateUpdate(DetailClasses dtlClass) throws Exception {
+		if (dtlClass.getStartDate() == null) {
+			throw new Exception("Tanggal mulai detail kelas tidak boleh kosong!");
+		}
+		if (dtlClass.getEndDate() == null) {
+			throw new Exception("Tanggal akhir detail kelas tidak boleh kosong!");
+		} else {
+			if(dtlClass.getEndDate().compareTo(dtlClass.getStartDate()) < 0) {
+				throw new Exception("Tanggal akhir detail kelas tidak boleh kurang dari tanggal mulai");
+			}
+		}
+		if (dtlClass.getStartTime() == null) {
+			throw new Exception("Waktu mulai detail kelas tidak boleh kosong!");
+		}
+		if (dtlClass.getEndTime() == null) {
+			throw new Exception("Waktu akhir detail kelas tidak boleh kosong!");
+		} else {
+			if(dtlClass.getEndTime().compareTo(dtlClass.getStartTime()) < 0) {
+				throw new Exception("Waktu akhir detail kelas tidak boleh kurang dari waktu akhir");
+			}
+		}
+	}
+
 }

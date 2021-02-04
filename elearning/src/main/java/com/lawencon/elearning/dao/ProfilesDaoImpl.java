@@ -51,9 +51,9 @@ public class ProfilesDaoImpl extends ElearningBaseDaoImpl<Profiles> implements P
 
 	@Override
 	public Profiles getProfileByEmail(String email) throws Exception {
-		Profiles profile = createQuery("FROM Profiles WHERE email = ?1 ", Profiles.class).setParameter(1, email)
-				.getSingleResult();
-		return profile;
+		List<Profiles> profile = createQuery("FROM Profiles WHERE email = ?1 ", Profiles.class).setParameter(1, email)
+				.getResultList();
+		return resultCheck(profile);
 	}
 	
 	@Override

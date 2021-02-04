@@ -23,6 +23,8 @@ public interface DetailClassesDao {
 	
 	void deleteClassById(String id, String idUser) throws Exception;
 	
+	void updateDetailClass(DetailClasses dtlClass, Callback before) throws Exception;
+	
 	List<DetailClasses> getAllDetailClassByIdClass(String idClass) throws Exception;
 
 }

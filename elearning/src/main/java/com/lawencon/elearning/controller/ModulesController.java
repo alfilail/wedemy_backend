@@ -1,5 +1,6 @@
 package com.lawencon.elearning.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,27 +31,25 @@ public class ModulesController extends ElearningBaseController {
 	
 	@GetMapping("all")
 	public ResponseEntity<?> getAllModules() {
+		List<Modules> listModules = new ArrayList<>();
 		try {
-			List<Modules> listModules = moduleService.getAllModules();
-			Response<List<Modules>> response = new Response<List<Modules>>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, listModules);
-			return new ResponseEntity<>(response, HttpStatus.OK);
+			listModules = moduleService.getAllModules();
+			return responseSuccess(listModules, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<List<Modules>> response = new Response<List<Modules>>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(listModules, e);
 		}
 	}
 	
 	@GetMapping("{id}")
 	public ResponseEntity<?> getModuleById(@PathVariable("id") String id) {
+		Modules module = new Modules();
 		try {
-			Modules module = moduleService.getModuleById(id);
-			Response<Modules> response = new Response<Modules>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, module);
-			return new ResponseEntity<>(response, HttpStatus.OK);
+			module = moduleService.getModuleById(id);
+			return responseSuccess(module, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<Modules> response = new Response<Modules>(true, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(module, e);
 		}
 	}
 	
