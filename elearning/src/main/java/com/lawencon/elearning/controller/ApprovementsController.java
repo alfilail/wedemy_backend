@@ -2,8 +2,6 @@ package com.lawencon.elearning.controller;
 
 import java.util.List;
 
-import javax.persistence.PersistenceException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,21 +27,22 @@ import com.lawencon.elearning.util.MessageStat;
 
 @RestController
 @RequestMapping("approvement")
-public class ApprovementsController {
+public class ApprovementsController extends ElearningBaseController {
 
 	@Autowired
 	private ApprovementsService approvementsService;
 
 	@PostMapping
-	public Response<?> insertApprovement(@RequestBody String body) {
+	public ResponseEntity<?> insertApprovement(@RequestBody String body) {
 		try {
 			Approvements approvement = new ObjectMapper().readValue(body, Approvements.class);
 			approvementsService.insertApprovement(approvement);
-//			return new ResponseEntity<>(approvement, HttpStatus.CREATED);
-			return new Response<>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_CREATED.msg, approvement);
+			Response<Approvements> res = new Response<Approvements>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_CREATED.msg, approvement);
+			return new ResponseEntity<>(res, HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new Response<>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), MessageStat.FAILED.msg, null);
+			Response<Approvements> res = new Response<Approvements>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -51,23 +50,25 @@ public class ApprovementsController {
 	public ResponseEntity<?> getApprovementById(@PathVariable String id) {
 		try {
 			Approvements approvement = approvementsService.getApprovementsById(id);
-			return new ResponseEntity<>(approvement, HttpStatus.CREATED);
+			Response<Approvements> res = new Response<Approvements>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, approvement);
+			return new ResponseEntity<>(res, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			Response<Approvements> res = new Response<Approvements>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
 	@GetMapping("all")
-	public Response<?> getAllApprovements() {
+	public ResponseEntity<?> getAllApprovements() {
 		try {
 			List<Approvements> approvementsList = approvementsService.getAllApprovements();
-//			return new Response<>(approvementsList, HttpStatus.CREATED);
-			return new Response<>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, approvementsList);
+			Response<List<Approvements>> res = new Response<List<Approvements>>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, approvementsList);
+			return new ResponseEntity<>(res, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new Response<>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), MessageStat.FAILED.msg, null);
-//			return new Response<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			Response<List<Approvements>> res = new Response<List<Approvements>>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -76,13 +77,12 @@ public class ApprovementsController {
 			@RequestParam("idUser") String idUser) {
 		try {
 			approvementsService.deleteApprovementById(id, idUser);
-			return new ResponseEntity<>("Approvement berhasil dihapus", HttpStatus.OK);
-		} catch (PersistenceException pe) {
-			pe.printStackTrace();
-			return new ResponseEntity<>("Data used in another table", HttpStatus.BAD_REQUEST);
+			Response<Approvements> res = new Response<Approvements>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_DELETE.msg, null);
+			return new ResponseEntity<>(res, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+			Response<Approvements> res = new Response<Approvements>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -91,10 +91,12 @@ public class ApprovementsController {
 		try {
 			Approvements approvement = new ObjectMapper().readValue(body, Approvements.class);
 			approvementsService.updateApprovement(approvement);
-			return new ResponseEntity<>(approvement, HttpStatus.OK);
+			Response<Approvements> res = new Response<Approvements>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_UPDATE.msg, approvement);
+			return new ResponseEntity<>(res, HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			Response<Approvements> res = new Response<Approvements>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 }

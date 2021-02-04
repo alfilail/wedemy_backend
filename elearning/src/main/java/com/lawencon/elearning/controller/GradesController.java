@@ -24,39 +24,36 @@ import com.lawencon.elearning.util.MessageStat;
 
 @RestController
 @RequestMapping("grade")
-public class GradesController {
+public class GradesController extends ElearningBaseController {
 	@Autowired
 	private GradesService gradesService;
 
 	@PostMapping
-	public Response<?> insertGrade(@RequestBody String body) {
+	public ResponseEntity<?> insertGrade(@RequestBody String body) {
+		Grades grade = new Grades();
 		try {
-			Grades grade = new ObjectMapper().readValue(body, Grades.class);
+			grade = new ObjectMapper().readValue(body, Grades.class);
 			gradesService.insertGrade(grade);
-//			return new ResponseEntity<>(grade, HttpStatus.CREATED);
-			return new Response<>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_CREATED.msg, grade);
+			Response<Grades> res = new Response<Grades>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_CREATED.msg, grade);
+			return new ResponseEntity<>(res, HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-//			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-			return new Response<>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), MessageStat.FAILED.msg, null);
+			Response<Grades> res = new Response<Grades>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), grade);
+			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getGradeById(@PathVariable("id") String id) {
 		Grades grade = new Grades();
 		try {
 			grade = gradesService.getGradeById(id);
-			Response<Grades> res = new Response(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, grade);
+			Response<Grades> res = new Response<Grades>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, grade);
 			return new ResponseEntity<>(res, HttpStatus.OK);
-			
-//			return new Response<>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, grade);
-			
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<Grades> res = new Response(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), MessageStat.FAILED.msg, grade);
+			Response<Grades> res = new Response<Grades>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), grade);
 			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
-//			return new Response<>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), MessageStat.FAILED.msg, null);
 		}
 	}
 
@@ -65,45 +62,40 @@ public class GradesController {
 		List<Grades> gradesList = new ArrayList<Grades>();
 		try {
 			gradesList = gradesService.getAllGrades();
-			Response<Grades> res = new Response(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, gradesList);
+			Response<List<Grades>> res = new Response<List<Grades>>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, gradesList);
 			return new ResponseEntity<>(res, HttpStatus.OK);
-//			return new Response<>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, gradesList);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<Grades> res = new Response(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), MessageStat.FAILED.msg, gradesList);
+			Response<List<Grades>> res = new Response<List<Grades>>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), gradesList);
 			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
-//			return new Response<>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), MessageStat.FAILED.msg, null);
 		}
 	}
 
 	@DeleteMapping
-	public Response<?> deleteGradeById(@RequestParam("id") String id, 
+	public ResponseEntity<?> deleteGradeById(@RequestParam("id") String id, 
 			@RequestParam("idUser") String idUser) {
 		try {
 			gradesService.deleteGradeById(id, idUser);
-//			return new ResponseEntity<>(HttpStatus.OK);
-			return new Response<>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_DELETE.msg, null);
-//		} catch (PersistenceException pe) {
-//			pe.printStackTrace();
-//			return new ResponseEntity<>("Data used in another table", HttpStatus.BAD_REQUEST);
+			Response<Grades> res = new Response<Grades>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_DELETE.msg, null);
+			return new ResponseEntity<>(res, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-//			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-			return new Response<>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), MessageStat.FAILED.msg, null);
+			Response<Grades> res = new Response<Grades>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
 	@PutMapping
-	public Response<?> updateGrade(@RequestBody String body) {
+	public ResponseEntity<?> updateGrade(@RequestBody String body) {
 		try {
 			Grades grade = new ObjectMapper().readValue(body, Grades.class);
 			gradesService.updateGrades(grade);
-//			return new ResponseEntity<>(grade, HttpStatus.OK);
-			return new Response<>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_UPDATE.msg, grade);
+			Response<Grades> res = new Response<Grades>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_UPDATE.msg, grade);
+			return new ResponseEntity<>(res, HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-//			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-			return new Response<>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), MessageStat.FAILED.msg, null);
+			Response<Grades> res = new Response<Grades>(true, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 }
