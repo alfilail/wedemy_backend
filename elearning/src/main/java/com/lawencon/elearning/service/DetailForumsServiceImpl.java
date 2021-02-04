@@ -46,8 +46,8 @@ public class DetailForumsServiceImpl extends ElearningBaseServiceImpl implements
 	}
 	
 	@Override
-	public void deleteDetailForumById(String id) throws Exception {
-		detailForumDao.deleteDetailForumById(id);
+	public void softDeleteDetailForumById(String id, String idUser) throws Exception {
+		detailForumDao.softDeleteDetailForumById(id, idUser);
 	}
 	
 	@Override

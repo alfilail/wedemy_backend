@@ -11,7 +11,7 @@ public interface DetailForumsService {
 	
 	DetailForums getDetailForumById (String id) throws Exception;
 	
-	void deleteDetailForumById (String id) throws Exception;
+	void softDeleteDetailForumById (String id, String idUser) throws Exception;
 	
 	void updateDetailForum(DetailForums detailForum) throws Exception;
 	

@@ -33,8 +33,8 @@ public class DetailForumsDaoImpl extends ElearningBaseDaoImpl<DetailForums> impl
 	}
 
 	@Override
-	public void deleteDetailForumById(String id) throws Exception {
-		deleteById(id);
+	public void softDeleteDetailForumById(String id, String idUser) throws Exception {
+		updateNativeSQL("UPDATE t_m_dtl_forums SET is_active = FALSE", id, idUser);
 	}
 
 	@Override
