@@ -19,12 +19,14 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.lawencon.elearning.helper.ClassesHelper;
+import com.lawencon.elearning.helper.Response;
 import com.lawencon.elearning.model.Classes;
 import com.lawencon.elearning.service.ClassesService;
+import com.lawencon.elearning.util.MessageStat;
 
 @RestController
 @RequestMapping("class")
-public class ClassesController {
+public class ClassesController extends ElearningBaseController{
 
 	@Autowired
 	private ClassesService classesService;
@@ -33,10 +35,12 @@ public class ClassesController {
 	public ResponseEntity<?> getAllClasses() {
 		try {
 			List<Classes> clazz = classesService.getAllClasses();
-			return new ResponseEntity<>(clazz, HttpStatus.OK);
+			Response<List<Classes> > res = new Response<List<Classes> >(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, clazz);
+			return new ResponseEntity<>(res, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			Response<List<Classes> > res = new Response<List<Classes> >(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -44,10 +48,12 @@ public class ClassesController {
 	public ResponseEntity<?> getClassById(@PathVariable("id") String id) {
 		try {
 			Classes clazz = classesService.getClassById(id);
-			return new ResponseEntity<>(clazz, HttpStatus.OK);
+			Response<Classes> res = new Response<Classes>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, clazz);
+			return new ResponseEntity<>(res, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			Response<Classes> res = new Response<Classes>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -58,10 +64,12 @@ public class ClassesController {
 			obj.registerModule(new JavaTimeModule());
 			ClassesHelper clazzHelper = obj.readValue(body, ClassesHelper.class);
 			classesService.insertClass(clazzHelper, file);
-			return new ResponseEntity<>(clazzHelper.getClazz(), HttpStatus.CREATED);
+			Response<ClassesHelper> res = new Response<ClassesHelper>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_CREATED.msg, clazzHelper);
+			return new ResponseEntity<>(res, HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			Response<ClassesHelper> res = new Response<ClassesHelper>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -72,10 +80,12 @@ public class ClassesController {
 			obj.registerModule(new JavaTimeModule());
 			Classes clazz = obj.readValue(body, Classes.class);
 			classesService.updateClass(clazz, file);
-			return new ResponseEntity<>(clazz, HttpStatus.CREATED);
+			Response<Classes> res = new Response<Classes>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_UPDATE.msg, clazz);
+			return new ResponseEntity<>(res, HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			Response<Classes> res = new Response<Classes>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -84,10 +94,12 @@ public class ClassesController {
 			@RequestParam("idUser") String idUser) {
 		try {
 			classesService.deleteClassById(id, idUser);
-			return new ResponseEntity<>("Kelas berhasil dihapus", HttpStatus.OK);
+			Response<Classes> res = new Response<Classes>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_DELETE.msg, null);
+			return new ResponseEntity<>(res, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			Response<Classes> res = new Response<Classes>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 

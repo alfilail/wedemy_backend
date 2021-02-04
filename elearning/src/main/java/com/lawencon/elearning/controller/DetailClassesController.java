@@ -10,12 +10,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawencon.elearning.helper.Response;
 import com.lawencon.elearning.model.DetailClasses;
 import com.lawencon.elearning.service.DetailClassesService;
+import com.lawencon.elearning.util.MessageStat;
 
 @RestController
 @RequestMapping("detail-class")
-public class DetailClassesController {
+public class DetailClassesController extends ElearningBaseController {
 
 	@Autowired
 	private DetailClassesService dtlClassesService;
@@ -24,10 +26,12 @@ public class DetailClassesController {
 	public ResponseEntity<?> getAllDetailClasses() {
 		try {
 			List<DetailClasses> dtlClass = dtlClassesService.getAllDetailClass();
-			return new ResponseEntity<>(dtlClass, HttpStatus.OK);
+			Response<List<DetailClasses>> res = new Response<List<DetailClasses>>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, dtlClass);
+			return new ResponseEntity<>(res, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			Response<List<DetailClasses>> res = new Response<List<DetailClasses>>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -35,10 +39,12 @@ public class DetailClassesController {
 	public ResponseEntity<?> getClassById(@PathVariable("id") String id) {
 		try {
 			DetailClasses dtlClass = dtlClassesService.getDetailClassById(id);
-			return new ResponseEntity<>(dtlClass, HttpStatus.OK);
+			Response<DetailClasses> res = new Response<DetailClasses>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, dtlClass);
+			return new ResponseEntity<>(res, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			Response<DetailClasses> res = new Response<DetailClasses>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -46,10 +52,12 @@ public class DetailClassesController {
 	public ResponseEntity<?> getTutorClasses(@PathVariable("idTutor") String idTutor) {
 		try {
 			List<DetailClasses> listResult = dtlClassesService.getTutorClasses(idTutor);
-			return new ResponseEntity<>(listResult, HttpStatus.OK);
+			Response<List<DetailClasses>> res = new Response<List<DetailClasses>>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, listResult);
+			return new ResponseEntity<>(res, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			Response<List<DetailClasses>> res = new Response<List<DetailClasses>>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -57,10 +65,12 @@ public class DetailClassesController {
 	public ResponseEntity<?> getPopularClasses() {
 		try {
 			List<DetailClasses> listResult = dtlClassesService.getPopularClasses();
-			return new ResponseEntity<>(listResult, HttpStatus.OK);
+			Response<List<DetailClasses>> res = new Response<List<DetailClasses>>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, listResult);
+			return new ResponseEntity<>(res, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			Response<List<DetailClasses>> res = new Response<List<DetailClasses>>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 

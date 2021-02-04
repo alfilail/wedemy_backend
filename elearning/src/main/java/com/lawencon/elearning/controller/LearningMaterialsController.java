@@ -2,8 +2,6 @@ package com.lawencon.elearning.controller;
 
 import java.util.List;
 
-import javax.persistence.PersistenceException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +18,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.lawencon.elearning.helper.Response;
 import com.lawencon.elearning.model.DetailModuleRegistrations;
 import com.lawencon.elearning.model.LearningMaterials;
 import com.lawencon.elearning.service.LearningMaterialsService;
+import com.lawencon.elearning.util.MessageStat;
 
 /**
  * @author Nur Alfilail
@@ -30,7 +30,7 @@ import com.lawencon.elearning.service.LearningMaterialsService;
 
 @RestController
 @RequestMapping("learning-material")
-public class LearningMaterialsController {
+public class LearningMaterialsController extends ElearningBaseController {
 
 	@Autowired
 	private LearningMaterialsService learningMaterialsService;
@@ -42,10 +42,12 @@ public class LearningMaterialsController {
 			obj.registerModule(new JavaTimeModule());
 			DetailModuleRegistrations dtlModuleRgs = obj.readValue(body, DetailModuleRegistrations.class);
 			learningMaterialsService.insertLearningMaterial(dtlModuleRgs, file);
-			return new ResponseEntity<>(dtlModuleRgs, HttpStatus.CREATED);
+			Response<DetailModuleRegistrations> res = new Response<DetailModuleRegistrations>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_CREATED.msg, dtlModuleRgs);
+			return new ResponseEntity<>(res, HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			Response<DetailModuleRegistrations> res = new Response<DetailModuleRegistrations>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -53,10 +55,12 @@ public class LearningMaterialsController {
 	public ResponseEntity<?> getLearningMaterialById(@PathVariable String id) {
 		try {
 			LearningMaterials learningMaterial = learningMaterialsService.getLearningMaterialById(id);
-			return new ResponseEntity<>(learningMaterial, HttpStatus.CREATED);
+			Response<LearningMaterials> res = new Response<LearningMaterials>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, learningMaterial);
+			return new ResponseEntity<>(res, HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			Response<LearningMaterials> res = new Response<LearningMaterials>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -64,10 +68,12 @@ public class LearningMaterialsController {
 	public ResponseEntity<?> getAllLearningMaterials() {
 		try {
 			List<LearningMaterials> learningMaterialsList = learningMaterialsService.getAllLearningMaterials();
-			return new ResponseEntity<>(learningMaterialsList, HttpStatus.CREATED);
+			Response<List<LearningMaterials>> res = new Response<List<LearningMaterials>>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, learningMaterialsList);
+			return new ResponseEntity<>(res, HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			Response<List<LearningMaterials>> res = new Response<List<LearningMaterials>>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -76,13 +82,12 @@ public class LearningMaterialsController {
 			@RequestParam("idUser") String idUser) {
 		try {
 			learningMaterialsService.deleteLearningMaterialById(id, idUser);
-			return new ResponseEntity<>("Materi berhasil dihapus", HttpStatus.OK);
-		} catch (PersistenceException pe) {
-			pe.printStackTrace();
-			return new ResponseEntity<>("Data used in another table", HttpStatus.BAD_REQUEST);
-		} catch (Exception e) {
+			Response<LearningMaterials> res = new Response<LearningMaterials>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_DELETE.msg, null);
+			return new ResponseEntity<>(res, HttpStatus.OK);
+		}  catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+			Response<LearningMaterials> res = new Response<LearningMaterials>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -93,10 +98,12 @@ public class LearningMaterialsController {
 			obj.registerModule(new JavaTimeModule());
 			LearningMaterials learningMaterial = obj.readValue(body, LearningMaterials.class);
 			learningMaterialsService.updateLearningMaterial(learningMaterial, file);
-			return new ResponseEntity<>(learningMaterial, HttpStatus.OK);
+			Response<LearningMaterials> res = new Response<LearningMaterials>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_UPDATE.msg, learningMaterial);
+			return new ResponseEntity<>(res, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			Response<LearningMaterials> res = new Response<LearningMaterials>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
+			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 }
