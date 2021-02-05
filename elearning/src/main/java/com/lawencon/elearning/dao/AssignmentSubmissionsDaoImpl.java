@@ -1,5 +1,6 @@
 package com.lawencon.elearning.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -22,6 +23,12 @@ public class AssignmentSubmissionsDaoImpl extends ElearningBaseDaoImpl<Assignmen
 		return getAll();
 	}
 
+	@Override
+	public List<AssignmentSubmissions> getAllByIdDtlModuleRgs(String idDtlModuleRgs) throws Exception {
+		List<AssignmentSubmissions> listResult = new ArrayList<>();
+		return null;
+	}
+	
 	@Override
 	public AssignmentSubmissions getAssignmentSubmissionByCode(String code) throws Exception {
 		return null;
@@ -80,4 +87,5 @@ public class AssignmentSubmissionsDaoImpl extends ElearningBaseDaoImpl<Assignmen
 	public void deleteAssignmentSubmissionById(String id) throws Exception {
 		deleteById(id);
 	}
+
 }

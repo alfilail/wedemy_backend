@@ -56,9 +56,9 @@ public class PresencesDaoImpl extends ElearningBaseDaoImpl<Presences> implements
 				"WHERE pr.id_detail_module_rgs = ?1 AND r.code = 'TTR' ").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlModuleRgs).getResultList();
 		listObj.forEach(val -> {
-			Object[] objArr = (Object[]) val;
+			Object obj = (Object) val;
 			Presences presence = new Presences();
-			presence.setId((String) objArr[0]);
+			presence.setId((String) obj);
 			listResult.add(presence);
 		});
 		return listResult.size() > 0 ? listResult.get(0) : null;

@@ -34,30 +34,37 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 
 	@Autowired
 	private FilesService filesService;
-	
+
 	@Autowired
 	private GeneralService generalService;
-	
+
 	@Autowired
 	private MailUtil mailUtil;
 
 	@Override
 	public void insertAssignmentSubmissions(AssignmentSubmissions assignmentSubmission, MultipartFile fileInput)
 			throws Exception {
-		Files file = new Files();
-		file.setFile(fileInput.getBytes());
-		file.setType(fileInput.getContentType());
-		filesService.insertFile(file);
-		assignmentSubmission.setIdFile(file);
-		assignmentSubmission.setSubmitDateTime(LocalDateTime.now());
-		assignmentSubmission.setTrxNumber(generateTrxNumber());
-		assignmentSubmissionsDao.insertAssignmentSubmission(assignmentSubmission,
-				() -> validateInsert(assignmentSubmission));
-		insertStatusRenewal(assignmentSubmission);
-		System.out.println("Sending Email...");
-		sendEmailTutor(assignmentSubmission);
-		sendEmailParticipant(assignmentSubmission);
-		System.out.println("Done");
+		try {
+			begin();
+			Files file = new Files();
+			file.setFile(fileInput.getBytes());
+			file.setType(fileInput.getContentType());
+			filesService.insertFile(file);
+			assignmentSubmission.setIdFile(file);
+			assignmentSubmission.setSubmitDateTime(LocalDateTime.now());
+			assignmentSubmission.setTrxNumber(generateTrxNumber());
+			assignmentSubmissionsDao.insertAssignmentSubmission(assignmentSubmission,
+					() -> validateInsert(assignmentSubmission));
+			insertStatusRenewal(assignmentSubmission);
+			System.out.println("Sending Email...");
+			sendEmailTutor(assignmentSubmission);
+			sendEmailParticipant(assignmentSubmission);
+			System.out.println("Done");
+			commit();
+		} catch (Exception e) {
+			rollback();
+			throw new Exception(e);
+		}
 	}
 
 	@Override
@@ -83,13 +90,13 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 	private void sendEmailTutor(AssignmentSubmissions assignmentSubmission) throws Exception {
 		Profiles tutor = assignmentSubmissionsDao.getTutorProfile(assignmentSubmission);
 		Profiles participant = assignmentSubmissionsDao.getParticipantProfile(assignmentSubmission);
-		
+
 		General general = generalService.getTemplateEmail("asgttr");
 		String text = general.getTemplateHtml();
-		
+
 		text = text.replace("#1#", tutor.getFullName());
 		text = text.replace("#2#", participant.getFullName());
-		
+
 		MailHelper mailHelper = new MailHelper();
 		mailHelper.setFrom("elearningalfione@gmail.com");
 		mailHelper.setTo(tutor.getEmail());
@@ -100,12 +107,12 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 
 	private void sendEmailParticipant(AssignmentSubmissions assignmentSubmission) throws Exception {
 		Profiles participant = assignmentSubmissionsDao.getParticipantProfile(assignmentSubmission);
-		
+
 		General general = generalService.getTemplateEmail("asgpcp");
 		String text = general.getTemplateHtml();
-		
+
 		text = text.replace("#1#", participant.getFullName());
-		
+
 		MailHelper mailHelper = new MailHelper();
 		mailHelper.setFrom("elearningalfione@gmail.com");
 		mailHelper.setTo(participant.getEmail());

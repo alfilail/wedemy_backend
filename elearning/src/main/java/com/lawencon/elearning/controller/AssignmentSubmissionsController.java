@@ -16,14 +16,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.lawencon.elearning.helper.Response;
 import com.lawencon.elearning.model.AssignmentSubmissions;
 import com.lawencon.elearning.service.AssignmentSubmissionsService;
 import com.lawencon.elearning.util.MessageStat;
 
 @RestController
 @RequestMapping("assignment-submission")
-public class AssignmentSubmissionsController extends ElearningBaseController{
+public class AssignmentSubmissionsController extends ElearningBaseController {
 
 	@Autowired
 	private AssignmentSubmissionsService assignmentSubmissionsService;
@@ -33,16 +32,10 @@ public class AssignmentSubmissionsController extends ElearningBaseController{
 		try {
 			List<AssignmentSubmissions> assignmentSubmissions = assignmentSubmissionsService
 					.getAllAssignmentSubmissions();
-			Response<List<AssignmentSubmissions>> res = 
-					new Response<List<AssignmentSubmissions>>
-			(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, assignmentSubmissions);
-			return new ResponseEntity<>(res, HttpStatus.OK);
+			return responseSuccess(assignmentSubmissions, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<List<AssignmentSubmissions>> res = 
-					new Response<List<AssignmentSubmissions>>
-			(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -50,12 +43,10 @@ public class AssignmentSubmissionsController extends ElearningBaseController{
 	public ResponseEntity<?> getassignmentSubmissionsById(@PathVariable("id") String id) {
 		try {
 			AssignmentSubmissions assignmentSubmissions = assignmentSubmissionsService.getAssignmentSubmissionsById(id);
-			Response<AssignmentSubmissions> res = new Response<AssignmentSubmissions>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, assignmentSubmissions);
-			return new ResponseEntity<>(res, HttpStatus.OK);
+			return responseSuccess(assignmentSubmissions, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<AssignmentSubmissions> res = new Response<AssignmentSubmissions>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -67,12 +58,10 @@ public class AssignmentSubmissionsController extends ElearningBaseController{
 			obj.registerModule(new JavaTimeModule());
 			AssignmentSubmissions assignmentSubmissions = obj.readValue(body, AssignmentSubmissions.class);
 			assignmentSubmissionsService.insertAssignmentSubmissions(assignmentSubmissions, file);
-			Response<AssignmentSubmissions> res = new Response<AssignmentSubmissions>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_CREATED.msg, assignmentSubmissions);
-			return new ResponseEntity<>(res, HttpStatus.CREATED);
+			return responseSuccess(assignmentSubmissions, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<AssignmentSubmissions> res = new Response<AssignmentSubmissions>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -80,12 +69,10 @@ public class AssignmentSubmissionsController extends ElearningBaseController{
 	public ResponseEntity<?> deleteAssignmentSubmissionById(@PathVariable("id") String id) {
 		try {
 			assignmentSubmissionsService.deleteAssignmentSubmissionsById(id);
-			Response<AssignmentSubmissions> res = new Response<AssignmentSubmissions>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_DELETE.msg, null);
-			return new ResponseEntity<>(res, HttpStatus.OK);
+			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<AssignmentSubmissions> res = new Response<AssignmentSubmissions>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 }
