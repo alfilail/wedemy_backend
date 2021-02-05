@@ -2,6 +2,8 @@ package com.lawencon.elearning.service;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.lawencon.elearning.model.Profiles;
 
 public interface ProfilesService {
@@ -14,7 +16,7 @@ public interface ProfilesService {
 
 	Profiles getProfileByCode(String code) throws Exception;
 
-	void updateProfile(Profiles profile) throws Exception;
+	void updateProfile(Profiles profile, MultipartFile file) throws Exception;
 
 	void deleteProfileById(String id) throws Exception;
 	

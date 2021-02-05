@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.elearning.dao.ProfilesDao;
+import com.lawencon.elearning.model.Files;
 import com.lawencon.elearning.model.Profiles;
 
 @Service
@@ -14,6 +16,9 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 
 	@Autowired
 	private ProfilesDao profilesDao;
+
+	@Autowired
+	FilesService filesService;
 
 	@Override
 	public void insertProfile(Profiles profile) throws Exception {
@@ -36,22 +41,29 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 	}
 
 	@Override
-	public void updateProfile(Profiles profile) throws Exception {
-//		try {
-//			begin();
-			profilesDao.updateProfile(profile, () -> validateUpdate(profile));
-//			commit();
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			rollback();
-//		}
+	public void updateProfile(Profiles profile, MultipartFile file) throws Exception {
+		try {
+			begin();
+			Files profilePict = new Files();
+			profilePict.setFile(file.getBytes());
+			profilePict.setType(file.getContentType());
+			profilesDao.updateProfile(profile, () -> {
+				validateUpdate(profile);
+				filesService.insertFile(profilePict);
+				profile.setIdFile(profilePict);
+			});
+			commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			rollback();
+		}
 	}
 
 	@Override
 	public void deleteProfileById(String id) throws Exception {
 		profilesDao.deleteProfileById(id);
 	}
-	
+
 	@Override
 	public void softDeleteProfileById(String id, String idUser) throws Exception {
 		profilesDao.softDeleteProfileById(id, idUser);
@@ -78,24 +90,15 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 		if (profile.getFullName() == null || profile.getFullName().trim().equals("")) {
 			throw new Exception("Nama Lengkap tidak boleh kosong");
 		}
-//		if (profile.getIdNumber() == null || profile.getIdNumber().trim().equals("")) {
-//			throw new Exception("Nomor Kartu Penduduk tidak boleh kosong");
-//		}
-//		if (profile.getBirthPlace() == null || profile.getBirthPlace().trim().equals("")) {
-//			throw new Exception("Tempat Lahir tidak boleh kosong");
-//		}
-//		if (profile.getBirthDate() == null || profile.getBirthDate().toString().trim().equals("")) {
-//			throw new Exception("Tanggal Lahir tidak boleh kosong");
-//		}
-//		if (profile.getEmail() == null || profile.getEmail().trim().equals("")) {
-//			throw new Exception("Email tidak boleh kosong");
-//		}
-//		if (profile.getPhone() == null || profile.getPhone().trim().equals("")) {
-//			throw new Exception("Nomor Handphone tidak boleh kosong");
-//		}
-//		if (profile.getAddress() == null || profile.getAddress().trim().equals("")) {
-//			throw new Exception("Alamat tidak boleh kosong");
-//		}
+		if (profile.getIdFile() != null) {
+			String[] type = profile.getIdFile().getType().split("/");
+			String ext = type[1];
+			if (ext != null) {
+				if (!ext.equalsIgnoreCase("png") || !ext.equalsIgnoreCase("png") || !ext.equalsIgnoreCase("jpeg")) {
+					throw new Exception("File harus gambar");
+				}
+			}
+		}
 	}
 
 }

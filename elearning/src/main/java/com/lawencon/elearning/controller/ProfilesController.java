@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -71,12 +73,12 @@ public class ProfilesController extends ElearningBaseController {
 	}
 	
 	@PutMapping
-	public ResponseEntity<?> updateProfile(@RequestBody String body) {
+	public ResponseEntity<?> updateProfile(@RequestBody String body, @RequestPart("file") MultipartFile file) {
 		try {
 			ObjectMapper obj = new ObjectMapper();
 			obj.registerModule(new JavaTimeModule());
 			Profiles profile = obj.readValue(body, Profiles.class);
-			profilesService.updateProfile(profile);
+			profilesService.updateProfile(profile, file);
 			Response<Profiles> response = new Response<Profiles>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_UPDATE.msg, profile);
 			return new ResponseEntity<>(response, HttpStatus.CREATED);
 		} catch (Exception e) {

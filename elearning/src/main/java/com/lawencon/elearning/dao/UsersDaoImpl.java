@@ -52,9 +52,9 @@ public class UsersDaoImpl extends ElearningBaseDaoImpl<Users> implements UsersDa
 
 	@Override
 	public Users getUserByIdProfile(Profiles profile) throws Exception {
-		Users user = createQuery("FROM Users WHERE idProfile.id = ?1 AND isActive = ?2 ", Users.class).setParameter(1, profile.getId())
-				.setParameter(2, true).getSingleResult();
-		return user;
+		List<Users> user = createQuery("FROM Users WHERE idProfile.id = ?1 AND isActive = ?2 ", Users.class).setParameter(1, profile.getId())
+				.setParameter(2, true).getResultList();
+		return resultCheck(user);
 	}
 
 	@Override

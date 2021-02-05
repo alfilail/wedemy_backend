@@ -77,11 +77,11 @@ public class ModulesServiceImpl extends BaseServiceImpl implements ModulesServic
 		}
 		if(module.getCode() == null || module.getCode().trim().equals("")) {
 			throw new Exception("Kode Modul tidak boleh kosong");
-		} else {
-			Modules mod = getModuleById(module.getId());
+		} else if(module.getCode() != null) {
+			Modules mod = getModuleByCode(module.getCode());
 			if(mod != null) {
 				if(!mod.getCode().equals(module.getCode())) {
-					throw new Exception("Kode Modul sudah ada");
+					throw new Exception("Kode Modul sudah ada");					
 				}
 			}
 			if(module.getModuleName() == null || module.getModuleName().trim().equals("")) {
