@@ -35,13 +35,13 @@ public class ModulesServiceImpl extends BaseServiceImpl implements ModulesServic
 	public void deleteModuleById(String id, String idUser) throws Exception {
 		try {
 			begin();
-			if(validateDelete(id)) {
+			if (validateDelete(id)) {
 				softDeleteModuleById(id, idUser);
-			} else {			
+			} else {
 				modulesDao.deleteModuleById(id);
 			}
-			commit();			
-		} catch(Exception e) {
+			commit();
+		} catch (Exception e) {
 			e.getMessage();
 			rollback();
 		}
@@ -58,43 +58,47 @@ public class ModulesServiceImpl extends BaseServiceImpl implements ModulesServic
 	}
 
 	private void validateInsert(Modules module) throws Exception {
-		if(module.getCode() == null || module.getCode().trim().equals("")) {
+		if (module.getCode() == null || module.getCode().trim().equals("")) {
 			throw new Exception("Kode Modul tidak boleh kosong");
 		} else {
 			Modules mod = getModuleByCode(module.getCode());
-			if(mod != null) {
+			if (mod != null) {
 				throw new Exception("Kode Modul sudah ada");
 			}
-			if(module.getModuleName() == null || module.getModuleName().trim().equals("")) {
+			if (module.getModuleName() == null || module.getModuleName().trim().equals("")) {
 				throw new Exception("Nama Modul tidak boleh kosong");
 			}
-		} 
+		}
 	}
 
 	private void validateUpdate(Modules module) throws Exception {
-		if(module.getId() == null || module.getId().trim().equals("")) {
+		if (module.getId() == null || module.getId().trim().equals("")) {
 			throw new Exception("Id Modul tidak boleh kosong");
-		}
-		if(module.getCode() == null || module.getCode().trim().equals("")) {
-			throw new Exception("Kode Modul tidak boleh kosong");
-		} else if(module.getCode() != null) {
-			Modules mod = getModuleByCode(module.getCode());
-			if(mod != null) {
-				if(!mod.getCode().equals(module.getCode())) {
-					throw new Exception("Kode Modul sudah ada");					
+		} else {
+			Modules modu = getModuleById(module.getId());
+			if (module.getCode() == null || module.getCode().trim().equals("")) {
+				throw new Exception("Kode Modul tidak boleh kosong");
+			} else {
+				if (!modu.getCode().equals(module.getCode())) {
+					Modules mod = getModuleByCode(module.getCode());
+					if (mod != null) {
+						throw new Exception("Kode Modul sudah ada");
+					}
 				}
-			}
-			if(module.getModuleName() == null || module.getModuleName().trim().equals("")) {
-				throw new Exception("Nama Modul tidak boleh kosong");
+				if (module.getModuleName() == null || module.getModuleName().trim().equals("")) {
+					throw new Exception("Nama Modul tidak boleh kosong");
+				}
+				if (!modu.getVersion().equals(module.getVersion())) {
+					throw new Exception("Modul yang diedit telah diperbarui, silahkan coba lagi");
+				}
 			}			
 		}
 	}
-	
+
 	private boolean validateDelete(String id) throws Exception {
 		List<?> listObj = modulesDao.validateDeleteModule(id);
 		listObj.forEach(System.out::println);
-		List<?> list =  listObj.stream().filter(val -> val != null)
-				.collect(Collectors.toList());
+		List<?> list = listObj.stream().filter(val -> val != null).collect(Collectors.toList());
 		System.out.println(list.size());
 		return list.size() > 0 ? true : false;
 	}

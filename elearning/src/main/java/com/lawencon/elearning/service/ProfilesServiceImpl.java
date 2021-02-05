@@ -42,21 +42,12 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 
 	@Override
 	public void updateProfile(Profiles profile, MultipartFile file) throws Exception {
-		try {
-			begin();
-			Files profilePict = new Files();
-			profilePict.setFile(file.getBytes());
-			profilePict.setType(file.getContentType());
-			profilesDao.updateProfile(profile, () -> {
-				validateUpdate(profile);
-				filesService.insertFile(profilePict);
-				profile.setIdFile(profilePict);
-			});
-			commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			rollback();
-		}
+		Files profilePict = filesService.getFileById(profile.getIdFile().getId());
+		profile.setIdFile(profilePict);
+		profilesDao.updateProfile(profile, () -> {
+			validateUpdate(profile);
+			filesService.insertFile(profilePict);
+		});
 	}
 
 	@Override
@@ -94,7 +85,9 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 			String[] type = profile.getIdFile().getType().split("/");
 			String ext = type[1];
 			if (ext != null) {
-				if (!ext.equalsIgnoreCase("png") || !ext.equalsIgnoreCase("png") || !ext.equalsIgnoreCase("jpeg")) {
+				if (ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("jpeg")) {
+
+				} else {
 					throw new Exception("File harus gambar");
 				}
 			}

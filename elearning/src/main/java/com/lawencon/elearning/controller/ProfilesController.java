@@ -73,18 +73,16 @@ public class ProfilesController extends ElearningBaseController {
 	}
 	
 	@PutMapping
-	public ResponseEntity<?> updateProfile(@RequestBody String body, @RequestPart("file") MultipartFile file) {
+	public ResponseEntity<?> updateProfile(@RequestPart String body, @RequestPart(value = "file", required = false) MultipartFile file) {
 		try {
 			ObjectMapper obj = new ObjectMapper();
 			obj.registerModule(new JavaTimeModule());
 			Profiles profile = obj.readValue(body, Profiles.class);
 			profilesService.updateProfile(profile, file);
-			Response<Profiles> response = new Response<Profiles>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_UPDATE.msg, profile);
-			return new ResponseEntity<>(response, HttpStatus.CREATED);
+			return responseSuccess(profile, HttpStatus.CREATED, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<Profiles> response = new Response<Profiles>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 

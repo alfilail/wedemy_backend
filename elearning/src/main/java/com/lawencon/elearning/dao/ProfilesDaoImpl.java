@@ -41,7 +41,7 @@ public class ProfilesDaoImpl extends ElearningBaseDaoImpl<Profiles> implements P
 
 	@Override
 	public void updateProfile(Profiles profile, Callback before) throws Exception {
-		save(profile, before, null);
+		save(profile, before, null, true, true);
 	}
 
 	@Override

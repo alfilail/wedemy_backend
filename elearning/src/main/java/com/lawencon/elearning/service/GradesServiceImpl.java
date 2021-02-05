@@ -80,23 +80,27 @@ public class GradesServiceImpl extends BaseServiceImpl implements GradesService 
 	private void validateUpdate(Grades grade) throws Exception {
 		if (grade.getId() == null || grade.getId().trim().equals("")) {
 			throw new Exception("Id grade tidak boleh kosong");
-		}
-		if (grade.getCode() == null || grade.getCode().trim().equals("")) {
-			throw new Exception("Kode grade tidak boleh kosong");
 		} else {
-			Grades grd = getGradeByCode(grade.getCode());
-			if(grd != null) {
-				if(!grd.getCode().equals(grade.getCode())) {
-					throw new Exception("Kode grade sudah ada");
-				}					
-			}
-			if (grade.getMinScore() == null || grade.getMaxScore() == null) {
-				throw new Exception("Minimum dan maximum score harus diisi");
+			Grades grad = getGradeById(grade.getId());
+			if (grade.getCode() == null || grade.getCode().trim().equals("")) {
+				throw new Exception("Kode grade tidak boleh kosong");
 			} else {
-				if (grade.getMinScore() >= grade.getMaxScore()) {
-					throw new Exception("Minimum score harus lebih kecil dari maximum score");
+				if(!grad.getCode().equals(grade.getCode())) {
+					Grades grd = getGradeByCode(grade.getCode());
+					if(grd != null) {
+						if(!grd.getCode().equals(grade.getCode())) {
+							throw new Exception("Kode grade sudah ada");
+						}					
+					}					
 				}
-			}			
+				if (grade.getMinScore() == null || grade.getMaxScore() == null) {
+					throw new Exception("Minimum dan maximum score harus diisi");
+				} else {
+					if (grade.getMinScore() >= grade.getMaxScore()) {
+						throw new Exception("Minimum score harus lebih kecil dari maximum score");
+					}
+				}			
+			}
 		}
 	}
 	

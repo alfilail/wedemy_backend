@@ -43,13 +43,13 @@ public class ApprovementsServiceImpl extends ElearningBaseServiceImpl implements
 	public void deleteApprovementById(String id, String idUser) throws Exception {
 		try {
 			begin();
-			if(validateDelete(id)) {
+			if (validateDelete(id)) {
 				approvementsDao.softDeleteApprovementById(id, idUser);
 			} else {
-				approvementsDao.deleteApprovementById(id);				
+				approvementsDao.deleteApprovementById(id);
 			}
 			commit();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.getMessage();
 			rollback();
 		}
@@ -65,39 +65,40 @@ public class ApprovementsServiceImpl extends ElearningBaseServiceImpl implements
 			throw new Exception("Kode approvement tidak boleh kosong");
 		} else if (approvement.getCode() != null) {
 			Approvements approve = getApprovementByCode(approvement.getCode());
-			if(approve != null) {
+			if (approve != null) {
 				throw new Exception("Kode Approvement sudah ada");
 			}
 			if (approvement.getApprovementName() == null || approvement.getApprovementName().trim().equals("")) {
 				throw new Exception("Nama approvement tidak boleh kosong");
-			}			
+			}
 		}
 	}
 
 	private void validateUpdate(Approvements approvement) throws Exception {
 		if (approvement.getId() == null || approvement.getId().trim().equals("")) {
 			throw new Exception("Id approvement tidak boleh kosong");
-		}
-		if (approvement.getCode() == null || approvement.getCode().trim().equals("")) {
-			throw new Exception("Kode approvement tidak boleh kosong");
-		} else if (approvement.getCode() != null) {
-			Approvements approve = getApprovementByCode(approvement.getCode());
-			if(approve != null) {
-				if(!approve.getCode().equals(approvement.getCode())) {
-					throw new Exception("Kode Approvement sudah ada");					
+		} else {
+			Approvements approvment = getApprovementsById(approvement.getId());
+			if (approvement.getCode() == null || approvement.getCode().trim().equals("")) {
+				throw new Exception("Kode approvement tidak boleh kosong");
+			} else {
+				if (!approvment.getCode().equals(approvement.getCode())) {
+					Approvements approve = getApprovementByCode(approvement.getCode());
+					if(approve != null) {
+						throw new Exception("Kode approvement sudah ada");						
+					}
+				}
+				if (approvement.getApprovementName() == null || approvement.getApprovementName().trim().equals("")) {
+					throw new Exception("Nama approvement tidak boleh kosong");
 				}
 			}
-			if (approvement.getApprovementName() == null || approvement.getApprovementName().trim().equals("")) {
-				throw new Exception("Nama approvement tidak boleh kosong");
-			}			
 		}
 	}
-	
+
 	private boolean validateDelete(String id) throws Exception {
 		List<?> listObj = approvementsDao.validateDeleteApprovement(id);
 		listObj.forEach(System.out::println);
-		List<?> list =  listObj.stream().filter(val -> val != null)
-				.collect(Collectors.toList());
+		List<?> list = listObj.stream().filter(val -> val != null).collect(Collectors.toList());
 		System.out.println(list.size());
 		return list.size() > 0 ? true : false;
 	}

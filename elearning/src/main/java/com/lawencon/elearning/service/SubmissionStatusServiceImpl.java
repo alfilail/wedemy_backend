@@ -75,19 +75,23 @@ public class SubmissionStatusServiceImpl extends BaseServiceImpl implements Subm
 	private void validateUpdate(SubmissionStatus submissionStatus) throws Exception {
 		if (submissionStatus.getId() == null || submissionStatus.getId().trim().equals("")) {
 			throw new Exception("Id status tidak boleh kosong");
-		}
-		if (submissionStatus.getCode() == null || submissionStatus.getCode().trim().equals("")) {
-			throw new Exception("Kode status tidak boleh kosong");
 		} else {
-			SubmissionStatus submissionStat = getSubmissionStatusByCode(submissionStatus.getCode());
-			if(submissionStat != null) {
-				if(!submissionStat.getCode().equals(submissionStatus.getCode())) {
-					throw new Exception("Kode status sudah ada");					
+			SubmissionStatus subStat = getSubmissionStatusById(submissionStatus.getId());
+			if (submissionStatus.getCode() == null || submissionStatus.getCode().trim().equals("")) {
+				throw new Exception("Kode status tidak boleh kosong");
+			} else {
+				if(!subStat.getCode().equals(submissionStatus.getCode())) {
+					SubmissionStatus submissionStat = getSubmissionStatusByCode(submissionStatus.getCode());
+					if(submissionStat != null) {
+						if(!submissionStat.getCode().equals(submissionStatus.getCode())) {
+							throw new Exception("Kode status sudah ada");					
+						}
+					}					
 				}
-			}
-			if (submissionStatus.getSubmissionStatusName() == null
-					|| submissionStatus.getSubmissionStatusName().trim().equals("")) {
-				throw new Exception("Nama status tidak boleh kosong");
+				if (submissionStatus.getSubmissionStatusName() == null
+						|| submissionStatus.getSubmissionStatusName().trim().equals("")) {
+					throw new Exception("Nama status tidak boleh kosong");
+				}
 			}
 		}
 	}
