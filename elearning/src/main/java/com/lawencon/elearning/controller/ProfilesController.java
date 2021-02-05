@@ -34,12 +34,10 @@ public class ProfilesController extends ElearningBaseController {
 	public ResponseEntity<?> getAllProfiles() {
 		try {
 			List<Profiles> listProfiles = profilesService.getAllProfiles();
-			Response<List<Profiles>> response = new Response<List<Profiles>>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_CREATED.msg, listProfiles);
-			return new ResponseEntity<>(response, HttpStatus.OK);
+			return responseSuccess(listProfiles, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<List<Profiles>> response = new Response<List<Profiles>>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 	

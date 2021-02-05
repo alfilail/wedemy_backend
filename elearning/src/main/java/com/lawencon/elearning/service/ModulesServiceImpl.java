@@ -88,7 +88,7 @@ public class ModulesServiceImpl extends BaseServiceImpl implements ModulesServic
 				if (module.getModuleName() == null || module.getModuleName().trim().equals("")) {
 					throw new Exception("Nama Modul tidak boleh kosong");
 				}
-				if (!modu.getVersion().equals(module.getVersion())) {
+				if (modu.getVersion() != module.getVersion()) {
 					throw new Exception("Modul yang diedit telah diperbarui, silahkan coba lagi");
 				}
 			}			

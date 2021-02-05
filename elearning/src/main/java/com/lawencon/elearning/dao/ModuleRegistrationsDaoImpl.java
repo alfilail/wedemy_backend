@@ -1,7 +1,5 @@
 package com.lawencon.elearning.dao;
 
-import java.sql.Date;
-import java.sql.Time;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;

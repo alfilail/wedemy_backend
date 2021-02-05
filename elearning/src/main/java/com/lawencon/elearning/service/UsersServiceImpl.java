@@ -197,13 +197,17 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 	private void validateUpdate(Users user) throws Exception {
 		if(user.getId() == null || user.getId().trim().equals("")) {
 			throw new Exception("Id user tidak boleh kosong");
-		} else if (user.getId() != null) {
+		} else {
 			Users usr = getUserById(user.getId());
 			if(user.getUsername() == null || user.getUsername().trim().equals("")) {
 				throw new Exception("Username tidak boleh kosong");
-			} else if(user.getUserPassword() == null || user.getUserPassword().trim().equals("")) {
+			}
+			if(usr.getVersion() != user.getVersion()) {
+				throw new Exception("User yang diedit telah diperbarui, silahkan coba lagi");
+			}
+			if(user.getUserPassword() == null || user.getUserPassword().trim().equals("")) {
 				throw new Exception("Password tidak boleh kosong");
-			} else if(user.getUserPassword() != null) {
+			} else {
 				if(passwordEncoder.matches(user.getUserPassword(), usr.getUserPassword())) {
 					throw new Exception("Password tidak boleh sama dengan sebelumnya");
 				}				

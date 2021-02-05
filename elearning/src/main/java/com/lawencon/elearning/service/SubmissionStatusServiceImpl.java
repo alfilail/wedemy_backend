@@ -40,13 +40,13 @@ public class SubmissionStatusServiceImpl extends BaseServiceImpl implements Subm
 	public void deleteSubmissionStatusById(String id, String idUser) throws Exception {
 		try {
 			begin();
-			if(validateDelete(id)) {
+			if (validateDelete(id)) {
 				submissionStatusDao.softDeleteSubmissionStatById(id, idUser);
 			} else {
-				submissionStatusDao.deleteSubmissionStatusById(id);				
+				submissionStatusDao.deleteSubmissionStatusById(id);
 			}
 			commit();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.getMessage();
 			rollback();
 		}
@@ -62,7 +62,7 @@ public class SubmissionStatusServiceImpl extends BaseServiceImpl implements Subm
 			throw new Exception("Kode status tidak boleh kosong");
 		} else {
 			SubmissionStatus submissionStat = getSubmissionStatusByCode(submissionStatus.getCode());
-			if(submissionStat != null) {
+			if (submissionStat != null) {
 				throw new Exception("Kode status sudah ada");
 			}
 			if (submissionStatus.getSubmissionStatusName() == null
@@ -80,27 +80,27 @@ public class SubmissionStatusServiceImpl extends BaseServiceImpl implements Subm
 			if (submissionStatus.getCode() == null || submissionStatus.getCode().trim().equals("")) {
 				throw new Exception("Kode status tidak boleh kosong");
 			} else {
-				if(!subStat.getCode().equals(submissionStatus.getCode())) {
+				if (!subStat.getCode().equals(submissionStatus.getCode())) {
 					SubmissionStatus submissionStat = getSubmissionStatusByCode(submissionStatus.getCode());
-					if(submissionStat != null) {
-						if(!submissionStat.getCode().equals(submissionStatus.getCode())) {
-							throw new Exception("Kode status sudah ada");					
-						}
-					}					
+					if (submissionStat != null) {
+						throw new Exception("Kode status sudah ada");
+					}
 				}
 				if (submissionStatus.getSubmissionStatusName() == null
 						|| submissionStatus.getSubmissionStatusName().trim().equals("")) {
 					throw new Exception("Nama status tidak boleh kosong");
 				}
+				if (submissionStatus.getVersion() != subStat.getVersion()) {
+					throw new Exception("Status yang diedit telah diperbarui, silahkan coba lagi");
+				}
 			}
 		}
 	}
-	
+
 	private boolean validateDelete(String id) throws Exception {
 		List<?> listObj = submissionStatusDao.validateDeleteSubmissionStat(id);
 		listObj.forEach(System.out::println);
-		List<?> list =  listObj.stream().filter(val -> val != null)
-				.collect(Collectors.toList());
+		List<?> list = listObj.stream().filter(val -> val != null).collect(Collectors.toList());
 		System.out.println(list.size());
 		return list.size() > 0 ? true : false;
 	}

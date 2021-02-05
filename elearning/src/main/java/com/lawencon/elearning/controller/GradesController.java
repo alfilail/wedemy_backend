@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lawencon.elearning.helper.Response;
 import com.lawencon.elearning.model.Grades;
 import com.lawencon.elearning.service.GradesService;
 import com.lawencon.elearning.util.MessageStat;
@@ -34,12 +33,10 @@ public class GradesController extends ElearningBaseController {
 		try {
 			grade = new ObjectMapper().readValue(body, Grades.class);
 			gradesService.insertGrade(grade);
-			Response<Grades> res = new Response<Grades>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_CREATED.msg, grade);
-			return new ResponseEntity<>(res, HttpStatus.CREATED);
+			return responseSuccess(grade, HttpStatus.CREATED, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<Grades> res = new Response<Grades>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), grade);
-			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 	
@@ -48,12 +45,10 @@ public class GradesController extends ElearningBaseController {
 		Grades grade = new Grades();
 		try {
 			grade = gradesService.getGradeById(id);
-			Response<Grades> res = new Response<Grades>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, grade);
-			return new ResponseEntity<>(res, HttpStatus.OK);
+			return responseSuccess(grade, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<Grades> res = new Response<Grades>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), grade);
-			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -62,12 +57,10 @@ public class GradesController extends ElearningBaseController {
 		List<Grades> gradesList = new ArrayList<Grades>();
 		try {
 			gradesList = gradesService.getAllGrades();
-			Response<List<Grades>> res = new Response<List<Grades>>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, gradesList);
-			return new ResponseEntity<>(res, HttpStatus.OK);
+			return responseSuccess(gradesList, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<List<Grades>> res = new Response<List<Grades>>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), gradesList);
-			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -76,12 +69,10 @@ public class GradesController extends ElearningBaseController {
 			@RequestParam("idUser") String idUser) {
 		try {
 			gradesService.deleteGradeById(id, idUser);
-			Response<Grades> res = new Response<Grades>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_DELETE.msg, null);
-			return new ResponseEntity<>(res, HttpStatus.OK);
+			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<Grades> res = new Response<Grades>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -90,12 +81,10 @@ public class GradesController extends ElearningBaseController {
 		try {
 			Grades grade = new ObjectMapper().readValue(body, Grades.class);
 			gradesService.updateGrades(grade);
-			Response<Grades> res = new Response<Grades>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_UPDATE.msg, grade);
-			return new ResponseEntity<>(res, HttpStatus.CREATED);
+			return responseSuccess(grade, HttpStatus.CREATED, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<Grades> res = new Response<Grades>(true, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 }

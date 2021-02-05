@@ -72,7 +72,7 @@ public class GradesServiceImpl extends BaseServiceImpl implements GradesService 
 					if (grade.getMinScore() >= grade.getMaxScore()) {
 						throw new Exception("Minimum score harus lebih kecil dari maximum score");
 					}
-				}							
+				}
 			}
 		}
 	}
@@ -99,7 +99,10 @@ public class GradesServiceImpl extends BaseServiceImpl implements GradesService 
 					if (grade.getMinScore() >= grade.getMaxScore()) {
 						throw new Exception("Minimum score harus lebih kecil dari maximum score");
 					}
-				}			
+				}
+				if (grade.getVersion() != grad.getVersion()) {
+					throw new Exception("Grade yang diedit telah diperbarui, silahkan coba lagi");
+				}
 			}
 		}
 	}

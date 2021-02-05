@@ -51,12 +51,27 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 
 	@Override
 	public void updateProfile(Profiles profile, MultipartFile file) throws Exception {
-		Files profilePict = filesService.getFileById(profile.getIdFile().getId());
-		profile.setIdFile(profilePict);
-		profilesDao.updateProfile(profile, () -> {
-			validateUpdate(profile);
+		try {
+			begin();
+			Files profilePict = new Files();
+			if(file != null) {
+//			profilePict.setCreatedBy(profile.getCreatedBy());
+				profilePict.setFile(file.getBytes());
+				profilePict.setType(file.getContentType());
+				profile.setIdFile(profilePict);
+			} else {
+				profilePict = filesService.getFileById(profile.getIdFile().getId());
+				profile.setIdFile(profilePict);						
+			}
 			filesService.insertFile(profilePict);
-		});
+			profilesDao.updateProfile(profile, () -> {
+				validateUpdate(profile);
+			});
+			commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			rollback();
+		}
 	}
 
 	@Override
@@ -86,19 +101,24 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 	private void validateUpdate(Profiles profile) throws Exception {
 		if (profile.getId() == null || profile.getId().trim().equals("")) {
 			throw new Exception("Id tidak boleh kosong");
-		}
-		if (profile.getFullName() == null || profile.getFullName().trim().equals("")) {
-			throw new Exception("Nama Lengkap tidak boleh kosong");
-		}
-		if (profile.getIdFile() != null) {
-			String[] type = profile.getIdFile().getType().split("/");
-			String ext = type[1];
-			if (ext != null) {
-				if (ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("jpeg")) {
-
-				} else {
-					throw new Exception("File harus gambar");
+		} else {
+			Profiles pfl = getProfileById(profile.getId());
+			if (profile.getFullName() == null || profile.getFullName().trim().equals("")) {
+				throw new Exception("Nama Lengkap tidak boleh kosong");
+			}
+			if (profile.getIdFile() != null) {
+				String[] type = profile.getIdFile().getType().split("/");
+				String ext = type[1];
+				if (ext != null) {
+					if (ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("jpeg")) {
+						
+					} else {
+						throw new Exception("File harus gambar");
+					}
 				}
+			}
+			if(pfl.getVersion() != profile.getVersion()) {
+				throw new Exception("Profile yang diedit telah diperbarui, silahkan coba lagi");
 			}
 		}
 	}

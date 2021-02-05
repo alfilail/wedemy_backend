@@ -26,7 +26,7 @@ public class AssignmentSubmissionsDaoImpl extends ElearningBaseDaoImpl<Assignmen
 	@Override
 	public List<AssignmentSubmissions> getAllByIdDtlModuleRgs(String idDtlModuleRgs) throws Exception {
 		List<AssignmentSubmissions> listResult = new ArrayList<>();
-		return null;
+		return listResult;
 	}
 	
 	@Override
