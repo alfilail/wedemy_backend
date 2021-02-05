@@ -23,6 +23,20 @@ public class ApprovementsRenewalDaoImpl extends ElearningBaseDaoImpl<Approvement
 	}
 
 	@Override
+	public List<ApprovementsRenewal> getListParticipantsPresence(String idDtlClass, String idDtlModuleRgs)
+			throws Exception {
+		List<ApprovementsRenewal> listResult = new ArrayList<>();
+		String sql = sqlBuilder("SELECT pf.fullname, pc.presence_time, a.approvement_name ",
+				"FROM t_m_class_enrollments ce INNER JOIN t_m_users u ON ce.id_user = u.id ",
+				"INNER JOIN t_m_profiles pf ON u.id_profile = pf.id ",
+				"LEFT JOIN t_r_presences pr ON ce.id_user = pr.id_user ",
+				"LEFT JOIN t_r_approvement_renewal ar ON pr.id = ar.id_presence ",
+				"LEFT JOIN t_m_approvements a ON ar.id_approvement = a.id ",
+				"WHERE ce.id_detail_class =?1 AND pr.id_detail_module_rgs = ?2").toString();
+		return null;
+	}
+
+	@Override
 	public ApprovementsRenewal getApprovementsRenewalById(String id) throws Exception {
 		return getById(id);
 	}
@@ -45,4 +59,5 @@ public class ApprovementsRenewalDaoImpl extends ElearningBaseDaoImpl<Approvement
 		});
 		return listResult.size() > 0 ? listResult.get(0) : null;
 	}
+
 }

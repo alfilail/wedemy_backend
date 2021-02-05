@@ -10,7 +10,9 @@ public interface ApprovementsRenewalDao {
 
 	List<ApprovementsRenewal> getAllApprovementsRenewal() throws Exception;
 
+	List<ApprovementsRenewal> getListParticipantsPresence(String idDtlClass, String idDtlModuleRgs) throws Exception;
+
 	ApprovementsRenewal getApprovementsRenewalById(String id) throws Exception;
-	
+
 	ApprovementsRenewal checkParticipantPresence(String idDtlModuleRgs, String idUser) throws Exception;
 }

@@ -14,8 +14,13 @@ public class ApprovementsRenewalServiceImpl extends ElearningBaseServiceImpl imp
 	@Autowired
 	private ApprovementsRenewalDao approvementsRenewalDao;
 
+	@Autowired
+	private ApprovementsService approvementService;
+
 	@Override
 	public void insertApprovementsRenewal(ApprovementsRenewal approvementsRenewal) throws Exception {
+		approvementsRenewal.setIdApprovement(
+				approvementService.getApprovementByCode(approvementsRenewal.getIdApprovement().getCode()));
 		approvementsRenewalDao.insertApprovementsRenewal(approvementsRenewal,
 				() -> validateInsert(approvementsRenewal));
 	}

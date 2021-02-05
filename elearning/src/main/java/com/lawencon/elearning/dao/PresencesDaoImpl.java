@@ -73,9 +73,9 @@ public class PresencesDaoImpl extends ElearningBaseDaoImpl<Presences> implements
 		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlModuleRgs).setParameter(2, idParticipant)
 				.getResultList();
 		listObj.forEach(val -> {
-			Object[] objArr = (Object[]) val;
+			Object objArr = (Object) val;
 			Presences presence = new Presences();
-			presence.setId((String) objArr[0]);
+			presence.setId((String) objArr);
 			listResult.add(presence);
 		});
 		return listResult.size() > 0 ? listResult.get(0) : null;
