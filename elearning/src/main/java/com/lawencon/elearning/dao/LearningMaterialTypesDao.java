@@ -26,4 +26,6 @@ public interface LearningMaterialTypesDao {
 	void softDeleteLearningMaterialTypeById(String id, String idUser) throws Exception;
 
 	List<?> validateDeleteLearningMaterialType(String id) throws Exception;
+	
+	
 }

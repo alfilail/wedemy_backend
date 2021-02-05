@@ -39,7 +39,7 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 	@Override
 	public void insertDetailClass(DetailClasses detailClass) throws Exception {
 		Classes clazz = classService.getClassById(detailClass.getIdClass().getId());
-		detailClass.setCode(generateCodeDetailClass(clazz.getCode()));
+		detailClass.setCode(generateCodeDetailClass(clazz.getCode(), detailClass.getStartDate()));
 		detailClassesDao.insertDetailClass(detailClass, () -> validateInsert(detailClass));
 	}
 
@@ -93,68 +93,69 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 	public void reactiveOldClass(DetailClasses detailClass) throws Exception {
 		try {
 			begin();
-			// get class by id class
+			//get class by id class
 			Classes clazz = classService.getInActiveClassById(detailClass.getIdClass().getId());
-
-			// update class is active
+			
+			//update class is active
 			classService.updateClassIsActive(detailClass.getIdClass().getId(), detailClass.getCreatedBy());
-
-			// set detail class
-
-			detailClass.setCode(generateCodeDetailClass(clazz.getCode()));
+				
+			//set detail class
+			detailClass.setCode(generateCodeDetailClass(clazz.getCode(), detailClass.getStartDate()));
 			detailClass.setViews(0);
 			detailClass.setIdClass(clazz);
-
-			// get detail class lama yang terbaru (end date tertinggi)
+			
+			//get detail class lama yang terbaru (end date tertinggi)
 			DetailClasses detailClassOld = detailClassesDao.getDetailClassByIdClass(detailClass.getIdClass().getId());
-
-			// get all module registration by id detail class lama
-			List<ModuleRegistrations> modulesRegistrationListOld = moduleRegistrationsService
-					.getModuleRegistrationsByIdDetailClass(detailClassOld.getId());
-
+			
+			//get all module registration by id detail class lama
+			List<ModuleRegistrations> modulesRegistrationListOld = 
+					moduleRegistrationsService.getModuleRegistrationsByIdDetailClass(detailClassOld.getId());
+			
 			// untuk menampung module list nya
 			List<Modules> modulesList = new ArrayList<Modules>();
-
-			// untuk menampung module registrations list
+			
+			//untuk menampung module registrations list
 			List<DetailModuleRegistrations> detailModuleList = new ArrayList<DetailModuleRegistrations>();
-
-			for (ModuleRegistrations moduleRegistration : modulesRegistrationListOld) {
-				// get module by id module yang ada di module registration
+			
+			for(ModuleRegistrations moduleRegistration : modulesRegistrationListOld) {
+				//get module by id module yang ada di module registration
 				Modules module = modulesService.getModuleById(moduleRegistration.getIdModule().getId());
 				modulesList.add(module);
-
-				List<DetailModuleRegistrations> detailModuleRegis = new ArrayList<DetailModuleRegistrations>();
-
-				// get detail module registration by id module registration
-				detailModuleRegis = detailModuleRegistrationsService
+				
+				List<DetailModuleRegistrations> detailModuleRegis = 
+						detailModuleRegistrationsService
 						.getDetailModuleRegistrationsByIdModuleRgs(moduleRegistration.getId());
 
-				// memindahkan detail module registration by id module registration ke detail
-				// module registration list
-				for (DetailModuleRegistrations detailModule : detailModuleRegis) {
-					detailModule.setIdModuleRegistration(moduleRegistration);
-					detailModuleList.add(detailModule);
+				// memindahkan detail module registration by id module registration ke detail module registration list
+				for(DetailModuleRegistrations detailModule : detailModuleRegis) {
+					DetailModuleRegistrations detail = new DetailModuleRegistrations();
+					detail.setIdLearningMaterial(detailModule.getIdLearningMaterial());
+					detail.setIdModuleRegistration(detailModule.getIdModuleRegistration());
+					detail.setOrderNumber(detailModule.getOrderNumber());
+					detail.setScheduleDate(detailModule.getScheduleDate());
+					detailModuleList.add(detail);	
 				}
-			}
-
-			detailClassesDao.insertDetailClass(detailClass, () -> validateReactive(detailClass));
-
-			// membuat clazz helper untuk insert module registration
+			}	
+			
+			detailClassesDao.insertDetailClass(detailClass, ()->validateReactive(detailClass));
+			
+			//membuat clazz helper untuk insert module registration
 			ClassesHelper clazzHelper = new ClassesHelper();
 			clazzHelper.setClazz(clazz);
 			clazzHelper.setDetailClass(detailClass);
 			clazzHelper.setModule(modulesList);
 			moduleRegistrationsService.insertModuleRegistration(clazzHelper);
-
-			// insert detail module registration
-			for (DetailModuleRegistrations detailModuleRegis : detailModuleList) {
+			
+			//insert detail module registration
+			for(DetailModuleRegistrations detailModuleRegis : detailModuleList) {
 				detailModuleRegistrationsService.insertDetailModuleRegistration(detailModuleRegis);
 			}
 			commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			rollback();
-		}
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+				rollback();
+			}
 	}
 
 	private void validateInsert(DetailClasses detailClass) throws Exception {
@@ -179,7 +180,7 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 
 	}
 
-	private String generateCodeDetailClass(String classCode) {
+	private String generateCodeDetailClass(String classCode, LocalDate startDate) {
 		LocalDate localDate = LocalDate.now();
 		DateTimeFormatter myFormat = DateTimeFormatter.ofPattern("yy-MM-dd");
 		String formattedDate = localDate.format(myFormat);

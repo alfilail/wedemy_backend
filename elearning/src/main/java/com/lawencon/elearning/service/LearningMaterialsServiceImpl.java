@@ -151,9 +151,11 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 					if (learningMaterial.getCode() == null || learningMaterial.getCode().trim().equals("")) {
 						throw new Exception("Kode bahan ajar tidak boleh kosong!");
 					} else {
-						LearningMaterials learningMaterials = getLearningMaterialByCode(learningMaterial.getCode());
-						if (learningMaterials != null) {
-							throw new Exception("Kode bahan ajar tidak boleh sama!");
+						if (!learningMaterial.getCode().equalsIgnoreCase(lm.getCode())) {
+							LearningMaterials learningMaterials = getLearningMaterialByCode(learningMaterial.getCode());
+							if(learningMaterials!= null) {
+								throw new Exception("Kode bahan ajar tidak boleh sama!");
+							}
 						} else {
 							if (learningMaterial.getIdLearningMaterialType() == null) {
 								LearningMaterialTypes materialType = learningMaterialTypesService

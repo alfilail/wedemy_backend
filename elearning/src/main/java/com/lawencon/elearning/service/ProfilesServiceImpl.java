@@ -18,10 +18,19 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 	private ProfilesDao profilesDao;
 
 	@Autowired
-	FilesService filesService;
+	private FilesService filesService;
+	
+	@Autowired
+	private GeneralService generalService;
 
 	@Override
 	public void insertProfile(Profiles profile) throws Exception {
+		byte[] defaultPict = generalService.getDefaultPict("rgs");
+		String pic = defaultPict.toString();
+		Files file = new Files();
+		file.setFile(pic.getBytes());
+		filesService.insertFile(file);
+		profile.setIdFile(file);
 		profilesDao.insertProfile(profile, () -> validateInsert(profile));
 	}
 

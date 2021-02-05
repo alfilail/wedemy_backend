@@ -143,9 +143,9 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 					if (clazz.getCode() == null || clazz.getCode().trim().equals("")) {
 						throw new Exception("Kode kelas tidak boleh kosong!");
 					} else {
-						Classes clz = classesDao.getClassByCode(clazz.getCode());
-						if (clz != null) {
-							if(!clz.getCode().equals(clazz.getCode())) {
+						if (!cls.getCode().equalsIgnoreCase(clazz.getCode())) {
+							Classes clz = classesDao.getClassByCode(clazz.getCode());
+							if(clz != null) {
 								throw new Exception("Kode kelas tidak boleh sama");								
 							}
 						} else {

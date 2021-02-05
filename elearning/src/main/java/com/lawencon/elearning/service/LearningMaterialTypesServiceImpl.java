@@ -13,7 +13,7 @@ import com.lawencon.elearning.model.LearningMaterialTypes;
 
 @Service
 public class LearningMaterialTypesServiceImpl extends BaseServiceImpl implements LearningMaterialTypesService {
-	
+
 	@Autowired
 	private LearningMaterialTypesDao learnMaterialTypeDao;
 
@@ -36,13 +36,13 @@ public class LearningMaterialTypesServiceImpl extends BaseServiceImpl implements
 	public void deleteLearningMaterialTypeById(String id, String idUser) throws Exception {
 		try {
 			begin();
-			if(validateDelete(id)) {
+			if (validateDelete(id)) {
 				learnMaterialTypeDao.softDeleteLearningMaterialTypeById(id, idUser);
-			} else {				
+			} else {
 				learnMaterialTypeDao.deleteLearningMaterialTypeById(id);
 			}
 			commit();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.getMessage();
 			rollback();
 		}
@@ -92,11 +92,11 @@ public class LearningMaterialTypesServiceImpl extends BaseServiceImpl implements
 								|| learningMaterialTypes.getCode().trim().equals("")) {
 							throw new Exception("Kode tipe bahan ajar tidak boleh kosong!");
 						} else {
-							LearningMaterialTypes learningMaterialType = getLearningMaterialTypeByCode(
-									learningMaterialTypes.getCode());
-							if (learningMaterialType != null) {
-								if(!learningMaterialType.getCode().equals(learningMaterialTypes.getCode())) {
-									throw new Exception("Kode tipe bahan tidak boleh sama!");									
+							if (!learningMaterialTypes.getCode().equalsIgnoreCase(learningType.getCode())) {
+								LearningMaterialTypes lmType = getLearningMaterialTypeByCode(
+										learningMaterialTypes.getCode());
+								if (lmType != null) {
+									throw new Exception("Kode tipe bahan ajar tidak boleh sama!");
 								}
 							} else {
 								if (learningMaterialTypes.getLearningMaterialTypeName() == null
@@ -110,12 +110,11 @@ public class LearningMaterialTypesServiceImpl extends BaseServiceImpl implements
 			}
 		}
 	}
-	
+
 	private boolean validateDelete(String id) throws Exception {
 		List<?> listObj = learnMaterialTypeDao.validateDeleteLearningMaterialType(id);
 		listObj.forEach(System.out::println);
-		List<?> list =  listObj.stream().filter(val -> val != null)
-				.collect(Collectors.toList());
+		List<?> list = listObj.stream().filter(val -> val != null).collect(Collectors.toList());
 		System.out.println(list.size());
 		return list.size() > 0 ? true : false;
 	}

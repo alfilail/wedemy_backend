@@ -25,4 +25,7 @@ public class General extends BaseMaster {
 	
 	@Column(name = "template_html", columnDefinition = "text")
 	private String templateHtml;
+	
+	@Column(name = "photo_profile")
+	private byte[] photoProfile;
 }
