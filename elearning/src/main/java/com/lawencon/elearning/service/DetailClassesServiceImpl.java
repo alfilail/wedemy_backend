@@ -39,7 +39,7 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 	@Override
 	public void insertDetailClass(DetailClasses detailClass) throws Exception {
 		Classes clazz = classService.getClassById(detailClass.getIdClass().getId());
-		detailClass.setCode(generateCodeDetailClass(clazz.getCode()));
+		detailClass.setCode(generateCodeDetailClass(clazz.getCode(), detailClass.getStartDate()));
 		detailClassesDao.insertDetailClass(detailClass, () -> validateInsert(detailClass));
 	}
 	
@@ -100,8 +100,7 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 		classService.updateClassIsActive(detailClass.getIdClass().getId(), detailClass.getCreatedBy());
 		
 		//set detail class
-		
-		detailClass.setCode(generateCodeDetailClass(clazz.getCode()));
+		detailClass.setCode(generateCodeDetailClass(clazz.getCode(), detailClass.getStartDate()));
 		detailClass.setViews(0);
 		detailClass.setIdClass(clazz);
 		
@@ -123,16 +122,18 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 			Modules module = modulesService.getModuleById(moduleRegistration.getIdModule().getId());
 			modulesList.add(module);
 			
-			List<DetailModuleRegistrations> detailModuleRegis = new ArrayList<DetailModuleRegistrations>();
-			
-			//get detail module registration by id module registration
-			detailModuleRegis = detailModuleRegistrationsService
+			List<DetailModuleRegistrations> detailModuleRegis = 
+					detailModuleRegistrationsService
 					.getDetailModuleRegistrationsByIdModuleRgs(moduleRegistration.getId());
-			
+
 			// memindahkan detail module registration by id module registration ke detail module registration list
 			for(DetailModuleRegistrations detailModule : detailModuleRegis) {
-				detailModule.setIdModuleRegistration(moduleRegistration);
-				detailModuleList.add(detailModule);
+				DetailModuleRegistrations detail = new DetailModuleRegistrations();
+				detail.setIdLearningMaterial(detailModule.getIdLearningMaterial());
+				detail.setIdModuleRegistration(detailModule.getIdModuleRegistration());
+				detail.setOrderNumber(detailModule.getOrderNumber());
+				detail.setScheduleDate(detailModule.getScheduleDate());
+				detailModuleList.add(detail);	
 			}
 		}	
 		
@@ -178,10 +179,9 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 		
 	}
 
-	private String generateCodeDetailClass(String classCode) {
-		LocalDate localDate = LocalDate.now();
+	private String generateCodeDetailClass(String classCode, LocalDate startDate) {
 		DateTimeFormatter myFormat = DateTimeFormatter.ofPattern("yy-MM-dd");
-		String formattedDate = localDate.format(myFormat);
+		String formattedDate = startDate.format(myFormat);
 		String date = bBuilder(formattedDate).toString();
 		date = date.replaceAll("-", "");
 		String detailClassCode = bBuilder(classCode, date).toString();

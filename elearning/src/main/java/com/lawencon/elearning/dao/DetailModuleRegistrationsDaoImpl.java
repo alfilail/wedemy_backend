@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.lawencon.elearning.model.DetailModuleRegistrations;
 import com.lawencon.elearning.model.LearningMaterialTypes;
 import com.lawencon.elearning.model.LearningMaterials;
+import com.lawencon.elearning.model.ModuleRegistrations;
 import com.lawencon.util.Callback;
 
 @Repository
@@ -44,7 +45,7 @@ public class DetailModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<Detai
 		List<DetailModuleRegistrations> listResult = new ArrayList<>();
 		String sql = sqlBuilder(
 				"SELECT lm.id materialid, lm.code materialcode, lm.learning_material_name, lm.description, ",
-				"lmt.code typecode, dmr.id dmrid, dmr.schedule_date FROM t_r_detail_module_registrations dmr ",
+				"lmt.code typecode, dmr.id dmrid, dmr.schedule_date, dmr.order_number, dmr.id_module_rgs FROM t_r_detail_module_registrations dmr ",
 				"INNER JOIN t_m_learning_materials lm ON dmr.id_learning_material = lm.id ",
 				"INNER JOIN t_m_learning_material_types lmt ON lm.id_learning_material_type = lmt.id WHERE dmr.id_module_rgs =?1")
 						.toString();
@@ -63,6 +64,10 @@ public class DetailModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<Detai
 			dtlModuleRgs.setIdLearningMaterial(learningMaterial);
 			dtlModuleRgs.setId((String) objArr[5]);
 			dtlModuleRgs.setScheduleDate(((Date) objArr[6]).toLocalDate());
+			dtlModuleRgs.setOrderNumber((Integer) objArr[7]);
+			ModuleRegistrations moduleRegis = new ModuleRegistrations();
+			moduleRegis.setId((String) objArr[8]);
+			dtlModuleRgs.setIdModuleRegistration(moduleRegis);
 			listResult.add(dtlModuleRgs);
 		});
 		return listResult;
