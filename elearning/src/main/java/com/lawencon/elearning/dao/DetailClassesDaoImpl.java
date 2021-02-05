@@ -106,7 +106,7 @@ public class DetailClassesDaoImpl extends ElearningBaseDaoImpl<DetailClasses> im
 	public List<DetailClasses> getAllDetailClassByIdClass(String idClass) throws Exception {
 		List<DetailClasses> detailClassList = createQuery("FROM DetailClasses WHERE idClass.id = ?1 ", DetailClasses.class)
 				.setParameter(1, idClass).getResultList();
-		return detailClassList.size() > 0 ? detailClassList : null;
+		return detailClassList.size() > 0 ? detailClassList : null; //ditanya mas imam
 	}
 
 	@Override
@@ -117,9 +117,9 @@ public class DetailClassesDaoImpl extends ElearningBaseDaoImpl<DetailClasses> im
 	@Override
 	public DetailClasses getDetailClassByIdClass(String idClass) throws Exception {
 		List<DetailClasses> detailClassList = createQuery(sqlBuilder(
-				"FROM DetailClasses WHERE idClass.id = ?1 ORDER BY endDate DESC").toString(), DetailClasses.class)
-				.setParameter(1, idClass).setMaxResults(1).getResultList();
-		return detailClassList.size() > 0 ? detailClassList.get(0) : null;
+				"FROM DetailClasses WHERE idClass.id = ?1 AND isActive = ?2 ORDER BY endDate DESC").toString(), DetailClasses.class)
+				.setParameter(1, idClass).setParameter(2, false).setMaxResults(1).getResultList();
+		return resultCheck(detailClassList);
 	}
 	
 	@Override
