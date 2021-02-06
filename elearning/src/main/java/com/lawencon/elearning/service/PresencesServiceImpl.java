@@ -37,6 +37,7 @@ public class PresencesServiceImpl extends ElearningBaseServiceImpl implements Pr
 	@Override
 	public void insertPresence(Presences presence) throws Exception {
 		try {
+			begin();
 			presence.setTrxNumber(generateTrxNumber());
 			presence.setPresenceTime(LocalTime.now());
 			presencesDao.insertPresence(presence, () -> validateInsert(presence));
@@ -44,6 +45,7 @@ public class PresencesServiceImpl extends ElearningBaseServiceImpl implements Pr
 			if (user.getIdRole().getCode().equals("PCP")) {
 				insertApprovementRenewal(presence);
 			}
+			commit();
 		} catch (Exception e) {
 			rollback();
 			throw new Exception(e);

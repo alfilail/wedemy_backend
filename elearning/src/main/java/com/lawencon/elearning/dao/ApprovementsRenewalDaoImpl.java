@@ -1,5 +1,6 @@
 package com.lawencon.elearning.dao;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,14 +8,24 @@ import org.springframework.stereotype.Repository;
 
 import com.lawencon.elearning.model.Approvements;
 import com.lawencon.elearning.model.ApprovementsRenewal;
+import com.lawencon.elearning.model.Presences;
+import com.lawencon.elearning.model.Profiles;
+import com.lawencon.elearning.model.Users;
 import com.lawencon.util.Callback;
 
 @Repository
 public class ApprovementsRenewalDaoImpl extends ElearningBaseDaoImpl<ApprovementsRenewal>
 		implements ApprovementsRenewalDao {
+
 	@Override
 	public void insertApprovementsRenewal(ApprovementsRenewal approvementsRenewal, Callback before) throws Exception {
 		save(approvementsRenewal, before, null);
+	}
+
+	@Override
+	public void participantApprovementsRenewal(ApprovementsRenewal approvementsRenewal, Callback before)
+			throws Exception {
+		save(approvementsRenewal, before, null, true, true);
 	}
 
 	@Override
@@ -26,14 +37,34 @@ public class ApprovementsRenewalDaoImpl extends ElearningBaseDaoImpl<Approvement
 	public List<ApprovementsRenewal> getListParticipantsPresence(String idDtlClass, String idDtlModuleRgs)
 			throws Exception {
 		List<ApprovementsRenewal> listResult = new ArrayList<>();
-		String sql = sqlBuilder("SELECT pf.fullname, pc.presence_time, a.approvement_name ",
-				"FROM t_m_class_enrollments ce INNER JOIN t_m_users u ON ce.id_user = u.id ",
-				"INNER JOIN t_m_profiles pf ON u.id_profile = pf.id ",
-				"LEFT JOIN t_r_presences pr ON ce.id_user = pr.id_user ",
-				"LEFT JOIN t_r_approvement_renewal ar ON pr.id = ar.id_presence ",
-				"LEFT JOIN t_m_approvements a ON ar.id_approvement = a.id ",
-				"WHERE ce.id_detail_class =?1 AND pr.id_detail_module_rgs = ?2").toString();
-		return null;
+		String sql = sqlBuilder("SELECT pr.fullname, p.presence_time, (SELECT a.approvement_name FROM ",
+				"t_r_approvement_renewal ar LEFT JOIN t_m_approvements a ON ar.id_approvement = a.id ",
+				"WHERE ar.id_presence = p.id ORDER BY ar.created_at DESC LIMIT 1) ",
+				"FROM t_r_class_enrollments ce INNER JOIN t_m_users u ON ce.id_user = u.id ",
+				"INNER JOIN t_m_profiles pr ON u.id_profile = pr.id INNER JOIN t_m_detail_classes dc ",
+				"ON ce.id_detail_class = dc.id INNER JOIN t_r_module_registrations mr ON dc.id = mr.id_detail_class ",
+				"INNER JOIN t_r_detail_module_registrations dmr ON mr.id = dmr.id_module_rgs ",
+				"LEFT JOIN t_r_presences p ON dmr.id = p.id_detail_module_rgs AND ce.id_user = p.id_user ",
+				"WHERE ce.id_detail_class =?1 and dmr.id =?2 ORDER BY p.presence_time ASC").toString();
+		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlClass).setParameter(2, idDtlModuleRgs)
+				.getResultList();
+		listObj.forEach(val -> {
+			Object[] objArr = (Object[]) val;
+			Profiles profile = new Profiles();
+			profile.setFullName((String) objArr[0]);
+			Users user = new Users();
+			user.setIdProfile(profile);
+			Presences presence = new Presences();
+			presence.setIdUser(user);
+			presence.setPresenceTime(objArr[1] != null ? ((Time) objArr[1]).toLocalTime() : null);
+			Approvements approvement = new Approvements();
+			approvement.setApprovementName((String) objArr[2]);
+			ApprovementsRenewal approvementRenewal = new ApprovementsRenewal();
+			approvementRenewal.setIdPresence(presence);
+			approvementRenewal.setIdApprovement(approvement);
+			listResult.add(approvementRenewal);
+		});
+		return listResult;
 	}
 
 	@Override

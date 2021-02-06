@@ -7,6 +7,8 @@ import com.lawencon.util.Callback;
 
 public interface ApprovementsRenewalDao {
 	void insertApprovementsRenewal(ApprovementsRenewal approvementsRenewal, Callback before) throws Exception;
+	
+	void participantApprovementsRenewal(ApprovementsRenewal approvementsRenewal, Callback before) throws Exception;
 
 	List<ApprovementsRenewal> getAllApprovementsRenewal() throws Exception;
 

@@ -18,7 +18,7 @@ public class PresencesDaoImpl extends ElearningBaseDaoImpl<Presences> implements
 
 	@Override
 	public void insertPresence(Presences presence, Callback before) throws Exception {
-		save(presence, before, null, true, true);
+		save(presence, before, null);
 	}
 
 	@Override

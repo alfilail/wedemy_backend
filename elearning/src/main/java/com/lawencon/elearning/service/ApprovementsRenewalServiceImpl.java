@@ -26,8 +26,22 @@ public class ApprovementsRenewalServiceImpl extends ElearningBaseServiceImpl imp
 	}
 
 	@Override
+	public void participantApprovementsRenewal(ApprovementsRenewal approvementsRenewal) throws Exception {
+		approvementsRenewal.setIdApprovement(
+				approvementService.getApprovementByCode(approvementsRenewal.getIdApprovement().getCode()));
+		approvementsRenewalDao.participantApprovementsRenewal(approvementsRenewal,
+				() -> validateInsert(approvementsRenewal));
+	}
+
+	@Override
 	public List<ApprovementsRenewal> getAllApprovementsRenewal() throws Exception {
 		return approvementsRenewalDao.getAllApprovementsRenewal();
+	}
+
+	@Override
+	public List<ApprovementsRenewal> getListParticipantsPresence(String idDtlClass, String idDtlModuleRgs)
+			throws Exception {
+		return approvementsRenewalDao.getListParticipantsPresence(idDtlClass, idDtlModuleRgs);
 	}
 
 	@Override
