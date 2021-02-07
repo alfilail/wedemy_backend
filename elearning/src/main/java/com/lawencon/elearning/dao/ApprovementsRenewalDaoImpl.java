@@ -37,7 +37,7 @@ public class ApprovementsRenewalDaoImpl extends ElearningBaseDaoImpl<Approvement
 	public List<ApprovementsRenewal> getListParticipantsPresence(String idDtlClass, String idDtlModuleRgs)
 			throws Exception {
 		List<ApprovementsRenewal> listResult = new ArrayList<>();
-		String sql = sqlBuilder("SELECT pr.fullname, p.presence_time, (SELECT a.approvement_name FROM ",
+		String sql = sqlBuilder("SELECT pr.fullname, p.id, p.presence_time, (SELECT a.approvement_name FROM ",
 				"t_r_approvement_renewal ar LEFT JOIN t_m_approvements a ON ar.id_approvement = a.id ",
 				"WHERE ar.id_presence = p.id ORDER BY ar.created_at DESC LIMIT 1) ",
 				"FROM t_r_class_enrollments ce INNER JOIN t_m_users u ON ce.id_user = u.id ",
@@ -56,9 +56,10 @@ public class ApprovementsRenewalDaoImpl extends ElearningBaseDaoImpl<Approvement
 			user.setIdProfile(profile);
 			Presences presence = new Presences();
 			presence.setIdUser(user);
-			presence.setPresenceTime(objArr[1] != null ? ((Time) objArr[1]).toLocalTime() : null);
+			presence.setId((String) objArr[1]);
+			presence.setPresenceTime(objArr[2] != null ? ((Time) objArr[2]).toLocalTime() : null);
 			Approvements approvement = new Approvements();
-			approvement.setApprovementName((String) objArr[2]);
+			approvement.setApprovementName((String) objArr[3]);
 			ApprovementsRenewal approvementRenewal = new ApprovementsRenewal();
 			approvementRenewal.setIdPresence(presence);
 			approvementRenewal.setIdApprovement(approvement);
@@ -81,9 +82,9 @@ public class ApprovementsRenewalDaoImpl extends ElearningBaseDaoImpl<Approvement
 		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlModuleRgs).setParameter(2, idUser)
 				.getResultList();
 		listObj.forEach(val -> {
-			Object[] objArr = (Object[]) val;
+			Object obj = (Object) val;
 			Approvements approvement = new Approvements();
-			approvement.setApprovementName((String) objArr[0]);
+			approvement.setCode((String) obj);
 			ApprovementsRenewal approvementRenewal = new ApprovementsRenewal();
 			approvementRenewal.setIdApprovement(approvement);
 			listResult.add(approvementRenewal);

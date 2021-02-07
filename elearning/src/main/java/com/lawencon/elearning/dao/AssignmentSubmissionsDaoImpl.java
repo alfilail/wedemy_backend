@@ -12,10 +12,11 @@ import com.lawencon.util.Callback;
 @Repository
 public class AssignmentSubmissionsDaoImpl extends ElearningBaseDaoImpl<AssignmentSubmissions>
 		implements AssignmentSubmissionsDao {
+
 	@Override
 	public void insertAssignmentSubmission(AssignmentSubmissions assignmentSubmission, Callback before)
 			throws Exception {
-		save(assignmentSubmission, before, null, true, true);
+		save(assignmentSubmission, before, null);
 	}
 
 	@Override
@@ -28,7 +29,7 @@ public class AssignmentSubmissionsDaoImpl extends ElearningBaseDaoImpl<Assignmen
 		List<AssignmentSubmissions> listResult = new ArrayList<>();
 		return listResult;
 	}
-	
+
 	@Override
 	public AssignmentSubmissions getAssignmentSubmissionByCode(String code) throws Exception {
 		return null;
@@ -57,16 +58,13 @@ public class AssignmentSubmissionsDaoImpl extends ElearningBaseDaoImpl<Assignmen
 		});
 		return tutor;
 	}
-	
+
 	@Override
 	public Profiles getParticipantProfile(AssignmentSubmissions assignmentSubmission) throws Exception {
 		Profiles participant = new Profiles();
-		String sql = sqlBuilder(
-				" SELECT p.fullname, p.email FROM t_r_assignment_submissions asm ",
+		String sql = sqlBuilder(" SELECT p.fullname, p.email FROM t_r_assignment_submissions asm ",
 				" INNER JOIN t_m_users u ON asm.id_participant = u.id ",
-				" INNER JOIN t_m_profiles p ON u.id_profile = p.id ",
-				" WHERE asm.id_dtl_module_rgs = ?1 "
-				).toString();
+				" INNER JOIN t_m_profiles p ON u.id_profile = p.id ", " WHERE asm.id_dtl_module_rgs = ?1 ").toString();
 		List<?> listObj = createNativeQuery(sql)
 				.setParameter(1, assignmentSubmission.getIdDetailModuleRegistration().getId()).getResultList();
 		listObj.forEach(val -> {

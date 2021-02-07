@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.elearning.dao.PresencesDao;
-import com.lawencon.elearning.model.Approvements;
 import com.lawencon.elearning.model.ApprovementsRenewal;
 import com.lawencon.elearning.model.Presences;
 import com.lawencon.elearning.model.Users;
@@ -24,9 +23,6 @@ public class PresencesServiceImpl extends ElearningBaseServiceImpl implements Pr
 
 	@Autowired
 	private PresencesDao presencesDao;
-
-	@Autowired
-	private ApprovementsService approvementsService;
 
 	@Autowired
 	private ApprovementsRenewalService approvementsRenewalService;
@@ -73,10 +69,8 @@ public class PresencesServiceImpl extends ElearningBaseServiceImpl implements Pr
 	}
 
 	private void insertApprovementRenewal(Presences presence) throws Exception {
-		Approvements approvements = approvementsService.getApprovementByCode("PND");
 		ApprovementsRenewal approvementsRenewal = new ApprovementsRenewal();
 		approvementsRenewal.setIdPresence(presence);
-		approvementsRenewal.setIdApprovement(approvements);
 		approvementsRenewalService.insertApprovementsRenewal(approvementsRenewal);
 	}
 

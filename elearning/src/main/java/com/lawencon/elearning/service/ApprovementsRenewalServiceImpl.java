@@ -19,8 +19,7 @@ public class ApprovementsRenewalServiceImpl extends ElearningBaseServiceImpl imp
 
 	@Override
 	public void insertApprovementsRenewal(ApprovementsRenewal approvementsRenewal) throws Exception {
-		approvementsRenewal.setIdApprovement(
-				approvementService.getApprovementByCode(approvementsRenewal.getIdApprovement().getCode()));
+		approvementsRenewal.setIdApprovement(approvementService.getApprovementByCode("PND"));
 		approvementsRenewalDao.insertApprovementsRenewal(approvementsRenewal,
 				() -> validateInsert(approvementsRenewal));
 	}

@@ -56,10 +56,10 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 			assignmentSubmissionsDao.insertAssignmentSubmission(assignmentSubmission,
 					() -> validateInsert(assignmentSubmission));
 			insertStatusRenewal(assignmentSubmission);
-			System.out.println("Sending Email...");
-			sendEmailTutor(assignmentSubmission);
-			sendEmailParticipant(assignmentSubmission);
-			System.out.println("Done");
+//			System.out.println("Sending Email...");
+//			sendEmailTutor(assignmentSubmission);
+//			sendEmailParticipant(assignmentSubmission);
+//			System.out.println("Done");
 			commit();
 		} catch (Exception e) {
 			rollback();
