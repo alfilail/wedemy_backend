@@ -15,7 +15,6 @@ import com.lawencon.elearning.model.Grades;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.SubmissionStatusRenewal;
 import com.lawencon.elearning.util.EmptyField;
-import com.lawencon.elearning.util.GeneralUtil;
 import com.lawencon.elearning.util.MailUtil;
 
 /**
@@ -52,29 +51,36 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 			begin();
 			for (Evaluations evaluation : scores.getEvaluations()) {
 				if (!evaluation.getIdAssignmentSubmission().getId().equals(EmptyField.EMPTY.msg)) {
-					Evaluations existedEval = evaluationsDao.getByIdDtlModuleRgsAndIdParticipant(
-							evaluation.getIdAssignmentSubmission().getIdDetailModuleRegistration().getId(),
-							evaluation.getIdAssignmentSubmission().getIdParticipant().getId());
-					if (existedEval == null) {
-						Grades grade = gradesService.getGradeByScore(evaluation.getScore());
-						evaluation.setIdGrade(grade);
-						evaluationsDao.insertEvaluation(evaluation, () -> validateInsert(evaluation));
-						insertStatusRenewal(evaluation);
+//					Evaluations existedEval = evaluationsDao.getByIdDtlModuleRgsAndIdParticipant(
+//							evaluation.getIdAssignmentSubmission().getIdDetailModuleRegistration().getId(),
+//							evaluation.getIdAssignmentSubmission().getIdParticipant().getId());
+//					if (existedEval == null) {
+					Grades grade = gradesService.getGradeByScore(evaluation.getScore());
+					evaluation.setIdGrade(grade);
+					evaluationsDao.insertEvaluation(evaluation, () -> validateInsert(evaluation));
+					insertStatusRenewal(evaluation);
 //						System.out.println("Sending Email...");
 //						sendEmail(evaluation);
 //						System.out.println("Done");
-					} else if (existedEval != null
-							&& evaluation.getScore().doubleValue() != existedEval.getScore().doubleValue()) {
-						Grades grade = gradesService.getGradeByScore(evaluation.getScore());
-						evaluation.setIdGrade(grade);
-						evaluationsDao.insertEvaluation(evaluation, () -> validateInsert(evaluation));
-					}
+//					} else if (existedEval != null
+//							&& evaluation.getScore().doubleValue() != existedEval.getScore().doubleValue()) {
+//						Grades grade = gradesService.getGradeByScore(evaluation.getScore());
+//						evaluation.setIdGrade(grade);
+//						evaluationsDao.insertEvaluation(evaluation, () -> validateInsert(evaluation));
+//					}
 				}
 			}
 			commit();
 		} catch (Exception e) {
 			rollback();
 			throw new Exception(e);
+		}
+	}
+
+	@Override
+	public void updateEvaluation(ScoreInputs scores) throws Exception {
+		for (Evaluations evaluation : scores.getEvaluations()) {
+			evaluationsDao.updateEvaluation(evaluation, () -> validateInsert(evaluation));
 		}
 	}
 
@@ -116,7 +122,7 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 		evaluation.setIdAssignmentSubmission(assignmentSubmissions);
 		Profiles participant = evaluationsDao.getParticipantProfile(evaluation);
 
-		General general = generalService.getTemplateEmail(GeneralUtil.EVALUATION_PARTICIPANT.code);
+		General general = generalService.getTemplateEmail("scrupd");
 		String text = general.getTemplateHtml();
 
 		text = text.replace("#1#", participant.getFullName());
@@ -131,8 +137,8 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 
 	@Override
 	public List<?> reportAllScore(String idClass) throws Exception {
-		List<?> data = evaluationsDao.reportAllScore(idClass);
-		validateReport(data);
+//		List<?> data = evaluationsDao.reportAllScore(idClass);
+//		validateReport(data);
 		return evaluationsDao.reportAllScore(idClass);
 	}
 
@@ -141,10 +147,10 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 		return evaluationsDao.reportScore(idDtlClass, idParticipant);
 	}
 
-	private void validateReport(List<?> data) throws Exception {
-		if(data == null) {
-			throw new Exception("Data kosong");
-		}
-	}
+//	private void validateReport(List<?> data) throws Exception {
+//		if(data == null) {
+//			throw new Exception("Data kosong");
+//		}
+//	}
 
 }

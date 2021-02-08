@@ -14,6 +14,8 @@ public interface EvaluationsDao {
 
 	void insertEvaluation(Evaluations evaluation, Callback before) throws Exception;
 
+	void updateEvaluation(Evaluations evaluation, Callback before) throws Exception;
+
 	List<Evaluations> getAllEvaluations() throws Exception;
 
 	List<Evaluations> getAllByIdDtlClassAndIdDtlModuleRgs(String idDtlClass, String idDtlModuleRgs) throws Exception;

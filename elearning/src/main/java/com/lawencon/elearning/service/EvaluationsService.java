@@ -13,6 +13,8 @@ public interface EvaluationsService {
 
 	void insertEvaluation(ScoreInputs scores) throws Exception;
 
+	void updateEvaluation(ScoreInputs scores) throws Exception;
+
 	List<Evaluations> getAllEvaluations() throws Exception;
 
 	List<Evaluations> getAllByIdDtlClassAndIdDtlModuleRgs(String idDtlClass, String idDtlModuleRgs) throws Exception;

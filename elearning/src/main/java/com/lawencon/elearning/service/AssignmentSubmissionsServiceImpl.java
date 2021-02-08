@@ -17,7 +17,6 @@ import com.lawencon.elearning.model.Files;
 import com.lawencon.elearning.model.General;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.SubmissionStatusRenewal;
-import com.lawencon.elearning.util.GeneralUtil;
 import com.lawencon.elearning.util.MailUtil;
 import com.lawencon.elearning.util.SubmissionStatusCode;
 
@@ -69,8 +68,30 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 	}
 
 	@Override
+	public void updateAssignmentSubmission(AssignmentSubmissions assignmentSubmission, MultipartFile fileInput)
+			throws Exception {
+		try {
+			begin();
+			Files file = new Files();
+			file.setFile(fileInput.getBytes());
+			file.setType(fileInput.getContentType());
+			filesService.insertFile(file);
+			commit();
+		} catch (Exception e) {
+			rollback();
+			throw new Exception();
+		}
+	}
+
+	@Override
 	public List<AssignmentSubmissions> getAllAssignmentSubmissions() throws Exception {
 		return assignmentSubmissionsDao.getAllAssignmentSubmissions();
+	}
+
+	@Override
+	public AssignmentSubmissions getByIdDtlModuleRgsAndIdParticipant(String idDtlModuleRgs, String idParticipant)
+			throws Exception {
+		return assignmentSubmissionsDao.getByIdDtlModuleRgsAndIdParticipant(idDtlModuleRgs, idParticipant);
 	}
 
 	@Override
@@ -92,7 +113,7 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 		Profiles tutor = assignmentSubmissionsDao.getTutorProfile(assignmentSubmission);
 		Profiles participant = assignmentSubmissionsDao.getParticipantProfile(assignmentSubmission);
 
-		General general = generalService.getTemplateEmail(GeneralUtil.ASSIGNMENT_SUBMISSION_TUTOR.code);
+		General general = generalService.getTemplateEmail("asgttr");
 		String text = general.getTemplateHtml();
 
 		text = text.replace("#1#", tutor.getFullName());
@@ -109,7 +130,7 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 	private void sendEmailParticipant(AssignmentSubmissions assignmentSubmission) throws Exception {
 		Profiles participant = assignmentSubmissionsDao.getParticipantProfile(assignmentSubmission);
 
-		General general = generalService.getTemplateEmail(GeneralUtil.ASSIGNMENT_SUBMISSION_PARTICIPANT.code);
+		General general = generalService.getTemplateEmail("asgpcp");
 		String text = general.getTemplateHtml();
 
 		text = text.replace("#1#", participant.getFullName());

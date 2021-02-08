@@ -6,7 +6,9 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.elearning.model.AssignmentSubmissions;
+import com.lawencon.elearning.model.Files;
 import com.lawencon.elearning.model.Profiles;
+import com.lawencon.elearning.util.EmptyField;
 import com.lawencon.util.Callback;
 
 @Repository
@@ -28,6 +30,28 @@ public class AssignmentSubmissionsDaoImpl extends ElearningBaseDaoImpl<Assignmen
 	public List<AssignmentSubmissions> getAllByIdDtlModuleRgs(String idDtlModuleRgs) throws Exception {
 		List<AssignmentSubmissions> listResult = new ArrayList<>();
 		return listResult;
+	}
+	
+	@Override
+	public AssignmentSubmissions getByIdDtlModuleRgsAndIdParticipant(String idDtlModuleRgs, String idParticipant)
+			throws Exception {
+		List<AssignmentSubmissions> listResult = new ArrayList<>();
+		String sql = sqlBuilder("SELECT asm.id, asm.version, f.file FROM t_r_assignment_submissions asm ",
+				"INNER JOIN t_m_files f ON asm.id_file = f.id WHERE asm.id_dtl_module_rgs = ?1 AND ",
+				"asm.id_participant = ?2").toString();
+		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlModuleRgs).setParameter(2, idParticipant)
+				.getResultList();
+		listObj.forEach(val -> {
+			Object[] objArr = (Object[]) val;
+			AssignmentSubmissions submission = new AssignmentSubmissions();
+			submission.setId(objArr[0] != null ? (String) objArr[0] : EmptyField.EMPTY.msg);
+			submission.setVersion(objArr[1] != null ? Long.valueOf(objArr[1].toString()) : null);
+			Files file = new Files();
+			file.setFile(objArr[2] != null ? (byte[]) objArr[2] : null);
+			submission.setIdFile(file);
+			listResult.add(submission);
+		});
+		return resultCheck(listResult);
 	}
 
 	@Override

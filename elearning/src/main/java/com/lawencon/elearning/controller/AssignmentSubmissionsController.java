@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,6 +44,19 @@ public class AssignmentSubmissionsController extends ElearningBaseController {
 	public ResponseEntity<?> getassignmentSubmissionsById(@PathVariable("id") String id) {
 		try {
 			AssignmentSubmissions assignmentSubmissions = assignmentSubmissionsService.getAssignmentSubmissionsById(id);
+			return responseSuccess(assignmentSubmissions, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return responseError(e);
+		}
+	}
+
+	@GetMapping("participant")
+	public ResponseEntity<?> getByIdDtlClassAndIdParticipant(@RequestParam("idDtlModuleRgs") String idDtlModuleRgs,
+			@RequestParam("idParticipant") String idParticipant) {
+		try {
+			AssignmentSubmissions assignmentSubmissions = assignmentSubmissionsService
+					.getByIdDtlModuleRgsAndIdParticipant(idDtlModuleRgs, idParticipant);
 			return responseSuccess(assignmentSubmissions, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
