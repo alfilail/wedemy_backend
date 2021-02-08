@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.lawencon.elearning.dao.ApprovementsRenewalDao;
 import com.lawencon.elearning.model.ApprovementsRenewal;
+import com.lawencon.elearning.util.ApprovementCode;
 
 @Service
 public class ApprovementsRenewalServiceImpl extends ElearningBaseServiceImpl implements ApprovementsRenewalService {
@@ -19,7 +20,7 @@ public class ApprovementsRenewalServiceImpl extends ElearningBaseServiceImpl imp
 
 	@Override
 	public void insertApprovementsRenewal(ApprovementsRenewal approvementsRenewal) throws Exception {
-		approvementsRenewal.setIdApprovement(approvementService.getApprovementByCode("PND"));
+		approvementsRenewal.setIdApprovement(approvementService.getApprovementByCode(ApprovementCode.PENDING.code));
 		approvementsRenewalDao.insertApprovementsRenewal(approvementsRenewal,
 				() -> validateInsert(approvementsRenewal));
 	}

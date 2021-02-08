@@ -12,6 +12,8 @@ public interface DetailModuleRegistrationsService {
 
 	DetailModuleRegistrations getDetailModuleRegistrationsById(String id) throws Exception;
 	
+	Integer totalHours(String idDtlClass) throws Exception;
+	
 	void deleteDetailModuleRegistration(String id, String idUser) throws Exception;
 	
 	DetailModuleRegistrations getDetailModuleRegistrationByIdLearningMaterial(String id) throws Exception;

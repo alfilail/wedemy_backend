@@ -36,6 +36,11 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 	}
 	
 	@Override
+	public Integer totalHours(String idDtlClass) throws Exception {
+		return dtlModRegistDao.totalHours(idDtlClass);
+	}
+	
+	@Override
 	public void deleteDetailModuleRegistration(String id, String idUser) throws Exception {
 		dtlModRegistDao.deleteDetailModuleRegistration(id, idUser);
 	}

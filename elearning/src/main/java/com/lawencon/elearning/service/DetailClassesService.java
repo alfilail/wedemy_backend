@@ -2,6 +2,7 @@ package com.lawencon.elearning.service;
 
 import java.util.List;
 
+import com.lawencon.elearning.helper.DetailClassInformation;
 import com.lawencon.elearning.model.DetailClasses;
 
 public interface DetailClassesService {
@@ -14,6 +15,8 @@ public interface DetailClassesService {
 	DetailClasses getDetailClassById(String id) throws Exception;
 
 	DetailClasses getDetailClassByCode(String code) throws Exception;
+	
+	DetailClassInformation getByIdDtlClass(String idDtlClass) throws Exception;
 
 	List<DetailClasses> getTutorClasses(String idTutor) throws Exception;
 	

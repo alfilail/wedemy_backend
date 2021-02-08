@@ -157,11 +157,11 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 						if (role.getCode().equals("TTR") || role.getCode().equals("ADM")) {
 							validateInsertExceptParticipant(user);
 						}
-						else {
-							System.out.println("Sending Email......");
-							sendEmailRegister(user.getIdProfile());
-							System.out.println("Done");
-						}
+//						else {
+//							System.out.println("Sending Email......");
+//							sendEmailRegister(user.getIdProfile());
+//							System.out.println("Done");
+//						}
 					}
 				}
 //				} else if (user.getIdRole().getCode() != null) {

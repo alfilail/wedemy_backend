@@ -81,4 +81,18 @@ public class DetailModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<Detai
 		return detailModuleList.size() > 0 ? detailModuleList.get(0) : null;
 	}
 
+	@Override
+	public Integer totalHours(String idDtlClass) throws Exception {
+		List<Integer> result = new ArrayList<>();
+		String sql = sqlBuilder("SELECT COUNT(DISTINCT(dmr.schedule_date)) FROM t_r_detail_module_registrations dmr ",
+				"INNER JOIN t_r_module_registrations mr ON dmr.id_module_rgs = mr.id WHERE mr.id_detail_class =?1")
+						.toString();
+		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlClass).getResultList();
+		listObj.forEach(val -> {
+			Object obj = (Object) val;
+			result.add(Integer.valueOf(obj.toString()));
+		});
+		return result.size() > 0 ? result.get(0) : 0;
+	}
+
 }

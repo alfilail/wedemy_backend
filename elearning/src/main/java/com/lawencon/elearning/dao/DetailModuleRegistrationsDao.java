@@ -12,6 +12,8 @@ public interface DetailModuleRegistrationsDao {
 	DetailModuleRegistrations getDetailModuleRegistrationsById(String id) throws Exception;
 	
 	DetailModuleRegistrations getByOrderNumber(Integer orderNumber) throws Exception;
+	
+	Integer totalHours(String idDtlClass) throws Exception;
 
 	List<DetailModuleRegistrations> getDetailModuleRegistrationsByIdModuleRgs(String idModuleRgs) throws Exception;
 	

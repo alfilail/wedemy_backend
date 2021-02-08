@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.lawencon.elearning.helper.DetailClassInformation;
 import com.lawencon.elearning.helper.Response;
 import com.lawencon.elearning.model.DetailClasses;
 import com.lawencon.elearning.service.DetailClassesService;
@@ -86,6 +87,17 @@ public class DetailClassesController extends ElearningBaseController {
 			Response<DetailClasses> res = new Response<DetailClasses>(false,
 					HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
 			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@GetMapping("information/{id}")
+	public ResponseEntity<?> getDetailClassInformationById(@PathVariable("id") String id) {
+		try {
+			DetailClassInformation dtlClassInformation = dtlClassesService.getByIdDtlClass(id);
+			return responseSuccess(dtlClassInformation, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return responseError(e);
 		}
 	}
 

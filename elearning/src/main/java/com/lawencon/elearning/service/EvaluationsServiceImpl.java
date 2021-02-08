@@ -14,6 +14,7 @@ import com.lawencon.elearning.model.General;
 import com.lawencon.elearning.model.Grades;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.SubmissionStatusRenewal;
+import com.lawencon.elearning.util.EmptyField;
 import com.lawencon.elearning.util.MailUtil;
 
 /**
@@ -49,7 +50,7 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 		try {
 			begin();
 			for (Evaluations evaluation : scores.getEvaluations()) {
-				if (evaluation.getIdAssignmentSubmission().getId() != null) {
+				if (!evaluation.getIdAssignmentSubmission().getId().equals(EmptyField.EMPTY.msg)) {
 					Evaluations existedEval = evaluationsDao.getByIdDtlModuleRgsAndIdParticipant(
 							evaluation.getIdAssignmentSubmission().getIdDetailModuleRegistration().getId(),
 							evaluation.getIdAssignmentSubmission().getIdParticipant().getId());

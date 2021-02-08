@@ -11,6 +11,7 @@ import com.lawencon.elearning.model.ApprovementsRenewal;
 import com.lawencon.elearning.model.Presences;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.Users;
+import com.lawencon.elearning.util.EmptyField;
 import com.lawencon.util.Callback;
 
 @Repository
@@ -37,7 +38,7 @@ public class ApprovementsRenewalDaoImpl extends ElearningBaseDaoImpl<Approvement
 	public List<ApprovementsRenewal> getListParticipantsPresence(String idDtlClass, String idDtlModuleRgs)
 			throws Exception {
 		List<ApprovementsRenewal> listResult = new ArrayList<>();
-		String sql = sqlBuilder("SELECT pr.fullname, p.id, p.presence_time, (SELECT a.approvement_name FROM ",
+		String sql = sqlBuilder("SELECT pr.fullname, p.id, p.presence_time, (SELECT a.code FROM ",
 				"t_r_approvement_renewal ar LEFT JOIN t_m_approvements a ON ar.id_approvement = a.id ",
 				"WHERE ar.id_presence = p.id ORDER BY ar.created_at DESC LIMIT 1) ",
 				"FROM t_r_class_enrollments ce INNER JOIN t_m_users u ON ce.id_user = u.id ",
@@ -56,10 +57,10 @@ public class ApprovementsRenewalDaoImpl extends ElearningBaseDaoImpl<Approvement
 			user.setIdProfile(profile);
 			Presences presence = new Presences();
 			presence.setIdUser(user);
-			presence.setId((String) objArr[1]);
+			presence.setId(objArr[1] != null ? (String) objArr[1] : EmptyField.EMPTY.msg);
 			presence.setPresenceTime(objArr[2] != null ? ((Time) objArr[2]).toLocalTime() : null);
 			Approvements approvement = new Approvements();
-			approvement.setApprovementName((String) objArr[3]);
+			approvement.setCode(objArr[3] != null ? (String) objArr[3] : EmptyField.EMPTY.msg);
 			ApprovementsRenewal approvementRenewal = new ApprovementsRenewal();
 			approvementRenewal.setIdPresence(presence);
 			approvementRenewal.setIdApprovement(approvement);

@@ -1,7 +1,6 @@
 package com.lawencon.elearning.service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -19,6 +18,7 @@ import com.lawencon.elearning.model.General;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.SubmissionStatusRenewal;
 import com.lawencon.elearning.util.MailUtil;
+import com.lawencon.elearning.util.SubmissionStatusCode;
 
 @Service
 public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl implements AssignmentSubmissionsService {
@@ -124,7 +124,8 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 	private void insertStatusRenewal(AssignmentSubmissions assignmentSubmission) throws Exception {
 		SubmissionStatusRenewal statusRenewal = new SubmissionStatusRenewal();
 		statusRenewal.setIdAssignmentSubmission(assignmentSubmission);
-		statusRenewal.setIdSubmissionStatus(statusService.getSubmissionStatusByCode("UPL"));
+		statusRenewal
+				.setIdSubmissionStatus(statusService.getSubmissionStatusByCode(SubmissionStatusCode.UPLOADED.code));
 		statusRenewalService.insertSubmissionStatusRenewal(statusRenewal);
 	}
 

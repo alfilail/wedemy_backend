@@ -13,6 +13,7 @@ import com.lawencon.elearning.dao.PresencesDao;
 import com.lawencon.elearning.model.ApprovementsRenewal;
 import com.lawencon.elearning.model.Presences;
 import com.lawencon.elearning.model.Users;
+import com.lawencon.elearning.util.RoleCode;
 
 /**
  * @author Nur Alfilail
@@ -38,7 +39,7 @@ public class PresencesServiceImpl extends ElearningBaseServiceImpl implements Pr
 			presence.setPresenceTime(LocalTime.now());
 			presencesDao.insertPresence(presence, () -> validateInsert(presence));
 			Users user = usersService.getUserById(presence.getIdUser().getId());
-			if (user.getIdRole().getCode().equals("PCP")) {
+			if (user.getIdRole().getCode().equals(RoleCode.PARTICIPANT.code)) {
 				insertApprovementRenewal(presence);
 			}
 			commit();

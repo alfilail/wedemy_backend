@@ -21,6 +21,8 @@ import com.lawencon.elearning.model.ModuleRegistrations;
 import com.lawencon.elearning.model.Modules;
 import com.lawencon.elearning.model.Presences;
 import com.lawencon.elearning.model.Users;
+import com.lawencon.elearning.util.ApprovementCode;
+import com.lawencon.elearning.util.RoleCode;
 
 @Service
 public class ModuleRegistrationsServiceImpl extends ElearningBaseServiceImpl implements ModuleRegistrationsService {
@@ -104,14 +106,14 @@ public class ModuleRegistrationsServiceImpl extends ElearningBaseServiceImpl imp
 				} else {
 					learningMaterial.setIsUserOnTime(false);
 				}
-				if (user.getIdRole().getCode().equals("PCP")) {
+				if (user.getIdRole().getCode().equals(RoleCode.PARTICIPANT.code)) {
 					if (participantPresent != null) {
 						learningMaterial.setDoesParticipantPresent(true);
 					} else {
 						learningMaterial.setDoesParticipantPresent(false);
 					}
-					if (participantApprovement != null
-							&& participantApprovement.getIdApprovement().getCode().equals("ACC")) {
+					if (participantApprovement != null && participantApprovement.getIdApprovement().getCode()
+							.equals(ApprovementCode.ACCEPTED.code)) {
 						learningMaterial.setIsParticipantAccepted(true);
 					} else {
 						learningMaterial.setIsParticipantAccepted(false);
