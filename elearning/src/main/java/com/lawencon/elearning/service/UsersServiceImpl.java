@@ -36,7 +36,7 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 
 	@Autowired
 	private GeneralService generalService;
-	
+
 	@Autowired
 	private MailUtil mailUtil;
 
@@ -83,18 +83,22 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 
 	@Override
 	public void deleteUserById(String id, String idUser) throws Exception {
-		begin();
-		if(validateDelete(id) == true) {
-			usersDao.softDeleteUserById(id, idUser);
-			Users user = usersDao.getUserById(id);
-			profilesService.softDeleteProfileById(user.getIdProfile().getId(), idUser);
+		try {
+			begin();
+			Users user = getUserById(id);
+			if (validateDelete(id) == true) {
+				usersDao.softDeleteUserById(id, idUser);
+				profilesService.softDeleteProfileById(user.getIdProfile().getId(), idUser);
+			} else {
+				usersDao.deleteUserById(id);
+//				Users user = getUserById(id);
+				profilesService.deleteProfileById(user.getIdProfile().getId());
+			}
+			commit();
+		} catch (Exception e) {
+			rollback();
+			throw new Exception(e);
 		}
-		else {
-			usersDao.deleteUserById(id);
-			Users user = usersDao.getUserById(id);
-			profilesService.deleteProfileById(user.getIdProfile().getId());
-		}
-		commit();
 	}
 
 	@Override
@@ -120,10 +124,10 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 	private void sendEmailResetPassword(String pass, Profiles profile) throws Exception {
 		General general = generalService.getTemplateEmail("pwdrst");
 		String text = general.getTemplateHtml();
-		
+
 		text = text.replace("#1#", profile.getFullName());
 		text = text.replace("#2#", pass);
-		
+
 		MailHelper mailHelper = new MailHelper();
 //		mailHelper.setFrom("elearningalfione@gmail.com");
 		mailHelper.setTo(profile.getEmail());
@@ -149,19 +153,18 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 					throw new Exception("Email tidak boleh kosong");
 				} else if (user.getIdProfile().getEmail() != null) {
 					Profiles profile = profilesService.getProfileByEmail(user.getIdProfile().getEmail());
-					if(profile != null) {
+					if (profile != null) {
 						throw new Exception("Email sudah ada");
 					}
 					if (user.getIdRole().getCode() != null) {
 						Roles role = rolesService.getRoleByCode(user.getIdRole().getCode());
-						if (role.getCode().equals("TTR") || role.getCode().equals("ADM")) {
+						if (role.getCode().equals("TTR") || role.getCode().equals("ADM") || role.getCode().equals("SADM")) {
 							validateInsertExceptParticipant(user);
+						} else {
+							System.out.println("Sending Email......");
+							sendEmailRegister(user.getIdProfile());
+							System.out.println("Done");
 						}
-//						else {
-//							System.out.println("Sending Email......");
-//							sendEmailRegister(user.getIdProfile());
-//							System.out.println("Done");
-//						}
 					}
 				}
 //				} else if (user.getIdRole().getCode() != null) {
@@ -183,34 +186,36 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 	private void validateInsertExceptParticipant(Users user) throws Exception {
 		if (user.getIdProfile().getIdNumber() == null || user.getIdProfile().getIdNumber().trim().equals("")) {
 			throw new Exception("Nomor Kartu Penduduk tidak boleh kosong");
-		} else if (user.getIdProfile().getBirthPlace() == null || user.getIdProfile().getBirthPlace().trim().equals("")) {
+		} else if (user.getIdProfile().getBirthPlace() == null
+				|| user.getIdProfile().getBirthPlace().trim().equals("")) {
 			throw new Exception("Tempat Lahir tidak boleh kosong");
-		} else if (user.getIdProfile().getBirthDate() == null || user.getIdProfile().getBirthDate().toString().trim().equals("")) {
+		} else if (user.getIdProfile().getBirthDate() == null
+				|| user.getIdProfile().getBirthDate().toString().trim().equals("")) {
 			throw new Exception("Tanggal Lahir tidak boleh kosong");
 		} else if (user.getIdProfile().getPhone() == null) {
 			throw new Exception("Nomor Handphone tidak boleh kosong");
 		} else if (user.getIdProfile().getEmail() == null) {
 			throw new Exception("Email tidak boleh kosong");
-		} 
+		}
 	}
 
 	private void validateUpdate(Users user) throws Exception {
-		if(user.getId() == null || user.getId().trim().equals("")) {
+		if (user.getId() == null || user.getId().trim().equals("")) {
 			throw new Exception("Id user tidak boleh kosong");
 		} else {
 			Users usr = getUserById(user.getId());
-			if(user.getUsername() == null || user.getUsername().trim().equals("")) {
+			if (user.getUsername() == null || user.getUsername().trim().equals("")) {
 				throw new Exception("Username tidak boleh kosong");
 			}
-			if(usr.getVersion() != user.getVersion()) {
+			if (usr.getVersion() != user.getVersion()) {
 				throw new Exception("User yang diedit telah diperbarui, silahkan coba lagi");
 			}
-			if(user.getUserPassword() == null || user.getUserPassword().trim().equals("")) {
+			if (user.getUserPassword() == null || user.getUserPassword().trim().equals("")) {
 				throw new Exception("Password tidak boleh kosong");
 			} else {
-				if(passwordEncoder.matches(user.getUserPassword(), usr.getUserPassword())) {
+				if (passwordEncoder.matches(user.getUserPassword(), usr.getUserPassword())) {
 					throw new Exception("Password tidak boleh sama dengan sebelumnya");
-				}				
+				}
 			}
 		}
 	}
@@ -219,27 +224,26 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 	public List<Users> getUsersByRoleCode(String code) throws Exception {
 		return usersDao.getUsersByRoleCode(code);
 	}
-	
+
 	@Override
 	public Users getUserByIdNumber(String idNumber) throws Exception {
 		return usersDao.getUserByIdNumber(idNumber);
 	}
-	
+
 	private boolean validateDelete(String idUser) throws Exception {
 		List<?> listObj = usersDao.validateDeleteUser(idUser);
 		listObj.forEach(System.out::println);
-		List<?> list =  listObj.stream().filter(val -> val != null)
-				.collect(Collectors.toList());
+		List<?> list = listObj.stream().filter(val -> val != null).collect(Collectors.toList());
 		System.out.println(list.size());
 		return list.size() > 0 ? true : false;
 	}
-	
+
 	private void sendEmailRegister(Profiles profile) throws Exception {
 		General general = generalService.getTemplateEmail("rgs");
 		String text = general.getTemplateHtml();
-	
+
 		text = text.replace("#1#", profile.getFullName());
-		
+
 		MailHelper mailHelper = new MailHelper();
 //		mailHelper.setFrom("elearningalfione@gmail.com");
 		mailHelper.setTo(profile.getEmail());

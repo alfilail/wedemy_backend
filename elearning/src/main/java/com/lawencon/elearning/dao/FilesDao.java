@@ -10,6 +10,8 @@ import com.lawencon.util.Callback;
 public interface FilesDao {
 
 	void insertFile(Files file, Callback before) throws Exception;
+	
+	void updateFile(Files file, Callback before) throws Exception;
 
 	Files getFileById(String id) throws Exception;
 

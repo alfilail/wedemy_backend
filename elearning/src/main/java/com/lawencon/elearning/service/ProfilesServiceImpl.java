@@ -19,16 +19,17 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 
 	@Autowired
 	private FilesService filesService;
-	
-	@Autowired
-	private GeneralService generalService;
+
+//	@Autowired
+//	private GeneralService generalService;
 
 	@Override
 	public void insertProfile(Profiles profile) throws Exception {
-		byte[] defaultPict = generalService.getDefaultPict("rgs");
-		String pic = defaultPict.toString();
+//		byte[] defaultPict = generalService.getDefaultPict("rgs");
+//		String pic = defaultPict.toString();
 		Files file = new Files();
-		file.setFile(pic.getBytes());
+		file.setFile(null);
+		file.setType(null);
 		filesService.insertFile(file);
 		profile.setIdFile(file);
 		profilesDao.insertProfile(profile, () -> validateInsert(profile));
@@ -52,25 +53,23 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 	@Override
 	public void updateProfile(Profiles profile, MultipartFile file) throws Exception {
 		try {
-			begin();
-			Files profilePict = new Files();
-			if(file != null) {
-//			profilePict.setCreatedBy(profile.getCreatedBy());
+			begin();	
+			Files profilePict = filesService.getFileById(profile.getIdFile().getId());
+			if (file != null && !file.isEmpty()) {
 				profilePict.setFile(file.getBytes());
 				profilePict.setType(file.getContentType());
+				filesService.updateFile(profilePict);
 				profile.setIdFile(profilePict);
 			} else {
-				profilePict = filesService.getFileById(profile.getIdFile().getId());
-				profile.setIdFile(profilePict);						
+				profile.setIdFile(profilePict);
 			}
-			filesService.insertFile(profilePict);
 			profilesDao.updateProfile(profile, () -> {
 				validateUpdate(profile);
 			});
 			commit();
 		} catch (Exception e) {
-			e.printStackTrace();
 			rollback();
+			throw new Exception(e);
 		}
 	}
 
@@ -102,23 +101,23 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 		if (profile.getId() == null || profile.getId().trim().equals("")) {
 			throw new Exception("Id tidak boleh kosong");
 		} else {
-			Profiles pfl = getProfileById(profile.getId());
+//			Profiles pfl = getProfileById(profile.getId());
 			if (profile.getFullName() == null || profile.getFullName().trim().equals("")) {
 				throw new Exception("Nama Lengkap tidak boleh kosong");
 			}
+//			if (pfl.getVersion().equals(profile.getVersion())) {
+//				throw new Exception("Profile yang diedit telah diperbarui, silahkan coba lagi");
+//			}
 			if (profile.getIdFile() != null) {
 				String[] type = profile.getIdFile().getType().split("/");
 				String ext = type[1];
 				if (ext != null) {
 					if (ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("jpeg")) {
-						
+
 					} else {
 						throw new Exception("File harus gambar");
 					}
 				}
-			}
-			if(pfl.getVersion() != profile.getVersion()) {
-				throw new Exception("Profile yang diedit telah diperbarui, silahkan coba lagi");
 			}
 		}
 	}

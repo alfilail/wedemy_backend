@@ -130,8 +130,8 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 
 	@Override
 	public List<?> reportAllScore(String idClass) throws Exception {
-//		List<?> data = evaluationsDao.reportAllScore(idClass);
-//		validateReport(data);
+		List<?> data = evaluationsDao.reportAllScore(idClass);
+		validateReport(data);
 		return evaluationsDao.reportAllScore(idClass);
 	}
 
@@ -140,10 +140,10 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 		return evaluationsDao.reportScore(idDtlClass, idParticipant);
 	}
 
-//	private void validateReport(List<?> data) throws Exception {
-//		if(data == null) {
-//			throw new Exception("Data kosong");
-//		}
-//	}
+	private void validateReport(List<?> data) throws Exception {
+		if(data == null) {
+			throw new Exception("Data kosong");
+		}
+	}
 
 }

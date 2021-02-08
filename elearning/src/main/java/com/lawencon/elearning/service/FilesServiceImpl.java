@@ -27,8 +27,18 @@ public class FilesServiceImpl extends BaseServiceImpl implements FilesService {
 		return filesDao.getFileById(id);
 	}
 
+	@Override
+	public void updateFile(Files file) throws Exception {
+		filesDao.updateFile(file, () -> validateUpdate(file));
+	}
+	
 	private void validateInsert(Files file) throws Exception {
 
 	}
+	
+	private void validateUpdate(Files file) throws Exception {
+
+	}
+
 
 }

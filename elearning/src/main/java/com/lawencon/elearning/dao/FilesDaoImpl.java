@@ -22,4 +22,9 @@ public class FilesDaoImpl extends ElearningBaseDaoImpl<Files> implements FilesDa
 		return getById(id);
 	}
 
+	@Override
+	public void updateFile(Files file, Callback before) throws Exception {
+		save(file, before, null);
+	}
+
 }

@@ -18,9 +18,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lawencon.elearning.helper.Response;
 import com.lawencon.elearning.helper.ScoreInputs;
 import com.lawencon.elearning.model.Evaluations;
 import com.lawencon.elearning.service.EvaluationsService;
+import com.lawencon.elearning.util.MessageStat;
 import com.lawencon.util.JasperUtil;
 
 /**
@@ -29,7 +31,7 @@ import com.lawencon.util.JasperUtil;
 
 @RestController
 @RequestMapping("evaluation")
-public class EvaluationsController {
+public class EvaluationsController extends ElearningBaseController {
 
 	@Autowired
 	private EvaluationsService evaluationsService;
@@ -79,10 +81,10 @@ public class EvaluationsController {
 	public ResponseEntity<?> getScores(@RequestParam("idClass") String idClass) {
 		try {
 			List<?> scoreList = evaluationsService.reportAllScore(idClass);
-			return new ResponseEntity<>(scoreList, HttpStatus.OK);
+			return responseSuccess(scoreList, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 

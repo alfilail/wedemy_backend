@@ -22,5 +22,9 @@ public class ElearningBaseDaoImpl<T extends Serializable> extends BaseDaoImpl<T>
 	protected T resultCheck(List<T> model) {
 		return model.size() > 0 ? model.get(0) : null;
 	}
+	
+	protected List<T> resultCheckList(List<T> list) {
+		return list.size() > 0 ? list : null;
+	}
 
 }
