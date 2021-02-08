@@ -2,6 +2,7 @@ package com.lawencon.elearning.service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Random;
@@ -16,7 +17,6 @@ import com.lawencon.elearning.model.AssignmentSubmissions;
 import com.lawencon.elearning.model.Files;
 import com.lawencon.elearning.model.General;
 import com.lawencon.elearning.model.Profiles;
-import com.lawencon.elearning.model.SubmissionStatus;
 import com.lawencon.elearning.model.SubmissionStatusRenewal;
 import com.lawencon.elearning.util.MailUtil;
 
@@ -51,7 +51,7 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 			file.setType(fileInput.getContentType());
 			filesService.insertFile(file);
 			assignmentSubmission.setIdFile(file);
-			assignmentSubmission.setSubmitDateTime(LocalDateTime.now());
+			assignmentSubmission.setSubmitTime(LocalTime.now());
 			assignmentSubmission.setTrxNumber(generateTrxNumber());
 			assignmentSubmissionsDao.insertAssignmentSubmission(assignmentSubmission,
 					() -> validateInsert(assignmentSubmission));
@@ -122,10 +122,9 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 	}
 
 	private void insertStatusRenewal(AssignmentSubmissions assignmentSubmission) throws Exception {
-		SubmissionStatus submissionStatus = statusService.getSubmissionStatusByCode("SNT");
 		SubmissionStatusRenewal statusRenewal = new SubmissionStatusRenewal();
 		statusRenewal.setIdAssignmentSubmission(assignmentSubmission);
-		statusRenewal.setIdSubmissionStatus(submissionStatus);
+		statusRenewal.setIdSubmissionStatus(statusService.getSubmissionStatusByCode("UPL"));
 		statusRenewalService.insertSubmissionStatusRenewal(statusRenewal);
 	}
 

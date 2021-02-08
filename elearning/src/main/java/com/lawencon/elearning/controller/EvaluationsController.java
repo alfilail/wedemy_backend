@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lawencon.elearning.helper.ScoreInputs;
 import com.lawencon.elearning.model.Evaluations;
 import com.lawencon.elearning.service.EvaluationsService;
 import com.lawencon.util.JasperUtil;
@@ -43,7 +44,20 @@ public class EvaluationsController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
+	@GetMapping("score-submission")
+	public ResponseEntity<?> getByIdDtlClassAndIdDtlModuleRgs(@RequestParam("idDtlClass") String idDtlClass,
+			@RequestParam("idDtlModuleRgs") String idDtlModuleRgs) {
+		try {
+			List<Evaluations> evaluations = evaluationsService.getAllByIdDtlClassAndIdDtlModuleRgs(idDtlClass,
+					idDtlModuleRgs);
+			return new ResponseEntity<>(evaluations, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 	@GetMapping("/report/scores")
 	public HttpEntity<?> reportAllScores(@RequestParam("idClass") String idClass) {
 		List<?> listData = new ArrayList<>();
@@ -60,7 +74,7 @@ public class EvaluationsController {
 		headers.setContentType(MediaType.APPLICATION_PDF);
 		return new HttpEntity<>(out, headers);
 	}
-	
+
 	@GetMapping("/scores")
 	public ResponseEntity<?> getScores(@RequestParam("idClass") String idClass) {
 		try {
@@ -71,7 +85,7 @@ public class EvaluationsController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	@GetMapping("/report/score")
 	public HttpEntity<?> reportScore(@RequestParam("idClass") String idClass,
 			@RequestParam("idParticipant") String idParticipant) {
@@ -105,9 +119,9 @@ public class EvaluationsController {
 	public ResponseEntity<?> insertEvaluation(@RequestBody String body) {
 		try {
 			ObjectMapper obj = new ObjectMapper();
-			Evaluations evaluation = obj.readValue(body, Evaluations.class);
-			evaluationsService.insertEvaluation(evaluation);
-			return new ResponseEntity<>(evaluation, HttpStatus.CREATED);
+			ScoreInputs scores = obj.readValue(body, ScoreInputs.class);
+			evaluationsService.insertEvaluation(scores);
+			return new ResponseEntity<>(scores, HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

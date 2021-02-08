@@ -21,7 +21,11 @@ public class SubmissionStatusRenewalsServiceImpl extends ElearningBaseServiceImp
 
 	@Override
 	public void insertSubmissionStatusRenewal(SubmissionStatusRenewal statusRenewal) throws Exception {
-		statusRenewalDao.insertSubmissionStatusRenewal(statusRenewal, () -> validateInsert(statusRenewal));
+		if (statusRenewal.getIdSubmissionStatus().getCode().equals("UPL")) {
+			statusRenewalDao.insertByParticipant(statusRenewal, () -> validateInsert(statusRenewal));
+		} else {
+			statusRenewalDao.insertByTutor(statusRenewal, () -> validateInsert(statusRenewal));
+		}
 	}
 
 	@Override

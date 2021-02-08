@@ -1,6 +1,6 @@
 package com.lawencon.elearning.model;
 
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,8 +25,8 @@ public class AssignmentSubmissions extends BaseTransaction {
 
 	private static final long serialVersionUID = -4540610639400514155L;
 
-	@Column(name = "submit_datetime", nullable = false)
-	private LocalDateTime submitDateTime;
+	@Column(name = "submit_time", nullable = false)
+	private LocalTime submitTime;
 
 	@ManyToOne
 	@JoinColumn(name = "id_participant", nullable = false)

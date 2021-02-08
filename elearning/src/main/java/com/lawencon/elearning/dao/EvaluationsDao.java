@@ -16,14 +16,18 @@ public interface EvaluationsDao {
 
 	List<Evaluations> getAllEvaluations() throws Exception;
 
+	List<Evaluations> getAllByIdDtlClassAndIdDtlModuleRgs(String idDtlClass, String idDtlModuleRgs) throws Exception;
+
+	Evaluations getByIdDtlModuleRgsAndIdParticipant(String idDtlModuleRgs, String idParticipant) throws Exception;
+
 	Evaluations getEvaluationById(String id) throws Exception;
 
 	Evaluations getEvaluationByCode(String code) throws Exception;
 
 	Profiles getParticipantProfile(Evaluations evaluation) throws Exception;
-	
+
 	List<?> reportAllScore(String idClass) throws Exception;
-	
+
 	List<?> reportScore(String idDtlClass, String idParticipant) throws Exception;
 
 }

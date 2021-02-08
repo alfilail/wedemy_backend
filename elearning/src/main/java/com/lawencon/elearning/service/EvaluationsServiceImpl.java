@@ -7,12 +7,12 @@ import org.springframework.stereotype.Service;
 
 import com.lawencon.elearning.dao.EvaluationsDao;
 import com.lawencon.elearning.helper.MailHelper;
+import com.lawencon.elearning.helper.ScoreInputs;
 import com.lawencon.elearning.model.AssignmentSubmissions;
 import com.lawencon.elearning.model.Evaluations;
 import com.lawencon.elearning.model.General;
 import com.lawencon.elearning.model.Grades;
 import com.lawencon.elearning.model.Profiles;
-import com.lawencon.elearning.model.SubmissionStatus;
 import com.lawencon.elearning.model.SubmissionStatusRenewal;
 import com.lawencon.elearning.util.MailUtil;
 
@@ -34,30 +34,57 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 
 	@Autowired
 	private SubmissionStatusService statusService;
-	
+
 	@Autowired
 	private AssignmentSubmissionsService assignmentSubmissionsService;
-	
+
 	@Autowired
 	private GeneralService generalService;
-	
+
 	@Autowired
 	private MailUtil mailUtil;
 
 	@Override
-	public void insertEvaluation(Evaluations evaluation) throws Exception {
-		Grades grade = gradesService.getGradeByScore(evaluation.getScore());
-		evaluation.setIdGrade(grade);
-		evaluationsDao.insertEvaluation(evaluation, () -> validateInsert(evaluation));
-		insertStatusRenewal(evaluation);
-		System.out.println("Sending Email...");
-		sendEmail(evaluation);
-		System.out.println("Done");
+	public void insertEvaluation(ScoreInputs scores) throws Exception {
+		try {
+			begin();
+			for (Evaluations evaluation : scores.getEvaluations()) {
+				if (evaluation.getIdAssignmentSubmission().getId() != null) {
+					Evaluations existedEval = evaluationsDao.getByIdDtlModuleRgsAndIdParticipant(
+							evaluation.getIdAssignmentSubmission().getIdDetailModuleRegistration().getId(),
+							evaluation.getIdAssignmentSubmission().getIdParticipant().getId());
+					if (existedEval == null) {
+						Grades grade = gradesService.getGradeByScore(evaluation.getScore());
+						evaluation.setIdGrade(grade);
+						evaluationsDao.insertEvaluation(evaluation, () -> validateInsert(evaluation));
+						insertStatusRenewal(evaluation);
+//						System.out.println("Sending Email...");
+//						sendEmail(evaluation);
+//						System.out.println("Done");
+					} else if (existedEval != null
+							&& evaluation.getScore().doubleValue() != existedEval.getScore().doubleValue()) {
+						Grades grade = gradesService.getGradeByScore(evaluation.getScore());
+						evaluation.setIdGrade(grade);
+						evaluationsDao.insertEvaluation(evaluation, () -> validateInsert(evaluation));
+					}
+				}
+			}
+			commit();
+		} catch (Exception e) {
+			rollback();
+			throw new Exception(e);
+		}
 	}
 
 	@Override
 	public List<Evaluations> getAllEvaluations() throws Exception {
 		return evaluationsDao.getAllEvaluations();
+	}
+
+	@Override
+	public List<Evaluations> getAllByIdDtlClassAndIdDtlModuleRgs(String idDtlClass, String idDtlModuleRgs)
+			throws Exception {
+		return evaluationsDao.getAllByIdDtlClassAndIdDtlModuleRgs(idDtlClass, idDtlModuleRgs);
 	}
 
 	@Override
@@ -71,10 +98,9 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 	}
 
 	private void insertStatusRenewal(Evaluations evaluation) throws Exception {
-		SubmissionStatus submissionStatus = statusService.getSubmissionStatusByCode("SNT");
 		SubmissionStatusRenewal statusRenewal = new SubmissionStatusRenewal();
 		statusRenewal.setIdAssignmentSubmission(evaluation.getIdAssignmentSubmission());
-		statusRenewal.setIdSubmissionStatus(submissionStatus);
+		statusRenewal.setIdSubmissionStatus(statusService.getSubmissionStatusByCode("GRD"));
 		statusRenewalService.insertSubmissionStatusRenewal(statusRenewal);
 	}
 
@@ -83,17 +109,16 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 	}
 
 	private void sendEmail(Evaluations evaluation) throws Exception {
-		AssignmentSubmissions assignmentSubmissions = 
-				assignmentSubmissionsService
+		AssignmentSubmissions assignmentSubmissions = assignmentSubmissionsService
 				.getAssignmentSubmissionsById(evaluation.getIdAssignmentSubmission().getId());
 		evaluation.setIdAssignmentSubmission(assignmentSubmissions);
 		Profiles participant = evaluationsDao.getParticipantProfile(evaluation);
-		
+
 		General general = generalService.getTemplateEmail("scrupd");
 		String text = general.getTemplateHtml();
-		
+
 		text = text.replace("#1#", participant.getFullName());
-		
+
 		MailHelper mailHelper = new MailHelper();
 		mailHelper.setFrom("elearningalfione@gmail.com");
 		mailHelper.setTo(participant.getEmail());
@@ -113,7 +138,7 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 	public List<?> reportScore(String idDtlClass, String idParticipant) throws Exception {
 		return evaluationsDao.reportScore(idDtlClass, idParticipant);
 	}
-	
+
 //	private void validateReport(List<?> data) throws Exception {
 //		if(data == null) {
 //			throw new Exception("Data kosong");

@@ -24,8 +24,8 @@ public class Grades extends BaseMaster {
 	private String code;
 
 	@Column(name = "min_score", nullable = false)
-	private Integer minScore;
+	private Double minScore;
 
 	@Column(name = "max_score", nullable = false)
-	private Integer maxScore;
+	private Double maxScore;
 }

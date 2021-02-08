@@ -7,6 +7,7 @@ import com.lawencon.elearning.model.Profiles;
 import com.lawencon.util.Callback;
 
 public interface AssignmentSubmissionsDao {
+	
 	void insertAssignmentSubmission(AssignmentSubmissions assignmentSubmission, Callback before) throws Exception;
 	
 	List<AssignmentSubmissions> getAllAssignmentSubmissions() throws Exception;
