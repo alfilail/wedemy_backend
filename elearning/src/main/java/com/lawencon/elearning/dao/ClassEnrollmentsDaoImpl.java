@@ -18,7 +18,7 @@ import com.lawencon.util.Callback;
 public class ClassEnrollmentsDaoImpl extends ElearningBaseDaoImpl<ClassEnrollments> implements ClassEnrollmentsDao {
 	@Override
 	public void insertClassEnrollment(ClassEnrollments classEnrollment, Callback before) throws Exception {
-		save(classEnrollment, before, null, true, true);
+		save(classEnrollment, before, null);
 	}
 
 	@Override
@@ -126,6 +126,6 @@ public class ClassEnrollmentsDaoImpl extends ElearningBaseDaoImpl<ClassEnrollmen
 			Object obj = (Object) val;
 			total.add(Integer.valueOf(obj.toString()));
 		});
-		return total.size() > 0 ? total.get(0) : null;
+		return total.size() > 0 ? total.get(0) : 0;
 	}
 }

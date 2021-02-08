@@ -1,6 +1,8 @@
 package com.lawencon.elearning.service;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -117,6 +119,20 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 					} else {
 						throw new Exception("File harus gambar");
 					}
+				}
+			}
+			if (profile.getPhone() != null) {
+				if (profile.getPhone().length() <= 10 && profile.getPhone().length() >= 13) {
+					Pattern pattern = Pattern.compile("\\d{10, 13}");
+					Matcher matcher = pattern.matcher(profile.getPhone());
+					if (matcher.matches()) {
+						throw new Exception("Nomor handphone tidak sesuai!");
+					}
+				}
+			}
+			if (profile.getIdNumber() != null) {
+				if (profile.getIdNumber().length() > 16) {
+					throw new Exception("Kartu penduduk tidak sesuai!");
 				}
 			}
 		}

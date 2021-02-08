@@ -17,11 +17,20 @@ public class ClassEnrollmentServiceImpl extends ElearningBaseServiceImpl impleme
 	@Autowired
 	private ClassEnrollmentsDao classEnrollmentDao;
 
+	@Autowired
+	private DetailClassesService detailClassService;
+
 	@Override
 	public void insertClassEnrollment(ClassEnrollments classEnrollment) throws Exception {
-		classEnrollment.setTrxNumber(generateTrxNumber());
-		classEnrollment.setIsOngoing(true);
-		classEnrollmentDao.insertClassEnrollment(classEnrollment, () -> validateInsert(classEnrollment));
+		try {
+			classEnrollment.setTrxNumber(generateTrxNumber());
+			classEnrollment.setIsOngoing(true);
+			classEnrollmentDao.insertClassEnrollment(classEnrollment, () -> validateInsert(classEnrollment));
+			commit();
+		} catch (Exception e) {
+			rollback();
+			throw new Exception(e);
+		}
 	}
 
 	@Override
@@ -70,7 +79,13 @@ public class ClassEnrollmentServiceImpl extends ElearningBaseServiceImpl impleme
 	}
 
 	private void validateInsert(ClassEnrollments classEnrollment) throws Exception {
-
+		Integer totalParticipant = getTotalParticipantsByIdDtlClass(classEnrollment.getIdDetailClass().getId());
+//		System.out.println(totalParticipant);
+		DetailClasses detailClass = detailClassService.getDetailClassById(classEnrollment.getIdDetailClass().getId());
+//		System.out.println(detailClass.getIdClass().getQuota());
+		if (totalParticipant >= detailClass.getIdClass().getQuota()) {
+			throw new Exception("Quota kelas sudah penuh!");
+		}
 	}
 
 	private void validateUpdate(ClassEnrollments classEnrollment) throws Exception {

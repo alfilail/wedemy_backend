@@ -15,6 +15,7 @@ import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.Roles;
 //import com.lawencon.elearning.model.Roles;
 import com.lawencon.elearning.model.Users;
+import com.lawencon.elearning.util.GeneralUtil;
 import com.lawencon.elearning.util.MailUtil;
 
 import net.bytebuddy.utility.RandomString;
@@ -122,7 +123,7 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 	}
 
 	private void sendEmailResetPassword(String pass, Profiles profile) throws Exception {
-		General general = generalService.getTemplateEmail("pwdrst");
+		General general = generalService.getTemplateEmail(GeneralUtil.RESET_PASSWORD.code);
 		String text = general.getTemplateHtml();
 
 		text = text.replace("#1#", profile.getFullName());
@@ -239,7 +240,7 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 	}
 
 	private void sendEmailRegister(Profiles profile) throws Exception {
-		General general = generalService.getTemplateEmail("rgs");
+		General general = generalService.getTemplateEmail(GeneralUtil.REGISTER.code);
 		String text = general.getTemplateHtml();
 
 		text = text.replace("#1#", profile.getFullName());

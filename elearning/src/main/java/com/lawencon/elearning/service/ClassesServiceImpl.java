@@ -39,7 +39,7 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 			if(helper.getClazz() != null) {
 				Classes clazz = helper.getClazz();
 				Files thumbnailImg = new Files();
-				thumbnailImg.setCreatedBy(helper.getClazz().getCreatedBy());
+//				thumbnailImg.setCreatedBy(helper.getClazz().getCreatedBy());
 				thumbnailImg.setFile(file.getBytes());
 				thumbnailImg.setType(file.getContentType());
 				filesService.insertFile(thumbnailImg);
