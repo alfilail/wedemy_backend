@@ -120,21 +120,4 @@ public class ClassEnrollmentController extends ElearningBaseController {
 			return responseError(e);
 		}
 	}
-
-	@GetMapping("certificate")
-	public HttpEntity<?> reportCertificate(@RequestParam String idUser, @RequestParam String idClass) {
-		List<?> data = new ArrayList<>();
-		byte[] out;
-		try {
-			data = classEnrollmentService.getCertificate(idUser, idClass);
-			out = JasperUtil.responseToByteArray(data, "Certificate", null);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_PDF);
-		return new HttpEntity<>(out, headers);
-	}
 }

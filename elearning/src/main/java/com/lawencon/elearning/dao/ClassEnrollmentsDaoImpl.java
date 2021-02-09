@@ -93,31 +93,6 @@ public class ClassEnrollmentsDaoImpl extends ElearningBaseDaoImpl<ClassEnrollmen
 	}
 
 	@Override
-	public List<?> getCertificate(String idUser, String idClass) throws Exception {
-		String query = sqlBuilder(" SELECT tmp.fullname, tmc.class_name FROM t_r_class_enrollments trce ",
-				" INNER JOIN t_m_users tmu on tmu.id = trce.id_user ",
-				" INNER JOIN t_m_profiles tmp on tmp.id = tmu.id_profile ",
-				" INNER JOIN t_m_detail_classes tmdc on tmdc.id = trce.id_detail_class ",
-				" INNER JOIN t_m_classes tmc on tmc.id = tmdc.id_class",
-				" WHERE trce.id_user = ?1 and tmc.id = ?2")
-						.toString();
-		List<CertificateHelper> listCertificate = new ArrayList<>();
-		List<?> listObj = createNativeQuery(query).setParameter(1, idUser).setParameter(2, idClass).getResultList();
-		listObj.forEach(val -> {
-			Object[] objArr = (Object[]) val;
-			Profiles profile = new Profiles();
-			profile.setFullName((String) objArr[0]);
-			CertificateHelper certificateHelper = new CertificateHelper();
-			certificateHelper.setFullname(profile);
-			Classes clazz = new Classes();
-			clazz.setClassName((String) objArr[1]);
-			certificateHelper.setClassName(clazz);
-			listCertificate.add(certificateHelper);
-		});
-		return listCertificate;
-	}
-
-	@Override
 	public Integer getTotalParticipantsByIdDtlClass(String id) throws Exception {
 		List<Integer> total = new ArrayList<>();
 		String sql = sqlBuilder("SELECT COUNT(*) FROM t_r_class_enrollments WHERE id_detail_class =?1 ",

@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.lawencon.elearning.helper.CertificateHelper;
 import com.lawencon.elearning.model.AssignmentSubmissions;
 import com.lawencon.elearning.model.Classes;
 import com.lawencon.elearning.model.DetailClasses;
@@ -237,5 +238,37 @@ public class EvaluationsDaoImpl extends ElearningBaseDaoImpl<Evaluations> implem
 		});
 		return resultCheckList(listEvaluations);
 	}
-
+	
+	@Override
+	public List<?> getCertificate(String idUser, String idDetailClass) throws Exception {
+		String query = sqlBuilder(" SELECT tmp.fullname , tmc.class_name ",
+				" FROM t_r_evaluations e ",
+				" INNER JOIN t_r_assignment_submissions ams ON ams.id = e.id_assignment_submission ",
+				" INNER JOIN t_m_users u ON u.id = ams.id_participant ",
+				" INNER JOIN t_m_profiles tmp ON u.id_profile = tmp.id ",
+				" INNER JOIN t_r_detail_module_registrations dmr ON dmr.id = ams.id_dtl_module_rgs ",
+				" INNER JOIN t_r_module_registrations mr ON mr.id = dmr.id_module_rgs ",
+				" INNER JOIN t_m_modules m ON m.id = mr.id_module ",
+				" INNER JOIN t_m_detail_classes dc ON dc.id = mr.id_detail_class ",
+				" INNER JOIN t_m_classes tmc ON tmc.id = dc.id_class ",
+				" INNER JOIN t_r_class_enrollments trce ON trce.id_detail_class = dc.id ",
+				" WHERE dc.id = ?1 AND ams.id_participant = ?2 ",
+				" GROUP BY tmp.fullname , tmc.class_name ",
+				" HAVING AVG(e.score) > 70 ")
+						.toString();
+		List<CertificateHelper> listCertificate = new ArrayList<>();
+		List<?> listObj = createNativeQuery(query).setParameter(1, idDetailClass).setParameter(2, idUser).getResultList();
+		listObj.forEach(val -> {
+			Object[] objArr = (Object[]) val;
+			Profiles profile = new Profiles();
+			profile.setFullName((String) objArr[0]);
+			CertificateHelper certificateHelper = new CertificateHelper();
+			certificateHelper.setFullname(profile);
+			Classes clazz = new Classes();
+			clazz.setClassName((String) objArr[1]);
+			certificateHelper.setClassName(clazz);
+			listCertificate.add(certificateHelper);
+		});
+		return listCertificate;
+	}
 }

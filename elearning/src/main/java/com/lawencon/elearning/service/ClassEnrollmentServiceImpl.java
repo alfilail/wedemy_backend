@@ -73,11 +73,6 @@ public class ClassEnrollmentServiceImpl extends ElearningBaseServiceImpl impleme
 		classEnrollmentDao.deleteclassEnrollmentById(id);
 	}
 
-	@Override
-	public List<?> getCertificate(String idUser, String idClass) throws Exception {
-		return classEnrollmentDao.getCertificate(idUser, idClass);
-	}
-
 	private void validateInsert(ClassEnrollments classEnrollment) throws Exception {
 		Integer totalParticipant = getTotalParticipantsByIdDtlClass(classEnrollment.getIdDetailClass().getId());
 		DetailClasses detailClass = detailClassService.getById(classEnrollment.getIdDetailClass().getId());

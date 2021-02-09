@@ -24,6 +24,4 @@ public interface ClassEnrollmentsDao {
 	ClassEnrollments getclassEnrollmentByCode(String code) throws Exception;
 
 	Integer getTotalParticipantsByIdDtlClass(String id) throws Exception;
-
-	List<?> getCertificate(String idUser, String idClass) throws Exception;
 }
