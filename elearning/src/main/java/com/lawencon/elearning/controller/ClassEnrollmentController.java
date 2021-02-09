@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lawencon.elearning.helper.Response;
 import com.lawencon.elearning.model.ClassEnrollments;
 import com.lawencon.elearning.model.DetailClasses;
 import com.lawencon.elearning.service.ClassEnrollmentService;
@@ -31,7 +30,7 @@ import com.lawencon.util.JasperUtil;
 
 @RestController
 @RequestMapping("class-enrollment")
-public class ClassEnrollmentController extends ElearningBaseController{
+public class ClassEnrollmentController extends ElearningBaseController {
 	@Autowired
 	private ClassEnrollmentService classEnrollmentService;
 
@@ -40,12 +39,10 @@ public class ClassEnrollmentController extends ElearningBaseController{
 		try {
 			ClassEnrollments classEnrollment = new ObjectMapper().readValue(body, ClassEnrollments.class);
 			classEnrollmentService.insertClassEnrollment(classEnrollment);
-			Response<ClassEnrollments> res = new Response<ClassEnrollments>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_CREATED.msg, classEnrollment);
-			return new ResponseEntity<>(res, HttpStatus.CREATED);
+			return responseSuccess(classEnrollment, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<ClassEnrollments> res = new Response<ClassEnrollments>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -102,13 +99,13 @@ public class ClassEnrollmentController extends ElearningBaseController{
 	public ResponseEntity<?> deleteClassEnrollmentById(@PathVariable("id") String id) {
 		try {
 			classEnrollmentService.deleteClassEnrollmentsById(id);
-			return new ResponseEntity<>(HttpStatus.OK);
+			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();
 			return new ResponseEntity<>("Data used in another table", HttpStatus.BAD_REQUEST);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -117,10 +114,10 @@ public class ClassEnrollmentController extends ElearningBaseController{
 		try {
 			ClassEnrollments classEnrollment = new ObjectMapper().readValue(body, ClassEnrollments.class);
 			classEnrollmentService.updateClassEnrollments(classEnrollment);
-			return new ResponseEntity<>(classEnrollment, HttpStatus.OK);
+			return responseSuccess(classEnrollment, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -133,7 +130,7 @@ public class ClassEnrollmentController extends ElearningBaseController{
 			out = JasperUtil.responseToByteArray(data, "Certificate", null);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return responseError(e);
 		}
 
 		HttpHeaders headers = new HttpHeaders();

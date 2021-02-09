@@ -24,7 +24,7 @@ import com.lawencon.elearning.util.MessageStat;
 public class DetailForumsController extends ElearningBaseController {
 	@Autowired
 	private DetailForumsService detailForumService;
-	
+
 	@GetMapping("all")
 	public ResponseEntity<?> getAllDetailForum() {
 		try {
@@ -35,7 +35,7 @@ public class DetailForumsController extends ElearningBaseController {
 			return responseError(e);
 		}
 	}
-	
+
 	@GetMapping("{id}")
 	public ResponseEntity<?> getDetailForumById(@PathVariable("id") String id) {
 		try {
@@ -46,7 +46,7 @@ public class DetailForumsController extends ElearningBaseController {
 			return responseError(e);
 		}
 	}
-	
+
 	@PostMapping
 	public ResponseEntity<?> insertDetailForum(@RequestBody String body) {
 		try {
@@ -54,13 +54,13 @@ public class DetailForumsController extends ElearningBaseController {
 			obj.registerModule(new JavaTimeModule());
 			DetailForums detailForum = obj.readValue(body, DetailForums.class);
 			detailForumService.insertDetailForum(detailForum);
-			return new ResponseEntity<>(detailForum, HttpStatus.CREATED);
+			return responseSuccess(detailForum, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
-	
+
 	@PutMapping
 	public ResponseEntity<?> updateDetailForum(@RequestBody String body) {
 		try {
@@ -68,23 +68,22 @@ public class DetailForumsController extends ElearningBaseController {
 			obj.registerModule(new JavaTimeModule());
 			DetailForums detailForum = obj.readValue(body, DetailForums.class);
 			detailForumService.updateDetailForum(detailForum);
-			return new ResponseEntity<>(detailForum, HttpStatus.CREATED);
+			return responseSuccess(detailForum, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
-	
+
 	@GetMapping("forum/{idForum}")
 	public ResponseEntity<?> getDetailForumByIdForum(@PathVariable("idForum") String idForum) {
 		try {
 			List<DetailForums> detailForum = detailForumService.getAllDetailForumsByIdForum(idForum);
-			return new ResponseEntity<>(detailForum, HttpStatus.OK);
+			return responseSuccess(detailForum, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
-	
-	
+
 }

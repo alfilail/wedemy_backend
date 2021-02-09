@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.lawencon.elearning.helper.Response;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.Users;
 import com.lawencon.elearning.service.UsersService;
@@ -34,12 +33,10 @@ public class UsersController extends ElearningBaseController {
 	public ResponseEntity<?> getAllUsers() {
 		try {
 			List<Users> listUsers = usersService.getAllUsers();
-			Response<List<Users>> response = new Response<List<Users>>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, listUsers);
-			return new ResponseEntity<>(response, HttpStatus.OK);
+			return responseSuccess(listUsers, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<List<Users>> response = new Response<List<Users>>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -47,25 +44,21 @@ public class UsersController extends ElearningBaseController {
 	public ResponseEntity<?> getUserById(@PathVariable("id") String id) {
 		try {
 			Users user = usersService.getUserById(id);
-			Response<Users> response = new Response<Users>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, user);
-			return new ResponseEntity<>(response, HttpStatus.OK);
+			return responseSuccess(user, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<Users> response = new Response<Users>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
-	
+
 	@GetMapping("role/{roleCode}")
 	public ResponseEntity<?> getUsersByRoleCode(@PathVariable("roleCode") String roleCode) {
 		try {
 			List<Users> user = usersService.getUsersByRoleCode(roleCode);
-			Response<List<Users>> response = new Response<List<Users>>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, user);
-			return new ResponseEntity<>(response, HttpStatus.OK);
+			return responseSuccess(user, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<List<Users>> response = new Response<List<Users>>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -76,12 +69,10 @@ public class UsersController extends ElearningBaseController {
 			obj.registerModule(new JavaTimeModule());
 			Users user = obj.readValue(body, Users.class);
 			usersService.insertUser(user);
-			Response<Users> response = new Response<Users>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_CREATED.msg, user);
-			return new ResponseEntity<>(response, HttpStatus.CREATED);
+			return responseSuccess(user, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<Users> response = new Response<Users>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -90,12 +81,10 @@ public class UsersController extends ElearningBaseController {
 		try {
 			Profiles profile = new ObjectMapper().readValue(body, Profiles.class);
 			Users user = usersService.updateUserPassword(profile);
-			Response<Users> response = new Response<Users>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_UPDATE.msg, user);
-			return new ResponseEntity<>(response, HttpStatus.CREATED);
+			return responseSuccess(user, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<Users> response = new Response<Users>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -106,26 +95,21 @@ public class UsersController extends ElearningBaseController {
 			obj.registerModule(new JavaTimeModule());
 			Users user = obj.readValue(body, Users.class);
 			usersService.updateUser(user);
-			Response<Users> response = new Response<Users>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_UPDATE.msg, user);
-			return new ResponseEntity<>(response, HttpStatus.CREATED);
+			return responseSuccess(user, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<Users> response = new Response<Users>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
 	@DeleteMapping
-	public ResponseEntity<?> deleteUserById(@RequestParam("id") String id, 
-			@RequestParam("idUser") String idUser) {
+	public ResponseEntity<?> deleteUserById(@RequestParam("id") String id, @RequestParam("idUser") String idUser) {
 		try {
 			usersService.deleteUserById(id, idUser);
-			Response<Users> response = new Response<Users>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_DELETE.msg, null);
-			return new ResponseEntity<>(response, HttpStatus.OK);
+			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<Users> response = new Response<Users>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 

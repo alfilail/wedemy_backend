@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lawencon.elearning.helper.Response;
 import com.lawencon.elearning.helper.ScoreInputs;
 import com.lawencon.elearning.model.Evaluations;
 import com.lawencon.elearning.service.EvaluationsService;
@@ -40,10 +39,10 @@ public class EvaluationsController extends ElearningBaseController {
 	public ResponseEntity<?> getAllEvaluations() {
 		try {
 			List<Evaluations> evaluations = evaluationsService.getAllEvaluations();
-			return new ResponseEntity<>(evaluations, HttpStatus.OK);
+			return responseSuccess(evaluations, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -53,10 +52,10 @@ public class EvaluationsController extends ElearningBaseController {
 		try {
 			List<Evaluations> evaluations = evaluationsService.getAllByIdDtlClassAndIdDtlModuleRgs(idDtlClass,
 					idDtlModuleRgs);
-			return new ResponseEntity<>(evaluations, HttpStatus.OK);
+			return responseSuccess(evaluations, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -69,7 +68,7 @@ public class EvaluationsController extends ElearningBaseController {
 			out = JasperUtil.responseToByteArray(listData, "ScoresReport", null);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return responseError(e);
 		}
 
 		HttpHeaders headers = new HttpHeaders();
@@ -98,7 +97,7 @@ public class EvaluationsController extends ElearningBaseController {
 			out = JasperUtil.responseToByteArray(listData, "ScoreReport", null);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return responseError(e);
 		}
 
 		HttpHeaders headers = new HttpHeaders();
@@ -110,10 +109,10 @@ public class EvaluationsController extends ElearningBaseController {
 	public ResponseEntity<?> getEvaluationById(@PathVariable("id") String id) {
 		try {
 			Evaluations evaluation = evaluationsService.getEvaluationById(id);
-			return new ResponseEntity<>(evaluation, HttpStatus.OK);
+			return responseSuccess(evaluation, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -123,10 +122,10 @@ public class EvaluationsController extends ElearningBaseController {
 			ObjectMapper obj = new ObjectMapper();
 			ScoreInputs scores = obj.readValue(body, ScoreInputs.class);
 			evaluationsService.insertEvaluation(scores);
-			return new ResponseEntity<>(scores, HttpStatus.CREATED);
+			return responseSuccess(scores, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 

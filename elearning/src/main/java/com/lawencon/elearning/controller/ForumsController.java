@@ -18,69 +18,70 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lawencon.elearning.helper.ForumAndDetailForums;
 import com.lawencon.elearning.model.Forums;
 import com.lawencon.elearning.service.ForumsService;
+import com.lawencon.elearning.util.MessageStat;
 
 @RestController
 @RequestMapping("forum")
-public class ForumsController {
-	
+public class ForumsController extends ElearningBaseController {
+
 	@Autowired
 	private ForumsService forumsService;
-	
+
 	@GetMapping("all")
 	public ResponseEntity<?> getAllForums() {
 		try {
 			List<Forums> forum = forumsService.getAllForums();
-			return new ResponseEntity<>(forum, HttpStatus.OK);
+			return responseSuccess(forum, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
-	
+
 	@GetMapping("material/{id}")
 	public ResponseEntity<?> getForumByIdDetailModuleRegistration(@PathVariable("id") String id) {
 		try {
 			List<ForumAndDetailForums> listResult = new ArrayList<>();
 			listResult = forumsService.getForumByIdDetailModuleRegistration(id);
-			return new ResponseEntity<>(listResult, HttpStatus.OK);
+			return responseSuccess(listResult, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
-	
+
 	@GetMapping("{id}")
 	public ResponseEntity<?> getForumById(@PathVariable("id") String id) {
 		try {
 			Forums forum = forumsService.getForumById(id);
-			return new ResponseEntity<>(forum, HttpStatus.OK);
+			return responseSuccess(forum, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
-	
+
 	@PostMapping
 	public ResponseEntity<?> insertForum(@RequestBody String body) {
 		try {
 			Forums forum = new ObjectMapper().readValue(body, Forums.class);
 			forumsService.insertForum(forum);
-			return new ResponseEntity<>(forum, HttpStatus.CREATED);
+			return responseSuccess(forum, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
-	
+
 	@PatchMapping
 	public ResponseEntity<?> updateForum(@RequestBody String body) {
 		try {
 			Forums forum = new ObjectMapper().readValue(body, Forums.class);
 			forumsService.updateContentForum(forum);
-			return new ResponseEntity<>(forum, HttpStatus.CREATED);
+			return responseSuccess(forum, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 

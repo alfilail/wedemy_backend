@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.lawencon.elearning.helper.Response;
 import com.lawencon.elearning.model.LearningMaterialTypes;
 import com.lawencon.elearning.service.LearningMaterialTypesService;
 import com.lawencon.elearning.util.MessageStat;
@@ -34,12 +33,10 @@ public class LearningMaterialTypesController extends ElearningBaseController {
 		try {
 			LearningMaterialTypes lmType = new ObjectMapper().readValue(body, LearningMaterialTypes.class);
 			lmTypesService.insertLearningMaterialType(lmType);
-			Response<LearningMaterialTypes> res = new Response<LearningMaterialTypes>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_CREATED.msg, lmType);
-			return new ResponseEntity<>(res, HttpStatus.CREATED);
+			return responseSuccess(lmType, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<LearningMaterialTypes> res = new Response<LearningMaterialTypes>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -48,12 +45,10 @@ public class LearningMaterialTypesController extends ElearningBaseController {
 		LearningMaterialTypes lmType = new LearningMaterialTypes();
 		try {
 			lmType = lmTypesService.getLearningMaterialTypeById(id);
-			Response<LearningMaterialTypes> res = new Response<LearningMaterialTypes>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, lmType);
-			return new ResponseEntity<>(res, HttpStatus.OK);
+			return responseSuccess(lmType, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<LearningMaterialTypes> res = new Response<LearningMaterialTypes>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -62,12 +57,10 @@ public class LearningMaterialTypesController extends ElearningBaseController {
 		List<LearningMaterialTypes> lmTypesList = new ArrayList<LearningMaterialTypes>();
 		try {
 			lmTypesList = lmTypesService.getAllLearningMaterialTypes();
-			Response<List<LearningMaterialTypes>> res = new Response<List<LearningMaterialTypes>>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, lmTypesList);
-			return new ResponseEntity<>(res, HttpStatus.OK);
+			return responseSuccess(lmTypesList, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<List<LearningMaterialTypes>> res = new Response<List<LearningMaterialTypes>>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -76,13 +69,10 @@ public class LearningMaterialTypesController extends ElearningBaseController {
 			@RequestParam("idUser") String idUser) {
 		try {
 			lmTypesService.deleteLearningMaterialTypeById(id, idUser);
-			Response<LearningMaterialTypes> res = new Response<LearningMaterialTypes>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_DELETE.msg, null);
-			return new ResponseEntity<>(res ,HttpStatus.OK);
-		} 
-		catch (Exception e) {
+			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
+		} catch (Exception e) {
 			e.printStackTrace();
-			Response<LearningMaterialTypes> res = new Response<LearningMaterialTypes>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -93,12 +83,10 @@ public class LearningMaterialTypesController extends ElearningBaseController {
 			obj.registerModule(new JavaTimeModule());
 			LearningMaterialTypes lmType = obj.readValue(body, LearningMaterialTypes.class);
 			lmTypesService.updateLearningMaterialType(lmType);
-			Response<LearningMaterialTypes> res = new Response<LearningMaterialTypes>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_UPDATE.msg, lmType);
-			return new ResponseEntity<>(res, HttpStatus.OK);
+			return responseSuccess(lmType, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<LearningMaterialTypes> res = new Response<LearningMaterialTypes>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 }

@@ -72,10 +72,10 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 			throws Exception {
 		try {
 			begin();
-			Files file = new Files();
+			Files file = filesService.getFileById(assignmentSubmission.getIdFile().getId());
 			file.setFile(fileInput.getBytes());
 			file.setType(fileInput.getContentType());
-			filesService.insertFile(file);
+			filesService.updateFile(file);
 			commit();
 		} catch (Exception e) {
 			rollback();

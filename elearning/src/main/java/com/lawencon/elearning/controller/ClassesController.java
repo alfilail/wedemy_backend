@@ -19,14 +19,13 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.lawencon.elearning.helper.ClassesHelper;
-import com.lawencon.elearning.helper.Response;
 import com.lawencon.elearning.model.Classes;
 import com.lawencon.elearning.service.ClassesService;
 import com.lawencon.elearning.util.MessageStat;
 
 @RestController
 @RequestMapping("class")
-public class ClassesController extends ElearningBaseController{
+public class ClassesController extends ElearningBaseController {
 
 	@Autowired
 	private ClassesService classesService;
@@ -35,25 +34,21 @@ public class ClassesController extends ElearningBaseController{
 	public ResponseEntity<?> getAllClasses() {
 		try {
 			List<Classes> clazz = classesService.getAllClasses();
-			Response<List<Classes> > res = new Response<List<Classes> >(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, clazz);
-			return new ResponseEntity<>(res, HttpStatus.OK);
+			return responseSuccess(clazz, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<List<Classes> > res = new Response<List<Classes> >(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
-	
+
 	@GetMapping("inactive")
 	public ResponseEntity<?> getAllInactiveClasses() {
 		try {
 			List<Classes> clazz = classesService.getAllInactiveClass();
-			Response<List<Classes> > res = new Response<List<Classes> >(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, clazz);
-			return new ResponseEntity<>(res, HttpStatus.OK);
+			return responseSuccess(clazz, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<List<Classes> > res = new Response<List<Classes> >(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -61,12 +56,10 @@ public class ClassesController extends ElearningBaseController{
 	public ResponseEntity<?> getClassById(@PathVariable("id") String id) {
 		try {
 			Classes clazz = classesService.getClassById(id);
-			Response<Classes> res = new Response<Classes>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, clazz);
-			return new ResponseEntity<>(res, HttpStatus.OK);
+			return responseSuccess(clazz, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<Classes> res = new Response<Classes>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -77,12 +70,10 @@ public class ClassesController extends ElearningBaseController{
 			obj.registerModule(new JavaTimeModule());
 			ClassesHelper clazzHelper = obj.readValue(body, ClassesHelper.class);
 			classesService.insertClass(clazzHelper, file);
-			Response<ClassesHelper> res = new Response<ClassesHelper>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_CREATED.msg, clazzHelper);
-			return new ResponseEntity<>(res, HttpStatus.CREATED);
+			return responseSuccess(clazzHelper, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<ClassesHelper> res = new Response<ClassesHelper>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -93,26 +84,21 @@ public class ClassesController extends ElearningBaseController{
 			obj.registerModule(new JavaTimeModule());
 			Classes clazz = obj.readValue(body, Classes.class);
 			classesService.updateClass(clazz, file);
-			Response<Classes> res = new Response<Classes>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_UPDATE.msg, clazz);
-			return new ResponseEntity<>(res, HttpStatus.CREATED);
+			return responseSuccess(clazz, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<Classes> res = new Response<Classes>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
 	@DeleteMapping
-	public ResponseEntity<?> deleteClassById(@RequestParam("id") String id,
-			@RequestParam("idUser") String idUser) {
+	public ResponseEntity<?> deleteClassById(@RequestParam("id") String id, @RequestParam("idUser") String idUser) {
 		try {
 			classesService.deleteClassById(id, idUser);
-			Response<Classes> res = new Response<Classes>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_DELETE.msg, null);
-			return new ResponseEntity<>(res, HttpStatus.OK);
+			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<Classes> res = new Response<Classes>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 

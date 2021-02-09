@@ -15,10 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lawencon.elearning.model.ApprovementsRenewal;
 import com.lawencon.elearning.service.ApprovementsRenewalService;
+import com.lawencon.elearning.util.MessageStat;
 
 @RestController
 @RequestMapping("approvement-renewal")
-public class ApprovementsRenewalController {
+public class ApprovementsRenewalController extends ElearningBaseController {
 	@Autowired
 	private ApprovementsRenewalService approvementsRenewalService;
 
@@ -27,10 +28,10 @@ public class ApprovementsRenewalController {
 		try {
 			ApprovementsRenewal approvementsRenewal = new ObjectMapper().readValue(body, ApprovementsRenewal.class);
 			approvementsRenewalService.insertApprovementsRenewal(approvementsRenewal);
-			return new ResponseEntity<>(approvementsRenewal, HttpStatus.CREATED);
+			return responseSuccess(approvementsRenewal, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -39,10 +40,10 @@ public class ApprovementsRenewalController {
 		try {
 			ApprovementsRenewal approvementsRenewal = new ObjectMapper().readValue(body, ApprovementsRenewal.class);
 			approvementsRenewalService.participantApprovementsRenewal(approvementsRenewal);
-			return new ResponseEntity<>(approvementsRenewal, HttpStatus.CREATED);
+			return responseSuccess(approvementsRenewal, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -52,10 +53,10 @@ public class ApprovementsRenewalController {
 		try {
 			List<ApprovementsRenewal> listResult = approvementsRenewalService.getListParticipantsPresence(idDtlClass,
 					idDtlModuleRgs);
-			return new ResponseEntity<>(listResult, HttpStatus.CREATED);
+			return responseSuccess(listResult, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 

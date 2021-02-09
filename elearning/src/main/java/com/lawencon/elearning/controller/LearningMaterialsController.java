@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.lawencon.elearning.helper.Response;
 import com.lawencon.elearning.model.DetailModuleRegistrations;
 import com.lawencon.elearning.model.LearningMaterials;
 import com.lawencon.elearning.service.LearningMaterialsService;
@@ -42,12 +41,10 @@ public class LearningMaterialsController extends ElearningBaseController {
 			obj.registerModule(new JavaTimeModule());
 			DetailModuleRegistrations dtlModuleRgs = obj.readValue(body, DetailModuleRegistrations.class);
 			learningMaterialsService.insertLearningMaterial(dtlModuleRgs, file);
-			Response<DetailModuleRegistrations> res = new Response<DetailModuleRegistrations>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_CREATED.msg, dtlModuleRgs);
-			return new ResponseEntity<>(res, HttpStatus.CREATED);
+			return responseSuccess(dtlModuleRgs, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<DetailModuleRegistrations> res = new Response<DetailModuleRegistrations>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -55,12 +52,10 @@ public class LearningMaterialsController extends ElearningBaseController {
 	public ResponseEntity<?> getLearningMaterialById(@PathVariable String id) {
 		try {
 			LearningMaterials learningMaterial = learningMaterialsService.getLearningMaterialById(id);
-			Response<LearningMaterials> res = new Response<LearningMaterials>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, learningMaterial);
-			return new ResponseEntity<>(res, HttpStatus.CREATED);
+			return responseSuccess(learningMaterial, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<LearningMaterials> res = new Response<LearningMaterials>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -68,12 +63,10 @@ public class LearningMaterialsController extends ElearningBaseController {
 	public ResponseEntity<?> getAllLearningMaterials() {
 		try {
 			List<LearningMaterials> learningMaterialsList = learningMaterialsService.getAllLearningMaterials();
-			Response<List<LearningMaterials>> res = new Response<List<LearningMaterials>>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, learningMaterialsList);
-			return new ResponseEntity<>(res, HttpStatus.CREATED);
+			return responseSuccess(learningMaterialsList, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<List<LearningMaterials>> res = new Response<List<LearningMaterials>>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -82,12 +75,10 @@ public class LearningMaterialsController extends ElearningBaseController {
 			@RequestParam("idUser") String idUser) {
 		try {
 			learningMaterialsService.deleteLearningMaterialById(id, idUser);
-			Response<LearningMaterials> res = new Response<LearningMaterials>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_DELETE.msg, null);
-			return new ResponseEntity<>(res, HttpStatus.OK);
-		}  catch (Exception e) {
+			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
+		} catch (Exception e) {
 			e.printStackTrace();
-			Response<LearningMaterials> res = new Response<LearningMaterials>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -98,12 +89,10 @@ public class LearningMaterialsController extends ElearningBaseController {
 			obj.registerModule(new JavaTimeModule());
 			LearningMaterials learningMaterial = obj.readValue(body, LearningMaterials.class);
 			learningMaterialsService.updateLearningMaterial(learningMaterial, file);
-			Response<LearningMaterials> res = new Response<LearningMaterials>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_UPDATE.msg, learningMaterial);
-			return new ResponseEntity<>(res, HttpStatus.OK);
+			return responseSuccess(learningMaterial, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<LearningMaterials> res = new Response<LearningMaterials>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 }

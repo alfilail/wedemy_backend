@@ -31,12 +31,13 @@ public class AssignmentSubmissionsDaoImpl extends ElearningBaseDaoImpl<Assignmen
 		List<AssignmentSubmissions> listResult = new ArrayList<>();
 		return listResult;
 	}
-	
+
 	@Override
 	public AssignmentSubmissions getByIdDtlModuleRgsAndIdParticipant(String idDtlModuleRgs, String idParticipant)
 			throws Exception {
 		List<AssignmentSubmissions> listResult = new ArrayList<>();
-		String sql = sqlBuilder("SELECT asm.id, asm.version, f.file FROM t_r_assignment_submissions asm ",
+		String sql = sqlBuilder(
+				"SELECT asm.id, asm.version, f.id idfile, f.file, f.type FROM t_r_assignment_submissions asm ",
 				"INNER JOIN t_m_files f ON asm.id_file = f.id WHERE asm.id_dtl_module_rgs = ?1 AND ",
 				"asm.id_participant = ?2").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlModuleRgs).setParameter(2, idParticipant)
@@ -47,7 +48,9 @@ public class AssignmentSubmissionsDaoImpl extends ElearningBaseDaoImpl<Assignmen
 			submission.setId(objArr[0] != null ? (String) objArr[0] : EmptyField.EMPTY.msg);
 			submission.setVersion(objArr[1] != null ? Long.valueOf(objArr[1].toString()) : null);
 			Files file = new Files();
-			file.setFile(objArr[2] != null ? (byte[]) objArr[2] : null);
+			file.setId((String) objArr[2]);
+			file.setFile(objArr[3] != null ? (byte[]) objArr[3] : null);
+			file.setType((String) objArr[4]);
 			submission.setIdFile(file);
 			listResult.add(submission);
 		});

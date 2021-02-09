@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lawencon.elearning.helper.Response;
 import com.lawencon.elearning.model.SubmissionStatus;
 import com.lawencon.elearning.service.SubmissionStatusService;
 import com.lawencon.elearning.util.MessageStat;
@@ -31,14 +30,12 @@ public class SubmissionStatusController extends ElearningBaseController {
 	@PostMapping
 	public ResponseEntity<?> insertSubmissionStatus(@RequestBody String body) {
 		try {
-			SubmissionStatus submissionStatus= new ObjectMapper().readValue(body, SubmissionStatus.class);
+			SubmissionStatus submissionStatus = new ObjectMapper().readValue(body, SubmissionStatus.class);
 			submissionStatusService.insertSubmissionStatus(submissionStatus);
-			Response<SubmissionStatus> response = new Response<SubmissionStatus>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_CREATED.msg, submissionStatus);
-			return new ResponseEntity<>(response, HttpStatus.CREATED);
+			return responseSuccess(submissionStatus, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<SubmissionStatus> response = new Response<SubmissionStatus>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -47,12 +44,10 @@ public class SubmissionStatusController extends ElearningBaseController {
 		SubmissionStatus submissionStatus = new SubmissionStatus();
 		try {
 			submissionStatus = submissionStatusService.getSubmissionStatusById(id);
-			Response<SubmissionStatus> response = new Response<SubmissionStatus>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, submissionStatus);
-			return new ResponseEntity<>(response, HttpStatus.OK);
+			return responseSuccess(submissionStatus, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<SubmissionStatus> response = new Response<SubmissionStatus>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -61,12 +56,10 @@ public class SubmissionStatusController extends ElearningBaseController {
 		List<SubmissionStatus> submissionStatusList = new ArrayList<SubmissionStatus>();
 		try {
 			submissionStatusList = submissionStatusService.getAllSubmissionStatus();
-			Response<List<SubmissionStatus>> response = new Response<List<SubmissionStatus>>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, submissionStatusList);
-			return new ResponseEntity<>(response, HttpStatus.OK);
+			return responseSuccess(submissionStatusList, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<List<SubmissionStatus>> response = new Response<List<SubmissionStatus>>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), submissionStatusList);
-			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -75,12 +68,10 @@ public class SubmissionStatusController extends ElearningBaseController {
 			@RequestParam("idUser") String idUser) {
 		try {
 			submissionStatusService.deleteSubmissionStatusById(id, idUser);
-			Response<SubmissionStatus> response = new Response<SubmissionStatus>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_DELETE.msg, null);
-			return new ResponseEntity<>(response, HttpStatus.OK);
+			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<SubmissionStatus> response = new Response<SubmissionStatus>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -89,12 +80,10 @@ public class SubmissionStatusController extends ElearningBaseController {
 		try {
 			SubmissionStatus submissionStatus = new ObjectMapper().readValue(body, SubmissionStatus.class);
 			submissionStatusService.updateSubmissionStatus(submissionStatus);
-			Response<SubmissionStatus> response = new Response<SubmissionStatus>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_UPDATE.msg, submissionStatus);
-			return new ResponseEntity<>(response, HttpStatus.CREATED);
+			return responseSuccess(submissionStatus, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<SubmissionStatus> response = new Response<SubmissionStatus>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 }

@@ -56,18 +56,7 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 
 	@Override
 	public DetailClasses getDetailClassById(String id) throws Exception {
-		DetailClasses dtlClass = new DetailClasses();
-//		try {
-//			begin();
-			dtlClass = detailClassesDao.getDetailClassById(id);
-//			updateViews(id);
-//			dtlClass.setTotalParticipant(classEnrollmentService.getTotalParticipantsByIdDtlClass(id));
-//			commit();
-//		} catch (Exception e) {
-//			rollback();
-//			e.printStackTrace();
-//		}
-		return dtlClass;
+		return detailClassesDao.getDetailClassById(id);
 	}
 
 	@Override

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.elearning.model.DetailModuleRegistrations;
 import com.lawencon.elearning.service.DetailModuleRegistrationsService;
+import com.lawencon.elearning.util.MessageStat;
 
 /**
  * @author Nur Alfilail
@@ -17,7 +18,7 @@ import com.lawencon.elearning.service.DetailModuleRegistrationsService;
 
 @RestController
 @RequestMapping("detail-module-rgs")
-public class DetailModuleRegistrationsController {
+public class DetailModuleRegistrationsController extends ElearningBaseController {
 
 	@Autowired
 	private DetailModuleRegistrationsService dtlModuleService;
@@ -26,10 +27,10 @@ public class DetailModuleRegistrationsController {
 	public ResponseEntity<?> getDetailModuleRgsById(@PathVariable("id") String id) {
 		try {
 			DetailModuleRegistrations dtlModuleRgs = dtlModuleService.getDetailModuleRegistrationsById(id);
-			return new ResponseEntity<>(dtlModuleRgs, HttpStatus.OK);
+			return responseSuccess(dtlModuleRgs, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 

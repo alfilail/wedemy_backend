@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.lawencon.elearning.helper.Response;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.service.ProfilesService;
 import com.lawencon.elearning.util.MessageStat;
@@ -26,10 +25,10 @@ import com.lawencon.elearning.util.MessageStat;
 @RestController
 @RequestMapping("profile")
 public class ProfilesController extends ElearningBaseController {
-	
+
 	@Autowired
 	private ProfilesService profilesService;
-	
+
 	@GetMapping("all")
 	public ResponseEntity<?> getAllProfiles() {
 		try {
@@ -40,20 +39,18 @@ public class ProfilesController extends ElearningBaseController {
 			return responseError(e);
 		}
 	}
-	
+
 	@GetMapping("{id}")
 	public ResponseEntity<?> getProfileById(@PathVariable("id") String id) {
 		try {
 			Profiles profile = profilesService.getProfileById(id);
-			Response<Profiles> response = new Response<Profiles>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, profile);
-			return new ResponseEntity<>(response, HttpStatus.OK);
+			return responseSuccess(profile, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<Profiles> response = new Response<Profiles>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
-	
+
 	@PostMapping
 	public ResponseEntity<?> insertProfile(@RequestBody String body) {
 		try {
@@ -61,17 +58,16 @@ public class ProfilesController extends ElearningBaseController {
 			obj.registerModule(new JavaTimeModule());
 			Profiles profile = obj.readValue(body, Profiles.class);
 			profilesService.insertProfile(profile);
-			Response<Profiles> response = new Response<Profiles>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_CREATED.msg, profile);
-			return new ResponseEntity<>(response, HttpStatus.CREATED);
+			return responseSuccess(profile, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<Profiles> response = new Response<Profiles>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
-	
+
 	@PutMapping
-	public ResponseEntity<?> updateProfile(@RequestPart String body, @RequestPart(value = "file", required = false) MultipartFile file) {
+	public ResponseEntity<?> updateProfile(@RequestPart String body,
+			@RequestPart(value = "file", required = false) MultipartFile file) {
 		try {
 			ObjectMapper obj = new ObjectMapper();
 			obj.registerModule(new JavaTimeModule());
@@ -88,12 +84,10 @@ public class ProfilesController extends ElearningBaseController {
 	public ResponseEntity<?> deleteProfileById(@PathVariable("id") String id) {
 		try {
 			profilesService.deleteProfileById(id);
-			Response<Profiles> response = new Response<Profiles>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_DELETE.msg, null);
-			return new ResponseEntity<>(response, HttpStatus.OK);
+			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<Profiles> response = new Response<Profiles>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 

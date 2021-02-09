@@ -27,6 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.lawencon.elearning.model.Presences;
 import com.lawencon.elearning.service.PresencesService;
+import com.lawencon.elearning.util.MessageStat;
 import com.lawencon.util.JasperUtil;
 
 /**
@@ -35,7 +36,7 @@ import com.lawencon.util.JasperUtil;
 
 @RestController
 @RequestMapping("presence")
-public class PresencesController {
+public class PresencesController extends ElearningBaseController {
 
 	@Autowired
 	private PresencesService presencesService;
@@ -47,10 +48,10 @@ public class PresencesController {
 			obj.registerModule(new JavaTimeModule());
 			Presences presence = obj.readValue(body, Presences.class);
 			presencesService.insertPresence(presence);
-			return new ResponseEntity<>(presence, HttpStatus.CREATED);
+			return responseSuccess(presence, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -58,10 +59,10 @@ public class PresencesController {
 	public ResponseEntity<?> getPresenceById(@PathVariable String id) {
 		try {
 			Presences presence = presencesService.getPresenceById(id);
-			return new ResponseEntity<>(presence, HttpStatus.CREATED);
+			return responseSuccess(presence, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -69,15 +70,15 @@ public class PresencesController {
 	public ResponseEntity<?> getAllPresences() {
 		try {
 			List<Presences> presencesList = presencesService.getAllPresences();
-			return new ResponseEntity<>(presencesList, HttpStatus.CREATED);
+			return responseSuccess(presencesList, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
-	
+
 	@GetMapping("report")
-	public HttpEntity<?> reportPresence(@RequestParam String idClass, @RequestParam String scheduleDateStart, 
+	public HttpEntity<?> reportPresence(@RequestParam String idClass, @RequestParam String scheduleDateStart,
 			@RequestParam String scheduleDateEnd) {
 		List<?> listData = new ArrayList<>();
 		byte[] out;
@@ -89,7 +90,7 @@ public class PresencesController {
 			out = JasperUtil.responseToByteArray(listData, "ReportPresence", null);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return responseError(e);
 		}
 
 		HttpHeaders headers = new HttpHeaders();
@@ -101,13 +102,13 @@ public class PresencesController {
 	public ResponseEntity<?> deletePresenceById(@PathVariable("id") String id) {
 		try {
 			presencesService.deletePresenceById(id);
-			return new ResponseEntity<>(HttpStatus.OK);
+			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();
 			return new ResponseEntity<>("Data used in another table", HttpStatus.BAD_REQUEST);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+			return responseError(e);
 		}
 	}
 
@@ -116,10 +117,10 @@ public class PresencesController {
 		try {
 			Presences presence = new ObjectMapper().readValue(body, Presences.class);
 			presencesService.updatePresence(presence);
-			return new ResponseEntity<>(presence, HttpStatus.OK);
+			return responseSuccess(presence, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 }

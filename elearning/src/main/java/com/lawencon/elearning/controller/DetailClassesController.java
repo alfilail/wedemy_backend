@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.lawencon.elearning.helper.DetailClassInformation;
-import com.lawencon.elearning.helper.Response;
 import com.lawencon.elearning.model.DetailClasses;
 import com.lawencon.elearning.service.DetailClassesService;
 import com.lawencon.elearning.util.MessageStat;
@@ -34,14 +33,10 @@ public class DetailClassesController extends ElearningBaseController {
 			obj.registerModule(new JavaTimeModule());
 			DetailClasses detailClass = obj.readValue(body, DetailClasses.class);
 			dtlClassesService.reactiveOldClass(detailClass);
-			Response<DetailClasses> res = new Response<DetailClasses>(true, HttpStatus.CREATED.toString(),
-					MessageStat.SUCCESS_CREATED.msg, detailClass);
-			return new ResponseEntity<>(res, HttpStatus.CREATED);
+			return responseSuccess(detailClass, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<DetailClasses> res = new Response<DetailClasses>(false,
-					HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -49,14 +44,10 @@ public class DetailClassesController extends ElearningBaseController {
 	public ResponseEntity<?> getAllDetailClasses() {
 		try {
 			List<DetailClasses> dtlClass = dtlClassesService.getAllDetailClass();
-			Response<List<DetailClasses>> res = new Response<List<DetailClasses>>(true, HttpStatus.OK.toString(),
-					MessageStat.SUCCESS_RETRIEVE.msg, dtlClass);
-			return new ResponseEntity<>(res, HttpStatus.OK);
+			return responseSuccess(dtlClass, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<List<DetailClasses>> res = new Response<List<DetailClasses>>(false,
-					HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -64,14 +55,10 @@ public class DetailClassesController extends ElearningBaseController {
 	public ResponseEntity<?> getAllInactiveDetailClasses() {
 		try {
 			List<DetailClasses> dtlClass = dtlClassesService.getAllInactiveDetailClass();
-			Response<List<DetailClasses>> res = new Response<List<DetailClasses>>(true, HttpStatus.OK.toString(),
-					MessageStat.SUCCESS_RETRIEVE.msg, dtlClass);
-			return new ResponseEntity<>(res, HttpStatus.OK);
+			return responseSuccess(dtlClass, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<List<DetailClasses>> res = new Response<List<DetailClasses>>(false,
-					HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -79,14 +66,10 @@ public class DetailClassesController extends ElearningBaseController {
 	public ResponseEntity<?> getClassById(@PathVariable("id") String id) {
 		try {
 			DetailClasses dtlClass = dtlClassesService.getDetailClassById(id);
-			Response<DetailClasses> res = new Response<DetailClasses>(true, HttpStatus.OK.toString(),
-					MessageStat.SUCCESS_RETRIEVE.msg, dtlClass);
-			return new ResponseEntity<>(res, HttpStatus.OK);
+			return responseSuccess(dtlClass, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<DetailClasses> res = new Response<DetailClasses>(false,
-					HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -105,14 +88,10 @@ public class DetailClassesController extends ElearningBaseController {
 	public ResponseEntity<?> getTutorClasses(@PathVariable("idTutor") String idTutor) {
 		try {
 			List<DetailClasses> listResult = dtlClassesService.getTutorClasses(idTutor);
-			Response<List<DetailClasses>> res = new Response<List<DetailClasses>>(true, HttpStatus.OK.toString(),
-					MessageStat.SUCCESS_RETRIEVE.msg, listResult);
-			return new ResponseEntity<>(res, HttpStatus.OK);
+			return responseSuccess(listResult, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<List<DetailClasses>> res = new Response<List<DetailClasses>>(false,
-					HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -120,14 +99,10 @@ public class DetailClassesController extends ElearningBaseController {
 	public ResponseEntity<?> getPopularClasses() {
 		try {
 			List<DetailClasses> listResult = dtlClassesService.getPopularClasses();
-			Response<List<DetailClasses>> res = new Response<List<DetailClasses>>(true, HttpStatus.OK.toString(),
-					MessageStat.SUCCESS_RETRIEVE.msg, listResult);
-			return new ResponseEntity<>(res, HttpStatus.OK);
+			return responseSuccess(listResult, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<List<DetailClasses>> res = new Response<List<DetailClasses>>(false,
-					HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 

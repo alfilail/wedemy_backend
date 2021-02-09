@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lawencon.elearning.helper.Response;
 import com.lawencon.elearning.model.Approvements;
 import com.lawencon.elearning.service.ApprovementsService;
 import com.lawencon.elearning.util.MessageStat;
@@ -37,12 +36,10 @@ public class ApprovementsController extends ElearningBaseController {
 		try {
 			Approvements approvement = new ObjectMapper().readValue(body, Approvements.class);
 			approvementsService.insertApprovement(approvement);
-			Response<Approvements> res = new Response<Approvements>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_CREATED.msg, approvement);
-			return new ResponseEntity<>(res, HttpStatus.CREATED);
+			return responseSuccess(approvement, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<Approvements> res = new Response<Approvements>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -50,12 +47,10 @@ public class ApprovementsController extends ElearningBaseController {
 	public ResponseEntity<?> getApprovementById(@PathVariable String id) {
 		try {
 			Approvements approvement = approvementsService.getApprovementsById(id);
-			Response<Approvements> res = new Response<Approvements>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, approvement);
-			return new ResponseEntity<>(res, HttpStatus.OK);
+			return responseSuccess(approvement, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<Approvements> res = new Response<Approvements>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -63,12 +58,10 @@ public class ApprovementsController extends ElearningBaseController {
 	public ResponseEntity<?> getAllApprovements() {
 		try {
 			List<Approvements> approvementsList = approvementsService.getAllApprovements();
-			Response<List<Approvements>> res = new Response<List<Approvements>>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_RETRIEVE.msg, approvementsList);
-			return new ResponseEntity<>(res, HttpStatus.OK);
+			return responseSuccess(approvementsList, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<List<Approvements>> res = new Response<List<Approvements>>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -77,12 +70,10 @@ public class ApprovementsController extends ElearningBaseController {
 			@RequestParam("idUser") String idUser) {
 		try {
 			approvementsService.deleteApprovementById(id, idUser);
-			Response<Approvements> res = new Response<Approvements>(true, HttpStatus.OK.toString(), MessageStat.SUCCESS_DELETE.msg, null);
-			return new ResponseEntity<>(res, HttpStatus.OK);
+			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<Approvements> res = new Response<Approvements>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 
@@ -91,12 +82,10 @@ public class ApprovementsController extends ElearningBaseController {
 		try {
 			Approvements approvement = new ObjectMapper().readValue(body, Approvements.class);
 			approvementsService.updateApprovement(approvement);
-			Response<Approvements> res = new Response<Approvements>(true, HttpStatus.CREATED.toString(), MessageStat.SUCCESS_UPDATE.msg, approvement);
-			return new ResponseEntity<>(res, HttpStatus.CREATED);
+			return responseSuccess(approvement, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Response<Approvements> res = new Response<Approvements>(false, HttpStatus.INTERNAL_SERVER_ERROR.toString(), getMessage(e), null);
-			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			return responseError(e);
 		}
 	}
 }

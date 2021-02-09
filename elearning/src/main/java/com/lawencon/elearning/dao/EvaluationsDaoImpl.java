@@ -45,7 +45,7 @@ public class EvaluationsDaoImpl extends ElearningBaseDaoImpl<Evaluations> implem
 	public List<Evaluations> getAllByIdDtlClassAndIdDtlModuleRgs(String idDtlClass, String idDtlModuleRgs)
 			throws Exception {
 		List<Evaluations> listResult = new ArrayList<>();
-		String sql = sqlBuilder("SELECT pr.fullname, u.id userid, asm.id submissionid, asm.submit_time, f.file, ",
+		String sql = sqlBuilder("SELECT pr.fullname, u.id userid, asm.id submissionid, asm.submit_time, f.file, f.type, ",
 				"(SELECT e.score FROM ",
 				"t_r_evaluations e WHERE e.id_assignment_submission = asm.id ORDER BY e.created_at DESC LIMIT 1) ",
 				"FROM t_r_class_enrollments ce INNER JOIN t_m_users u ON ce.id_user = u.id ",
@@ -70,9 +70,10 @@ public class EvaluationsDaoImpl extends ElearningBaseDaoImpl<Evaluations> implem
 			submission.setSubmitTime(objArr[3] != null ? ((Time) objArr[3]).toLocalTime() : null);
 			Files file = new Files();
 			file.setFile((byte[]) objArr[4]);
+			file.setType((String) objArr[5]);
 			submission.setIdFile(file);
 			Evaluations evaluation = new Evaluations();
-			evaluation.setScore(objArr[5] != null ? (Double) objArr[5] : 0);
+			evaluation.setScore(objArr[6] != null ? (Double) objArr[6] : 0);
 			evaluation.setIdAssignmentSubmission(submission);
 			listResult.add(evaluation);
 		});
