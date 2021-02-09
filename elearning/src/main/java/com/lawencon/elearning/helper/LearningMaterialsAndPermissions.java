@@ -15,6 +15,7 @@ public class LearningMaterialsAndPermissions {
 	private Boolean doesParticipantPresent;
 	private Boolean doesTutorPresent;
 	private Boolean isUserOnTime;
+	private Boolean isParticipantConfirmed;
 	private Boolean isParticipantAccepted;
 
 }

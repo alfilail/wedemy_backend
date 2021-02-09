@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -122,6 +123,19 @@ public class EvaluationsController extends ElearningBaseController {
 			ObjectMapper obj = new ObjectMapper();
 			ScoreInputs scores = obj.readValue(body, ScoreInputs.class);
 			evaluationsService.insertEvaluation(scores);
+			return responseSuccess(scores, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return responseError(e);
+		}
+	}
+
+	@PutMapping
+	public ResponseEntity<?> update(@RequestBody String body) {
+		try {
+			ObjectMapper obj = new ObjectMapper();
+			ScoreInputs scores = obj.readValue(body, ScoreInputs.class);
+			evaluationsService.updateEvaluation(scores);
 			return responseSuccess(scores, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
