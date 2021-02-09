@@ -45,15 +45,14 @@ public class EvaluationsDaoImpl extends ElearningBaseDaoImpl<Evaluations> implem
 	public List<Evaluations> getAllByIdDtlClassAndIdDtlModuleRgs(String idDtlClass, String idDtlModuleRgs)
 			throws Exception {
 		List<Evaluations> listResult = new ArrayList<>();
-		String sql = sqlBuilder("SELECT pr.fullname, u.id userid, asm.id submissionid, asm.submit_time, f.file, f.type, ",
-				"(SELECT e.score FROM ",
-				"t_r_evaluations e WHERE e.id_assignment_submission = asm.id ORDER BY e.created_at DESC LIMIT 1) ",
-				"FROM t_r_class_enrollments ce INNER JOIN t_m_users u ON ce.id_user = u.id ",
+		String sql = sqlBuilder("SELECT pr.fullname, u.id userid, asm.id submissionid, asm.submit_time, f.file, ",
+				"f.type, e.id evalid, e.version, e.score FROM t_r_class_enrollments ce INNER JOIN t_m_users u ON ce.id_user = u.id ",
 				"INNER JOIN t_m_profiles pr ON u.id_profile = pr.id INNER JOIN t_m_detail_classes dc ",
 				"ON ce.id_detail_class = dc.id INNER JOIN t_r_module_registrations mr ON dc.id = mr.id_detail_class ",
 				"INNER JOIN t_r_detail_module_registrations dmr ON mr.id = dmr.id_module_rgs ",
 				"LEFT JOIN t_r_assignment_submissions asm ON dmr.id = asm.id_dtl_module_rgs ",
 				"AND ce.id_user = asm.id_participant LEFT JOIN t_m_files f ON asm.id_file = f.id ",
+				"LEFT JOIN t_r_evaluations e ON asm.id = e.id_assignment_submission ",
 				"WHERE ce.id_detail_class =?1 and dmr.id =?2 ORDER BY asm.submit_time ASC").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlClass).setParameter(2, idDtlModuleRgs)
 				.getResultList();
@@ -73,7 +72,9 @@ public class EvaluationsDaoImpl extends ElearningBaseDaoImpl<Evaluations> implem
 			file.setType((String) objArr[5]);
 			submission.setIdFile(file);
 			Evaluations evaluation = new Evaluations();
-			evaluation.setScore(objArr[6] != null ? (Double) objArr[6] : 0);
+			evaluation.setId(objArr[6] != null ? (String) objArr[6] : EmptyField.EMPTY.msg);
+			evaluation.setVersion(objArr[7] != null ? Long.valueOf(objArr[7].toString()) : null);
+			evaluation.setScore(objArr[8] != null ? (Double) objArr[8] : 0);
 			evaluation.setIdAssignmentSubmission(submission);
 			listResult.add(evaluation);
 		});

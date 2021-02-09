@@ -14,8 +14,6 @@ import com.lawencon.elearning.model.General;
 import com.lawencon.elearning.model.Grades;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.SubmissionStatusRenewal;
-import com.lawencon.elearning.util.EmptyField;
-import com.lawencon.elearning.util.GeneralUtil;
 import com.lawencon.elearning.util.MailUtil;
 
 /**
@@ -51,25 +49,10 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 		try {
 			begin();
 			for (Evaluations evaluation : scores.getEvaluations()) {
-				if (!evaluation.getIdAssignmentSubmission().getId().equals(EmptyField.EMPTY.msg)) {
-//					Evaluations existedEval = evaluationsDao.getByIdDtlModuleRgsAndIdParticipant(
-//							evaluation.getIdAssignmentSubmission().getIdDetailModuleRegistration().getId(),
-//							evaluation.getIdAssignmentSubmission().getIdParticipant().getId());
-//					if (existedEval == null) {
-					Grades grade = gradesService.getByScore(evaluation.getScore());
-					evaluation.setIdGrade(grade);
-					evaluationsDao.insertEvaluation(evaluation, () -> validateInsert(evaluation));
-					insertStatusRenewal(evaluation);
-//						System.out.println("Sending Email...");
-//						sendEmail(evaluation);
-//						System.out.println("Done");
-//					} else if (existedEval != null
-//							&& evaluation.getScore().doubleValue() != existedEval.getScore().doubleValue()) {
-//						Grades grade = gradesService.getGradeByScore(evaluation.getScore());
-//						evaluation.setIdGrade(grade);
-//						evaluationsDao.insertEvaluation(evaluation, () -> validateInsert(evaluation));
-//					}
-				}
+				Grades grade = gradesService.getByScore(evaluation.getScore());
+				evaluation.setIdGrade(grade);
+				evaluationsDao.insertEvaluation(evaluation, () -> validateInsert(evaluation));
+				insertStatusRenewal(evaluation);
 			}
 			commit();
 		} catch (Exception e) {
@@ -80,8 +63,17 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 
 	@Override
 	public void updateEvaluation(ScoreInputs scores) throws Exception {
-		for (Evaluations evaluation : scores.getEvaluations()) {
-			evaluationsDao.updateEvaluation(evaluation, () -> validateInsert(evaluation));
+		try {
+			begin();
+			for (Evaluations evaluation : scores.getEvaluations()) {
+				Grades grade = gradesService.getByScore(evaluation.getScore());
+				evaluation.setIdGrade(grade);
+				evaluationsDao.updateEvaluation(evaluation, () -> validateInsert(evaluation));
+			}
+			commit();
+		} catch (Exception e) {
+			rollback();
+			throw new Exception(e);
 		}
 	}
 
@@ -123,7 +115,7 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 		evaluation.setIdAssignmentSubmission(assignmentSubmissions);
 		Profiles participant = evaluationsDao.getParticipantProfile(evaluation);
 
-		General general = generalService.getTemplateEmail(GeneralUtil.EVALUATION_PARTICIPANT.code);
+		General general = generalService.getTemplateEmail("scrupd");
 		String text = general.getTemplateHtml();
 
 		text = text.replace("#1#", participant.getFullName());
