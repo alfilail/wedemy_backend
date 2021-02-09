@@ -60,6 +60,9 @@ public class GradesServiceImpl extends BaseServiceImpl implements GradesService 
 
 	@Override
 	public void update(Grades grade) throws Exception {
+		Grades grd = getById(grade.getId());
+		grade.setCreatedAt(grd.getCreatedAt());
+		grade.setCreatedBy(grd.getCreatedBy());
 		gradeDao.update(grade, () -> validateUpdate(grade));
 	}
 

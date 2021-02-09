@@ -51,16 +51,20 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 	public void update(Profiles profile, MultipartFile file) throws Exception {
 		try {
 			begin();	
+			Files profilePict = filesService.getById(profile.getIdFile().getId());
 			if (file != null && !file.isEmpty()) {
-				Files profilePict = new Files();
 				profilePict.setFile(file.getBytes());
 				profilePict.setType(file.getContentType());
+				profilePict.setCreatedAt(profilePict.getCreatedAt());
+				profilePict.setCreatedBy(profilePict.getCreatedBy());
 				filesService.update(profilePict);
 				profile.setIdFile(profilePict);
 			} else {
-				Files profilePict = filesService.getById(profile.getIdFile().getId());
 				profile.setIdFile(profilePict);
 			}
+			Profiles pfl = getById(profile.getId());
+			profile.setCreatedAt(pfl.getCreatedAt());
+			profile.setCreatedBy(pfl.getCreatedBy());
 			profilesDao.update(profile, () -> {
 				validateUpdate(profile);
 			});
@@ -107,14 +111,16 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 				throw new Exception("Profile yang diedit telah diperbarui, silahkan coba lagi");
 			}
 			if (profile.getIdFile() != null) {
-				String[] type = profile.getIdFile().getType().split("/");
-				String ext = type[1];
-				if (ext != null) {
-					if (ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("jpeg")) {
-
-					} else {
-						throw new Exception("File harus gambar");
-					}
+				if(profile.getIdFile().getType() != null) {
+					String[] type = profile.getIdFile().getType().split("/");
+					String ext = type[1];
+					if (ext != null) {
+						if (ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("jpeg")) {
+							
+						} else {
+							throw new Exception("File harus gambar");
+						}
+					}					
 				}
 			}
 			if (profile.getPhone() != null) {

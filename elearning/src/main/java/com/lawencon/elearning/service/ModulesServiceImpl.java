@@ -28,6 +28,9 @@ public class ModulesServiceImpl extends BaseServiceImpl implements ModulesServic
 
 	@Override
 	public void update(Modules module) throws Exception {
+		Modules mod = getById(module.getId());
+		module.setCreatedAt(mod.getCreatedAt());
+		module.setCreatedBy(mod.getCreatedBy());
 		modulesDao.update(module, () -> validateUpdate(module));
 	}
 

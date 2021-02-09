@@ -36,6 +36,9 @@ public class ApprovementsServiceImpl extends ElearningBaseServiceImpl implements
 
 	@Override
 	public void update(Approvements approvement) throws Exception {
+		Approvements approve = getById(approvement.getId());
+		approvement.setCreatedAt(approve.getCreatedAt());
+		approvement.setCreatedBy(approve.getCreatedBy());
 		approvementsDao.update(approvement, () -> validateUpdate(approvement));
 	}
 

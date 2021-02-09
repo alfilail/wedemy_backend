@@ -54,6 +54,9 @@ public class SubmissionStatusServiceImpl extends BaseServiceImpl implements Subm
 
 	@Override
 	public void update(SubmissionStatus submissionStatus) throws Exception {
+		SubmissionStatus subStat = getById(submissionStatus.getId());
+		submissionStatus.setCreatedAt(subStat.getCreatedAt());
+		submissionStatus.setCreatedBy(subStat.getCreatedBy());
 		submissionStatusDao.update(submissionStatus, () -> validateUpdate(submissionStatus));
 	}
 

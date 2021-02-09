@@ -76,6 +76,9 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 
 	@Override
 	public void update(Users user) throws Exception {
+		Users usr = getById(user.getId());
+		user.setCreatedAt(usr.getCreatedAt());
+		user.setCreatedBy(usr.getCreatedBy());
 		usersDao.update(user, () -> {
 			validateUpdate(user);
 			user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
