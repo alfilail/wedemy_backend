@@ -47,8 +47,8 @@ public class SubmissionStatusServiceImpl extends BaseServiceImpl implements Subm
 			}
 			commit();
 		} catch (Exception e) {
-			e.getMessage();
 			rollback();
+			throw new Exception(e);
 		}
 	}
 

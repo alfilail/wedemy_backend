@@ -42,8 +42,8 @@ public class ModulesServiceImpl extends BaseServiceImpl implements ModulesServic
 			}
 			commit();
 		} catch (Exception e) {
-			e.getMessage();
 			rollback();
+			throw new Exception(e);
 		}
 	}
 

@@ -43,14 +43,19 @@ public class GradesServiceImpl extends BaseServiceImpl implements GradesService 
 
 	@Override
 	public void deleteById(String id, String idUser) throws Exception {
-		begin();
-		if(validateDelete(id) == true) {
-			gradeDao.softDeleteById(id, idUser);
+		try {
+			begin();
+			if(validateDelete(id) == true) {
+				gradeDao.softDeleteById(id, idUser);
+			}
+			else {
+				gradeDao.deleteById(id);
+			}
+			commit();			
+		} catch(Exception e) {
+			rollback();
+			throw new Exception(e);
 		}
-		else {
-			gradeDao.deleteById(id);
-		}
-		commit();
 	}
 
 	@Override

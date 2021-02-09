@@ -128,7 +128,7 @@ public class EvaluationsDaoImpl extends ElearningBaseDaoImpl<Evaluations> implem
 	}
 
 	@Override
-	public List<?> reportAllScore(String idClass) throws Exception {
+	public List<?> reportAllScore(String idDtlClass) throws Exception {
 		String sql = sqlBuilder(
 				"SELECT c.code, c.class_name, pt.fullname tutor, p.fullname participant, avg(e.score) score ",
 				" FROM t_r_evaluations e ",
@@ -139,10 +139,10 @@ public class EvaluationsDaoImpl extends ElearningBaseDaoImpl<Evaluations> implem
 				" INNER JOIN t_r_module_registrations mr ON mr.id = dmr.id_module_rgs ",
 				" INNER JOIN t_m_modules m ON m.id = mr.id_module ",
 				" INNER JOIN t_m_detail_classes dc ON dc.id = mr.id_detail_class ",
-				" INNER JOIN t_m_classes c ON c.id = dc.id_class ", " INNER JOIN t_m_users ut ON ut.id = c.id_tutor ",
-				" INNER JOIN t_m_profiles pt ON pt.id = ut.id_profile ", " WHERE dc.id_class = ?1 ",
+				" INNER JOIN t_m_classes c ON c.id = dc.id_class INNER JOIN t_m_users ut ON ut.id = c.id_tutor ",
+				" INNER JOIN t_m_profiles pt ON pt.id = ut.id_profile WHERE dc.id = ?1 ",
 				" GROUP BY p.fullname, c.class_name, c.code, pt.fullname ").toString();
-		List<?> listObj = createNativeQuery(sql).setParameter(1, idClass).getResultList();
+		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlClass).getResultList();
 		List<Evaluations> listEvaluations = new ArrayList<>();
 		listObj.forEach(val -> {
 			Object[] objArr = (Object[]) val;
@@ -182,7 +182,7 @@ public class EvaluationsDaoImpl extends ElearningBaseDaoImpl<Evaluations> implem
 
 			listEvaluations.add(evaluation);
 		});
-		return listEvaluations;
+		return resultCheckList(listEvaluations);
 	}
 
 	@Override
@@ -196,8 +196,8 @@ public class EvaluationsDaoImpl extends ElearningBaseDaoImpl<Evaluations> implem
 				" INNER JOIN t_r_module_registrations mr ON mr.id = dmr.id_module_rgs ",
 				" INNER JOIN t_m_modules m ON m.id = mr.id_module ",
 				" INNER JOIN t_m_detail_classes dc on dc.id = mr.id_detail_class ",
-//				" INNER JOIN t_m_classes c on c.id = dc.id_class",
-				" WHERE dc.id_class = ?1 AND ams.id_participant = ?2 ",
+				" INNER JOIN t_m_classes c on c.id = dc.id_class",
+				" WHERE dc.id = ?1 AND ams.id_participant = ?2 ",
 				" GROUP BY p.fullname, p.email, p.address, p.phone, m.code, m.module_name, dmr.order_number ",
 				" ORDER BY dmr.order_number").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlClass).setParameter(2, idParticipant)
@@ -234,7 +234,7 @@ public class EvaluationsDaoImpl extends ElearningBaseDaoImpl<Evaluations> implem
 
 			listEvaluations.add(evaluation);
 		});
-		return listEvaluations;
+		return resultCheckList(listEvaluations);
 	}
 
 }

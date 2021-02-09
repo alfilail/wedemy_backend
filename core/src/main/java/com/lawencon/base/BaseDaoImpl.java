@@ -30,7 +30,10 @@ import com.lawencon.util.Callback;
  */
 @Repository
 public class BaseDaoImpl<T extends Serializable> {
-
+	
+//	@PersistenceContext
+//	private EntityManager em;
+	
 	public Class<T> clazz;
 
 	@SuppressWarnings("unchecked")

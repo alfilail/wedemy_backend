@@ -58,7 +58,7 @@ public class ProfilesController extends ElearningBaseController {
 			obj.registerModule(new JavaTimeModule());
 			Profiles profile = obj.readValue(body, Profiles.class);
 			profilesService.insert(profile);
-			return responseSuccess(profile, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
+			return responseSuccess(profile, HttpStatus.CREATED, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
@@ -73,7 +73,7 @@ public class ProfilesController extends ElearningBaseController {
 			obj.registerModule(new JavaTimeModule());
 			Profiles profile = obj.readValue(body, Profiles.class);
 			profilesService.update(profile, file);
-			return responseSuccess(profile, HttpStatus.CREATED, MessageStat.SUCCESS_UPDATE);
+			return responseSuccess(profile, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);

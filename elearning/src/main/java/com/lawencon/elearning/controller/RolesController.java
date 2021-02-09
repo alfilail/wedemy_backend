@@ -31,7 +31,7 @@ public class RolesController extends ElearningBaseController {
 		try {
 			Roles role = new ObjectMapper().readValue(body, Roles.class);
 			rolesService.insert(role);
-			return responseSuccess(role, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
+			return responseSuccess(role, HttpStatus.CREATED, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);

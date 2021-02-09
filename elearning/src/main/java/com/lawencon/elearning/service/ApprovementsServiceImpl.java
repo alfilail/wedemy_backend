@@ -50,8 +50,8 @@ public class ApprovementsServiceImpl extends ElearningBaseServiceImpl implements
 			}
 			commit();
 		} catch (Exception e) {
-			e.getMessage();
 			rollback();
+			throw new Exception(e);
 		}
 	}
 
@@ -90,6 +90,9 @@ public class ApprovementsServiceImpl extends ElearningBaseServiceImpl implements
 				}
 				if (approvement.getApprovementName() == null || approvement.getApprovementName().trim().equals("")) {
 					throw new Exception("Nama approvement tidak boleh kosong");
+				}
+				if (approvement.getVersion() != approvment.getVersion()) {
+					throw new Exception("Approvement yang diedit sudah diperbarui, silahkan coba lagi");
 				}
 			}
 		}

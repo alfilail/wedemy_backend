@@ -36,7 +36,7 @@ public class ApprovementsController extends ElearningBaseController {
 		try {
 			Approvements approvement = new ObjectMapper().readValue(body, Approvements.class);
 			approvementsService.insert(approvement);
-			return responseSuccess(approvement, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
+			return responseSuccess(approvement, HttpStatus.CREATED, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);

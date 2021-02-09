@@ -69,7 +69,7 @@ public class UsersController extends ElearningBaseController {
 			obj.registerModule(new JavaTimeModule());
 			Users user = obj.readValue(body, Users.class);
 			usersService.insert(user);
-			return responseSuccess(user, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
+			return responseSuccess(user, HttpStatus.CREATED, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);

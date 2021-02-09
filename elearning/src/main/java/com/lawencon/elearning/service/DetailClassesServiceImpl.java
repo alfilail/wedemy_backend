@@ -147,8 +147,8 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 			}
 			commit();
 		} catch (Exception e) {
-			e.printStackTrace();
 			rollback();
+			throw new Exception(e);
 		}
 	}
 
@@ -175,9 +175,8 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 	}
 
 	private String generateCodeDetailClass(String classCode, LocalDate startDate) {
-		LocalDate localDate = LocalDate.now();
 		DateTimeFormatter myFormat = DateTimeFormatter.ofPattern("yy-MM-dd");
-		String formattedDate = localDate.format(myFormat);
+		String formattedDate = startDate.format(myFormat);
 		String date = bBuilder(formattedDate).toString();
 		date = date.replaceAll("-", "");
 		String detailClassCode = bBuilder(classCode, date).toString();

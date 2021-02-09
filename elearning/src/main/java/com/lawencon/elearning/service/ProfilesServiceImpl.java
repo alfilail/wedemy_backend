@@ -51,13 +51,14 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 	public void update(Profiles profile, MultipartFile file) throws Exception {
 		try {
 			begin();	
-			Files profilePict = filesService.getById(profile.getIdFile().getId());
 			if (file != null && !file.isEmpty()) {
+				Files profilePict = new Files();
 				profilePict.setFile(file.getBytes());
 				profilePict.setType(file.getContentType());
 				filesService.update(profilePict);
 				profile.setIdFile(profilePict);
 			} else {
+				Files profilePict = filesService.getById(profile.getIdFile().getId());
 				profile.setIdFile(profilePict);
 			}
 			profilesDao.update(profile, () -> {
@@ -98,13 +99,13 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 		if (profile.getId() == null || profile.getId().trim().equals("")) {
 			throw new Exception("Id tidak boleh kosong");
 		} else {
-//			Profiles pfl = getProfileById(profile.getId());
+			Profiles pfl = getById(profile.getId());
 			if (profile.getFullName() == null || profile.getFullName().trim().equals("")) {
 				throw new Exception("Nama Lengkap tidak boleh kosong");
 			}
-//			if (pfl.getVersion().equals(profile.getVersion())) {
-//				throw new Exception("Profile yang diedit telah diperbarui, silahkan coba lagi");
-//			}
+			if (pfl.getVersion() != profile.getVersion()) {
+				throw new Exception("Profile yang diedit telah diperbarui, silahkan coba lagi");
+			}
 			if (profile.getIdFile() != null) {
 				String[] type = profile.getIdFile().getType().split("/");
 				String ext = type[1];
