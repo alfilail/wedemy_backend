@@ -22,7 +22,7 @@ public class ApiSecurityServiceImpl implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		try {
-			Users userDb = usersService.getUserByUsername(username);
+			Users userDb = usersService.getByUsername(username);
 			if (userDb != null) {
 				return new User(userDb.getUsername(), userDb.getUserPassword(), new ArrayList<>());
 			}

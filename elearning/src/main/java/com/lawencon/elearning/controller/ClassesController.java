@@ -25,26 +25,26 @@ import com.lawencon.elearning.util.MessageStat;
 
 @RestController
 @RequestMapping("class")
-public class ClassesController extends ElearningBaseController {
+public class ClassesController extends ElearningBaseController{
 
 	@Autowired
 	private ClassesService classesService;
 
 	@GetMapping("active")
-	public ResponseEntity<?> getAllClasses() {
+	public ResponseEntity<?> getAll() {
 		try {
-			List<Classes> clazz = classesService.getAllClasses();
+			List<Classes> clazz = classesService.getAll();
 			return responseSuccess(clazz, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
 		}
 	}
-
+	
 	@GetMapping("inactive")
-	public ResponseEntity<?> getAllInactiveClasses() {
+	public ResponseEntity<?> getAllInactive() {
 		try {
-			List<Classes> clazz = classesService.getAllInactiveClass();
+			List<Classes> clazz = classesService.getAllInactive();
 			return responseSuccess(clazz, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -53,9 +53,9 @@ public class ClassesController extends ElearningBaseController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<?> getClassById(@PathVariable("id") String id) {
+	public ResponseEntity<?> getById(@PathVariable("id") String id) {
 		try {
-			Classes clazz = classesService.getClassById(id);
+			Classes clazz = classesService.getById(id);
 			return responseSuccess(clazz, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -64,13 +64,13 @@ public class ClassesController extends ElearningBaseController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> insertClass(@RequestPart("body") String body, @RequestPart("file") MultipartFile file) {
+	public ResponseEntity<?> insert(@RequestPart("body") String body, @RequestPart("file") MultipartFile file) {
 		try {
 			ObjectMapper obj = new ObjectMapper();
 			obj.registerModule(new JavaTimeModule());
 			ClassesHelper clazzHelper = obj.readValue(body, ClassesHelper.class);
-			classesService.insertClass(clazzHelper, file);
-			return responseSuccess(clazzHelper, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
+			classesService.insert(clazzHelper, file);
+			return responseSuccess(clazzHelper, HttpStatus.CREATED, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
@@ -78,13 +78,13 @@ public class ClassesController extends ElearningBaseController {
 	}
 
 	@PutMapping
-	public ResponseEntity<?> updateClass(@RequestPart String body, @RequestPart("file") MultipartFile file) {
+	public ResponseEntity<?> update(@RequestPart String body, @RequestPart(value = "file", required = false) MultipartFile file) {
 		try {
 			ObjectMapper obj = new ObjectMapper();
 			obj.registerModule(new JavaTimeModule());
 			Classes clazz = obj.readValue(body, Classes.class);
-			classesService.updateClass(clazz, file);
-			return responseSuccess(clazz, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
+			classesService.update(clazz, file);
+			return responseSuccess(clazz, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
@@ -92,10 +92,11 @@ public class ClassesController extends ElearningBaseController {
 	}
 
 	@DeleteMapping
-	public ResponseEntity<?> deleteClassById(@RequestParam("id") String id, @RequestParam("idUser") String idUser) {
+	public ResponseEntity<?> deleteById(@RequestParam("id") String id,
+			@RequestParam("idUser") String idUser) {
 		try {
-			classesService.deleteClassById(id, idUser);
-			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
+			classesService.deleteById(id, idUser);
+			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);

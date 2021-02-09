@@ -17,28 +17,28 @@ public class ModulesServiceImpl extends BaseServiceImpl implements ModulesServic
 	private ModulesDao modulesDao;
 
 	@Override
-	public void insertModule(Modules module) throws Exception {
-		modulesDao.insertModule(module, () -> validateInsert(module));
+	public void insert(Modules module) throws Exception {
+		modulesDao.insert(module, () -> validateInsert(module));
 	}
 
 	@Override
-	public List<Modules> getAllModules() throws Exception {
-		return modulesDao.getAllModules();
+	public List<Modules> getAll() throws Exception {
+		return modulesDao.getAllModule();
 	}
 
 	@Override
-	public void updateModule(Modules module) throws Exception {
-		modulesDao.updateModule(module, () -> validateUpdate(module));
+	public void update(Modules module) throws Exception {
+		modulesDao.update(module, () -> validateUpdate(module));
 	}
 
 	@Override
-	public void deleteModuleById(String id, String idUser) throws Exception {
+	public void deleteById(String id, String idUser) throws Exception {
 		try {
 			begin();
 			if (validateDelete(id)) {
-				softDeleteModuleById(id, idUser);
+				softDeleteById(id, idUser);
 			} else {
-				modulesDao.deleteModuleById(id);
+				modulesDao.deleteById(id);
 			}
 			commit();
 		} catch (Exception e) {
@@ -48,20 +48,20 @@ public class ModulesServiceImpl extends BaseServiceImpl implements ModulesServic
 	}
 
 	@Override
-	public Modules getModuleById(String id) throws Exception {
+	public Modules getById(String id) throws Exception {
 		return modulesDao.getModuleById(id);
 	}
 
 	@Override
-	public Modules getModuleByCode(String code) throws Exception {
-		return modulesDao.getModuleByCode(code);
+	public Modules getByCode(String code) throws Exception {
+		return modulesDao.getByCode(code);
 	}
 
 	private void validateInsert(Modules module) throws Exception {
 		if (module.getCode() == null || module.getCode().trim().equals("")) {
 			throw new Exception("Kode Modul tidak boleh kosong");
 		} else {
-			Modules mod = getModuleByCode(module.getCode());
+			Modules mod = getByCode(module.getCode());
 			if (mod != null) {
 				throw new Exception("Kode Modul sudah ada");
 			}
@@ -75,12 +75,12 @@ public class ModulesServiceImpl extends BaseServiceImpl implements ModulesServic
 		if (module.getId() == null || module.getId().trim().equals("")) {
 			throw new Exception("Id Modul tidak boleh kosong");
 		} else {
-			Modules modu = getModuleById(module.getId());
+			Modules modu = getById(module.getId());
 			if (module.getCode() == null || module.getCode().trim().equals("")) {
 				throw new Exception("Kode Modul tidak boleh kosong");
 			} else {
 				if (!modu.getCode().equals(module.getCode())) {
-					Modules mod = getModuleByCode(module.getCode());
+					Modules mod = getByCode(module.getCode());
 					if (mod != null) {
 						throw new Exception("Kode Modul sudah ada");
 					}
@@ -96,7 +96,7 @@ public class ModulesServiceImpl extends BaseServiceImpl implements ModulesServic
 	}
 
 	private boolean validateDelete(String id) throws Exception {
-		List<?> listObj = modulesDao.validateDeleteModule(id);
+		List<?> listObj = modulesDao.validateDelete(id);
 		listObj.forEach(System.out::println);
 		List<?> list = listObj.stream().filter(val -> val != null).collect(Collectors.toList());
 		System.out.println(list.size());
@@ -104,8 +104,8 @@ public class ModulesServiceImpl extends BaseServiceImpl implements ModulesServic
 	}
 
 	@Override
-	public void softDeleteModuleById(String id, String idUser) throws Exception {
-		modulesDao.softDeleteModuleById(id, idUser);
+	public void softDeleteById(String id, String idUser) throws Exception {
+		modulesDao.softDeleteById(id, idUser);
 	}
 
 }

@@ -9,22 +9,22 @@ import com.lawencon.elearning.model.Classes;
 
 public interface ClassesService {
 
-	void insertClass(ClassesHelper clazzHelper, MultipartFile file) throws Exception;
+	void insert(ClassesHelper clazzHelper, MultipartFile file) throws Exception;
 
-	List<Classes> getAllClasses() throws Exception;
+	List<Classes> getAll() throws Exception;
 	
-	List<Classes> getAllInactiveClass() throws Exception;
+	List<Classes> getAllInactive() throws Exception;
 
-	Classes getClassById(String id) throws Exception;
+	Classes getById(String id) throws Exception;
 
-	Classes getClassByCode(String code) throws Exception;
+	Classes getByCode(String code) throws Exception;
 
-	void updateClass(Classes clazz, MultipartFile file) throws Exception;
+	void update(Classes clazz, MultipartFile file) throws Exception;
 
-	void deleteClassById(String id, String idUser) throws Exception;
+	void deleteById(String id, String idUser) throws Exception;
 	
-	void updateClassIsActive(String id, String idUser) throws Exception;
+	void updateIsActive(String id, String idUser) throws Exception;
 	
-	Classes getInActiveClassById(String id) throws Exception;
+	Classes getInActiveById(String id) throws Exception;
 
 }

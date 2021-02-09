@@ -13,7 +13,7 @@ import com.lawencon.util.Callback;
 public class FilesDaoImpl extends ElearningBaseDaoImpl<Files> implements FilesDao {
 
 	@Override
-	public void insertFile(Files file, Callback before) throws Exception {
+	public void insert(Files file, Callback before) throws Exception {
 		save(file, before, null);
 	}
 
@@ -23,7 +23,7 @@ public class FilesDaoImpl extends ElearningBaseDaoImpl<Files> implements FilesDa
 	}
 
 	@Override
-	public void updateFile(Files file, Callback before) throws Exception {
+	public void update(Files file, Callback before) throws Exception {
 		save(file, before, null);
 	}
 

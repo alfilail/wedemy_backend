@@ -42,14 +42,14 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 	private MailUtil mailUtil;
 
 	@Override
-	public void insertUser(Users user) throws Exception {
+	public void insert(Users user) throws Exception {
 		try {
 			begin();
-			usersDao.insertUser(user, () -> {
+			usersDao.insert(user, () -> {
 				validateInsert(user);
-				Roles role = rolesService.getRoleByCode(user.getIdRole().getCode());
+				Roles role = rolesService.getByCode(user.getIdRole().getCode());
 				user.setIdRole(role);
-				profilesService.insertProfile(user.getIdProfile());
+				profilesService.insert(user.getIdProfile());
 				user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
 			});
 			commit();
@@ -60,40 +60,39 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 	}
 
 	@Override
-	public List<Users> getAllUsers() throws Exception {
-		return usersDao.getAllUsers();
+	public List<Users> getAll() throws Exception {
+		return usersDao.getAllUser();
 	}
 
 	@Override
-	public Users getUserById(String id) throws Exception {
+	public Users getById(String id) throws Exception {
 		return usersDao.getUserById(id);
 	}
 
 	@Override
-	public Users getUserByUsername(String username) throws Exception {
-		return usersDao.getUserByUsername(username);
+	public Users getByUsername(String username) throws Exception {
+		return usersDao.getByUsername(username);
 	}
 
 	@Override
-	public void updateUser(Users user) throws Exception {
-		usersDao.updateUser(user, () -> {
+	public void update(Users user) throws Exception {
+		usersDao.update(user, () -> {
 			validateUpdate(user);
 			user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
 		});
 	}
 
 	@Override
-	public void deleteUserById(String id, String idUser) throws Exception {
+	public void deleteById(String id, String idUser) throws Exception {
 		try {
 			begin();
-			Users user = getUserById(id);
+			Users user = getById(id);
 			if (validateDelete(id) == true) {
-				usersDao.softDeleteUserById(id, idUser);
-				profilesService.softDeleteProfileById(user.getIdProfile().getId(), idUser);
+				usersDao.softDeleteById(id, idUser);
+				profilesService.softDeleteById(user.getIdProfile().getId(), idUser);
 			} else {
-				usersDao.deleteUserById(id);
-//				Users user = getUserById(id);
-				profilesService.deleteProfileById(user.getIdProfile().getId());
+				usersDao.deleteById(id);
+				profilesService.deleteById(user.getIdProfile().getId());
 			}
 			commit();
 		} catch (Exception e) {
@@ -104,12 +103,12 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 
 	@Override
 	public Users updateUserPassword(Profiles profile) throws Exception {
-		Profiles profiles = profilesService.getProfileByEmail(profile.getEmail());
-		Users user = usersDao.getUserByIdProfile(profiles);
+		Profiles profiles = profilesService.getByEmail(profile.getEmail());
+		Users user = usersDao.getByIdProfile(profiles);
 		String pass = generatePassword();
 		System.out.println(pass);
 		user.setUserPassword(passwordEncoder.encode(pass));
-		usersDao.updateUser(user, () -> validateUpdate(user));
+		usersDao.update(user, () -> validateUpdate(user));
 		System.out.println("Sending mail...");
 		sendEmailResetPassword(pass, profiles);
 		System.out.println("Done");
@@ -141,7 +140,7 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 		if (user.getUsername() == null || user.getUsername().trim().equals("")) {
 			throw new Exception("Username tidak boleh kosong");
 		} else if (user.getUsername() != null) {
-			Users usr = getUserByUsername(user.getUsername());
+			Users usr = getByUsername(user.getUsername());
 			if (usr != null) {
 				throw new Exception("Username sudah ada");
 			} else {
@@ -153,12 +152,12 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 				} else if (user.getIdProfile().getEmail() == null || user.getIdProfile().getEmail().trim().equals("")) {
 					throw new Exception("Email tidak boleh kosong");
 				} else if (user.getIdProfile().getEmail() != null) {
-					Profiles profile = profilesService.getProfileByEmail(user.getIdProfile().getEmail());
+					Profiles profile = profilesService.getByEmail(user.getIdProfile().getEmail());
 					if (profile != null) {
 						throw new Exception("Email sudah ada");
 					}
 					if (user.getIdRole().getCode() != null) {
-						Roles role = rolesService.getRoleByCode(user.getIdRole().getCode());
+						Roles role = rolesService.getByCode(user.getIdRole().getCode());
 						if (role.getCode().equals("TTR") || role.getCode().equals("ADM") || role.getCode().equals("SADM")) {
 							validateInsertExceptParticipant(user);
 						} else {
@@ -204,7 +203,7 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 		if (user.getId() == null || user.getId().trim().equals("")) {
 			throw new Exception("Id user tidak boleh kosong");
 		} else {
-			Users usr = getUserById(user.getId());
+			Users usr = getById(user.getId());
 			if (user.getUsername() == null || user.getUsername().trim().equals("")) {
 				throw new Exception("Username tidak boleh kosong");
 			}
@@ -222,17 +221,17 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 	}
 
 	@Override
-	public List<Users> getUsersByRoleCode(String code) throws Exception {
-		return usersDao.getUsersByRoleCode(code);
+	public List<Users> getByRoleCode(String code) throws Exception {
+		return usersDao.getByRoleCode(code);
 	}
 
 	@Override
-	public Users getUserByIdNumber(String idNumber) throws Exception {
-		return usersDao.getUserByIdNumber(idNumber);
+	public Users getByIdNumber(String idNumber) throws Exception {
+		return usersDao.getByIdNumber(idNumber);
 	}
 
 	private boolean validateDelete(String idUser) throws Exception {
-		List<?> listObj = usersDao.validateDeleteUser(idUser);
+		List<?> listObj = usersDao.validateDelete(idUser);
 		listObj.forEach(System.out::println);
 		List<?> list = listObj.stream().filter(val -> val != null).collect(Collectors.toList());
 		System.out.println(list.size());
@@ -251,6 +250,11 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 		mailHelper.setSubject("Your account has been registered");
 		mailHelper.setText(text);
 		new MailServiceImpl(mailUtil, mailHelper).start();
+	}
+	
+	@Override
+	public Users getByIdClass(String idClass) throws Exception {
+		return usersDao.getByIdClass(idClass);
 	}
 
 }

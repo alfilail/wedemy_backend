@@ -12,7 +12,7 @@ import com.lawencon.util.Callback;
 public class SubmissionStatusDaoImpl extends ElearningBaseDaoImpl<SubmissionStatus> implements SubmissionStatusDao {
 
 	@Override
-	public void insertSubmissionStatus(SubmissionStatus submissionStatus, Callback before) throws Exception {
+	public void insert(SubmissionStatus submissionStatus, Callback before) throws Exception {
 		save(submissionStatus, before, null, true, true);
 	}
 
@@ -22,7 +22,7 @@ public class SubmissionStatusDaoImpl extends ElearningBaseDaoImpl<SubmissionStat
 	}
 
 	@Override
-	public SubmissionStatus getSubmissionStatusByCode(String code) throws Exception {
+	public SubmissionStatus getByCode(String code) throws Exception {
 		List<SubmissionStatus> submissionStatus = createQuery("FROM SubmissionStatus WHERE code = ?1", SubmissionStatus.class)
 				.setParameter(1, code).getResultList();
 		return resultCheck(submissionStatus);
@@ -34,22 +34,22 @@ public class SubmissionStatusDaoImpl extends ElearningBaseDaoImpl<SubmissionStat
 	}
 
 	@Override
-	public void deleteSubmissionStatusById(String id) throws Exception {
+	public void deleteById(String id) throws Exception {
 		deleteById(id);
 	}
 
 	@Override
-	public void updateSubmissionStatus(SubmissionStatus submissionStatus, Callback before) throws Exception {
+	public void update(SubmissionStatus submissionStatus, Callback before) throws Exception {
 		save(submissionStatus, before, null, true, true);
 	}
 
 	@Override
-	public void softDeleteSubmissionStatById(String id, String idUser) throws Exception {
+	public void softDeleteById(String id, String idUser) throws Exception {
 		updateNativeSQL("UPDATE t_m_submission_status SET is_active = FALSE", id, idUser);
 	}
 
 	@Override
-	public List<?> validateDeleteSubmissionStat(String id) throws Exception {
+	public List<?> validateDelete(String id) throws Exception {
 		String sql = sqlBuilder("SELECT ssr.id FROM t_m_submission_status ss ",
 				" FULL JOIN t_r_submission_status_renewal ssr ON ssr.id_submission_status = ss.id ",
 				" WHERE ss.id = ?1 ").toString();

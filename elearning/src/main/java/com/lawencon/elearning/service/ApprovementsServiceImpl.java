@@ -20,33 +20,33 @@ public class ApprovementsServiceImpl extends ElearningBaseServiceImpl implements
 	private ApprovementsDao approvementsDao;
 
 	@Override
-	public void insertApprovement(Approvements approvement) throws Exception {
-		approvementsDao.insertApprovement(approvement, () -> validateInsert(approvement));
+	public void insert(Approvements approvement) throws Exception {
+		approvementsDao.insert(approvement, () -> validateInsert(approvement));
 	}
 
 	@Override
-	public List<Approvements> getAllApprovements() throws Exception {
-		return approvementsDao.getAllApprovements();
+	public List<Approvements> getAll() throws Exception {
+		return approvementsDao.getAllApprovement();
 	}
 
 	@Override
-	public Approvements getApprovementsById(String id) throws Exception {
-		return approvementsDao.getApprovementsById(id);
+	public Approvements getById(String id) throws Exception {
+		return approvementsDao.getApprovementById(id);
 	}
 
 	@Override
-	public void updateApprovement(Approvements approvement) throws Exception {
-		approvementsDao.updateApprovement(approvement, () -> validateUpdate(approvement));
+	public void update(Approvements approvement) throws Exception {
+		approvementsDao.update(approvement, () -> validateUpdate(approvement));
 	}
 
 	@Override
-	public void deleteApprovementById(String id, String idUser) throws Exception {
+	public void deleteById(String id, String idUser) throws Exception {
 		try {
 			begin();
 			if (validateDelete(id)) {
-				approvementsDao.softDeleteApprovementById(id, idUser);
+				approvementsDao.softDeleteById(id, idUser);
 			} else {
-				approvementsDao.deleteApprovementById(id);
+				approvementsDao.deleteById(id);
 			}
 			commit();
 		} catch (Exception e) {
@@ -56,15 +56,15 @@ public class ApprovementsServiceImpl extends ElearningBaseServiceImpl implements
 	}
 
 	@Override
-	public Approvements getApprovementByCode(String code) throws Exception {
-		return approvementsDao.getApprovementByCode(code);
+	public Approvements getByCode(String code) throws Exception {
+		return approvementsDao.getByCode(code);
 	}
 
 	private void validateInsert(Approvements approvement) throws Exception {
 		if (approvement.getCode() == null || approvement.getCode().trim().equals("")) {
 			throw new Exception("Kode approvement tidak boleh kosong");
 		} else if (approvement.getCode() != null) {
-			Approvements approve = getApprovementByCode(approvement.getCode());
+			Approvements approve = getByCode(approvement.getCode());
 			if (approve != null) {
 				throw new Exception("Kode Approvement sudah ada");
 			}
@@ -78,12 +78,12 @@ public class ApprovementsServiceImpl extends ElearningBaseServiceImpl implements
 		if (approvement.getId() == null || approvement.getId().trim().equals("")) {
 			throw new Exception("Id approvement tidak boleh kosong");
 		} else {
-			Approvements approvment = getApprovementsById(approvement.getId());
+			Approvements approvment = getById(approvement.getId());
 			if (approvement.getCode() == null || approvement.getCode().trim().equals("")) {
 				throw new Exception("Kode approvement tidak boleh kosong");
 			} else {
 				if (!approvment.getCode().equals(approvement.getCode())) {
-					Approvements approve = getApprovementByCode(approvement.getCode());
+					Approvements approve = getByCode(approvement.getCode());
 					if(approve != null) {
 						throw new Exception("Kode approvement sudah ada");						
 					}
@@ -96,7 +96,7 @@ public class ApprovementsServiceImpl extends ElearningBaseServiceImpl implements
 	}
 
 	private boolean validateDelete(String id) throws Exception {
-		List<?> listObj = approvementsDao.validateDeleteApprovement(id);
+		List<?> listObj = approvementsDao.validateDelete(id);
 		listObj.forEach(System.out::println);
 		List<?> list = listObj.stream().filter(val -> val != null).collect(Collectors.toList());
 		System.out.println(list.size());

@@ -35,7 +35,7 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 	@Autowired ForumsService forumsService;
 
 	@Override
-	public void insertLearningMaterial(DetailModuleRegistrations dtlModuleRgs, MultipartFile fileInput)
+	public void insert(DetailModuleRegistrations dtlModuleRgs, MultipartFile fileInput)
 			throws Exception {
 		try {
 			begin();
@@ -43,9 +43,9 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 			file.setCreatedBy(dtlModuleRgs.getIdLearningMaterial().getCreatedBy());
 			file.setFile(fileInput.getBytes());
 			file.setType(fileInput.getContentType());
-			filesService.insertFile(file);
+			filesService.insert(file);
 			dtlModuleRgs.getIdLearningMaterial().setIdFile(file);
-			learningMaterialsDao.insertLearningMaterial(dtlModuleRgs.getIdLearningMaterial(),
+			learningMaterialsDao.insert(dtlModuleRgs.getIdLearningMaterial(),
 					() -> validateInsert(dtlModuleRgs.getIdLearningMaterial()));
 			insertDetailModulRegistration(dtlModuleRgs);
 			commit();
@@ -56,30 +56,30 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 	}
 
 	@Override
-	public List<LearningMaterials> getAllLearningMaterials() throws Exception {
-		return learningMaterialsDao.getAllLearningMaterials();
+	public List<LearningMaterials> getAll() throws Exception {
+		return learningMaterialsDao.getAllLearningMaterial();
 	}
 
 	@Override
-	public LearningMaterials getLearningMaterialById(String id) throws Exception {
+	public LearningMaterials getById(String id) throws Exception {
 		return learningMaterialsDao.getLearningMaterialById(id);
 	}
 
 	@Override
-	public void updateLearningMaterial(LearningMaterials learningMaterial, MultipartFile fileInput) throws Exception {
+	public void update(LearningMaterials learningMaterial, MultipartFile fileInput) throws Exception {
 		Files file = new Files();
 		file.setFile(fileInput.getBytes());
 		file.setType(fileInput.getContentType());
-		filesService.insertFile(file);
+		filesService.insert(file);
 		learningMaterial.setIdFile(file);
-		learningMaterialsDao.updateLearningMaterial(learningMaterial, () -> validateUpdate(learningMaterial));
+		learningMaterialsDao.update(learningMaterial, () -> validateUpdate(learningMaterial));
 	}
 
 	@Override
-	public void deleteLearningMaterialById(String id, String idUser) throws Exception {
+	public void deleteById(String id, String idUser) throws Exception {
 		try {
 			begin();
-			learningMaterialsDao.softDeleteLearningMaterialById(id, idUser);
+			learningMaterialsDao.softDeleteById(id, idUser);
 			DetailModuleRegistrations detailModule = 
 					dtlModRegistService.getDetailModuleRegistrationByIdLearningMaterial(id);
 			dtlModRegistService.deleteDetailModuleRegistration(detailModule.getId(), idUser);
@@ -92,8 +92,8 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 	}
 
 	@Override
-	public LearningMaterials getLearningMaterialByCode(String code) throws Exception {
-		return learningMaterialsDao.getLearningMaterialByCode(code);
+	public LearningMaterials getByCode(String code) throws Exception {
+		return learningMaterialsDao.getByCode(code);
 	}
 
 	private void insertDetailModulRegistration(DetailModuleRegistrations dtlModuleRgs) throws Exception {
@@ -106,13 +106,13 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 		if (learningMaterial.getCode() == null || learningMaterial.getCode().trim().equals("")) {
 			throw new Exception("Kode bahan ajar tidak boleh kosong!");
 		} else {
-			LearningMaterials learningMaterials = getLearningMaterialByCode(learningMaterial.getCode());
+			LearningMaterials learningMaterials = getByCode(learningMaterial.getCode());
 			if (learningMaterials != null) {
 				throw new Exception("Kode bahan ajar tidak boleh sama!");
 			} else {
 				if (learningMaterial.getIdLearningMaterialType() == null) {
 					LearningMaterialTypes materialType = learningMaterialTypesService
-							.getLearningMaterialTypeById(learningMaterial.getIdLearningMaterialType().getId());
+							.getById(learningMaterial.getIdLearningMaterialType().getId());
 					if (materialType == null) {
 						throw new Exception("Id tipe bahan ajar tidak ada!");
 					} else {
@@ -141,7 +141,7 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 		if (learningMaterial.getId() == null || learningMaterial.getId().trim().equals("")) {
 			throw new Exception("Id kelas tidak boleh kosong!");
 		} else {
-			LearningMaterials lm = getLearningMaterialById(learningMaterial.getId());
+			LearningMaterials lm = getById(learningMaterial.getId());
 			if (learningMaterial.getVersion() == null) {
 				throw new Exception("Kelas version tidak boleh kosong!");
 			} else {
@@ -152,14 +152,14 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 						throw new Exception("Kode bahan ajar tidak boleh kosong!");
 					} else {
 						if (!learningMaterial.getCode().equalsIgnoreCase(lm.getCode())) {
-							LearningMaterials learningMaterials = getLearningMaterialByCode(learningMaterial.getCode());
+							LearningMaterials learningMaterials = getByCode(learningMaterial.getCode());
 							if(learningMaterials!= null) {
 								throw new Exception("Kode bahan ajar tidak boleh sama!");
 							}
 						} else {
 							if (learningMaterial.getIdLearningMaterialType() == null) {
 								LearningMaterialTypes materialType = learningMaterialTypesService
-										.getLearningMaterialTypeById(
+										.getById(
 												learningMaterial.getIdLearningMaterialType().getId());
 								if (materialType == null) {
 									throw new Exception("Id tipe bahan ajar tidak ada!");
@@ -187,13 +187,4 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 			}
 		}
 	}
-	
-//	private boolean validateDelete(String id) throws Exception {
-//		List<?> listObj = learningMaterialsDao.validateDeleteLearningMaterial(id);
-//		listObj.forEach(System.out::println);
-//		List<?> list =  listObj.stream().filter(val -> val != null)
-//				.collect(Collectors.toList());
-//		System.out.println(list.size());
-//		return list.size() > 0 ? true : false;
-//	}
 }

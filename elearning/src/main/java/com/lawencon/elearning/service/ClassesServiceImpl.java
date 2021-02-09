@@ -33,24 +33,23 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 	private FilesService filesService;
 
 	@Override
-	public void insertClass(ClassesHelper helper, MultipartFile file) throws Exception {
+	public void insert(ClassesHelper helper, MultipartFile file) throws Exception {
 		try {
 			begin();
-			if(helper.getClazz() != null) {
+			if (helper.getClazz() != null) {
 				Classes clazz = helper.getClazz();
 				Files thumbnailImg = new Files();
-//				thumbnailImg.setCreatedBy(helper.getClazz().getCreatedBy());
 				thumbnailImg.setFile(file.getBytes());
 				thumbnailImg.setType(file.getContentType());
-				filesService.insertFile(thumbnailImg);
+				filesService.insert(thumbnailImg);
 				clazz.setIdFile(thumbnailImg);
-				classesDao.insertClass(clazz, () -> validateInsert(clazz));
+				classesDao.insert(clazz, () -> validateInsert(clazz));
 				if (helper.getDetailClass() != null) {
 					DetailClasses detailClass = helper.getDetailClass();
 					detailClass.setIdClass(clazz);
 					detailClass.setViews(0);
 					helper.setDetailClass(detailClass);
-					detailClassesService.insertDetailClass(helper.getDetailClass());
+					detailClassesService.insert(helper.getDetailClass());
 					if (helper.getModule() != null) {
 						moduleRegistrationsService.insertModuleRegistration(helper);
 					}
@@ -64,47 +63,65 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 	}
 
 	@Override
-	public List<Classes> getAllClasses() throws Exception {
-		return classesDao.getAllClasses();
+	public List<Classes> getAll() throws Exception {
+		return classesDao.getAllClass();
 	}
 
 	@Override
-	public Classes getClassById(String id) throws Exception {
+	public Classes getById(String id) throws Exception {
 		return classesDao.getClassById(id);
 	}
 
 	@Override
-	public Classes getClassByCode(String code) throws Exception {
-		return classesDao.getClassByCode(code);
+	public Classes getByCode(String code) throws Exception {
+		return classesDao.getByCode(code);
 	}
 
 	@Override
-	public void updateClass(Classes clazz, MultipartFile file) throws Exception {
-		Files thumbnailImg = new Files();
-		thumbnailImg.setFile(file.getBytes());
-		thumbnailImg.setType(file.getContentType());
-		filesService.insertFile(thumbnailImg);
-		clazz.setIdFile(thumbnailImg);
-		classesDao.updateClass(clazz, () -> validateUpdate(clazz));
+	public void update(Classes clazz, MultipartFile file) throws Exception {
+		try {
+			begin();
+			if (file != null && !file.isEmpty()) {
+				Files logo = new Files();
+				logo.setFile(file.getBytes());
+				logo.setType(file.getContentType());
+				filesService.update(logo);
+				clazz.setIdFile(logo);
+			} else {
+				Files logoPict = filesService.getById(clazz.getIdFile().getId());
+				clazz.setIdFile(logoPict);
+			}
+			if(clazz.getIdTutor() == null) {
+				System.out.println(clazz.getIdTutor());
+				Users tutor = usersService.getByIdClass(clazz.getId());
+				clazz.setIdTutor(tutor);
+			}
+			classesDao.update(clazz, () -> validateUpdate(clazz));
+			commit();
+		} catch (Exception e) {
+			rollback();
+			throw new Exception(e);
+		}
+
 	}
-	
+
 	@Override
-	public void updateClassIsActive(String id, String idUser) throws Exception {
-		classesDao.updateClassIsActive(id, idUser);
+	public void updateIsActive(String id, String idUser) throws Exception {
+		classesDao.updateIsActive(id, idUser);
 	}
 
 	private void validateInsert(Classes clazz) throws Exception {
 		if (clazz.getCode() == null || clazz.getCode().trim().equals("")) {
 			throw new Exception("Kode kelas tidak boleh kosong!");
 		} else {
-			Classes cls = getClassByCode(clazz.getCode());
+			Classes cls = getByCode(clazz.getCode());
 			if (cls != null) {
 				throw new Exception("Kode kelas yang dimasukkan sudah ada!");
 			} else {
 				if (clazz.getIdTutor() == null) {
 					throw new Exception("Tutor tidak boleh kosong!");
 				} else {
-					Users user = usersService.getUserByIdNumber(clazz.getIdTutor().getIdProfile().getIdNumber());
+					Users user = usersService.getByIdNumber(clazz.getIdTutor().getIdProfile().getIdNumber());
 					if (user == null) {
 						throw new Exception("Id Tutor tidak ada!");
 					} else {
@@ -144,34 +161,30 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 						throw new Exception("Kode kelas tidak boleh kosong!");
 					} else {
 						if (!cls.getCode().equalsIgnoreCase(clazz.getCode())) {
-							Classes clz = classesDao.getClassByCode(clazz.getCode());
-							if(clz != null) {
-								throw new Exception("Kode kelas tidak boleh sama");								
+							Classes clz = classesDao.getByCode(clazz.getCode());
+							if (clz != null) {
+								throw new Exception("Kode kelas tidak boleh sama");
 							}
 						} else {
-							if (clazz.getIdTutor() == null) {
-								throw new Exception("Tutor tidak boleh kosong!");
-							} else {
-								Users user = usersService.getUserById(clazz.getIdTutor().getId());
-								if (user == null) {
-									throw new Exception("Id Tutor tidak ada!");
-								} else {
-									String[] type = clazz.getIdFile().getType().split("/");
-									String ext = type[1];
-									if (ext != null) {
-										if (ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("png")
-												|| ext.equalsIgnoreCase("jpeg")) {
-										} else {
-											throw new Exception("File harus gambar!");
-										}
-									} else if (clazz.getClassName() == null) {
-										throw new Exception("Nama kelas tidak boleh kosong!");
-									} else if (clazz.getDescription() == null) {
-										throw new Exception("Dekripsi kelas tidak boleh kosong!");
-									} else if (clazz.getQuota() == null) {
-										throw new Exception("Quota kelas tidak boleh kosong!");
+							if (clazz.getIdFile() != null) {
+								String[] type = clazz.getIdFile().getType().split("/");
+								String ext = type[1];
+								if (ext != null) {
+									if (ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("png")
+											|| ext.equalsIgnoreCase("jpeg")) {
+									} else {
+										throw new Exception("File harus gambar!");
 									}
 								}
+							}
+							if (clazz.getClassName() == null) {
+								throw new Exception("Nama kelas tidak boleh kosong!");
+							}
+							if (clazz.getDescription() == null) {
+								throw new Exception("Dekripsi kelas tidak boleh kosong!");
+							}
+							if (clazz.getQuota() == null) {
+								throw new Exception("Quota kelas tidak boleh kosong!");
 							}
 						}
 					}
@@ -179,15 +192,17 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 			}
 		}
 	}
+//		}
+//	}
 
 	@Override
-	public void deleteClassById(String id, String idUser) throws Exception {
+	public void deleteById(String id, String idUser) throws Exception {
 		try {
 			begin();
-			classesDao.softDeleteClassById(id, idUser);
-			List<DetailClasses> dtlClass = detailClassesService.getAllDetailClassByIdClass(id);
+			classesDao.softDeleteById(id, idUser);
+			List<DetailClasses> dtlClass = detailClassesService.getAllByIdClass(id);
 			for (DetailClasses dtl : dtlClass) {
-				detailClassesService.deleteDetailClassById(dtl.getId(), idUser);
+				detailClassesService.deleteById(dtl.getId(), idUser);
 			}
 			commit();
 		} catch (Exception e) {
@@ -197,22 +212,13 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 	}
 
 	@Override
-	public List<Classes> getAllInactiveClass() throws Exception {
-		return classesDao.getAllInactiveClass();
-	}
-	
-	@Override
-	public Classes getInActiveClassById(String id) throws Exception {
-		return classesDao.getInActiveClassById(id);
+	public List<Classes> getAllInactive() throws Exception {
+		return classesDao.getAllInactive();
 	}
 
-//	private boolean validateDelete(String id) throws Exception {
-//		List<?> listObj = classesDao.validateDeleteClass(id);
-//		listObj.forEach(System.out::println);
-//		List<?> list =  listObj.stream().filter(val -> val != null)
-//				.collect(Collectors.toList());
-//		System.out.println(list.size());
-//		return list.size() > 0 ? true : false;
-//	}
+	@Override
+	public Classes getInActiveById(String id) throws Exception {
+		return classesDao.getInActiveById(id);
+	}
 
 }

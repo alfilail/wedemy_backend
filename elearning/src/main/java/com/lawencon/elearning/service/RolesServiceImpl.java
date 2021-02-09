@@ -15,33 +15,33 @@ public class RolesServiceImpl extends BaseServiceImpl implements RolesService{
 	private RolesDao rolesDao;
 	
 	@Override
-	public void insertRole(Roles role) throws Exception {
-		rolesDao.insertRole(role, ()-> validateInsert(role));
+	public void insert(Roles role) throws Exception {
+		rolesDao.insert(role, ()-> validateInsert(role));
 	}
 	
 	@Override
-	public Roles getRoleById(String id) throws Exception {
+	public Roles getById(String id) throws Exception {
 		return rolesDao.getRoleById(id);
 	}
 	
 	@Override
-	public Roles getRoleByCode(String code) throws Exception {
-		return rolesDao.getRoleByCode(code);
+	public Roles getByCode(String code) throws Exception {
+		return rolesDao.getByCode(code);
 	}
 	
 	@Override
-	public List<Roles> getAllRoles() throws Exception {
-		return rolesDao.getAllRoles();
+	public List<Roles> getAll() throws Exception {
+		return rolesDao.getAllRole();
 	}
 	
 	@Override
-	public void updateRole(Roles role) throws Exception {
-		rolesDao.updateRole(role, ()->validateUpdate(role));
+	public void update(Roles role) throws Exception {
+		rolesDao.update(role, ()->validateUpdate(role));
 	}
 	
 	@Override
-	public void deleteRoleById(String id) throws Exception {
-		rolesDao.deleteRoleById(id);
+	public void deleteById(String id) throws Exception {
+		rolesDao.deleteById(id);
 	}
 	
 	private void validateInsert(Roles role) throws Exception {

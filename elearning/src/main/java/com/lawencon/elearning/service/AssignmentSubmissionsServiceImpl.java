@@ -49,7 +49,7 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 			Files file = new Files();
 			file.setFile(fileInput.getBytes());
 			file.setType(fileInput.getContentType());
-			filesService.insertFile(file);
+			filesService.insert(file);
 			assignmentSubmission.setIdFile(file);
 			assignmentSubmission.setSubmitTime(LocalTime.now());
 			assignmentSubmission.setTrxNumber(generateTrxNumber());
@@ -72,10 +72,10 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 			throws Exception {
 		try {
 			begin();
-			Files file = filesService.getFileById(assignmentSubmission.getIdFile().getId());
+			Files file = filesService.getById(assignmentSubmission.getIdFile().getId());
 			file.setFile(fileInput.getBytes());
 			file.setType(fileInput.getContentType());
-			filesService.updateFile(file);
+			filesService.update(file);
 			commit();
 		} catch (Exception e) {
 			rollback();
@@ -147,7 +147,7 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 		SubmissionStatusRenewal statusRenewal = new SubmissionStatusRenewal();
 		statusRenewal.setIdAssignmentSubmission(assignmentSubmission);
 		statusRenewal
-				.setIdSubmissionStatus(statusService.getSubmissionStatusByCode(SubmissionStatusCode.UPLOADED.code));
+				.setIdSubmissionStatus(statusService.getByCode(SubmissionStatusCode.UPLOADED.code));
 		statusRenewalService.insertSubmissionStatusRenewal(statusRenewal);
 	}
 

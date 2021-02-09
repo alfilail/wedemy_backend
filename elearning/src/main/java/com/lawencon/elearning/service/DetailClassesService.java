@@ -6,27 +6,27 @@ import com.lawencon.elearning.helper.DetailClassInformation;
 import com.lawencon.elearning.model.DetailClasses;
 
 public interface DetailClassesService {
-	void insertDetailClass(DetailClasses detailClass) throws Exception;
+	void insert(DetailClasses detailClass) throws Exception;
 
-	List<DetailClasses> getAllDetailClass() throws Exception;
+	List<DetailClasses> getAll() throws Exception;
 	
-	List<DetailClasses> getAllInactiveDetailClass() throws Exception;
+	List<DetailClasses> getAllInactive() throws Exception;
 
-	DetailClasses getDetailClassById(String id) throws Exception;
+	DetailClasses getById(String id) throws Exception;
 
-	DetailClasses getDetailClassByCode(String code) throws Exception;
+	DetailClasses getByCode(String code) throws Exception;
 	
-	DetailClassInformation getByIdDtlClass(String idDtlClass) throws Exception;
+	DetailClassInformation getInformationByIdDetailClass(String idDtlClass) throws Exception;
 
 	List<DetailClasses> getTutorClasses(String idTutor) throws Exception;
 	
 	List<DetailClasses> getPopularClasses() throws Exception;
 	
-	void deleteDetailClassById(String id, String idUser) throws Exception;
+	void deleteById(String id, String idUser) throws Exception;
 	
-	List<DetailClasses> getAllDetailClassByIdClass(String idClass) throws Exception;
+	List<DetailClasses> getAllByIdClass(String idClass) throws Exception;
 	
-	void updateDetailClass(DetailClasses dtlClass) throws Exception;
+	void update(DetailClasses dtlClass) throws Exception;
 	
 	void reactiveOldClass(DetailClasses detailClass) throws Exception;
 }

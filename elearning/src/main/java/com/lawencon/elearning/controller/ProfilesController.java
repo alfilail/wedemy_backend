@@ -30,9 +30,9 @@ public class ProfilesController extends ElearningBaseController {
 	private ProfilesService profilesService;
 
 	@GetMapping("all")
-	public ResponseEntity<?> getAllProfiles() {
+	public ResponseEntity<?> getAll() {
 		try {
-			List<Profiles> listProfiles = profilesService.getAllProfiles();
+			List<Profiles> listProfiles = profilesService.getAll();
 			return responseSuccess(listProfiles, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -41,9 +41,9 @@ public class ProfilesController extends ElearningBaseController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<?> getProfileById(@PathVariable("id") String id) {
+	public ResponseEntity<?> getById(@PathVariable("id") String id) {
 		try {
-			Profiles profile = profilesService.getProfileById(id);
+			Profiles profile = profilesService.getById(id);
 			return responseSuccess(profile, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -52,12 +52,12 @@ public class ProfilesController extends ElearningBaseController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> insertProfile(@RequestBody String body) {
+	public ResponseEntity<?> insert(@RequestBody String body) {
 		try {
 			ObjectMapper obj = new ObjectMapper();
 			obj.registerModule(new JavaTimeModule());
 			Profiles profile = obj.readValue(body, Profiles.class);
-			profilesService.insertProfile(profile);
+			profilesService.insert(profile);
 			return responseSuccess(profile, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -66,13 +66,13 @@ public class ProfilesController extends ElearningBaseController {
 	}
 
 	@PutMapping
-	public ResponseEntity<?> updateProfile(@RequestPart String body,
+	public ResponseEntity<?> update(@RequestPart String body,
 			@RequestPart(value = "file", required = false) MultipartFile file) {
 		try {
 			ObjectMapper obj = new ObjectMapper();
 			obj.registerModule(new JavaTimeModule());
 			Profiles profile = obj.readValue(body, Profiles.class);
-			profilesService.updateProfile(profile, file);
+			profilesService.update(profile, file);
 			return responseSuccess(profile, HttpStatus.CREATED, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -81,9 +81,9 @@ public class ProfilesController extends ElearningBaseController {
 	}
 
 	@DeleteMapping("{id}")
-	public ResponseEntity<?> deleteProfileById(@PathVariable("id") String id) {
+	public ResponseEntity<?> deleteById(@PathVariable("id") String id) {
 		try {
-			profilesService.deleteProfileById(id);
+			profilesService.deleteById(id);
 			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
 		} catch (Exception e) {
 			e.printStackTrace();

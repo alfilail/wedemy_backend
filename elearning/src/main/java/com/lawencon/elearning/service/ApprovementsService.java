@@ -10,15 +10,15 @@ import com.lawencon.elearning.model.Approvements;
 
 public interface ApprovementsService {
 
-	void insertApprovement(Approvements approvement) throws Exception;
+	void insert(Approvements approvement) throws Exception;
 
-	List<Approvements> getAllApprovements() throws Exception;
+	List<Approvements> getAll() throws Exception;
 
-	Approvements getApprovementsById(String id) throws Exception;
+	Approvements getById(String id) throws Exception;
 
-	void updateApprovement(Approvements approvement) throws Exception;
+	void update(Approvements approvement) throws Exception;
 
-	void deleteApprovementById(String id, String idUser) throws Exception;
+	void deleteById(String id, String idUser) throws Exception;
 
-	Approvements getApprovementByCode(String code) throws Exception;
+	Approvements getByCode(String code) throws Exception;
 }

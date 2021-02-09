@@ -94,11 +94,12 @@ public class ClassEnrollmentsDaoImpl extends ElearningBaseDaoImpl<ClassEnrollmen
 
 	@Override
 	public List<?> getCertificate(String idUser, String idClass) throws Exception {
-		String query = sqlBuilder(" select tmp.fullname, tmc.class_name from t_r_class_enrollments trce ",
-				" inner join t_m_users tmu on tmu.id = trce.id_user ",
-				" inner join t_m_profiles tmp on tmp.id = tmu.id_profile ",
-				" inner join t_m_detail_classes tmdc on tmdc.id = trce.id_detail_class ",
-				" inner join t_m_classes tmc on tmc.id = tmdc.id_class ", " where trce.id_user = ?1 and tmc.id = ?2")
+		String query = sqlBuilder(" SELECT tmp.fullname, tmc.class_name FROM t_r_class_enrollments trce ",
+				" INNER JOIN t_m_users tmu on tmu.id = trce.id_user ",
+				" INNER JOIN t_m_profiles tmp on tmp.id = tmu.id_profile ",
+				" INNER JOIN t_m_detail_classes tmdc on tmdc.id = trce.id_detail_class ",
+				" INNER JOIN t_m_classes tmc on tmc.id = tmdc.id_class",
+				" WHERE trce.id_user = ?1 and tmc.id = ?2")
 						.toString();
 		List<CertificateHelper> listCertificate = new ArrayList<>();
 		List<?> listObj = createNativeQuery(query).setParameter(1, idUser).setParameter(2, idClass).getResultList();

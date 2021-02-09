@@ -22,50 +22,45 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 	@Autowired
 	private FilesService filesService;
 
-//	@Autowired
-//	private GeneralService generalService;
-
 	@Override
-	public void insertProfile(Profiles profile) throws Exception {
-//		byte[] defaultPict = generalService.getDefaultPict("rgs");
-//		String pic = defaultPict.toString();
+	public void insert(Profiles profile) throws Exception {
 		Files file = new Files();
 		file.setFile(null);
 		file.setType(null);
-		filesService.insertFile(file);
+		filesService.insert(file);
 		profile.setIdFile(file);
-		profilesDao.insertProfile(profile, () -> validateInsert(profile));
+		profilesDao.insert(profile, () -> validateInsert(profile));
 	}
 
 	@Override
-	public List<Profiles> getAllProfiles() throws Exception {
-		return profilesDao.getAllProfiles();
+	public List<Profiles> getAll() throws Exception {
+		return profilesDao.getAllProfile();
 	}
 
 	@Override
-	public Profiles getProfileById(String id) throws Exception {
+	public Profiles getById(String id) throws Exception {
 		return profilesDao.getProfileById(id);
 	}
 
 	@Override
-	public Profiles getProfileByCode(String code) throws Exception {
-		return profilesDao.getProfileByCode(code);
+	public Profiles getByCode(String code) throws Exception {
+		return profilesDao.getByCode(code);
 	}
 
 	@Override
-	public void updateProfile(Profiles profile, MultipartFile file) throws Exception {
+	public void update(Profiles profile, MultipartFile file) throws Exception {
 		try {
 			begin();	
-			Files profilePict = filesService.getFileById(profile.getIdFile().getId());
+			Files profilePict = filesService.getById(profile.getIdFile().getId());
 			if (file != null && !file.isEmpty()) {
 				profilePict.setFile(file.getBytes());
 				profilePict.setType(file.getContentType());
-				filesService.updateFile(profilePict);
+				filesService.update(profilePict);
 				profile.setIdFile(profilePict);
 			} else {
 				profile.setIdFile(profilePict);
 			}
-			profilesDao.updateProfile(profile, () -> {
+			profilesDao.update(profile, () -> {
 				validateUpdate(profile);
 			});
 			commit();
@@ -76,23 +71,23 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 	}
 
 	@Override
-	public void deleteProfileById(String id) throws Exception {
-		profilesDao.deleteProfileById(id);
+	public void deleteById(String id) throws Exception {
+		profilesDao.deleteById(id);
 	}
 
 	@Override
-	public void softDeleteProfileById(String id, String idUser) throws Exception {
-		profilesDao.softDeleteProfileById(id, idUser);
+	public void softDeleteById(String id, String idUser) throws Exception {
+		profilesDao.softDeleteById(id, idUser);
 	}
 
 	@Override
-	public Profiles getProfileByEmail(String email) throws Exception {
-		return profilesDao.getProfileByEmail(email);
+	public Profiles getByEmail(String email) throws Exception {
+		return profilesDao.getByEmail(email);
 	}
 
 	@Override
-	public Profiles getProfileByIdNumber(String idNumber) throws Exception {
-		return profilesDao.getProfileByIdNumber(idNumber);
+	public Profiles getByIdNumber(String idNumber) throws Exception {
+		return profilesDao.getByIdNumber(idNumber);
 	}
 
 	private void validateInsert(Profiles profile) throws Exception {

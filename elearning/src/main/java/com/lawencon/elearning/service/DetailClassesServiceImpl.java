@@ -38,29 +38,29 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 	private DetailModuleRegistrationsService detailModuleRegistrationsService;
 
 	@Override
-	public void insertDetailClass(DetailClasses detailClass) throws Exception {
-		Classes clazz = classService.getClassById(detailClass.getIdClass().getId());
+	public void insert(DetailClasses detailClass) throws Exception {
+		Classes clazz = classService.getById(detailClass.getIdClass().getId());
 		detailClass.setCode(generateCodeDetailClass(clazz.getCode(), detailClass.getStartDate()));
-		detailClassesDao.insertDetailClass(detailClass, () -> validateInsert(detailClass));
+		detailClassesDao.insert(detailClass, () -> validateInsert(detailClass));
 	}
 
 	@Override
-	public List<DetailClasses> getAllDetailClass() throws Exception {
+	public List<DetailClasses> getAll() throws Exception {
 		return detailClassesDao.getAllDetailClass();
 	}
 
 	@Override
-	public List<DetailClasses> getAllDetailClassByIdClass(String idClass) throws Exception {
-		return detailClassesDao.getAllDetailClassByIdClass(idClass);
+	public List<DetailClasses> getAllByIdClass(String idClass) throws Exception {
+		return detailClassesDao.getAllByIdClass(idClass);
 	}
 
 	@Override
-	public DetailClasses getDetailClassById(String id) throws Exception {
+	public DetailClasses getById(String id) throws Exception {
 		return detailClassesDao.getDetailClassById(id);
 	}
 
 	@Override
-	public DetailClassInformation getByIdDtlClass(String idDtlClass) throws Exception {
+	public DetailClassInformation getInformationByIdDetailClass(String idDtlClass) throws Exception {
 		DetailClassInformation dtlClassInfo = new DetailClassInformation();
 		try {
 			begin();
@@ -78,8 +78,8 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 	}
 
 	@Override
-	public DetailClasses getDetailClassByCode(String code) throws Exception {
-		return detailClassesDao.getDetailClassByCode(code);
+	public DetailClasses getByCode(String code) throws Exception {
+		return detailClassesDao.getByCode(code);
 	}
 
 	@Override
@@ -93,48 +93,38 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 	}
 
 	@Override
-	public void deleteDetailClassById(String id, String idUser) throws Exception {
-		detailClassesDao.deleteClassById(id, idUser);
+	public void deleteById(String id, String idUser) throws Exception {
+		detailClassesDao.deleteById(id, idUser);
 	}
 
 	@Override
 	public void reactiveOldClass(DetailClasses detailClass) throws Exception {
 		try {
 			begin();
-			// get class by id class
-			Classes clazz = classService.getInActiveClassById(detailClass.getIdClass().getId());
+			Classes clazz = classService.getInActiveById(detailClass.getIdClass().getId());
 
-			// update class is active
-			classService.updateClassIsActive(detailClass.getIdClass().getId(), detailClass.getCreatedBy());
+			classService.updateIsActive(detailClass.getIdClass().getId(), detailClass.getCreatedBy());
 
-			// set detail class
 			detailClass.setCode(generateCodeDetailClass(clazz.getCode(), detailClass.getStartDate()));
 			detailClass.setViews(0);
 			detailClass.setIdClass(clazz);
 
-			// get detail class lama yang terbaru (end date tertinggi)
-			DetailClasses detailClassOld = detailClassesDao.getDetailClassByIdClass(detailClass.getIdClass().getId());
+			DetailClasses detailClassOld = detailClassesDao.getByIdClass(detailClass.getIdClass().getId());
 
-			// get all module registration by id detail class lama
 			List<ModuleRegistrations> modulesRegistrationListOld = moduleRegistrationsService
 					.getModuleRegistrationsByIdDetailClass(detailClassOld.getId());
 
-			// untuk menampung module list nya
 			List<Modules> modulesList = new ArrayList<Modules>();
 
-			// untuk menampung module registrations list
 			List<DetailModuleRegistrations> detailModuleList = new ArrayList<DetailModuleRegistrations>();
 
 			for (ModuleRegistrations moduleRegistration : modulesRegistrationListOld) {
-				// get module by id module yang ada di module registration
-				Modules module = modulesService.getModuleById(moduleRegistration.getIdModule().getId());
+				Modules module = modulesService.getById(moduleRegistration.getIdModule().getId());
 				modulesList.add(module);
 
 				List<DetailModuleRegistrations> detailModuleRegis = detailModuleRegistrationsService
 						.getDetailModuleRegistrationsByIdModuleRgs(moduleRegistration.getId());
-
-				// memindahkan detail module registration by id module registration ke detail
-				// module registration list
+				
 				for (DetailModuleRegistrations detailModule : detailModuleRegis) {
 					DetailModuleRegistrations detail = new DetailModuleRegistrations();
 					detail.setIdLearningMaterial(detailModule.getIdLearningMaterial());
@@ -144,17 +134,14 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 					detailModuleList.add(detail);
 				}
 			}
+			detailClassesDao.insert(detailClass, () -> validateReactive(detailClass));
 
-			detailClassesDao.insertDetailClass(detailClass, () -> validateReactive(detailClass));
-
-			// membuat clazz helper untuk insert module registration
 			ClassesHelper clazzHelper = new ClassesHelper();
 			clazzHelper.setClazz(clazz);
 			clazzHelper.setDetailClass(detailClass);
 			clazzHelper.setModule(modulesList);
 			moduleRegistrationsService.insertModuleRegistration(clazzHelper);
 
-			// insert detail module registration
 			for (DetailModuleRegistrations detailModuleRegis : detailModuleList) {
 				detailModuleRegistrationsService.insertDetailModuleRegistration(detailModuleRegis);
 			}
@@ -179,7 +166,7 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 
 	private void validateReactive(DetailClasses detailClass) throws Exception {
 		validateInsert(detailClass);
-		DetailClasses detailClazz = detailClassesDao.getDetailClassByIdClass(detailClass.getIdClass().getId());
+		DetailClasses detailClazz = detailClassesDao.getByIdClass(detailClass.getIdClass().getId());
 		if (detailClass.getStartDate().compareTo(detailClazz.getEndDate()) < 0) {
 			throw new Exception(
 					"Tanggal mulai detail kelas tidak boleh kurang dari tanggal akhir detail kelas sebelumnya");
@@ -202,8 +189,8 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 	}
 
 	@Override
-	public void updateDetailClass(DetailClasses dtlClass) throws Exception {
-		detailClassesDao.updateDetailClass(dtlClass, () -> validateUpdate(dtlClass));
+	public void update(DetailClasses dtlClass) throws Exception {
+		detailClassesDao.update(dtlClass, () -> validateUpdate(dtlClass));
 	}
 
 	private void validateUpdate(DetailClasses dtlClass) throws Exception {
@@ -230,8 +217,8 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 	}
 
 	@Override
-	public List<DetailClasses> getAllInactiveDetailClass() throws Exception {
-		return detailClassesDao.getAllInactiveDetailClass();
+	public List<DetailClasses> getAllInactive() throws Exception {
+		return detailClassesDao.getAllInactive();
 	}
 
 }

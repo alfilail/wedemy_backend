@@ -12,22 +12,22 @@ import com.lawencon.util.Callback;
 public class ModulesDaoImpl extends ElearningBaseDaoImpl<Modules> implements ModulesDao {
 
 	@Override
-	public void insertModule(Modules module, Callback before) throws Exception {
+	public void insert(Modules module, Callback before) throws Exception {
 		save(module, before, null, true ,true);
 	}
 
 	@Override
-	public List<Modules> getAllModules() throws Exception {
+	public List<Modules> getAllModule() throws Exception {
 		return getAll();
 	}
 
 	@Override
-	public void updateModule(Modules module, Callback before) throws Exception {
+	public void update(Modules module, Callback before) throws Exception {
 		save(module, before, null, true, true);
 	}
 
 	@Override
-	public void deleteModuleById(String id) throws Exception {
+	public void deleteById(String id) throws Exception {
 		deleteById(id);
 	}
 
@@ -37,18 +37,18 @@ public class ModulesDaoImpl extends ElearningBaseDaoImpl<Modules> implements Mod
 	}
 
 	@Override
-	public Modules getModuleByCode(String code) throws Exception {
+	public Modules getByCode(String code) throws Exception {
 		List<Modules> module = createQuery("FROM Modules WHERE code = ?1 ", Modules.class).setParameter(1, code).getResultList();
-		return module.size() > 0 ? module.get(0) : null;
+		return resultCheck(module);
 	}
 
 	@Override
-	public void softDeleteModuleById(String id, String idUser) throws Exception {
+	public void softDeleteById(String id, String idUser) throws Exception {
 		updateNativeSQL("UPDATE t_m_modules SET is_active = FALSE", id, idUser);
 	}
 
 	@Override
-	public List<?> validateDeleteModule(String id) throws Exception {
+	public List<?> validateDelete(String id) throws Exception {
 		String sql = sqlBuilder("SELECT mr.id FROM t_m_modules m ",
 				" FULL JOIN t_r_module_registrations mr ON mr.id_module = m.id ",
 				" WHERE m.id = ?1 ").toString();

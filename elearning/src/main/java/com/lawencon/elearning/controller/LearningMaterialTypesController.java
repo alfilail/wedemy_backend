@@ -29,10 +29,10 @@ public class LearningMaterialTypesController extends ElearningBaseController {
 	private LearningMaterialTypesService lmTypesService;
 
 	@PostMapping
-	public ResponseEntity<?> insertLearningMaterialType(@RequestBody String body) {
+	public ResponseEntity<?> insert(@RequestBody String body) {
 		try {
 			LearningMaterialTypes lmType = new ObjectMapper().readValue(body, LearningMaterialTypes.class);
-			lmTypesService.insertLearningMaterialType(lmType);
+			lmTypesService.insert(lmType);
 			return responseSuccess(lmType, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -41,10 +41,10 @@ public class LearningMaterialTypesController extends ElearningBaseController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<?> getLearningMaterialTypeById(@PathVariable("id") String id) {
+	public ResponseEntity<?> getById(@PathVariable("id") String id) {
 		LearningMaterialTypes lmType = new LearningMaterialTypes();
 		try {
-			lmType = lmTypesService.getLearningMaterialTypeById(id);
+			lmType = lmTypesService.getById(id);
 			return responseSuccess(lmType, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -53,10 +53,10 @@ public class LearningMaterialTypesController extends ElearningBaseController {
 	}
 
 	@GetMapping("/all")
-	public ResponseEntity<?> getAllLearningMaterialTypes() {
+	public ResponseEntity<?> getAll() {
 		List<LearningMaterialTypes> lmTypesList = new ArrayList<LearningMaterialTypes>();
 		try {
-			lmTypesList = lmTypesService.getAllLearningMaterialTypes();
+			lmTypesList = lmTypesService.getAll();
 			return responseSuccess(lmTypesList, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -65,10 +65,10 @@ public class LearningMaterialTypesController extends ElearningBaseController {
 	}
 
 	@DeleteMapping
-	public ResponseEntity<?> deleteLearningMaterialTypeById(@RequestParam("id") String id,
+	public ResponseEntity<?> deleteById(@RequestParam("id") String id,
 			@RequestParam("idUser") String idUser) {
 		try {
-			lmTypesService.deleteLearningMaterialTypeById(id, idUser);
+			lmTypesService.deleteById(id, idUser);
 			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -77,12 +77,12 @@ public class LearningMaterialTypesController extends ElearningBaseController {
 	}
 
 	@PutMapping
-	public ResponseEntity<?> updateLearningMaterialType(@RequestBody String body) {
+	public ResponseEntity<?> update(@RequestBody String body) {
 		try {
 			ObjectMapper obj = new ObjectMapper();
 			obj.registerModule(new JavaTimeModule());
 			LearningMaterialTypes lmType = obj.readValue(body, LearningMaterialTypes.class);
-			lmTypesService.updateLearningMaterialType(lmType);
+			lmTypesService.update(lmType);
 			return responseSuccess(lmType, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();

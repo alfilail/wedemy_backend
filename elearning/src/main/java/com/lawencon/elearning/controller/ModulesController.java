@@ -29,10 +29,10 @@ public class ModulesController extends ElearningBaseController {
 	private ModulesService moduleService;
 
 	@GetMapping("all")
-	public ResponseEntity<?> getAllModules() {
+	public ResponseEntity<?> getAll() {
 		List<Modules> listModules = new ArrayList<>();
 		try {
-			listModules = moduleService.getAllModules();
+			listModules = moduleService.getAll();
 			return responseSuccess(listModules, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -41,10 +41,10 @@ public class ModulesController extends ElearningBaseController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<?> getModuleById(@PathVariable("id") String id) {
+	public ResponseEntity<?> getById(@PathVariable("id") String id) {
 		Modules module = new Modules();
 		try {
-			module = moduleService.getModuleById(id);
+			module = moduleService.getById(id);
 			return responseSuccess(module, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -53,10 +53,10 @@ public class ModulesController extends ElearningBaseController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> insertModule(@RequestBody String body) {
+	public ResponseEntity<?> insert(@RequestBody String body) {
 		try {
 			Modules module = new ObjectMapper().readValue(body, Modules.class);
-			moduleService.insertModule(module);
+			moduleService.insert(module);
 			return responseSuccess(module, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -65,10 +65,10 @@ public class ModulesController extends ElearningBaseController {
 	}
 
 	@PutMapping
-	public ResponseEntity<?> updateModule(@RequestBody String body) {
+	public ResponseEntity<?> update(@RequestBody String body) {
 		try {
 			Modules module = new ObjectMapper().readValue(body, Modules.class);
-			moduleService.updateModule(module);
+			moduleService.update(module);
 			return responseSuccess(module, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -79,7 +79,7 @@ public class ModulesController extends ElearningBaseController {
 	@DeleteMapping
 	public ResponseEntity<?> deleteModuleById(@RequestParam("id") String id, @RequestParam("idUser") String idUser) {
 		try {
-			moduleService.deleteModuleById(id, idUser);
+			moduleService.deleteById(id, idUser);
 			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -11,12 +11,12 @@ import com.lawencon.util.Callback;
 public class ProfilesDaoImpl extends ElearningBaseDaoImpl<Profiles> implements ProfilesDao {
 
 	@Override
-	public void insertProfile(Profiles profile, Callback before) throws Exception {
+	public void insert(Profiles profile, Callback before) throws Exception {
 		save(profile, before, null);
 	}
 
 	@Override
-	public List<Profiles> getAllProfiles() throws Exception {
+	public List<Profiles> getAllProfile() throws Exception {
 		return getAll();
 	}
 
@@ -26,38 +26,38 @@ public class ProfilesDaoImpl extends ElearningBaseDaoImpl<Profiles> implements P
 	}
 
 	@Override
-	public Profiles getProfileByCode(String code) throws Exception {
+	public Profiles getByCode(String code) throws Exception {
 		Profiles profile = createQuery("FROM Profiles WHERE code = ?1 ", Profiles.class).setParameter(1, code)
 				.getSingleResult();
 		return profile;
 	}
 
 	@Override
-	public Profiles getProfileByIdNumber(String idNumber) throws Exception {
-		List<Profiles> listResult = createQuery("FROM Profiles WHERE id_number = ?1 ", Profiles.class)
+	public Profiles getByIdNumber(String idNumber) throws Exception {
+		List<Profiles> listResult = createQuery("FROM Profiles WHERE idNumber = ?1 ", Profiles.class)
 				.setParameter(1, idNumber).getResultList();
-		return listResult.size() > 0 ? listResult.get(0) : null;
+		return resultCheck(listResult);
 	}
 
 	@Override
-	public void updateProfile(Profiles profile, Callback before) throws Exception {
+	public void update(Profiles profile, Callback before) throws Exception {
 		save(profile, before, null);
 	}
 
 	@Override
-	public void deleteProfileById(String id) throws Exception {
+	public void deleteById(String id) throws Exception {
 		deleteById(id);
 	}
 
 	@Override
-	public Profiles getProfileByEmail(String email) throws Exception {
+	public Profiles getByEmail(String email) throws Exception {
 		List<Profiles> profile = createQuery("FROM Profiles WHERE email = ?1 ", Profiles.class).setParameter(1, email)
 				.getResultList();
 		return resultCheck(profile);
 	}
 	
 	@Override
-	public void softDeleteProfileById(String id, String idUser) throws Exception {
+	public void softDeleteById(String id, String idUser) throws Exception {
 		updateNativeSQL("UPDATE t_m_profiles SET is_active = false", id, idUser);
 	}
 

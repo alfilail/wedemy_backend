@@ -6,15 +6,15 @@ import com.lawencon.elearning.model.Roles;
 import com.lawencon.util.Callback;
 
 public interface RolesDao {
-	void insertRole(Roles role, Callback before) throws Exception;
+	void insert(Roles role, Callback before) throws Exception;
 	
-	List<Roles> getAllRoles() throws Exception;
+	List<Roles> getAllRole() throws Exception;
 	
 	Roles getRoleById(String id) throws Exception;
 	
-	void updateRole(Roles role, Callback before) throws Exception;
+	void update(Roles role, Callback before) throws Exception;
 	
-	void deleteRoleById(String id) throws Exception;
+	void deleteById(String id) throws Exception;
 	
-	Roles getRoleByCode(String code) throws Exception;
+	Roles getByCode(String code) throws Exception;
 }

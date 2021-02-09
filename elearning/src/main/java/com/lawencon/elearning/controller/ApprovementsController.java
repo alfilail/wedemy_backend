@@ -32,10 +32,10 @@ public class ApprovementsController extends ElearningBaseController {
 	private ApprovementsService approvementsService;
 
 	@PostMapping
-	public ResponseEntity<?> insertApprovement(@RequestBody String body) {
+	public ResponseEntity<?> insert(@RequestBody String body) {
 		try {
 			Approvements approvement = new ObjectMapper().readValue(body, Approvements.class);
-			approvementsService.insertApprovement(approvement);
+			approvementsService.insert(approvement);
 			return responseSuccess(approvement, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -44,9 +44,9 @@ public class ApprovementsController extends ElearningBaseController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<?> getApprovementById(@PathVariable String id) {
+	public ResponseEntity<?> getById(@PathVariable String id) {
 		try {
-			Approvements approvement = approvementsService.getApprovementsById(id);
+			Approvements approvement = approvementsService.getById(id);
 			return responseSuccess(approvement, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -55,9 +55,9 @@ public class ApprovementsController extends ElearningBaseController {
 	}
 
 	@GetMapping("all")
-	public ResponseEntity<?> getAllApprovements() {
+	public ResponseEntity<?> getAll() {
 		try {
-			List<Approvements> approvementsList = approvementsService.getAllApprovements();
+			List<Approvements> approvementsList = approvementsService.getAll();
 			return responseSuccess(approvementsList, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -66,10 +66,10 @@ public class ApprovementsController extends ElearningBaseController {
 	}
 
 	@DeleteMapping
-	public ResponseEntity<?> deleteApprovementById(@RequestParam("id") String id,
+	public ResponseEntity<?> deleteById(@RequestParam("id") String id,
 			@RequestParam("idUser") String idUser) {
 		try {
-			approvementsService.deleteApprovementById(id, idUser);
+			approvementsService.deleteById(id, idUser);
 			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -78,10 +78,10 @@ public class ApprovementsController extends ElearningBaseController {
 	}
 
 	@PutMapping
-	public ResponseEntity<?> updateApprovement(@RequestBody String body) {
+	public ResponseEntity<?> update(@RequestBody String body) {
 		try {
 			Approvements approvement = new ObjectMapper().readValue(body, Approvements.class);
-			approvementsService.updateApprovement(approvement);
+			approvementsService.update(approvement);
 			return responseSuccess(approvement, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();

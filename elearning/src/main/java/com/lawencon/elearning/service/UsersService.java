@@ -7,22 +7,24 @@ import com.lawencon.elearning.model.Users;
 
 public interface UsersService {
 
-	void insertUser(Users user) throws Exception;
+	void insert(Users user) throws Exception;
 
-	List<Users> getAllUsers() throws Exception;
+	List<Users> getAll() throws Exception;
 
-	Users getUserById(String id) throws Exception;
+	Users getById(String id) throws Exception;
 
-	Users getUserByUsername(String username) throws Exception;
+	Users getByUsername(String username) throws Exception;
 
-	void updateUser(Users user) throws Exception;
+	void update(Users user) throws Exception;
 
-	void deleteUserById(String id, String idUser) throws Exception;
+	void deleteById(String id, String idUser) throws Exception;
 
 	Users updateUserPassword(Profiles profile) throws Exception;
 	
-	Users getUserByIdNumber(String idNumber) throws Exception;
+	Users getByIdNumber(String idNumber) throws Exception;
 	
-	List<Users> getUsersByRoleCode(String code) throws Exception;
+	List<Users> getByRoleCode(String code) throws Exception;
+	
+	Users getByIdClass(String idClass) throws Exception;
 
 }

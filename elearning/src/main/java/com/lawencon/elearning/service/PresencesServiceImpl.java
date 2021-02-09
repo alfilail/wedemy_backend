@@ -38,7 +38,7 @@ public class PresencesServiceImpl extends ElearningBaseServiceImpl implements Pr
 			presence.setTrxNumber(generateTrxNumber());
 			presence.setPresenceTime(LocalTime.now());
 			presencesDao.insertPresence(presence, () -> validateInsert(presence));
-			Users user = usersService.getUserById(presence.getIdUser().getId());
+			Users user = usersService.getById(presence.getIdUser().getId());
 			if (user.getIdRole().getCode().equals(RoleCode.PARTICIPANT.code)) {
 				insertApprovementRenewal(presence);
 			}

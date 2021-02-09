@@ -9,13 +9,13 @@ public interface DetailClassesDao {
 
 	List<DetailClasses> getAllDetailClass() throws Exception;
 	
-	List<DetailClasses> getAllInactiveDetailClass() throws Exception;
+	List<DetailClasses> getAllInactive() throws Exception;
 
-	void insertDetailClass(DetailClasses detailClass, Callback before) throws Exception;
+	void insert(DetailClasses detailClass, Callback before) throws Exception;
 
 	DetailClasses getDetailClassById(String id) throws Exception;
 
-	DetailClasses getDetailClassByCode(String code) throws Exception;
+	DetailClasses getByCode(String code) throws Exception;
 
 	List<DetailClasses> getTutorClasses(String idTutor) throws Exception;
 	
@@ -23,12 +23,12 @@ public interface DetailClassesDao {
 	
 	void updateViews(String id) throws Exception;
 	
-	void deleteClassById(String id, String idUser) throws Exception;
+	void deleteById(String id, String idUser) throws Exception;
 	
-	void updateDetailClass(DetailClasses dtlClass, Callback before) throws Exception;
+	void update(DetailClasses dtlClass, Callback before) throws Exception;
 	
-	List<DetailClasses> getAllDetailClassByIdClass(String idClass) throws Exception;
+	List<DetailClasses> getAllByIdClass(String idClass) throws Exception;
 	
-	DetailClasses getDetailClassByIdClass(String idClass) throws Exception;
+	DetailClasses getByIdClass(String idClass) throws Exception;
 
 }

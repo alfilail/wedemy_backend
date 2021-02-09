@@ -18,28 +18,28 @@ public class LearningMaterialTypesServiceImpl extends BaseServiceImpl implements
 	private LearningMaterialTypesDao learnMaterialTypeDao;
 
 	@Override
-	public void insertLearningMaterialType(LearningMaterialTypes lmType) throws Exception {
-		learnMaterialTypeDao.insertLearningMaterialType(lmType, () -> validateInsert(lmType));
+	public void insert(LearningMaterialTypes lmType) throws Exception {
+		learnMaterialTypeDao.insert(lmType, () -> validateInsert(lmType));
 	}
 
 	@Override
-	public List<LearningMaterialTypes> getAllLearningMaterialTypes() throws Exception {
-		return learnMaterialTypeDao.getAllLearningMaterialTypes();
+	public List<LearningMaterialTypes> getAll() throws Exception {
+		return learnMaterialTypeDao.getAllLearningMaterialType();
 	}
 
 	@Override
-	public LearningMaterialTypes getLearningMaterialTypeById(String id) throws Exception {
+	public LearningMaterialTypes getById(String id) throws Exception {
 		return learnMaterialTypeDao.getLearningMaterialTypeById(id);
 	}
 
 	@Override
-	public void deleteLearningMaterialTypeById(String id, String idUser) throws Exception {
+	public void deleteById(String id, String idUser) throws Exception {
 		try {
 			begin();
 			if (validateDelete(id)) {
-				learnMaterialTypeDao.softDeleteLearningMaterialTypeById(id, idUser);
+				learnMaterialTypeDao.softDeleteById(id, idUser);
 			} else {
-				learnMaterialTypeDao.deleteLearningMaterialTypeById(id);
+				learnMaterialTypeDao.deleteById(id);
 			}
 			commit();
 		} catch (Exception e) {
@@ -49,20 +49,20 @@ public class LearningMaterialTypesServiceImpl extends BaseServiceImpl implements
 	}
 
 	@Override
-	public void updateLearningMaterialType(LearningMaterialTypes lmType) throws Exception {
-		learnMaterialTypeDao.updateLearningMaterialType(lmType, () -> validateUpdate(lmType));
+	public void update(LearningMaterialTypes lmType) throws Exception {
+		learnMaterialTypeDao.update(lmType, () -> validateUpdate(lmType));
 	}
 
 	@Override
-	public LearningMaterialTypes getLearningMaterialTypeByCode(String code) throws Exception {
-		return learnMaterialTypeDao.getLearningMaterialTypeByCode(code);
+	public LearningMaterialTypes getByCode(String code) throws Exception {
+		return learnMaterialTypeDao.getByCode(code);
 	}
 
 	private void validateInsert(LearningMaterialTypes learningMaterialTypes) throws Exception {
 		if (learningMaterialTypes.getCode() == null || learningMaterialTypes.getCode().trim().equals("")) {
 			throw new Exception("Kode tipe bahan ajar tidak boleh kosong!");
 		} else {
-			LearningMaterialTypes learningMaterialType = getLearningMaterialTypeByCode(learningMaterialTypes.getCode());
+			LearningMaterialTypes learningMaterialType = getByCode(learningMaterialTypes.getCode());
 			if (learningMaterialType != null) {
 				throw new Exception("Kode tipe bahan ajar tidak boleh sama!");
 			} else {
@@ -78,7 +78,7 @@ public class LearningMaterialTypesServiceImpl extends BaseServiceImpl implements
 		if (learningMaterialTypes.getId() == null || learningMaterialTypes.getId().trim().equals("")) {
 			throw new Exception("Id tipe bahan ajar tidak boleh kosong!");
 		} else {
-			LearningMaterialTypes learningType = getLearningMaterialTypeById(learningMaterialTypes.getId());
+			LearningMaterialTypes learningType = getById(learningMaterialTypes.getId());
 			if (learningType == null) {
 				throw new Exception("Id tipe bahan ajar tidak ada!");
 			} else {
@@ -93,7 +93,7 @@ public class LearningMaterialTypesServiceImpl extends BaseServiceImpl implements
 							throw new Exception("Kode tipe bahan ajar tidak boleh kosong!");
 						} else {
 							if (!learningMaterialTypes.getCode().equalsIgnoreCase(learningType.getCode())) {
-								LearningMaterialTypes lmType = getLearningMaterialTypeByCode(
+								LearningMaterialTypes lmType = getByCode(
 										learningMaterialTypes.getCode());
 								if (lmType != null) {
 									throw new Exception("Kode tipe bahan ajar tidak boleh sama!");
@@ -112,7 +112,7 @@ public class LearningMaterialTypesServiceImpl extends BaseServiceImpl implements
 	}
 
 	private boolean validateDelete(String id) throws Exception {
-		List<?> listObj = learnMaterialTypeDao.validateDeleteLearningMaterialType(id);
+		List<?> listObj = learnMaterialTypeDao.validateDelete(id);
 		listObj.forEach(System.out::println);
 		List<?> list = listObj.stream().filter(val -> val != null).collect(Collectors.toList());
 		System.out.println(list.size());

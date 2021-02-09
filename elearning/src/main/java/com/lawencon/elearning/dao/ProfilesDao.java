@@ -7,21 +7,21 @@ import com.lawencon.util.Callback;
 
 public interface ProfilesDao {
 
-	void insertProfile(Profiles profile, Callback before) throws Exception;
+	void insert(Profiles profile, Callback before) throws Exception;
 
-	List<Profiles> getAllProfiles() throws Exception;
+	List<Profiles> getAllProfile() throws Exception;
 
 	Profiles getProfileById(String id) throws Exception;
 
-	Profiles getProfileByCode(String code) throws Exception;
+	Profiles getByCode(String code) throws Exception;
 
-	void updateProfile(Profiles profile, Callback before) throws Exception;
+	void update(Profiles profile, Callback before) throws Exception;
 
-	void deleteProfileById(String id) throws Exception;
+	void deleteById(String id) throws Exception;
 
-	Profiles getProfileByEmail(String email) throws Exception;
+	Profiles getByEmail(String email) throws Exception;
 
-	Profiles getProfileByIdNumber(String idNumber) throws Exception;
+	Profiles getByIdNumber(String idNumber) throws Exception;
 	
-	void softDeleteProfileById(String id, String idUser) throws Exception;
+	void softDeleteById(String id, String idUser) throws Exception;
 }

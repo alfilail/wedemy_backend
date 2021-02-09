@@ -5,15 +5,15 @@ import java.util.List;
 import com.lawencon.elearning.model.Roles;
 
 public interface RolesService {
-	void insertRole(Roles role) throws Exception;
+	void insert(Roles role) throws Exception;
 	
-	List<Roles> getAllRoles() throws Exception;
+	List<Roles> getAll() throws Exception;
 	
-	Roles getRoleById(String id) throws Exception;
+	Roles getById(String id) throws Exception;
 	
-	void updateRole(Roles role) throws Exception;
+	void update(Roles role) throws Exception;
 	
-	void deleteRoleById(String id) throws Exception;
+	void deleteById(String id) throws Exception;
 	
-	Roles getRoleByCode(String code) throws Exception;
+	Roles getByCode(String code) throws Exception;
 }

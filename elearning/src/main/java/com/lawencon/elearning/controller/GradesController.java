@@ -28,11 +28,11 @@ public class GradesController extends ElearningBaseController {
 	private GradesService gradesService;
 
 	@PostMapping
-	public ResponseEntity<?> insertGrade(@RequestBody String body) {
+	public ResponseEntity<?> insert(@RequestBody String body) {
 		Grades grade = new Grades();
 		try {
 			grade = new ObjectMapper().readValue(body, Grades.class);
-			gradesService.insertGrade(grade);
+			gradesService.insert(grade);
 			return responseSuccess(grade, HttpStatus.CREATED, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -41,10 +41,10 @@ public class GradesController extends ElearningBaseController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<?> getGradeById(@PathVariable("id") String id) {
+	public ResponseEntity<?> getById(@PathVariable("id") String id) {
 		Grades grade = new Grades();
 		try {
-			grade = gradesService.getGradeById(id);
+			grade = gradesService.getById(id);
 			return responseSuccess(grade, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -53,10 +53,10 @@ public class GradesController extends ElearningBaseController {
 	}
 
 	@GetMapping("/all")
-	public ResponseEntity<?> getAllGrades() {
+	public ResponseEntity<?> getAll() {
 		List<Grades> gradesList = new ArrayList<Grades>();
 		try {
-			gradesList = gradesService.getAllGrades();
+			gradesList = gradesService.getAll();
 			return responseSuccess(gradesList, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -65,10 +65,10 @@ public class GradesController extends ElearningBaseController {
 	}
 
 	@DeleteMapping
-	public ResponseEntity<?> deleteGradeById(@RequestParam("id") String id, 
+	public ResponseEntity<?> deleteById(@RequestParam("id") String id, 
 			@RequestParam("idUser") String idUser) {
 		try {
-			gradesService.deleteGradeById(id, idUser);
+			gradesService.deleteById(id, idUser);
 			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -77,10 +77,10 @@ public class GradesController extends ElearningBaseController {
 	}
 
 	@PutMapping
-	public ResponseEntity<?> updateGrade(@RequestBody String body) {
+	public ResponseEntity<?> update(@RequestBody String body) {
 		try {
 			Grades grade = new ObjectMapper().readValue(body, Grades.class);
-			gradesService.updateGrades(grade);
+			gradesService.update(grade);
 			return responseSuccess(grade, HttpStatus.CREATED, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();

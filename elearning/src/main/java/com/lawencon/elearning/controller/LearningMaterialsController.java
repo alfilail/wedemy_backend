@@ -35,13 +35,13 @@ public class LearningMaterialsController extends ElearningBaseController {
 	private LearningMaterialsService learningMaterialsService;
 
 	@PostMapping
-	public ResponseEntity<?> insertLearningMaterial(@RequestPart String body, @RequestPart("file") MultipartFile file) {
+	public ResponseEntity<?> insert(@RequestPart String body, @RequestPart("file") MultipartFile file) {
 		try {
 			ObjectMapper obj = new ObjectMapper();
 			obj.registerModule(new JavaTimeModule());
 			DetailModuleRegistrations dtlModuleRgs = obj.readValue(body, DetailModuleRegistrations.class);
-			learningMaterialsService.insertLearningMaterial(dtlModuleRgs, file);
-			return responseSuccess(dtlModuleRgs, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
+			learningMaterialsService.insert(dtlModuleRgs, file);
+			return responseSuccess(dtlModuleRgs, HttpStatus.CREATED, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
@@ -49,9 +49,9 @@ public class LearningMaterialsController extends ElearningBaseController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<?> getLearningMaterialById(@PathVariable String id) {
+	public ResponseEntity<?> getById(@PathVariable String id) {
 		try {
-			LearningMaterials learningMaterial = learningMaterialsService.getLearningMaterialById(id);
+			LearningMaterials learningMaterial = learningMaterialsService.getById(id);
 			return responseSuccess(learningMaterial, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -60,9 +60,9 @@ public class LearningMaterialsController extends ElearningBaseController {
 	}
 
 	@GetMapping("all")
-	public ResponseEntity<?> getAllLearningMaterials() {
+	public ResponseEntity<?> getAll() {
 		try {
-			List<LearningMaterials> learningMaterialsList = learningMaterialsService.getAllLearningMaterials();
+			List<LearningMaterials> learningMaterialsList = learningMaterialsService.getAll();
 			return responseSuccess(learningMaterialsList, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -71,10 +71,10 @@ public class LearningMaterialsController extends ElearningBaseController {
 	}
 
 	@DeleteMapping
-	public ResponseEntity<?> deleteLearningMaterialById(@RequestParam("id") String id,
+	public ResponseEntity<?> deleteById(@RequestParam("id") String id,
 			@RequestParam("idUser") String idUser) {
 		try {
-			learningMaterialsService.deleteLearningMaterialById(id, idUser);
+			learningMaterialsService.deleteById(id, idUser);
 			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -83,12 +83,12 @@ public class LearningMaterialsController extends ElearningBaseController {
 	}
 
 	@PutMapping
-	public ResponseEntity<?> updateLearningMaterial(@RequestPart String body, @RequestPart("file") MultipartFile file) {
+	public ResponseEntity<?> update(@RequestPart String body, @RequestPart("file") MultipartFile file) {
 		try {
 			ObjectMapper obj = new ObjectMapper();
 			obj.registerModule(new JavaTimeModule());
 			LearningMaterials learningMaterial = obj.readValue(body, LearningMaterials.class);
-			learningMaterialsService.updateLearningMaterial(learningMaterial, file);
+			learningMaterialsService.update(learningMaterial, file);
 			return responseSuccess(learningMaterial, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();

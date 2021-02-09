@@ -10,7 +10,7 @@ import com.lawencon.util.Callback;
 @Repository
 public class RolesDaoImpl extends ElearningBaseDaoImpl<Roles> implements RolesDao {
 	@Override
-	public void insertRole(Roles role, Callback before) throws Exception {
+	public void insert(Roles role, Callback before) throws Exception {
 		save(role, before, null, true, true);
 	}
 
@@ -20,23 +20,23 @@ public class RolesDaoImpl extends ElearningBaseDaoImpl<Roles> implements RolesDa
 	}
 
 	@Override
-	public Roles getRoleByCode(String code) throws Exception {
+	public Roles getByCode(String code) throws Exception {
 		List<Roles> role = createQuery("FROM Roles WHERE code = ?1", Roles.class).setParameter(1, code).getResultList();
-		return role.size() > 0 ? role.get(0) : null;
+		return resultCheck(role);
 	}
 
 	@Override
-	public List<Roles> getAllRoles() throws Exception {
+	public List<Roles> getAllRole() throws Exception {
 		return getAll();
 	}
 
 	@Override
-	public void updateRole(Roles role, Callback before) throws Exception {
+	public void update(Roles role, Callback before) throws Exception {
 		save(role, before, null, true, true);
 	}
 
 	@Override
-	public void deleteRoleById(String id) throws Exception {
+	public void deleteById(String id) throws Exception {
 		deleteById(id);
 	}
 }

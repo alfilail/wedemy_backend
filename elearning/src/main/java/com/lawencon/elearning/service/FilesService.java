@@ -8,10 +8,10 @@ import com.lawencon.elearning.model.Files;
 
 public interface FilesService {
 
-	void insertFile(Files file) throws Exception;
+	void insert(Files file) throws Exception;
 
-	void updateFile(Files file) throws Exception;
+	void update(Files file) throws Exception;
 	
-	Files getFileById(String id) throws Exception;
+	Files getById(String id) throws Exception;
 	
 }

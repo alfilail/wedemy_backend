@@ -15,6 +15,7 @@ import com.lawencon.elearning.model.Grades;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.SubmissionStatusRenewal;
 import com.lawencon.elearning.util.EmptyField;
+import com.lawencon.elearning.util.GeneralUtil;
 import com.lawencon.elearning.util.MailUtil;
 
 /**
@@ -55,7 +56,7 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 //							evaluation.getIdAssignmentSubmission().getIdDetailModuleRegistration().getId(),
 //							evaluation.getIdAssignmentSubmission().getIdParticipant().getId());
 //					if (existedEval == null) {
-					Grades grade = gradesService.getGradeByScore(evaluation.getScore());
+					Grades grade = gradesService.getByScore(evaluation.getScore());
 					evaluation.setIdGrade(grade);
 					evaluationsDao.insertEvaluation(evaluation, () -> validateInsert(evaluation));
 					insertStatusRenewal(evaluation);
@@ -108,7 +109,7 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 	private void insertStatusRenewal(Evaluations evaluation) throws Exception {
 		SubmissionStatusRenewal statusRenewal = new SubmissionStatusRenewal();
 		statusRenewal.setIdAssignmentSubmission(evaluation.getIdAssignmentSubmission());
-		statusRenewal.setIdSubmissionStatus(statusService.getSubmissionStatusByCode("GRD"));
+		statusRenewal.setIdSubmissionStatus(statusService.getByCode("GRD"));
 		statusRenewalService.insertSubmissionStatusRenewal(statusRenewal);
 	}
 
@@ -122,7 +123,7 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 		evaluation.setIdAssignmentSubmission(assignmentSubmissions);
 		Profiles participant = evaluationsDao.getParticipantProfile(evaluation);
 
-		General general = generalService.getTemplateEmail("scrupd");
+		General general = generalService.getTemplateEmail(GeneralUtil.EVALUATION_PARTICIPANT.code);
 		String text = general.getTemplateHtml();
 
 		text = text.replace("#1#", participant.getFullName());

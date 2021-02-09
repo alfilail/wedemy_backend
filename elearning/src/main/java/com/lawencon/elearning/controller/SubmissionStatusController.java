@@ -28,10 +28,10 @@ public class SubmissionStatusController extends ElearningBaseController {
 	private SubmissionStatusService submissionStatusService;
 
 	@PostMapping
-	public ResponseEntity<?> insertSubmissionStatus(@RequestBody String body) {
+	public ResponseEntity<?> insert(@RequestBody String body) {
 		try {
 			SubmissionStatus submissionStatus = new ObjectMapper().readValue(body, SubmissionStatus.class);
-			submissionStatusService.insertSubmissionStatus(submissionStatus);
+			submissionStatusService.insert(submissionStatus);
 			return responseSuccess(submissionStatus, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -40,10 +40,10 @@ public class SubmissionStatusController extends ElearningBaseController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<?> getSubmissionStatusById(@PathVariable("id") String id) {
+	public ResponseEntity<?> getById(@PathVariable("id") String id) {
 		SubmissionStatus submissionStatus = new SubmissionStatus();
 		try {
-			submissionStatus = submissionStatusService.getSubmissionStatusById(id);
+			submissionStatus = submissionStatusService.getById(id);
 			return responseSuccess(submissionStatus, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -52,10 +52,10 @@ public class SubmissionStatusController extends ElearningBaseController {
 	}
 
 	@GetMapping("/all")
-	public ResponseEntity<?> getAllSubmissionStatus() {
+	public ResponseEntity<?> getAll() {
 		List<SubmissionStatus> submissionStatusList = new ArrayList<SubmissionStatus>();
 		try {
-			submissionStatusList = submissionStatusService.getAllSubmissionStatus();
+			submissionStatusList = submissionStatusService.getAll();
 			return responseSuccess(submissionStatusList, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -64,10 +64,10 @@ public class SubmissionStatusController extends ElearningBaseController {
 	}
 
 	@DeleteMapping
-	public ResponseEntity<?> deleteSubmissionStatusById(@RequestParam("id") String id,
+	public ResponseEntity<?> deleteById(@RequestParam("id") String id,
 			@RequestParam("idUser") String idUser) {
 		try {
-			submissionStatusService.deleteSubmissionStatusById(id, idUser);
+			submissionStatusService.deleteById(id, idUser);
 			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -76,10 +76,10 @@ public class SubmissionStatusController extends ElearningBaseController {
 	}
 
 	@PutMapping
-	public ResponseEntity<?> updateSubmissionStatus(@RequestBody String body) {
+	public ResponseEntity<?> update(@RequestBody String body) {
 		try {
 			SubmissionStatus submissionStatus = new ObjectMapper().readValue(body, SubmissionStatus.class);
-			submissionStatusService.updateSubmissionStatus(submissionStatus);
+			submissionStatusService.update(submissionStatus);
 			return responseSuccess(submissionStatus, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();

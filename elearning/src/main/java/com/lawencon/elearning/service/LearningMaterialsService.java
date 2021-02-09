@@ -13,16 +13,16 @@ import com.lawencon.elearning.model.LearningMaterials;
 
 public interface LearningMaterialsService {
 
-	void insertLearningMaterial(DetailModuleRegistrations dtlModuleRgs, MultipartFile file) throws Exception;
+	void insert(DetailModuleRegistrations dtlModuleRgs, MultipartFile file) throws Exception;
 
-	List<LearningMaterials> getAllLearningMaterials() throws Exception;
+	List<LearningMaterials> getAll() throws Exception;
 
-	LearningMaterials getLearningMaterialById(String id) throws Exception;
+	LearningMaterials getById(String id) throws Exception;
 
-	void updateLearningMaterial(LearningMaterials learningMaterial, MultipartFile file) throws Exception;
+	void update(LearningMaterials learningMaterial, MultipartFile file) throws Exception;
 
-	void deleteLearningMaterialById(String id, String idUser) throws Exception;
+	void deleteById(String id, String idUser) throws Exception;
 
-	LearningMaterials getLearningMaterialByCode(String code) throws Exception;
+	LearningMaterials getByCode(String code) throws Exception;
 
 }

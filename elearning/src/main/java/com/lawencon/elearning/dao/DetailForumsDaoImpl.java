@@ -25,9 +25,9 @@ public class DetailForumsDaoImpl extends ElearningBaseDaoImpl<DetailForums> impl
 
 	@Override
 	public DetailForums getDetailForumByCode(String code) throws Exception {
-		DetailForums detailForum = createQuery("FROM DetailForums WHERE code = ?1", DetailForums.class)
-				.setParameter(1, code).getSingleResult();
-		return detailForum;
+		List<DetailForums> detailForum = createQuery("FROM DetailForums WHERE code = ?1", DetailForums.class)
+				.setParameter(1, code).getResultList();
+		return resultCheck(detailForum);
 	}
 
 	@Override

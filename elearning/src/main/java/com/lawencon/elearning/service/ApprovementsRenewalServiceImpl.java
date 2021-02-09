@@ -20,7 +20,7 @@ public class ApprovementsRenewalServiceImpl extends ElearningBaseServiceImpl imp
 
 	@Override
 	public void insertApprovementsRenewal(ApprovementsRenewal approvementsRenewal) throws Exception {
-		approvementsRenewal.setIdApprovement(approvementService.getApprovementByCode(ApprovementCode.PENDING.code));
+		approvementsRenewal.setIdApprovement(approvementService.getByCode(ApprovementCode.PENDING.code));
 		approvementsRenewalDao.insertApprovementsRenewal(approvementsRenewal,
 				() -> validateInsert(approvementsRenewal));
 	}
@@ -28,7 +28,7 @@ public class ApprovementsRenewalServiceImpl extends ElearningBaseServiceImpl imp
 	@Override
 	public void participantApprovementsRenewal(ApprovementsRenewal approvementsRenewal) throws Exception {
 		approvementsRenewal.setIdApprovement(
-				approvementService.getApprovementByCode(approvementsRenewal.getIdApprovement().getCode()));
+				approvementService.getByCode(approvementsRenewal.getIdApprovement().getCode()));
 		approvementsRenewalDao.participantApprovementsRenewal(approvementsRenewal,
 				() -> validateInsert(approvementsRenewal));
 	}

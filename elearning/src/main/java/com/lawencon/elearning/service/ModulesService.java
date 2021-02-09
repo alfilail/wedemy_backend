@@ -6,17 +6,17 @@ import com.lawencon.elearning.model.Modules;
 
 public interface ModulesService {
 
-	void insertModule(Modules module) throws Exception;
+	void insert(Modules module) throws Exception;
 
-	List<Modules> getAllModules() throws Exception;
+	List<Modules> getAll() throws Exception;
 	
-	Modules getModuleById(String id) throws Exception;
+	Modules getById(String id) throws Exception;
 	
-	Modules getModuleByCode(String code) throws Exception;
+	Modules getByCode(String code) throws Exception;
 	
-	void softDeleteModuleById(String id, String idUser) throws Exception;
+	void softDeleteById(String id, String idUser) throws Exception;
 
-	void updateModule(Modules module) throws Exception;
+	void update(Modules module) throws Exception;
 
-	void deleteModuleById(String id, String idUser) throws Exception;
+	void deleteById(String id, String idUser) throws Exception;
 }

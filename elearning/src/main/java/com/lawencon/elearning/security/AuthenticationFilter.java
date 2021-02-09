@@ -56,7 +56,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 		String username = authResult.getName();
 		Users user = new Users();
 		try {
-			user = this.usersService.getUserByUsername(username);
+			user = this.usersService.getByUsername(username);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

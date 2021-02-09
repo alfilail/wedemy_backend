@@ -15,7 +15,7 @@ import com.lawencon.util.Callback;
 @Repository
 public class DetailClassesDaoImpl extends ElearningBaseDaoImpl<DetailClasses> implements DetailClassesDao {
 	@Override
-	public void insertDetailClass(DetailClasses detailClass, Callback before) throws Exception {
+	public void insert(DetailClasses detailClass, Callback before) throws Exception {
 		save(detailClass, before, null);
 	}
 
@@ -23,7 +23,7 @@ public class DetailClassesDaoImpl extends ElearningBaseDaoImpl<DetailClasses> im
 	public List<DetailClasses> getAllDetailClass() throws Exception {
 		List<DetailClasses> listDtlClasses = createQuery("FROM DetailClasses WHERE isActive = ?1 ", DetailClasses.class).setParameter(1, true)
 				.getResultList();
-		return listDtlClasses;
+		return resultCheckList(listDtlClasses);
 	}
 
 	@Override
@@ -32,10 +32,10 @@ public class DetailClassesDaoImpl extends ElearningBaseDaoImpl<DetailClasses> im
 	}
 
 	@Override
-	public DetailClasses getDetailClassByCode(String code) throws Exception {
+	public DetailClasses getByCode(String code) throws Exception {
 		List<DetailClasses> detailClassList = createQuery("FROM DetailClasses WHERE code = ?1 ", DetailClasses.class)
 				.setParameter(1, code).getResultList();
-		return detailClassList.size() > 0 ? detailClassList.get(0) : null;
+		return resultCheck(detailClassList);
 	}
 
 	@Override
@@ -98,24 +98,24 @@ public class DetailClassesDaoImpl extends ElearningBaseDaoImpl<DetailClasses> im
 	}
 	
 	@Override
-	public void deleteClassById(String id, String idUser) throws Exception {
+	public void deleteById(String id, String idUser) throws Exception {
 		updateNativeSQL("UPDATE t_m_detail_classes SET is_active = FALSE", id, idUser);
 	}
 	
 	@Override
-	public List<DetailClasses> getAllDetailClassByIdClass(String idClass) throws Exception {
+	public List<DetailClasses> getAllByIdClass(String idClass) throws Exception {
 		List<DetailClasses> detailClassList = createQuery("FROM DetailClasses WHERE idClass.id = ?1 ", DetailClasses.class)
 				.setParameter(1, idClass).getResultList();
-		return detailClassList.size() > 0 ? detailClassList : null; //ditanya mas imam
+		return resultCheckList(detailClassList); //ditanya mas imam
 	}
 
 	@Override
-	public void updateDetailClass(DetailClasses dtlClass, Callback before) throws Exception {
+	public void update(DetailClasses dtlClass, Callback before) throws Exception {
 		save(dtlClass, before, null);
 	}
 	
 	@Override
-	public DetailClasses getDetailClassByIdClass(String idClass) throws Exception {
+	public DetailClasses getByIdClass(String idClass) throws Exception {
 		List<DetailClasses> detailClassList = createQuery(sqlBuilder(
 				"FROM DetailClasses WHERE idClass.id = ?1 AND isActive = ?2 ORDER BY endDate DESC").toString(), DetailClasses.class)
 				.setParameter(1, idClass).setParameter(2, false).setMaxResults(1).getResultList();
@@ -123,9 +123,9 @@ public class DetailClassesDaoImpl extends ElearningBaseDaoImpl<DetailClasses> im
 	}
 	
 	@Override
-	public List<DetailClasses> getAllInactiveDetailClass() throws Exception {
+	public List<DetailClasses> getAllInactive() throws Exception {
 		List<DetailClasses> listDtlClasses = createQuery("FROM DetailClasses WHERE isActive = ?1 ", DetailClasses.class).setParameter(1, false)
 				.getResultList();
-		return listDtlClasses;
+		return resultCheckList(listDtlClasses);
 	}
 }

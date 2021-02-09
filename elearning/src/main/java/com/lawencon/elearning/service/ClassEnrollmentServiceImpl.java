@@ -80,9 +80,7 @@ public class ClassEnrollmentServiceImpl extends ElearningBaseServiceImpl impleme
 
 	private void validateInsert(ClassEnrollments classEnrollment) throws Exception {
 		Integer totalParticipant = getTotalParticipantsByIdDtlClass(classEnrollment.getIdDetailClass().getId());
-//		System.out.println(totalParticipant);
-		DetailClasses detailClass = detailClassService.getDetailClassById(classEnrollment.getIdDetailClass().getId());
-//		System.out.println(detailClass.getIdClass().getQuota());
+		DetailClasses detailClass = detailClassService.getById(classEnrollment.getIdDetailClass().getId());
 		if (totalParticipant >= detailClass.getIdClass().getQuota()) {
 			throw new Exception("Quota kelas sudah penuh!");
 		}

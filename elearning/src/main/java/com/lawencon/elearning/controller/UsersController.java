@@ -30,9 +30,9 @@ public class UsersController extends ElearningBaseController {
 	private UsersService usersService;
 
 	@GetMapping("all")
-	public ResponseEntity<?> getAllUsers() {
+	public ResponseEntity<?> getAll() {
 		try {
-			List<Users> listUsers = usersService.getAllUsers();
+			List<Users> listUsers = usersService.getAll();
 			return responseSuccess(listUsers, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -41,9 +41,9 @@ public class UsersController extends ElearningBaseController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<?> getUserById(@PathVariable("id") String id) {
+	public ResponseEntity<?> getById(@PathVariable("id") String id) {
 		try {
-			Users user = usersService.getUserById(id);
+			Users user = usersService.getById(id);
 			return responseSuccess(user, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -52,9 +52,9 @@ public class UsersController extends ElearningBaseController {
 	}
 
 	@GetMapping("role/{roleCode}")
-	public ResponseEntity<?> getUsersByRoleCode(@PathVariable("roleCode") String roleCode) {
+	public ResponseEntity<?> getByRoleCode(@PathVariable("roleCode") String roleCode) {
 		try {
-			List<Users> user = usersService.getUsersByRoleCode(roleCode);
+			List<Users> user = usersService.getByRoleCode(roleCode);
 			return responseSuccess(user, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -63,12 +63,12 @@ public class UsersController extends ElearningBaseController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> insertUser(@RequestBody String body) {
+	public ResponseEntity<?> insert(@RequestBody String body) {
 		try {
 			ObjectMapper obj = new ObjectMapper();
 			obj.registerModule(new JavaTimeModule());
 			Users user = obj.readValue(body, Users.class);
-			usersService.insertUser(user);
+			usersService.insert(user);
 			return responseSuccess(user, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -89,12 +89,12 @@ public class UsersController extends ElearningBaseController {
 	}
 
 	@PatchMapping
-	public ResponseEntity<?> updateUser(@RequestBody String body) {
+	public ResponseEntity<?> update(@RequestBody String body) {
 		try {
 			ObjectMapper obj = new ObjectMapper();
 			obj.registerModule(new JavaTimeModule());
 			Users user = obj.readValue(body, Users.class);
-			usersService.updateUser(user);
+			usersService.update(user);
 			return responseSuccess(user, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -103,9 +103,9 @@ public class UsersController extends ElearningBaseController {
 	}
 
 	@DeleteMapping
-	public ResponseEntity<?> deleteUserById(@RequestParam("id") String id, @RequestParam("idUser") String idUser) {
+	public ResponseEntity<?> deleteById(@RequestParam("id") String id, @RequestParam("idUser") String idUser) {
 		try {
-			usersService.deleteUserById(id, idUser);
+			usersService.deleteById(id, idUser);
 			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
 		} catch (Exception e) {
 			e.printStackTrace();

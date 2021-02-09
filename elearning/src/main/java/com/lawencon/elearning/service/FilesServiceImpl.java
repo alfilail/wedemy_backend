@@ -18,18 +18,18 @@ public class FilesServiceImpl extends BaseServiceImpl implements FilesService {
 	private FilesDao filesDao;
 
 	@Override
-	public void insertFile(Files file) throws Exception {
-		filesDao.insertFile(file, () -> validateInsert(file));
+	public void insert(Files file) throws Exception {
+		filesDao.insert(file, () -> validateInsert(file));
 	}
 
 	@Override
-	public Files getFileById(String id) throws Exception {
+	public Files getById(String id) throws Exception {
 		return filesDao.getFileById(id);
 	}
 
 	@Override
-	public void updateFile(Files file) throws Exception {
-		filesDao.updateFile(file, () -> validateUpdate(file));
+	public void update(Files file) throws Exception {
+		filesDao.update(file, () -> validateUpdate(file));
 	}
 	
 	private void validateInsert(Files file) throws Exception {

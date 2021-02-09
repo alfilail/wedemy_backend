@@ -17,52 +17,52 @@ public class GradesServiceImpl extends BaseServiceImpl implements GradesService 
 	private GradesDao gradeDao;
 
 	@Override
-	public void insertGrade(Grades grade) throws Exception {
-		gradeDao.insertGrade(grade, () -> validateInsert(grade));
+	public void insert(Grades grade) throws Exception {
+		gradeDao.insert(grade, () -> validateInsert(grade));
 	}
 
 	@Override
-	public List<Grades> getAllGrades() throws Exception {
+	public List<Grades> getAll() throws Exception {
 		return gradeDao.getAllGrades();
 	}
 
 	@Override
-	public Grades getGradeById(String id) throws Exception {
+	public Grades getById(String id) throws Exception {
 		return gradeDao.getGradeById(id);
 	}
 
 	@Override
-	public Grades getGradeByCode(String code) throws Exception {
-		return gradeDao.getGradeByCode(code);
+	public Grades getByCode(String code) throws Exception {
+		return gradeDao.getByCode(code);
 	}
 
 	@Override
-	public Grades getGradeByScore(Double score) throws Exception {
-		return gradeDao.getGradeByScore(score);
+	public Grades getByScore(Double score) throws Exception {
+		return gradeDao.getByScore(score);
 	}
 
 	@Override
-	public void deleteGradeById(String id, String idUser) throws Exception {
+	public void deleteById(String id, String idUser) throws Exception {
 		begin();
 		if(validateDelete(id) == true) {
-			gradeDao.softDeleteGradeById(id, idUser);
+			gradeDao.softDeleteById(id, idUser);
 		}
 		else {
-			gradeDao.deleteGradeById(id);
+			gradeDao.deleteById(id);
 		}
 		commit();
 	}
 
 	@Override
-	public void updateGrades(Grades grade) throws Exception {
-		gradeDao.updateGrades(grade, () -> validateUpdate(grade));
+	public void update(Grades grade) throws Exception {
+		gradeDao.update(grade, () -> validateUpdate(grade));
 	}
 
 	private void validateInsert(Grades grade) throws Exception {
 		if (grade.getCode() == null || grade.getCode().trim().equals("")) {
 			throw new Exception("Kode grade tidak boleh kosong");
 		} else {
-			Grades grd = getGradeByCode(grade.getCode());
+			Grades grd = getByCode(grade.getCode());
 			if(grd != null) {
 				throw new Exception("Kode grade sudah ada");
 			} else {
@@ -81,12 +81,12 @@ public class GradesServiceImpl extends BaseServiceImpl implements GradesService 
 		if (grade.getId() == null || grade.getId().trim().equals("")) {
 			throw new Exception("Id grade tidak boleh kosong");
 		} else {
-			Grades grad = getGradeById(grade.getId());
+			Grades grad = getById(grade.getId());
 			if (grade.getCode() == null || grade.getCode().trim().equals("")) {
 				throw new Exception("Kode grade tidak boleh kosong");
 			} else {
 				if(!grad.getCode().equals(grade.getCode())) {
-					Grades grd = getGradeByCode(grade.getCode());
+					Grades grd = getByCode(grade.getCode());
 					if(grd != null) {
 						if(!grd.getCode().equals(grade.getCode())) {
 							throw new Exception("Kode grade sudah ada");
@@ -108,7 +108,7 @@ public class GradesServiceImpl extends BaseServiceImpl implements GradesService 
 	}
 	
 	private boolean validateDelete(String id) throws Exception {
-		List<?> listObj = gradeDao.validateDeleteGrade(id);
+		List<?> listObj = gradeDao.validateDelete(id);
 		listObj.forEach(System.out::println);
 		List<?> list =  listObj.stream().filter(val -> val != null)
 				.collect(Collectors.toList());

@@ -6,19 +6,19 @@ import com.lawencon.elearning.model.SubmissionStatus;
 import com.lawencon.util.Callback;
 
 public interface SubmissionStatusDao {
-	void insertSubmissionStatus(SubmissionStatus submissionStatus, Callback before) throws Exception;
+	void insert(SubmissionStatus submissionStatus, Callback before) throws Exception;
 	
 	List<SubmissionStatus> getAllSubmissionStatus() throws Exception;
 	
 	SubmissionStatus getSubmissionStatusById(String id) throws Exception;
 	
-	void updateSubmissionStatus(SubmissionStatus submissionStatus, Callback before) throws Exception;
+	void update(SubmissionStatus submissionStatus, Callback before) throws Exception;
 	
-	void deleteSubmissionStatusById(String id) throws Exception;
+	void deleteById(String id) throws Exception;
 	
-	SubmissionStatus getSubmissionStatusByCode(String code) throws Exception;
+	SubmissionStatus getByCode(String code) throws Exception;
 	
-	void softDeleteSubmissionStatById(String id, String idUser) throws Exception;
+	void softDeleteById(String id, String idUser) throws Exception;
 
-	List<?> validateDeleteSubmissionStat(String id) throws Exception;
+	List<?> validateDelete(String id) throws Exception;
 }

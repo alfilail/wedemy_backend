@@ -11,21 +11,21 @@ import com.lawencon.util.Callback;
 
 public interface LearningMaterialTypesDao {
 
-	void insertLearningMaterialType(LearningMaterialTypes lmType, Callback before) throws Exception;
+	void insert(LearningMaterialTypes lmType, Callback before) throws Exception;
 
-	List<LearningMaterialTypes> getAllLearningMaterialTypes() throws Exception;
+	List<LearningMaterialTypes> getAllLearningMaterialType() throws Exception;
 
 	LearningMaterialTypes getLearningMaterialTypeById(String id) throws Exception;
 
-	void updateLearningMaterialType(LearningMaterialTypes lmType, Callback before) throws Exception;
+	void update(LearningMaterialTypes lmType, Callback before) throws Exception;
 
-	void deleteLearningMaterialTypeById(String id) throws Exception;
+	void deleteById(String id) throws Exception;
 
-	LearningMaterialTypes getLearningMaterialTypeByCode(String code) throws Exception;
+	LearningMaterialTypes getByCode(String code) throws Exception;
 
-	void softDeleteLearningMaterialTypeById(String id, String idUser) throws Exception;
+	void softDeleteById(String id, String idUser) throws Exception;
 
-	List<?> validateDeleteLearningMaterialType(String id) throws Exception;
+	List<?> validateDelete(String id) throws Exception;
 	
 	
 }

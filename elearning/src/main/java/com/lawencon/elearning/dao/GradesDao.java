@@ -6,21 +6,21 @@ import com.lawencon.elearning.model.Grades;
 import com.lawencon.util.Callback;
 
 public interface GradesDao {
-	void insertGrade(Grades assignmentType, Callback before) throws Exception;
+	void insert(Grades assignmentType, Callback before) throws Exception;
 	
 	List<Grades> getAllGrades() throws Exception;
 	
 	Grades getGradeById(String id) throws Exception;
 	
-	Grades getGradeByScore(Double score) throws Exception;
+	Grades getByScore(Double score) throws Exception;
 	
-	void updateGrades(Grades grade, Callback before) throws Exception;
+	void update(Grades grade, Callback before) throws Exception;
 	
-	void deleteGradeById(String id) throws Exception;
+	void deleteById(String id) throws Exception;
 	
-	Grades getGradeByCode(String code) throws Exception;
+	Grades getByCode(String code) throws Exception;
 	
-	List<?> validateDeleteGrade(String id) throws Exception;
+	List<?> validateDelete(String id) throws Exception;
 	
-	void softDeleteGradeById(String id, String idUser) throws Exception;
+	void softDeleteById(String id, String idUser) throws Exception;
 }

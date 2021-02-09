@@ -5,15 +5,15 @@ import java.util.List;
 import com.lawencon.elearning.model.LearningMaterialTypes;
 
 public interface LearningMaterialTypesService {
-	void insertLearningMaterialType(LearningMaterialTypes lmType) throws Exception;
+	void insert(LearningMaterialTypes lmType) throws Exception;
 
-	List<LearningMaterialTypes> getAllLearningMaterialTypes() throws Exception;
+	List<LearningMaterialTypes> getAll() throws Exception;
 
-	LearningMaterialTypes getLearningMaterialTypeById(String id) throws Exception;
+	LearningMaterialTypes getById(String id) throws Exception;
 
-	void deleteLearningMaterialTypeById(String id, String idUser) throws Exception;
+	void deleteById(String id, String idUser) throws Exception;
 
-	void updateLearningMaterialType(LearningMaterialTypes lmType) throws Exception;
+	void update(LearningMaterialTypes lmType) throws Exception;
 
-	LearningMaterialTypes getLearningMaterialTypeByCode(String code) throws Exception;
+	LearningMaterialTypes getByCode(String code) throws Exception;
 }

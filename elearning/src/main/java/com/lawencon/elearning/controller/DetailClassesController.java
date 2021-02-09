@@ -41,9 +41,9 @@ public class DetailClassesController extends ElearningBaseController {
 	}
 
 	@GetMapping("active")
-	public ResponseEntity<?> getAllDetailClasses() {
+	public ResponseEntity<?> getAll() {
 		try {
-			List<DetailClasses> dtlClass = dtlClassesService.getAllDetailClass();
+			List<DetailClasses> dtlClass = dtlClassesService.getAll();
 			return responseSuccess(dtlClass, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -52,9 +52,9 @@ public class DetailClassesController extends ElearningBaseController {
 	}
 
 	@GetMapping("inactive")
-	public ResponseEntity<?> getAllInactiveDetailClasses() {
+	public ResponseEntity<?> getAllInactive() {
 		try {
-			List<DetailClasses> dtlClass = dtlClassesService.getAllInactiveDetailClass();
+			List<DetailClasses> dtlClass = dtlClassesService.getAllInactive();
 			return responseSuccess(dtlClass, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -63,9 +63,9 @@ public class DetailClassesController extends ElearningBaseController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<?> getClassById(@PathVariable("id") String id) {
+	public ResponseEntity<?> getById(@PathVariable("id") String id) {
 		try {
-			DetailClasses dtlClass = dtlClassesService.getDetailClassById(id);
+			DetailClasses dtlClass = dtlClassesService.getById(id);
 			return responseSuccess(dtlClass, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -74,9 +74,9 @@ public class DetailClassesController extends ElearningBaseController {
 	}
 
 	@GetMapping("information/{id}")
-	public ResponseEntity<?> getDetailClassInformationById(@PathVariable("id") String id) {
+	public ResponseEntity<?> getInformationByIdDetailClass(@PathVariable("id") String id) {
 		try {
-			DetailClassInformation dtlClassInformation = dtlClassesService.getByIdDtlClass(id);
+			DetailClassInformation dtlClassInformation = dtlClassesService.getInformationByIdDetailClass(id);
 			return responseSuccess(dtlClassInformation, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();

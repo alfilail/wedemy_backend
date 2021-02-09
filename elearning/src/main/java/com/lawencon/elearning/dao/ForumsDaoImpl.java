@@ -66,13 +66,13 @@ public class ForumsDaoImpl extends ElearningBaseDaoImpl<Forums> implements Forum
 	
 	@Override
 	public void softDeleteForumById(String id, String idUser) throws Exception {
-		updateNativeSQL("UPDATE t_r_forums SET is_active = false", id, idUser);
+		updateNativeSQL("UPDATE t_r_forums SET is_active = FALSE", id, idUser);
 	}
 	
 	@Override
 	public List<?> validateDeleteForum(String id) throws Exception {
-		String sql = sqlBuilder("select from t_r_forums trf full join t_r_dtl_forums trdf ",
-				" on trf.id = trdf.id_forum where trf.id = ?1 ").toString();
+		String sql = sqlBuilder("SELECT trf.id FROM t_r_forums trf FULL JOIN t_r_dtl_forums trdf ",
+				" ON trf.id = trdf.id_forum WHERE trf.id = ?1 ").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, id).setMaxResults(1).getResultList();
 		List<String> result = new ArrayList<String>();
 		listObj.forEach(val -> {

@@ -27,10 +27,10 @@ public class RolesController extends ElearningBaseController {
 	private RolesService rolesService;
 
 	@PostMapping
-	public ResponseEntity<?> insertRole(@RequestBody String body) {
+	public ResponseEntity<?> insert(@RequestBody String body) {
 		try {
 			Roles role = new ObjectMapper().readValue(body, Roles.class);
-			rolesService.insertRole(role);
+			rolesService.insert(role);
 			return responseSuccess(role, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -39,10 +39,10 @@ public class RolesController extends ElearningBaseController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<?> getRoleById(@PathVariable("id") String id) {
+	public ResponseEntity<?> getById(@PathVariable("id") String id) {
 		Roles role = new Roles();
 		try {
-			role = rolesService.getRoleById(id);
+			role = rolesService.getById(id);
 			return responseSuccess(role, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -51,10 +51,10 @@ public class RolesController extends ElearningBaseController {
 	}
 
 	@GetMapping("/all")
-	public ResponseEntity<?> getAllRoles() {
+	public ResponseEntity<?> getAll() {
 		List<Roles> rolesList = new ArrayList<Roles>();
 		try {
-			rolesList = rolesService.getAllRoles();
+			rolesList = rolesService.getAll();
 			return responseSuccess(rolesList, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -63,9 +63,9 @@ public class RolesController extends ElearningBaseController {
 	}
 
 	@DeleteMapping("{id}")
-	public ResponseEntity<?> deleteRoleById(@PathVariable("id") String id) {
+	public ResponseEntity<?> deleteById(@PathVariable("id") String id) {
 		try {
-			rolesService.deleteRoleById(id);
+			rolesService.deleteById(id);
 			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -74,10 +74,10 @@ public class RolesController extends ElearningBaseController {
 	}
 
 	@PutMapping
-	public ResponseEntity<?> updateRole(@RequestBody String body) {
+	public ResponseEntity<?> update(@RequestBody String body) {
 		try {
 			Roles role = new ObjectMapper().readValue(body, Roles.class);
-			rolesService.updateRole(role);
+			rolesService.update(role);
 			return responseSuccess(role, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();

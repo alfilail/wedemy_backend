@@ -7,20 +7,20 @@ import com.lawencon.util.Callback;
 
 public interface ApprovementsDao {
 
-	void insertApprovement(Approvements approvement, Callback before) throws Exception;
+	void insert(Approvements approvement, Callback before) throws Exception;
 
-	List<Approvements> getAllApprovements() throws Exception;
+	List<Approvements> getAllApprovement() throws Exception;
 
-	Approvements getApprovementsById(String id) throws Exception;
+	Approvements getApprovementById(String id) throws Exception;
 
-	void updateApprovement(Approvements approvement, Callback before) throws Exception;
+	void update(Approvements approvement, Callback before) throws Exception;
 
-	void deleteApprovementById(String id) throws Exception;
+	void deleteById(String id) throws Exception;
 
-	Approvements getApprovementByCode(String code) throws Exception;
+	Approvements getByCode(String code) throws Exception;
 	
-	void softDeleteApprovementById(String id, String idUser) throws Exception;
+	void softDeleteById(String id, String idUser) throws Exception;
 
-	List<?> validateDeleteApprovement(String id) throws Exception;
+	List<?> validateDelete(String id) throws Exception;
 
 }

@@ -43,9 +43,9 @@ public class PresencesDaoImpl extends ElearningBaseDaoImpl<Presences> implements
 
 	@Override
 	public Presences getPresenceByCode(String code) throws Exception {
-		Presences presence = createQuery("FROM Presences WHERE code =?1", Presences.class).setParameter(1, code)
-				.getSingleResult();
-		return presence;
+		List<Presences> presence = createQuery("FROM Presences WHERE code =?1", Presences.class).setParameter(1, code)
+				.getResultList();
+		return resultCheck(presence);
 	}
 
 	@Override
@@ -67,9 +67,11 @@ public class PresencesDaoImpl extends ElearningBaseDaoImpl<Presences> implements
 	@Override
 	public Presences doesParticipantPresent(String idDtlModuleRgs, String idParticipant) throws Exception {
 		List<Presences> listResult = new ArrayList<>();
-		String sql = sqlBuilder("SELECT pr.id_user FROM t_r_presences pr INNER JOIN t_m_users u ON pr.id_user = u.id ",
-				"INNER JOIN t_m_profiles p ON u.id_profile = p.id INNER JOIN t_m_roles r ON u.id_role = r.id ",
-				"WHERE pr.id_detail_module_rgs = ?1 AND pr.id_user = ?2").toString();
+		String sql = sqlBuilder("SELECT pr.id_user FROM t_r_presences pr ",
+				" INNER JOIN t_m_users u ON pr.id_user = u.id ",
+				" INNER JOIN t_m_profiles p ON u.id_profile = p.id ",
+				" INNER JOIN t_m_roles r ON u.id_role = r.id ",
+				" WHERE pr.id_detail_module_rgs = ?1 AND pr.id_user = ?2").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlModuleRgs).setParameter(2, idParticipant)
 				.getResultList();
 		listObj.forEach(val -> {
@@ -84,22 +86,28 @@ public class PresencesDaoImpl extends ElearningBaseDaoImpl<Presences> implements
 	@Override
 	public List<?> getPresenceReport(String idClass, LocalDate scheduleDateStart, LocalDate scheduleDateEnd)
 			throws Exception {
-		String query = sqlBuilder(" select tmp.fullname, tmm.module_name , tmc.class_name, ",
-				" round(count(tar.id_presence) ", " /cast((select count(order_number) ",
-				" from t_r_detail_module_registrations trdmr ", " inner join t_r_module_registrations trmr ",
-				" on trdmr.id_module_rgs = trmr.id ", " inner join t_m_modules tmm2 on trmr.id_module = tmm2.id ",
-				" where tmm2.module_name = tmm.module_name) as decimal), 4) * 100 ", " as present_day ",
-				" from t_r_approvement_renewal tar ", " inner join t_r_presences trp on tar.id_presence = trp.id ",
-				" inner join t_m_users tmu on trp.id_user = tmu.id ",
-				" inner join t_m_profiles tmp  on tmu.id_profile = tmp.id ",
-				" inner join t_r_detail_module_registrations trdmr on ", " trp.id_detail_module_rgs = trdmr.id ",
-				" inner join t_r_module_registrations trmr ", " on trdmr.id_module_rgs = trmr.id ",
-				" inner join t_m_detail_classes tmdc ", " on trmr.id_detail_class = tmdc.id ",
-				" inner join t_m_modules tmm on trmr.id_module = tmm.id ", " inner join t_m_learning_materials tmlm ",
-				" on tmlm.id = trdmr.id_learning_material ", " inner join t_m_classes tmc on tmdc.id_class = tmc.id ",
-				" where trdmr.schedule_date between ?1 and ?2 and ", " tmdc.id_class = ?3 and id_approvement = ",
-				" (select id from t_m_approvements where code = 'RCV') ",
-				" group  by tmp.fullname, tmm.module_name, tmc.class_name ", " order by tmm.module_name, tmp.fullname")
+		String query = sqlBuilder(" SELECT tmp.fullname, tmm.module_name , ",
+				" tmc.class_name, ROUND(COUNT(tar.id_presence)/CAST((SELECT COUNT(order_number) ",
+				" FROM t_r_detail_module_registrations trdmr ",
+				" INNER JOIN t_r_module_registrations trmr ON trdmr.id_module_rgs = trmr.id ",
+				" INNER JOIN t_m_modules tmm2 ON trmr.id_module = tmm2.id ",
+				" WHERE tmm2.module_name = tmm.module_name) AS decimal), 4) * 100 ",
+				" AS present_day ",
+				" FROM t_r_approvement_renewal tar ", 
+				" INNER JOIN t_r_presences trp ON tar.id_presence = trp.id ",
+				" INNER JOIN t_m_users tmu ON trp.id_user = tmu.id ",
+				" INNER JOIN t_m_profiles tmp  ON tmu.id_profile = tmp.id ",
+				" INNER JOIN t_r_detail_module_registrations trdmr ON trp.id_detail_module_rgs = trdmr.id ",
+				" INNER JOIN t_r_module_registrations trmr ON trdmr.id_module_rgs = trmr.id ",
+				" INNER JOIN t_m_detail_classes tmdc  ON trmr.id_detail_class = tmdc.id ",
+				" INNER JOIN t_m_modules tmm ON trmr.id_module = tmm.id ",
+				" INNER JOIN t_m_learning_materials tmlm ON tmlm.id = trdmr.id_learning_material ",
+				" INNER JOIN t_m_classes tmc ON tmdc.id_class = tmc.id ",
+				" WHERE trdmr.schedule_date between ?1 and ?2 ",
+				" AND tmdc.id_class = ?3 AND id_approvement = ",
+				" (SELECT id FROM t_m_approvements WHERE code = 'RCV') ",
+				" GROUP BY tmp.fullname, tmm.module_name, tmc.class_name ",
+				" ORDER BY tmm.module_name, tmp.fullname")
 						.toString();
 		List<ReportPresences> listReportPresences = new ArrayList<>();
 		List<?> listObj = createNativeQuery(query).setParameter(1, scheduleDateStart).setParameter(2, scheduleDateEnd)
