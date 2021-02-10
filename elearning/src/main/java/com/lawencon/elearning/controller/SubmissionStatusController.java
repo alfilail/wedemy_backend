@@ -80,7 +80,8 @@ public class SubmissionStatusController extends ElearningBaseController {
 		try {
 			SubmissionStatus submissionStatus = new ObjectMapper().readValue(body, SubmissionStatus.class);
 			submissionStatusService.update(submissionStatus);
-			return responseSuccess(submissionStatus, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
+			SubmissionStatus subStat = submissionStatusService.getById(submissionStatus.getId());
+			return responseSuccess(subStat, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);

@@ -83,7 +83,8 @@ public class LearningMaterialTypesController extends ElearningBaseController {
 			obj.registerModule(new JavaTimeModule());
 			LearningMaterialTypes lmType = obj.readValue(body, LearningMaterialTypes.class);
 			lmTypesService.update(lmType);
-			return responseSuccess(lmType, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
+			LearningMaterialTypes learnMatType = lmTypesService.getById(lmType.getId());
+			return responseSuccess(learnMatType, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);

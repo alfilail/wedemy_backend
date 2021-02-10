@@ -69,7 +69,8 @@ public class ModulesController extends ElearningBaseController {
 		try {
 			Modules module = new ObjectMapper().readValue(body, Modules.class);
 			moduleService.update(module);
-			return responseSuccess(module, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
+			Modules mod = moduleService.getById(module.getId());
+			return responseSuccess(mod, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);

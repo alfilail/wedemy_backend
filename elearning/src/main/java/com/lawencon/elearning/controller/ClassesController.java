@@ -85,7 +85,8 @@ public class ClassesController extends ElearningBaseController{
 			obj.registerModule(new JavaTimeModule());
 			Classes clazz = obj.readValue(body, Classes.class);
 			classesService.update(clazz, file);
-			return responseSuccess(clazz, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
+			Classes cls = classesService.getById(clazz.getId());
+			return responseSuccess(cls, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);

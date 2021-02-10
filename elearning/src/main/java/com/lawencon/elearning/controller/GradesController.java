@@ -81,7 +81,8 @@ public class GradesController extends ElearningBaseController {
 		try {
 			Grades grade = new ObjectMapper().readValue(body, Grades.class);
 			gradesService.update(grade);
-			return responseSuccess(grade, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
+			Grades grad = gradesService.getById(grade.getId());
+			return responseSuccess(grad, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);

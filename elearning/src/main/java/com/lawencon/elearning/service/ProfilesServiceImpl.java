@@ -103,7 +103,7 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 		if (profile.getId() == null || profile.getId().trim().equals("")) {
 			throw new Exception("Id tidak boleh kosong");
 		} else {
-			Profiles pfl = getById(profile.getId());
+//			Profiles pfl = getById(profile.getId());
 			if (profile.getFullName() == null || profile.getFullName().trim().equals("")) {
 				throw new Exception("Nama Lengkap tidak boleh kosong");
 			}
