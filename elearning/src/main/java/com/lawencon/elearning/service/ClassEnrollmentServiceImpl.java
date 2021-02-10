@@ -1,9 +1,6 @@
 package com.lawencon.elearning.service;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.lawencon.elearning.dao.ClassEnrollmentsDao;
 import com.lawencon.elearning.model.ClassEnrollments;
 import com.lawencon.elearning.model.DetailClasses;
+import com.lawencon.elearning.util.TransactionNumberCode;
 
 @Service
 public class ClassEnrollmentServiceImpl extends ElearningBaseServiceImpl implements ClassEnrollmentService {
@@ -23,7 +21,7 @@ public class ClassEnrollmentServiceImpl extends ElearningBaseServiceImpl impleme
 	@Override
 	public void insertClassEnrollment(ClassEnrollments classEnrollment) throws Exception {
 		try {
-			classEnrollment.setTrxNumber(generateTrxNumber());
+			classEnrollment.setTrxNumber(generateTrxNumber(TransactionNumberCode.CLASS_ENROLLMENT.code));
 			classEnrollment.setIsOngoing(true);
 			classEnrollmentDao.insertClassEnrollment(classEnrollment, () -> validateInsert(classEnrollment));
 			commit();
@@ -83,17 +81,5 @@ public class ClassEnrollmentServiceImpl extends ElearningBaseServiceImpl impleme
 
 	private void validateUpdate(ClassEnrollments classEnrollment) throws Exception {
 
-	}
-
-	private String generateTrxNumber() {
-		Random random = new Random();
-		LocalDate localDate = LocalDate.now();
-		DateTimeFormatter myFormat = DateTimeFormatter.ofPattern("yy-MM-dd");
-		String formattedDate = localDate.format(myFormat);
-		String trxCodeValue = String.valueOf(random.nextInt((999 + 1 - 100) + 100));
-		String trx = bBuilder(formattedDate).toString();
-		trx = trx.replaceAll("-", "");
-		String trxNumber = bBuilder("CER-", trx, "-", trxCodeValue).toString();
-		return trxNumber;
 	}
 }

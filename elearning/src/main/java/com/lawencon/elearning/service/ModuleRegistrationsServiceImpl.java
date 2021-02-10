@@ -23,6 +23,7 @@ import com.lawencon.elearning.model.Presences;
 import com.lawencon.elearning.model.Users;
 import com.lawencon.elearning.util.ApprovementCode;
 import com.lawencon.elearning.util.RoleCode;
+import com.lawencon.elearning.util.TransactionNumberCode;
 
 @Service
 public class ModuleRegistrationsServiceImpl extends ElearningBaseServiceImpl implements ModuleRegistrationsService {
@@ -53,7 +54,7 @@ public class ModuleRegistrationsServiceImpl extends ElearningBaseServiceImpl imp
 		List<Modules> modulesList = clazzHelper.getModule();
 		for (Modules modules : modulesList) {
 			ModuleRegistrations moduleRegistrations = new ModuleRegistrations();
-			moduleRegistrations.setTrxNumber(generateTrxNumber());
+			moduleRegistrations.setTrxNumber(generateTrxNumber(TransactionNumberCode.MODULE_REGISTRATION.code));
 			moduleRegistrations.setIdDetailClass(clazzHelper.getDetailClass());
 			moduleRegistrations.setIdModule(modules);
 			moduleRegistrationDao.insertModuleRegistration(moduleRegistrations,
@@ -177,16 +178,5 @@ public class ModuleRegistrationsServiceImpl extends ElearningBaseServiceImpl imp
 //		}
 	}
 
-	private String generateTrxNumber() {
-		Random random = new Random();
-		LocalDate localDate = LocalDate.now();
-		DateTimeFormatter myFormat = DateTimeFormatter.ofPattern("yy-MM-dd");
-		String formattedDate = localDate.format(myFormat);
-		String trxCodeValue = String.valueOf(random.nextInt((999 + 1 - 100) + 100));
-		String trx = bBuilder(formattedDate).toString();
-		trx = trx.replaceAll("-", "");
-		String trxNumber = bBuilder("MRG-", trx, "-", trxCodeValue).toString();
-		return trxNumber;
-	}
 
 }

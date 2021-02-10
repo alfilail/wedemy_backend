@@ -17,8 +17,10 @@ import com.lawencon.elearning.model.Files;
 import com.lawencon.elearning.model.General;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.SubmissionStatusRenewal;
+import com.lawencon.elearning.util.GeneralUtil;
 import com.lawencon.elearning.util.MailUtil;
 import com.lawencon.elearning.util.SubmissionStatusCode;
+import com.lawencon.elearning.util.TransactionNumberCode;
 
 @Service
 public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl implements AssignmentSubmissionsService {
@@ -52,7 +54,7 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 			filesService.insert(file);
 			assignmentSubmission.setIdFile(file);
 			assignmentSubmission.setSubmitTime(LocalTime.now());
-			assignmentSubmission.setTrxNumber(generateTrxNumber());
+			assignmentSubmission.setTrxNumber(generateTrxNumber(TransactionNumberCode.ASSIGNMENT_SUBMISSION.code));
 			assignmentSubmissionsDao.insertAssignmentSubmission(assignmentSubmission,
 					() -> validateInsert(assignmentSubmission));
 			insertStatusRenewal(assignmentSubmission);
@@ -113,7 +115,7 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 		Profiles tutor = assignmentSubmissionsDao.getTutorProfile(assignmentSubmission);
 		Profiles participant = assignmentSubmissionsDao.getParticipantProfile(assignmentSubmission);
 
-		General general = generalService.getTemplateEmail("asgttr");
+		General general = generalService.getTemplateEmail(GeneralUtil.ASSIGNMENT_SUBMISSION_TUTOR.code);
 		String text = general.getTemplateHtml();
 
 		text = text.replace("#1#", tutor.getFullName());
@@ -130,7 +132,7 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 	private void sendEmailParticipant(AssignmentSubmissions assignmentSubmission) throws Exception {
 		Profiles participant = assignmentSubmissionsDao.getParticipantProfile(assignmentSubmission);
 
-		General general = generalService.getTemplateEmail("asgpcp");
+		General general = generalService.getTemplateEmail(GeneralUtil.ASSIGNMENT_SUBMISSION_PARTICIPANT.code);
 		String text = general.getTemplateHtml();
 
 		text = text.replace("#1#", participant.getFullName());
@@ -153,18 +155,6 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 
 	private void validateInsert(AssignmentSubmissions assignmentSubmissions) {
 
-	}
-
-	private String generateTrxNumber() {
-		Random random = new Random();
-		LocalDate localDate = LocalDate.now();
-		DateTimeFormatter myFormat = DateTimeFormatter.ofPattern("yy-MM-dd");
-		String formattedDate = localDate.format(myFormat);
-		String trxCodeValue = String.valueOf(random.nextInt((999 + 1 - 100) + 100));
-		String trx = bBuilder(formattedDate).toString();
-		trx = trx.replaceAll("-", "");
-		String trxNumber = bBuilder("ASB-", trx, "-", trxCodeValue).toString();
-		return trxNumber;
 	}
 
 }

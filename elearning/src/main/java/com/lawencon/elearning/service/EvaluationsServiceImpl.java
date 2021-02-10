@@ -15,6 +15,7 @@ import com.lawencon.elearning.model.Grades;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.SubmissionStatusRenewal;
 import com.lawencon.elearning.util.MailUtil;
+import com.lawencon.elearning.util.TransactionNumberCode;
 
 /**
  * @author Nur Alfilail
@@ -51,6 +52,7 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 			for (Evaluations evaluation : scores.getEvaluations()) {
 				Grades grade = gradesService.getByScore(evaluation.getScore());
 				evaluation.setIdGrade(grade);
+				evaluation.setTrxNumber(generateTrxNumber(TransactionNumberCode.EVALUATION.code));
 				evaluationsDao.insertEvaluation(evaluation, () -> validateInsert(evaluation));
 				insertStatusRenewal(evaluation);
 			}

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.lawencon.elearning.dao.DetailModuleRegistrationsDao;
 import com.lawencon.elearning.model.DetailModuleRegistrations;
+import com.lawencon.elearning.util.TransactionNumberCode;
 
 @Service
 public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceImpl
@@ -20,7 +21,7 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 
 	@Override
 	public void insertDetailModuleRegistration(DetailModuleRegistrations dtlModRegist) throws Exception {
-		dtlModRegist.setTrxNumber(generateTrxNumber());
+		dtlModRegist.setTrxNumber(generateTrxNumber(TransactionNumberCode.DETAIL_MODULE_REGISTRATION.code));
 		dtlModRegistDao.insertDetailModuleRegistration(dtlModRegist, () -> validateInsert(dtlModRegist));
 	}
 
@@ -71,18 +72,6 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 //		} else {
 //			throw new Exception("Order number tidak boleh kosong");
 //		}
-	}
-
-	private String generateTrxNumber() {
-		Random random = new Random();
-		LocalDate localDate = LocalDate.now();
-		DateTimeFormatter myFormat = DateTimeFormatter.ofPattern("yy-MM-dd");
-		String formattedDate = localDate.format(myFormat);
-		String trxCodeValue = String.valueOf(random.nextInt((999 + 1 - 100) + 100));
-		String trx = bBuilder(formattedDate).toString();
-		trx = trx.replaceAll("-", "");
-		String trxNumber = bBuilder("DMRG-", trx, "-", trxCodeValue).toString();
-		return trxNumber;
 	}
 
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.lawencon.elearning.dao.SubmissionStatusRenewalsDao;
 import com.lawencon.elearning.model.SubmissionStatusRenewal;
+import com.lawencon.elearning.util.TransactionNumberCode;
 
 /**
  * @author Nur Alfilail
@@ -21,6 +22,7 @@ public class SubmissionStatusRenewalsServiceImpl extends ElearningBaseServiceImp
 
 	@Override
 	public void insertSubmissionStatusRenewal(SubmissionStatusRenewal statusRenewal) throws Exception {
+		statusRenewal.setTrxNumber(generateTrxNumber(TransactionNumberCode.SUBMISSION_STATUS_RENEWAL.code));
 		if (statusRenewal.getIdSubmissionStatus().getCode().equals("UPL")) {
 			statusRenewalDao.insertByParticipant(statusRenewal, () -> validateInsert(statusRenewal));
 		} else {
