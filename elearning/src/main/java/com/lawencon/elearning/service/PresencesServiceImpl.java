@@ -88,12 +88,6 @@ public class PresencesServiceImpl extends ElearningBaseServiceImpl implements Pr
 		return presencesDao.getPresenceByCode(code);
 	}
 
-	@Override
-	public List<?> getPresenceReport(String idDetailClass)
-			throws Exception {
-		return presencesDao.getPresenceReport(idDetailClass);
-	}
-
 	private void validateInsert(Presences presence) throws Exception {
 
 	}

@@ -23,6 +23,4 @@ public interface PresencesDao {
 	
 	Presences doesParticipantPresent(String idDtlModuleRgs, String idParticipant) throws Exception;
 
-	List<?> getPresenceReport(String idDetailClass) throws Exception;
-
 }

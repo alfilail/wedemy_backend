@@ -1,16 +1,11 @@
 package com.lawencon.elearning.controller;
 
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.PersistenceException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +21,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.lawencon.elearning.model.Presences;
 import com.lawencon.elearning.service.PresencesService;
 import com.lawencon.elearning.util.MessageStat;
-import com.lawencon.util.JasperUtil;
 
 /**
  * @author Nur Alfilail
@@ -73,26 +67,6 @@ public class PresencesController extends ElearningBaseController {
 			e.printStackTrace();
 			return responseError(e);
 		}
-	}
-
-	@GetMapping("report/{idDetailClass}")
-	public HttpEntity<?> reportPresence(@PathVariable String idDetailClass) {
-		List<?> listData = new ArrayList<>();
-		byte[] out;
-		try {
-			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-//			LocalDate scheduleDateStartNew = LocalDate.parse(scheduleDateStart, dtf);
-//			LocalDate scheduleDateEndNew = LocalDate.parse(scheduleDateEnd, dtf);
-			listData = presencesService.getPresenceReport(idDetailClass);
-			out = JasperUtil.responseToByteArray(listData, "ReportPresence", null);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_PDF);
-		return new HttpEntity<>(out, headers);
 	}
 
 	@DeleteMapping("{id}")

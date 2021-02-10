@@ -50,6 +50,11 @@ public class ApprovementsRenewalServiceImpl extends ElearningBaseServiceImpl imp
 	public ApprovementsRenewal getApprovementsRenewalById(String id) throws Exception {
 		return approvementsRenewalDao.getApprovementsRenewalById(id);
 	}
+	
+	@Override
+	public List<?> getPresenceReport(String idDetailClass) throws Exception {
+		return approvementsRenewalDao.getPresenceReport(idDetailClass);
+	}
 
 	@Override
 	public ApprovementsRenewal checkParticipantPresence(String idDtlModuleRgs, String idUser) throws Exception {
