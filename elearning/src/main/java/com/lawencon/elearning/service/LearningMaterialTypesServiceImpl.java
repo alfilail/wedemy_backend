@@ -50,6 +50,9 @@ public class LearningMaterialTypesServiceImpl extends BaseServiceImpl implements
 
 	@Override
 	public void update(LearningMaterialTypes lmType) throws Exception {
+		LearningMaterialTypes learnMatType = getById(lmType.getId());
+		lmType.setCreatedAt(learnMatType.getCreatedAt());
+		lmType.setCreatedBy(learnMatType.getCreatedBy());
 		learnMaterialTypeDao.update(lmType, () -> validateUpdate(lmType));
 	}
 

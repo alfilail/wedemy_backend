@@ -73,7 +73,8 @@ public class ProfilesController extends ElearningBaseController {
 			obj.registerModule(new JavaTimeModule());
 			Profiles profile = obj.readValue(body, Profiles.class);
 			profilesService.update(profile, file);
-			return responseSuccess(profile, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
+			Profiles data = profilesService.getById(profile.getId());
+			return responseSuccess(data, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
