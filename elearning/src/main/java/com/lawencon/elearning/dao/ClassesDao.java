@@ -26,5 +26,7 @@ public interface ClassesDao {
 	void updateIsActive(String id, String idUser) throws Exception;
 	
 	Classes getInActiveById(String id) throws Exception;
+	
+	List<Integer> getTotalClassAndUser() throws Exception;
 
 }

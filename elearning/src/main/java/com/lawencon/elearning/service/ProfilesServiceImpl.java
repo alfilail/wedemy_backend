@@ -107,9 +107,9 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 			if (profile.getFullName() == null || profile.getFullName().trim().equals("")) {
 				throw new Exception("Nama Lengkap tidak boleh kosong");
 			}
-			if (pfl.getVersion() != profile.getVersion()) {
-				throw new Exception("Profile yang diedit telah diperbarui, silahkan coba lagi");
-			}
+//			if (pfl.getVersion() != profile.getVersion()) {
+//				throw new Exception("Profile yang diedit telah diperbarui, silahkan coba lagi");
+//			}
 			if (profile.getIdFile() != null) {
 				if(profile.getIdFile().getType() != null) {
 					String[] type = profile.getIdFile().getType().split("/");

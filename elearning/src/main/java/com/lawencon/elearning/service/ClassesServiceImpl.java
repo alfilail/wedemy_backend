@@ -221,4 +221,9 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 		return classesDao.getInActiveById(id);
 	}
 
+	@Override
+	public List<Integer> getTotalClassAndUser() throws Exception {
+		return classesDao.getTotalClassAndUser();
+	}
+
 }

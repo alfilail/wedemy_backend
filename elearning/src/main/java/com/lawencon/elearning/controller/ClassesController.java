@@ -102,5 +102,16 @@ public class ClassesController extends ElearningBaseController{
 			return responseError(e);
 		}
 	}
+	
+	@GetMapping("user")
+	public ResponseEntity<?> getTotalClassAndUser() {
+		try {
+			List<Integer> data = classesService.getTotalClassAndUser();
+			return responseSuccess(data, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return responseError(e);
+		}
+	}
 
 }
