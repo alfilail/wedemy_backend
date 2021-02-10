@@ -70,7 +70,7 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 		try {
 			begin();
 			Files file = filesService.getById(dtlModuleRgs.getIdLearningMaterial().getIdFile().getId());
-			if (!fileInput.isEmpty()) {
+			if (fileInput != null && !fileInput.isEmpty()) {
 				file.setFile(fileInput.getBytes());
 				file.setType(fileInput.getContentType());
 				file.setCreatedAt(file.getCreatedAt());

@@ -27,6 +27,7 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 		DetailModuleRegistrations dtlModRgs = dtlModRegistDao.getDetailModuleRegistrationsById(dtlModRegist.getId());
 		dtlModRegist.setCreatedAt(dtlModRegist.getCreatedAt());
 		dtlModRegist.setCreatedBy(dtlModRgs.getCreatedBy());
+		dtlModRegist.setIdModuleRegistration(dtlModRgs.getIdModuleRegistration());
 		dtlModRegistDao.update(dtlModRegist, () -> validateInsert(dtlModRegist));
 	}
 
