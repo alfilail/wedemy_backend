@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.lawencon.elearning.helper.ClassesHelper;
+import com.lawencon.elearning.helper.TotalClassAndUser;
 import com.lawencon.elearning.model.Classes;
 
 public interface ClassesService {
@@ -27,6 +28,6 @@ public interface ClassesService {
 	
 	Classes getInActiveById(String id) throws Exception;
 	
-	List<Integer> getTotalClassAndUser() throws Exception;
+	TotalClassAndUser getTotalClassAndUser() throws Exception;
 
 }

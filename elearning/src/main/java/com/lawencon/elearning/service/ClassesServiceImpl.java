@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.elearning.dao.ClassesDao;
 import com.lawencon.elearning.helper.ClassesHelper;
+import com.lawencon.elearning.helper.TotalClassAndUser;
 import com.lawencon.elearning.model.Classes;
 import com.lawencon.elearning.model.DetailClasses;
 import com.lawencon.elearning.model.Files;
@@ -222,7 +223,7 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 	}
 
 	@Override
-	public List<Integer> getTotalClassAndUser() throws Exception {
+	public TotalClassAndUser getTotalClassAndUser() throws Exception {
 		return classesDao.getTotalClassAndUser();
 	}
 

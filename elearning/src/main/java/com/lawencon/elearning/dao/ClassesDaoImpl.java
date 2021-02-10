@@ -1,10 +1,10 @@
 package com.lawencon.elearning.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.lawencon.elearning.helper.TotalClassAndUser;
 import com.lawencon.elearning.model.Classes;
 import com.lawencon.elearning.util.RoleCode;
 import com.lawencon.util.Callback;
@@ -73,7 +73,7 @@ public class ClassesDaoImpl extends ElearningBaseDaoImpl<Classes> implements Cla
 	}
 
 	@Override
-	public List<Integer> getTotalClassAndUser() throws Exception {
+	public TotalClassAndUser getTotalClassAndUser() throws Exception {
 		String sql = sqlBuilder("SELECT (SELECT COUNT(username) ",
 				" FROM t_m_users tmu ",
 				" INNER JOIN t_m_roles tmr ON tmr.id = tmu.id_role ",
@@ -89,14 +89,14 @@ public class ClassesDaoImpl extends ElearningBaseDaoImpl<Classes> implements Cla
 				" WHERE tmc.is_active = ?3 ").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, RoleCode.PARTICIPANT.code).setParameter(2, RoleCode.TUTOR.code)
 				.setParameter(3, true).getResultList();
-		List<Integer> resultList = new ArrayList<>();
+		TotalClassAndUser total = new TotalClassAndUser();
 		listObj.forEach(val -> {
 			Object[] obj = (Object[]) val;
-			resultList.add(Integer.valueOf(obj[0].toString()));
-			resultList.add(Integer.valueOf(obj[1].toString()));
-			resultList.add(Integer.valueOf(obj[2].toString()));
+			total.setTotalParticipant(Integer.valueOf(obj[0].toString()));
+			total.setTotalTutor(Integer.valueOf(obj[1].toString()));
+			total.setTotalClass(Integer.valueOf(obj[2].toString()));
 		});
-		return resultList;
+		return total;
 	}
 
 }

@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.lawencon.elearning.helper.ClassesHelper;
+import com.lawencon.elearning.helper.TotalClassAndUser;
 import com.lawencon.elearning.model.Classes;
 import com.lawencon.elearning.service.ClassesService;
 import com.lawencon.elearning.util.MessageStat;
@@ -106,7 +107,7 @@ public class ClassesController extends ElearningBaseController{
 	@GetMapping("user")
 	public ResponseEntity<?> getTotalClassAndUser() {
 		try {
-			List<Integer> data = classesService.getTotalClassAndUser();
+			TotalClassAndUser data = classesService.getTotalClassAndUser();
 			return responseSuccess(data, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();

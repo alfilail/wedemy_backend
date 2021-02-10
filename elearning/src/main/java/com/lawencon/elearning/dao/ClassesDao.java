@@ -2,6 +2,7 @@ package com.lawencon.elearning.dao;
 
 import java.util.List;
 
+import com.lawencon.elearning.helper.TotalClassAndUser;
 import com.lawencon.elearning.model.Classes;
 import com.lawencon.util.Callback;
 
@@ -27,6 +28,6 @@ public interface ClassesDao {
 	
 	Classes getInActiveById(String id) throws Exception;
 	
-	List<Integer> getTotalClassAndUser() throws Exception;
+	TotalClassAndUser getTotalClassAndUser() throws Exception;
 
 }
