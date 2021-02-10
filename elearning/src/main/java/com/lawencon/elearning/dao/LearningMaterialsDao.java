@@ -20,4 +20,6 @@ public interface LearningMaterialsDao {
 	LearningMaterials getByCode(String code) throws Exception;
 	
 	void softDeleteById(String id, String idUser) throws Exception;
+	
+	List<?> validateDelete(String id) throws Exception;
 }

@@ -1,6 +1,7 @@
 package com.lawencon.elearning.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -95,11 +96,16 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 	public void deleteById(String id, String idUser) throws Exception {
 		try {
 			begin();
-			learningMaterialsDao.softDeleteById(id, idUser);
-			DetailModuleRegistrations detailModule = dtlModRegistService
-					.getDetailModuleRegistrationByIdLearningMaterial(id);
-			dtlModRegistService.deleteDetailModuleRegistration(detailModule.getId(), idUser);
-			forumsService.deleteForumByIdDetailModuleRegistration(detailModule.getId(), idUser);
+			if(checkDelete(id) == false) {
+				learningMaterialsDao.softDeleteById(id, idUser);
+				DetailModuleRegistrations detailModule = dtlModRegistService
+						.getDetailModuleRegistrationByIdLearningMaterial(id);
+				dtlModRegistService.deleteDetailModuleRegistration(detailModule.getId(), idUser);
+				forumsService.deleteForumByIdDetailModuleRegistration(detailModule.getId(), idUser);
+			}
+			else {
+				validateDelete();
+			}
 			commit();
 		} catch (Exception e) {
 			e.getMessage();
@@ -201,5 +207,16 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 				}
 			}
 		}
+	}
+	
+	private boolean checkDelete(String id) throws Exception {
+		List<?> listObj = learningMaterialsDao.validateDelete(id);
+		List<?> list =  listObj.stream().filter(val -> val != null)
+				.collect(Collectors.toList());
+		return list.size() > 0 ? true : false;
+	}
+	
+	private void validateDelete() throws Exception{
+		throw new Exception("Bahan ajar tidak boleh dihapus!");
 	}
 }
