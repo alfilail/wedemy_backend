@@ -71,8 +71,7 @@ public class LearningMaterialsController extends ElearningBaseController {
 	}
 
 	@DeleteMapping
-	public ResponseEntity<?> deleteById(@RequestParam("id") String id,
-			@RequestParam("idUser") String idUser) {
+	public ResponseEntity<?> deleteById(@RequestParam("id") String id, @RequestParam("idUser") String idUser) {
 		try {
 			learningMaterialsService.deleteById(id, idUser);
 			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
@@ -83,13 +82,14 @@ public class LearningMaterialsController extends ElearningBaseController {
 	}
 
 	@PutMapping
-	public ResponseEntity<?> update(@RequestPart String body, @RequestPart("file") MultipartFile file) {
+	public ResponseEntity<?> update(@RequestPart String body,
+			@RequestPart(value = "file", required = false) MultipartFile file) {
 		try {
 			ObjectMapper obj = new ObjectMapper();
 			obj.registerModule(new JavaTimeModule());
-			LearningMaterials learningMaterial = obj.readValue(body, LearningMaterials.class);
-			learningMaterialsService.update(learningMaterial, file);
-			return responseSuccess(learningMaterial, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
+			DetailModuleRegistrations dtlModuleRgs = obj.readValue(body, DetailModuleRegistrations.class);
+			learningMaterialsService.update(dtlModuleRgs, file);
+			return responseSuccess(dtlModuleRgs, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);

@@ -19,7 +19,7 @@ public interface LearningMaterialsService {
 
 	LearningMaterials getById(String id) throws Exception;
 
-	void update(LearningMaterials learningMaterial, MultipartFile file) throws Exception;
+	void update(DetailModuleRegistrations dtlModuleRgs, MultipartFile file) throws Exception;
 
 	void deleteById(String id, String idUser) throws Exception;
 

@@ -23,6 +23,11 @@ public class DetailModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<Detai
 	}
 
 	@Override
+	public void update(DetailModuleRegistrations dtlModRegist, Callback before) throws Exception {
+		save(dtlModRegist, before, null);
+	}
+
+	@Override
 	public DetailModuleRegistrations getDetailModuleRegistrationsById(String id) throws Exception {
 		return getById(id);
 	}

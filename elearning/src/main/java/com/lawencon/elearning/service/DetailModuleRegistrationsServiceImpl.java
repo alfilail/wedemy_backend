@@ -1,9 +1,6 @@
 package com.lawencon.elearning.service;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +23,14 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 	}
 
 	@Override
+	public void update(DetailModuleRegistrations dtlModRegist) throws Exception {
+		DetailModuleRegistrations dtlModRgs = dtlModRegistDao.getDetailModuleRegistrationsById(dtlModRegist.getId());
+		dtlModRegist.setCreatedAt(dtlModRegist.getCreatedAt());
+		dtlModRegist.setCreatedBy(dtlModRgs.getCreatedBy());
+		dtlModRegistDao.update(dtlModRegist, () -> validateInsert(dtlModRegist));
+	}
+
+	@Override
 	public List<DetailModuleRegistrations> getDetailModuleRegistrationsByIdModuleRgs(String idModuleRgs)
 			throws Exception {
 		return dtlModRegistDao.getDetailModuleRegistrationsByIdModuleRgs(idModuleRgs);
@@ -35,17 +40,17 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 	public DetailModuleRegistrations getDetailModuleRegistrationsById(String id) throws Exception {
 		return dtlModRegistDao.getDetailModuleRegistrationsById(id);
 	}
-	
+
 	@Override
 	public Integer totalHours(String idDtlClass) throws Exception {
 		return dtlModRegistDao.totalHours(idDtlClass);
 	}
-	
+
 	@Override
 	public void deleteDetailModuleRegistration(String id, String idUser) throws Exception {
 		dtlModRegistDao.deleteDetailModuleRegistration(id, idUser);
 	}
-	
+
 	@Override
 	public DetailModuleRegistrations getDetailModuleRegistrationByIdLearningMaterial(String id) throws Exception {
 		return dtlModRegistDao.getDetailModuleRegistrationByIdLearningMaterial(id);
