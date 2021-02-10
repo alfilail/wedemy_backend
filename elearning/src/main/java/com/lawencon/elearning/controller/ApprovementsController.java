@@ -54,7 +54,7 @@ public class ApprovementsController extends ElearningBaseController {
 		}
 	}
 
-	@GetMapping("all")
+	@GetMapping
 	public ResponseEntity<?> getAll() {
 		try {
 			List<Approvements> approvementsList = approvementsService.getAll();

@@ -52,7 +52,7 @@ public class GradesController extends ElearningBaseController {
 		}
 	}
 
-	@GetMapping("/all")
+	@GetMapping
 	public ResponseEntity<?> getAll() {
 		List<Grades> gradesList = new ArrayList<Grades>();
 		try {

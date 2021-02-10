@@ -30,7 +30,7 @@ public class ClassesController extends ElearningBaseController{
 	@Autowired
 	private ClassesService classesService;
 
-	@GetMapping("active")
+	@GetMapping
 	public ResponseEntity<?> getAll() {
 		try {
 			List<Classes> clazz = classesService.getAll();

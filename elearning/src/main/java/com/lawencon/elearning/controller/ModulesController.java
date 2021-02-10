@@ -28,7 +28,7 @@ public class ModulesController extends ElearningBaseController {
 	@Autowired
 	private ModulesService moduleService;
 
-	@GetMapping("all")
+	@GetMapping
 	public ResponseEntity<?> getAll() {
 		List<Modules> listModules = new ArrayList<>();
 		try {
@@ -77,7 +77,7 @@ public class ModulesController extends ElearningBaseController {
 	}
 
 	@DeleteMapping
-	public ResponseEntity<?> deleteModuleById(@RequestParam("id") String id, @RequestParam("idUser") String idUser) {
+	public ResponseEntity<?> deleteById(@RequestParam("id") String id, @RequestParam("idUser") String idUser) {
 		try {
 			moduleService.deleteById(id, idUser);
 			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);

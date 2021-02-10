@@ -40,7 +40,7 @@ public class DetailClassesController extends ElearningBaseController {
 		}
 	}
 
-	@GetMapping("active")
+	@GetMapping
 	public ResponseEntity<?> getAll() {
 		try {
 			List<DetailClasses> dtlClass = dtlClassesService.getAll();

@@ -29,7 +29,7 @@ public class ProfilesController extends ElearningBaseController {
 	@Autowired
 	private ProfilesService profilesService;
 
-	@GetMapping("all")
+	@GetMapping
 	public ResponseEntity<?> getAll() {
 		try {
 			List<Profiles> listProfiles = profilesService.getAll();

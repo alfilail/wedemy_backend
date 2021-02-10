@@ -52,7 +52,7 @@ public class LearningMaterialTypesController extends ElearningBaseController {
 		}
 	}
 
-	@GetMapping("/all")
+	@GetMapping
 	public ResponseEntity<?> getAll() {
 		List<LearningMaterialTypes> lmTypesList = new ArrayList<LearningMaterialTypes>();
 		try {

@@ -59,7 +59,7 @@ public class LearningMaterialsController extends ElearningBaseController {
 		}
 	}
 
-	@GetMapping("all")
+	@GetMapping
 	public ResponseEntity<?> getAll() {
 		try {
 			List<LearningMaterials> learningMaterialsList = learningMaterialsService.getAll();

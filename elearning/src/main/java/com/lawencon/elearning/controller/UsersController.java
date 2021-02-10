@@ -29,7 +29,7 @@ public class UsersController extends ElearningBaseController {
 	@Autowired
 	private UsersService usersService;
 
-	@GetMapping("all")
+	@GetMapping
 	public ResponseEntity<?> getAll() {
 		try {
 			List<Users> listUsers = usersService.getAll();
@@ -77,7 +77,7 @@ public class UsersController extends ElearningBaseController {
 	}
 
 	@PatchMapping("/forget-password")
-	public ResponseEntity<?> resetPassword(@RequestBody String body) {
+	public ResponseEntity<?> forgetPassword(@RequestBody String body) {
 		try {
 			Profiles profile = new ObjectMapper().readValue(body, Profiles.class);
 			Users user = usersService.updateUserPassword(profile);
