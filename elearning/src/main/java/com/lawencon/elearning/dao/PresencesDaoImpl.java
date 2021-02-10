@@ -1,6 +1,5 @@
 package com.lawencon.elearning.dao;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,7 +83,7 @@ public class PresencesDaoImpl extends ElearningBaseDaoImpl<Presences> implements
 	}
 
 	@Override
-	public List<?> getPresenceReport(String idClass, LocalDate scheduleDateStart, LocalDate scheduleDateEnd)
+	public List<?> getPresenceReport(String idDetailClass)
 			throws Exception {
 		String query = sqlBuilder(" SELECT tmp.fullname, tmm.module_name , ",
 				" tmc.class_name, ROUND(COUNT(tar.id_presence)/CAST((SELECT COUNT(order_number) ",
@@ -103,15 +102,14 @@ public class PresencesDaoImpl extends ElearningBaseDaoImpl<Presences> implements
 				" INNER JOIN t_m_modules tmm ON trmr.id_module = tmm.id ",
 				" INNER JOIN t_m_learning_materials tmlm ON tmlm.id = trdmr.id_learning_material ",
 				" INNER JOIN t_m_classes tmc ON tmdc.id_class = tmc.id ",
-				" WHERE trdmr.schedule_date between ?1 and ?2 ",
-				" AND tmdc.id_class = ?3 AND id_approvement = ",
-				" (SELECT id FROM t_m_approvements WHERE code = 'RCV') ",
+				" WHERE tmdc.id = ?1 AND id_approvement = ",
+				" (SELECT id FROM t_m_approvements WHERE code = 'APRV') ",
 				" GROUP BY tmp.fullname, tmm.module_name, tmc.class_name ",
 				" ORDER BY tmm.module_name, tmp.fullname")
 						.toString();
 		List<ReportPresences> listReportPresences = new ArrayList<>();
-		List<?> listObj = createNativeQuery(query).setParameter(1, scheduleDateStart).setParameter(2, scheduleDateEnd)
-				.setParameter(3, idClass).getResultList();
+		List<?> listObj = createNativeQuery(query)
+				.setParameter(1, idDetailClass).getResultList();
 		listObj.forEach(val -> {
 			Object[] objArr = (Object[]) val;
 			Profiles profile = new Profiles();

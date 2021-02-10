@@ -1,6 +1,5 @@
 package com.lawencon.elearning.dao;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import com.lawencon.elearning.model.Presences;
@@ -24,6 +23,6 @@ public interface PresencesDao {
 	
 	Presences doesParticipantPresent(String idDtlModuleRgs, String idParticipant) throws Exception;
 
-	List<?> getPresenceReport(String idClass, LocalDate scheduleDateStart, LocalDate scheduleDateEnd) throws Exception;
+	List<?> getPresenceReport(String idDetailClass) throws Exception;
 
 }

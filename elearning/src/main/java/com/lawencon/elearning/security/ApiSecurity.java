@@ -51,7 +51,8 @@ public class ApiSecurity extends WebSecurityConfigurerAdapter {
 //				.antMatchers(HttpMethod.PATCH, "/**").antMatchers(HttpMethod.PUT, "/**")
 //				.antMatchers(HttpMethod.DELETE, "/**");
 		web.ignoring().antMatchers(HttpMethod.POST, "/user", "/role").antMatchers(HttpMethod.GET, "/detail-class/**/",
-		"/module-registration/**/", "/class/user").antMatchers(HttpMethod.PATCH, "/user/forget-password");
+		"/module-registration/**/", "/class/user", "/presence/report/**")
+		.antMatchers(HttpMethod.PATCH, "/user/forget-password");
 	}
 
 	@Bean

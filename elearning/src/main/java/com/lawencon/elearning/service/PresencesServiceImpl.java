@@ -1,6 +1,5 @@
 package com.lawencon.elearning.service;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -90,9 +89,9 @@ public class PresencesServiceImpl extends ElearningBaseServiceImpl implements Pr
 	}
 
 	@Override
-	public List<?> getPresenceReport(String idClass, LocalDate scheduleDateStart, LocalDate scheduleDateEnd)
+	public List<?> getPresenceReport(String idDetailClass)
 			throws Exception {
-		return presencesDao.getPresenceReport(idClass, scheduleDateStart, scheduleDateEnd);
+		return presencesDao.getPresenceReport(idDetailClass);
 	}
 
 	private void validateInsert(Presences presence) throws Exception {

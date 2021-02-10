@@ -74,18 +74,25 @@
 				<reportElement x="15" y="37" width="765" height="2" uuid="e117b6f7-ce84-4860-90a7-6fb3f2d67d07"/>
 			</line>
 			<staticText>
-				<reportElement x="99" y="37" width="100" height="30" uuid="f198b161-0fbd-4c51-8803-945cea169b1d"/>
+				<reportElement x="97" y="37" width="100" height="30" uuid="f198b161-0fbd-4c51-8803-945cea169b1d"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Fullname]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="400" y="34" width="100" height="30" uuid="5227cfd7-b0f2-4a35-a1db-91a2a3008f13"/>
+				<reportElement x="586" y="37" width="100" height="30" uuid="5227cfd7-b0f2-4a35-a1db-91a2a3008f13"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Present Day (%)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="339" y="37" width="100" height="30" uuid="0b164fce-5d01-4ae0-8fa1-5be3d58c83f2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Module Name]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="13" y="43" width="60" height="20" uuid="b8b42d7c-bce6-471d-8226-f90629e75990"/>
@@ -116,14 +123,18 @@
 	<detail>
 		<band height="27">
 			<textField>
-				<reportElement x="102" y="-6" width="100" height="30" uuid="d7f43c1f-48a5-4fa1-bb96-bcf88fdc3aae"/>
+				<reportElement x="99" y="-6" width="100" height="30" uuid="d7f43c1f-48a5-4fa1-bb96-bcf88fdc3aae"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{fullname.fullName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="395" y="0" width="102" height="26" uuid="dff52be4-706d-427f-aba8-6eed49ce0fb5"/>
+				<reportElement x="584" y="-3" width="102" height="26" uuid="dff52be4-706d-427f-aba8-6eed49ce0fb5"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{presentDay}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="364" y="1" width="96" height="23" uuid="0232ddf3-5e33-4651-b98a-cc4f8df6f3da"/>
+				<textFieldExpression><![CDATA[$F{module.moduleName}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="34" y="3" width="64" height="21" uuid="4fb2300d-3eab-4a0c-9b53-bc81c7188d39"/>

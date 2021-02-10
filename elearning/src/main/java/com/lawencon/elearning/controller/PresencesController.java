@@ -1,6 +1,5 @@
 package com.lawencon.elearning.controller;
 
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -77,16 +75,15 @@ public class PresencesController extends ElearningBaseController {
 		}
 	}
 
-	@GetMapping("report")
-	public HttpEntity<?> reportPresence(@RequestParam String idClass, @RequestParam String scheduleDateStart,
-			@RequestParam String scheduleDateEnd) {
+	@GetMapping("report/{idDetailClass}")
+	public HttpEntity<?> reportPresence(@PathVariable String idDetailClass) {
 		List<?> listData = new ArrayList<>();
 		byte[] out;
 		try {
 			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-			LocalDate scheduleDateStartNew = LocalDate.parse(scheduleDateStart, dtf);
-			LocalDate scheduleDateEndNew = LocalDate.parse(scheduleDateEnd, dtf);
-			listData = presencesService.getPresenceReport(idClass, scheduleDateStartNew, scheduleDateEndNew);
+//			LocalDate scheduleDateStartNew = LocalDate.parse(scheduleDateStart, dtf);
+//			LocalDate scheduleDateEndNew = LocalDate.parse(scheduleDateEnd, dtf);
+			listData = presencesService.getPresenceReport(idDetailClass);
 			out = JasperUtil.responseToByteArray(listData, "ReportPresence", null);
 		} catch (Exception e) {
 			e.printStackTrace();
