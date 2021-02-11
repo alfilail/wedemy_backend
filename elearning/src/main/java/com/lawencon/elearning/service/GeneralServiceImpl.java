@@ -15,9 +15,4 @@ public class GeneralServiceImpl implements GeneralService{
 	public General getTemplateEmail(String code) throws Exception {
 		return generalDao.getTemplateEmail(code);
 	}
-	
-	@Override
-	public byte[] getDefaultPict(String code) throws Exception {
-		return generalDao.getDefaultPict(code);
-	}
 }

@@ -2,6 +2,7 @@ package com.lawencon.elearning.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
@@ -26,17 +27,17 @@ public class LearningMaterials extends BaseMaster {
 	@Column(name = "code", length = 10, unique = true, nullable = false)
 	private String code;
 
-	@Column(name = "learning_material_name", length = 35, nullable = false)
+	@Column(name = "learning_material_name", length = 50, nullable = false)
 	private String learningMaterialName;
 
 	@ManyToOne
-	@JoinColumn(name = "id_learning_material_type")
+	@JoinColumn(name = "id_type", nullable = false, foreignKey = @ForeignKey(name = "FK_LEARNING_MATERIAL_TYPE_OF_LEARNING_MATERIAL"))
 	private LearningMaterialTypes idLearningMaterialType;
 
 	@Column(name = "description", nullable = false, columnDefinition = "text")
 	private String description;
 
 	@OneToOne
-	@JoinColumn(name = "id_file")
+	@JoinColumn(name = "id_file", nullable = false, foreignKey = @ForeignKey(name = "FK_FILE_OF_LEARNING_MATERIAL"))
 	private Files idFile;
 }

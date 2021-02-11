@@ -2,6 +2,7 @@ package com.lawencon.elearning.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -23,14 +24,14 @@ public class ClassEnrollments extends BaseTransaction {
 	private static final long serialVersionUID = 7114555677950524878L;
 
 	@ManyToOne
-	@JoinColumn(name = "id_detail_class", nullable = false)
+	@JoinColumn(name = "id_dtl_class", nullable = false, foreignKey = @ForeignKey(name = "FK_DTL_CLASS_OF_CLASS_ENROLLMENT"))
 	private DetailClasses idDetailClass;
 
 	@ManyToOne
-	@JoinColumn(name = "id_user", nullable = false)
+	@JoinColumn(name = "id_participant", nullable = false, foreignKey = @ForeignKey(name = "FK_USER_OF_CLASS_ENROLLMENT"))
 	private Users idUser;
 
-	@Column(name = "is_ongoing")
+	@Column(name = "is_ongoing", nullable = false)
 	private Boolean isOngoing;
 
 }

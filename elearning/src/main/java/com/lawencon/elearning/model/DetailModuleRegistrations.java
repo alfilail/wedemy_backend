@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -29,11 +30,11 @@ public class DetailModuleRegistrations extends BaseTransaction {
 	private static final long serialVersionUID = -8107533276767612098L;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_module_rgs", nullable = false)
+	@JoinColumn(name = "id_module_rgs", nullable = false, foreignKey = @ForeignKey(name = "FK_MODULE_RGS_OF_DTL_MODULE_RGS"))
 	private ModuleRegistrations idModuleRegistration;
 
 	@ManyToOne
-	@JoinColumn(name = "id_learning_material", nullable = false)
+	@JoinColumn(name = "id_learning_material", nullable = false, foreignKey = @ForeignKey(name = "FK_LEARNING_MATERIAL_OF_DTL_MODULE_RGS"))
 	private LearningMaterials idLearningMaterial;
 
 	@Column(name = "order_number", nullable = false)

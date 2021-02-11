@@ -27,7 +27,10 @@ public class Files extends BaseMaster {
 	@Column(name = "file")
 	private byte[] file;
 
-	@Column(name = "type")
+	@Column(name = "file_name")
+	private String name;
+
+	@Column(name = "file_type")
 	private String type;
 
 }

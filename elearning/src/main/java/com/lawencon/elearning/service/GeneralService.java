@@ -4,6 +4,4 @@ import com.lawencon.elearning.model.General;
 
 public interface GeneralService {
 	General getTemplateEmail(String code) throws Exception;
-	
-	byte[] getDefaultPict(String code) throws Exception;
 }

@@ -23,7 +23,7 @@ public class SubmissionStatus extends BaseMaster {
 	@Column(name = "code", length = 6, unique = true, nullable = false)
 	private String code;
 
-	@Column(name = "status_name", length = 35, nullable = false)
+	@Column(name = "status_name", length = 10, unique = true, nullable = false)
 	private String submissionStatusName;
 
 }

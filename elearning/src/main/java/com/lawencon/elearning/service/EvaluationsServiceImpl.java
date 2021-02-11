@@ -65,17 +65,10 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 
 	@Override
 	public void updateEvaluation(ScoreInputs scores) throws Exception {
-		try {
-			begin();
-			for (Evaluations evaluation : scores.getEvaluations()) {
-				Grades grade = gradesService.getByScore(evaluation.getScore());
-				evaluation.setIdGrade(grade);
-				evaluationsDao.updateEvaluation(evaluation, () -> validateInsert(evaluation));
-			}
-			commit();
-		} catch (Exception e) {
-			rollback();
-			throw new Exception(e);
+		for (Evaluations evaluation : scores.getEvaluations()) {
+			Grades grade = gradesService.getByScore(evaluation.getScore());
+			evaluation.setIdGrade(grade);
+			evaluationsDao.updateEvaluation(evaluation, () -> validateInsert(evaluation));
 		}
 	}
 
@@ -141,14 +134,14 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 	public List<?> reportScore(String idDtlClass, String idParticipant) throws Exception {
 		return evaluationsDao.reportScore(idDtlClass, idParticipant);
 	}
-	
+
 	@Override
 	public List<?> getCertificate(String idUser, String idDetailClass) throws Exception {
 		return evaluationsDao.getCertificate(idUser, idDetailClass);
 	}
 
 	private void validateReport(List<?> data) throws Exception {
-		if(data == null) {
+		if (data == null) {
 			throw new Exception("Data kosong");
 		}
 	}

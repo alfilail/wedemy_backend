@@ -2,6 +2,7 @@ package com.lawencon.elearning.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
@@ -17,7 +18,7 @@ import lombok.EqualsAndHashCode;
 
 @Entity
 @JsonInclude(Include.NON_NULL)
-@JsonIgnoreProperties(allowSetters = true, value = {"userPassword"})
+@JsonIgnoreProperties(allowSetters = true, value = { "userPassword" })
 @Table(name = "t_m_users")
 @EqualsAndHashCode(callSuper = false)
 @Data
@@ -32,10 +33,10 @@ public class Users extends BaseMaster {
 	private String userPassword;
 
 	@OneToOne
-	@JoinColumn(name = "id_profile", nullable = false)
+	@JoinColumn(name = "id_profile", nullable = false, foreignKey = @ForeignKey(name = "FK_PROFILE_OF_USER"))
 	private Profiles idProfile;
 
 	@ManyToOne
-	@JoinColumn(name = "id_role", nullable = false)
+	@JoinColumn(name = "id_role", nullable = false, foreignKey = @ForeignKey(name = "FK_ROLE_OF_USER"))
 	private Roles idRole;
 }

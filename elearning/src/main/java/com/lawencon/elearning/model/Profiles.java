@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -31,7 +32,7 @@ public class Profiles extends BaseMaster {
 	@Column(name = "id_number", length = 16, unique = true)
 	private String idNumber;
 
-	@Column(name = "birth_place", length = 35)
+	@Column(name = "birth_place", length = 50)
 	private String birthPlace;
 
 	@JsonFormat(pattern = "yyyy-MM-dd")
@@ -46,11 +47,11 @@ public class Profiles extends BaseMaster {
 
 	@Column(name = "email", length = 30, nullable = false)
 	private String email;
-	
+
 	@Column(name = "bio", columnDefinition = "text")
 	private String bio;
-	
+
 	@OneToOne
-	@JoinColumn(name = "id_file", columnDefinition = "varchar DEFAULT NULL")
+	@JoinColumn(name = "id_file", columnDefinition = "varchar DEFAULT NULL", foreignKey = @ForeignKey(name = "FK_FILE_OF_PROFILE"))
 	private Files idFile;
 }

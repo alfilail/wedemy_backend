@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.PreUpdate;
 import javax.persistence.Version;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -29,21 +30,21 @@ public abstract class BaseEntity implements Serializable {
 	@CreationTimestamp
 	private LocalDateTime createdAt;
 
-//	@Column(name = "updated_by")
-//	private String updatedBy;
-//
-//	@Column(name = "updated_at")
-//	private LocalDateTime updatedAt;
+	@Column(name = "updated_by")
+	private String updatedBy;
+
+	@Column(name = "updated_at")
+	private LocalDateTime updatedAt;
 
 	public BaseEntity() {
 		if (version == null)
 			version = 0L;
 	}
 
-//	@PreUpdate
-//	public void preUpdate() {
-//		updatedAt = LocalDateTime.now();
-//	}
+	@PreUpdate
+	public void preUpdate() {
+		updatedAt = LocalDateTime.now();
+	}
 
 	@Column(name = "version")
 	@Version
@@ -81,19 +82,19 @@ public abstract class BaseEntity implements Serializable {
 		this.createdAt = createdAt;
 	}
 
-//	public String getUpdatedBy() {
-//		return updatedBy;
-//	}
-//
-//	public void setUpdatedBy(String updatedBy) {
-//		this.updatedBy = updatedBy;
-//	}
-//
-//	public LocalDateTime getUpdatedAt() {
-//		return updatedAt;
-//	}
-//
-//	public void setUpdatedAt(LocalDateTime updatedAt) {
-//		this.updatedAt = updatedAt;
-//	}
+	public String getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(String updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(LocalDateTime updatedAt) {
+		this.updatedAt = updatedAt;
+	}
 }

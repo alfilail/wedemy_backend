@@ -23,6 +23,6 @@ public class Modules extends BaseMaster {
 	@Column(name = "code", length = 6, unique = true, nullable = false)
 	private String code;
 
-	@Column(name = "module_name", length = 35, nullable = false)
+	@Column(name = "module_name", length = 50, nullable = false)
 	private String moduleName;
 }

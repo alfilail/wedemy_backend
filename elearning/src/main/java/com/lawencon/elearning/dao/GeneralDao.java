@@ -4,6 +4,4 @@ import com.lawencon.elearning.model.General;
 
 public interface GeneralDao {
 	General getTemplateEmail(String code) throws Exception;
-	
-	byte[] getDefaultPict(String code) throws Exception;
 }
