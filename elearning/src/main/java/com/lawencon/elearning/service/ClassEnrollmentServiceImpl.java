@@ -12,6 +12,7 @@ import com.lawencon.elearning.util.TransactionNumberCode;
 
 @Service
 public class ClassEnrollmentServiceImpl extends ElearningBaseServiceImpl implements ClassEnrollmentService {
+	
 	@Autowired
 	private ClassEnrollmentsDao classEnrollmentDao;
 

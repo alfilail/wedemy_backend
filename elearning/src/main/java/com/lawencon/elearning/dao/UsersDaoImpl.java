@@ -59,12 +59,12 @@ public class UsersDaoImpl extends ElearningBaseDaoImpl<Users> implements UsersDa
 	@Override
 	public List<Users> getByRoleCode(String code) throws Exception {
 		String sql = sqlBuilder("SELECT u.id, u.username, r.code, p.fullname, p.id_number, p.birth_place, p.birth_date,",
-				" p.email, p.phone, p.address FROM t_m_users u", " INNER JOIN t_m_profiles p ON p.id = u.id_profile",
+				" p.email, p.phone, p.address, p.bio FROM t_m_users u INNER JOIN t_m_profiles p ON p.id = u.id_profile",
 				" INNER JOIN t_m_roles r ON r.id = u.id_role WHERE r.code = ?1 AND u.is_active = ?2").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, code).setParameter(2, true).getResultList();
 		return HibernateUtils.bMapperList(listObj, Users.class, "id", "username", "idRole.code", "idProfile.fullName",
 				"idProfile.idNumber", "idProfile.birthPlace", "idProfile.birthDate", "idProfile.email",
-				"idProfile.phone", "idProfile.address");
+				"idProfile.phone", "idProfile.address", "idProfile.bio");
 	}
 
 	@Override

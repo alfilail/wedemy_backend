@@ -60,12 +60,12 @@ public class EvaluationsController extends ElearningBaseController {
 		}
 	}
 
-	@GetMapping("/report/scores")
-	public HttpEntity<?> reportAllScores(@RequestParam("idClass") String idClass) {
+	@GetMapping("/report/scores/{idDtlClass}")
+	public HttpEntity<?> reportAllScores(@PathVariable("idDtlClass") String idDtlClass) {
 		List<?> listData = new ArrayList<>();
 		byte[] out;
 		try {
-			listData = evaluationsService.reportAllScore(idClass);
+			listData = evaluationsService.reportAllScore(idDtlClass);
 			out = JasperUtil.responseToByteArray(listData, "ScoresReport", null);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -77,10 +77,10 @@ public class EvaluationsController extends ElearningBaseController {
 		return new HttpEntity<>(out, headers);
 	}
 
-	@GetMapping("/scores")
-	public ResponseEntity<?> getScores(@RequestParam("idClass") String idClass) {
+	@GetMapping("scores/{idDtlClass}")
+	public ResponseEntity<?> getScores(@PathVariable("idDtlClass") String idDtlClass) {
 		try {
-			List<?> scoreList = evaluationsService.reportAllScore(idClass);
+			List<?> scoreList = evaluationsService.reportAllScore(idDtlClass);
 			return responseSuccess(scoreList, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -89,12 +89,12 @@ public class EvaluationsController extends ElearningBaseController {
 	}
 
 	@GetMapping("/report/score")
-	public HttpEntity<?> reportScore(@RequestParam("idClass") String idClass,
+	public HttpEntity<?> reportScore(@RequestParam("idDtlClass") String idDtlClass,
 			@RequestParam("idParticipant") String idParticipant) {
 		List<?> listData = new ArrayList<>();
 		byte[] out;
 		try {
-			listData = evaluationsService.reportScore(idClass, idParticipant);
+			listData = evaluationsService.reportScore(idDtlClass, idParticipant);
 			out = JasperUtil.responseToByteArray(listData, "ScoreReport", null);
 		} catch (Exception e) {
 			e.printStackTrace();

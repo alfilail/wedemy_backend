@@ -51,7 +51,7 @@ public class SubmissionStatusController extends ElearningBaseController {
 		}
 	}
 
-	@GetMapping("/all")
+	@GetMapping
 	public ResponseEntity<?> getAll() {
 		List<SubmissionStatus> submissionStatusList = new ArrayList<SubmissionStatus>();
 		try {

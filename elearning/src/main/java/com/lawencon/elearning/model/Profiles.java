@@ -47,6 +47,9 @@ public class Profiles extends BaseMaster {
 	@Column(name = "email", length = 30, nullable = false)
 	private String email;
 	
+	@Column(name = "bio", columnDefinition = "text")
+	private String bio;
+	
 	@OneToOne
 	@JoinColumn(name = "id_file", columnDefinition = "varchar DEFAULT NULL")
 	private Files idFile;
