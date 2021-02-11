@@ -40,7 +40,7 @@ public class GradesDaoImpl extends ElearningBaseDaoImpl<Grades> implements Grade
 	}
 
 	@Override
-	public void deleteById(String id) throws Exception {
+	public void deleteGradeById(String id) throws Exception {
 		deleteById(id);
 	}
 

@@ -45,7 +45,7 @@ public class UsersDaoImpl extends ElearningBaseDaoImpl<Users> implements UsersDa
 	}
 
 	@Override
-	public void deleteById(String id) throws Exception {
+	public void deleteUserById(String id) throws Exception {
 		deleteById(id);
 	}
 
@@ -83,7 +83,7 @@ public class UsersDaoImpl extends ElearningBaseDaoImpl<Users> implements UsersDa
 				" FULL JOIN t_r_assignment_submissions tras on tmu.id = tras.id_participant ",
 				" FULL JOIN t_r_forums trf on tmu.id = trf.id_user ",
 				" FULL JOIN t_r_dtl_forums trdf on tmu.id = trdf.id_user ",
-				" FULL JOIN t_r_class_enrollments trce on tmu.id = trce.id_user where tmu.id = ?1 ").toString();
+				" FULL JOIN t_r_class_enrollments trce on tmu.id = trce.id_participant where tmu.id = ?1 ").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, id).setMaxResults(1).getResultList();
 		List<String> result = new ArrayList<String>();
 		listObj.forEach(val -> {

@@ -41,7 +41,7 @@ public class ModulesServiceImpl extends BaseServiceImpl implements ModulesServic
 			if (validateDelete(id)) {
 				softDeleteById(id, idUser);
 			} else {
-				modulesDao.deleteById(id);
+				modulesDao.deleteModuleById(id);
 			}
 			commit();
 		} catch (Exception e) {

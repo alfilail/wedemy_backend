@@ -49,7 +49,7 @@ public class ApprovementsServiceImpl extends ElearningBaseServiceImpl implements
 			if (validateDelete(id)) {
 				approvementsDao.softDeleteById(id, idUser);
 			} else {
-				approvementsDao.deleteById(id);
+				approvementsDao.deleteApprovementById(id);
 			}
 			commit();
 		} catch (Exception e) {

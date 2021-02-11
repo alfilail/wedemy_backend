@@ -45,16 +45,16 @@ public class ApprovementsRenewalDaoImpl extends ElearningBaseDaoImpl<Approvement
 			throws Exception {
 		List<ApprovementsRenewal> listResult = new ArrayList<>();
 		String sql = sqlBuilder("SELECT pr.fullname, p.id, p.presence_time, (SELECT a.code FROM ",
-				"t_r_approvement_renewal ar LEFT JOIN t_m_approvements a ON ar.id_approvement = a.id ",
+				"t_r_approvement_renewals ar LEFT JOIN t_m_approvements a ON ar.id_approvement = a.id ",
 				"WHERE ar.id_presence = p.id ORDER BY ar.created_at DESC LIMIT 1), tmlm.learning_material_name ,",
 				" dmr.schedule_date ",
-				"FROM t_r_class_enrollments ce INNER JOIN t_m_users u ON ce.id_user = u.id ",
+				"FROM t_r_class_enrollments ce INNER JOIN t_m_users u ON ce.id_participant = u.id ",
 				"INNER JOIN t_m_profiles pr ON u.id_profile = pr.id INNER JOIN t_m_detail_classes dc ",
-				"ON ce.id_detail_class = dc.id INNER JOIN t_r_module_registrations mr ON dc.id = mr.id_detail_class ",
+				"ON ce.id_dtl_class = dc.id INNER JOIN t_r_module_registrations mr ON dc.id = mr.id_dtl_class ",
 				"INNER JOIN t_r_detail_module_registrations dmr ON mr.id = dmr.id_module_rgs ",
 				"INNER JOIN t_m_learning_materials tmlm ON dmr.id_learning_material = tmlm.id ",
-				"LEFT JOIN t_r_presences p ON dmr.id = p.id_detail_module_rgs AND ce.id_user = p.id_user ",
-				"WHERE ce.id_detail_class =?1 and dmr.id =?2 ORDER BY p.presence_time ASC").toString();
+				"LEFT JOIN t_r_presences p ON dmr.id = p.id_dtl_module_rgs AND ce.id_participant = p.id_user ",
+				"WHERE ce.id_dtl_class =?1 and dmr.id =?2 ORDER BY p.presence_time ASC").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlClass).setParameter(2, idDtlModuleRgs)
 				.getResultList();
 		listObj.forEach(val -> {
@@ -91,9 +91,9 @@ public class ApprovementsRenewalDaoImpl extends ElearningBaseDaoImpl<Approvement
 	@Override
 	public ApprovementsRenewal checkParticipantPresence(String idDtlModuleRgs, String idUser) throws Exception {
 		List<ApprovementsRenewal> listResult = new ArrayList<>();
-		String sql = sqlBuilder("SELECT a.code FROM t_r_presences p INNER JOIN t_r_approvement_renewal ar ",
+		String sql = sqlBuilder("SELECT a.code FROM t_r_presences p INNER JOIN t_r_approvement_renewals ar ",
 				"ON ar.id_presence = p.id INNER JOIN t_m_approvements a ON ar.id_approvement = a.id ",
-				"WHERE p.id_detail_module_rgs =?1 AND p.id_user =?2 ORDER BY ar.created_at DESC LIMIT 1").toString();
+				"WHERE p.id_dtl_module_rgs =?1 AND p.id_user =?2 ORDER BY ar.created_at DESC LIMIT 1").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlModuleRgs).setParameter(2, idUser)
 				.getResultList();
 		listObj.forEach(val -> {
@@ -117,13 +117,13 @@ public class ApprovementsRenewalDaoImpl extends ElearningBaseDaoImpl<Approvement
 				" INNER JOIN t_m_modules tmm2 ON trmr.id_module = tmm2.id ",
 				" WHERE tmm2.module_name = tmm.module_name) AS decimal), 4) * 100 ",
 				" AS present_day ",
-				" FROM t_r_approvement_renewal tar ", 
+				" FROM t_r_approvement_renewals tar ", 
 				" INNER JOIN t_r_presences trp ON tar.id_presence = trp.id ",
 				" INNER JOIN t_m_users tmu ON trp.id_user = tmu.id ",
 				" INNER JOIN t_m_profiles tmp  ON tmu.id_profile = tmp.id ",
-				" INNER JOIN t_r_detail_module_registrations trdmr ON trp.id_detail_module_rgs = trdmr.id ",
+				" INNER JOIN t_r_detail_module_registrations trdmr ON trp.id_dtl_module_rgs = trdmr.id ",
 				" INNER JOIN t_r_module_registrations trmr ON trdmr.id_module_rgs = trmr.id ",
-				" INNER JOIN t_m_detail_classes tmdc  ON trmr.id_detail_class = tmdc.id ",
+				" INNER JOIN t_m_detail_classes tmdc  ON trmr.id_dtl_class = tmdc.id ",
 				" INNER JOIN t_m_modules tmm ON trmr.id_module = tmm.id ",
 				" INNER JOIN t_m_learning_materials tmlm ON tmlm.id = trdmr.id_learning_material ",
 				" INNER JOIN t_m_classes tmc ON tmdc.id_class = tmc.id ",

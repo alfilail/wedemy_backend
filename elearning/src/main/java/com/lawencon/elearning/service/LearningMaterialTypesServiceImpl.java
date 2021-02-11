@@ -39,7 +39,7 @@ public class LearningMaterialTypesServiceImpl extends BaseServiceImpl implements
 			if (validateDelete(id)) {
 				learnMaterialTypeDao.softDeleteById(id, idUser);
 			} else {
-				learnMaterialTypeDao.deleteById(id);
+				learnMaterialTypeDao.deleteTypeById(id);
 			}
 			commit();
 		} catch (Exception e) {

@@ -23,7 +23,7 @@ public interface DetailClassesDao {
 	
 	void updateViews(String id) throws Exception;
 	
-	void deleteById(String id, String idUser) throws Exception;
+	void deleteDtlClassById(String id, String idUser) throws Exception;
 	
 	void update(DetailClasses dtlClass, Callback before) throws Exception;
 	

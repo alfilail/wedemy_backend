@@ -43,7 +43,7 @@ public class SubmissionStatusServiceImpl extends BaseServiceImpl implements Subm
 			if (validateDelete(id)) {
 				submissionStatusDao.softDeleteById(id, idUser);
 			} else {
-				submissionStatusDao.deleteById(id);
+				submissionStatusDao.deleteSubmissionStatusById(id);
 			}
 			commit();
 		} catch (Exception e) {

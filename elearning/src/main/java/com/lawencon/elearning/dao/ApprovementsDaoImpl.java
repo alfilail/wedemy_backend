@@ -36,7 +36,7 @@ public class ApprovementsDaoImpl extends ElearningBaseDaoImpl<Approvements> impl
 	}
 
 	@Override
-	public void deleteById(String id) throws Exception {
+	public void deleteApprovementById(String id) throws Exception {
 		deleteById(id);
 	}	
 
@@ -55,7 +55,7 @@ public class ApprovementsDaoImpl extends ElearningBaseDaoImpl<Approvements> impl
 	@Override
 	public List<?> validateDelete(String id) throws Exception {
 		String sql = sqlBuilder("SELECT ar.id FROM t_m_approvements a ",
-				" FULL JOIN t_r_approvement_renewal ar ON ar.id_approvement = a.id ",
+				" FULL JOIN t_r_approvement_renewals ar ON ar.id_approvement = a.id ",
 				" WHERE a.id = ?1").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, id).setMaxResults(1).getResultList();
 		List<String> result = new ArrayList<>();

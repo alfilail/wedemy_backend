@@ -48,7 +48,7 @@ public class PresencesDaoImpl extends ElearningBaseDaoImpl<Presences> implements
 		List<Presences> listResult = new ArrayList<>();
 		String sql = sqlBuilder("SELECT pr.id_user FROM t_r_presences pr INNER JOIN t_m_users u ON pr.id_user = u.id ",
 				"INNER JOIN t_m_profiles p ON u.id_profile = p.id INNER JOIN t_m_roles r ON u.id_role = r.id ",
-				"WHERE pr.id_detail_module_rgs = ?1 AND r.code = 'TTR' ").toString();
+				"WHERE pr.id_dtl_module_rgs = ?1 AND r.code = 'TTR' ").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlModuleRgs).getResultList();
 		listObj.forEach(val -> {
 			Object obj = (Object) val;
@@ -66,7 +66,7 @@ public class PresencesDaoImpl extends ElearningBaseDaoImpl<Presences> implements
 				" INNER JOIN t_m_users u ON pr.id_user = u.id ",
 				" INNER JOIN t_m_profiles p ON u.id_profile = p.id ",
 				" INNER JOIN t_m_roles r ON u.id_role = r.id ",
-				" WHERE pr.id_detail_module_rgs = ?1 AND pr.id_user = ?2").toString();
+				" WHERE pr.id_dtl_module_rgs = ?1 AND pr.id_user = ?2").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlModuleRgs).setParameter(2, idParticipant)
 				.getResultList();
 		listObj.forEach(val -> {

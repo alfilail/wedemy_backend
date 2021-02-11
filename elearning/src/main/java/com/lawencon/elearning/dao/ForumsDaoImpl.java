@@ -46,7 +46,7 @@ public class ForumsDaoImpl extends ElearningBaseDaoImpl<Forums> implements Forum
 		List<Forums> listResult = new ArrayList<>();
 		String sql = sqlBuilder("SELECT f.id, f.created_at, f.content_text, p.fullname FROM t_r_forums f ",
 				"INNER JOIN t_m_users u ON f.id_user = u.id INNER JOIN t_m_profiles p ON u.id_profile = p.id ",
-				"WHERE f.id_dtl_module_registration =?1").toString();
+				"WHERE f.id_dtl_module_rgs =?1").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, id).getResultList();
 		listObj.forEach(val -> {
 			Object[] objArr = (Object[]) val;
@@ -71,7 +71,7 @@ public class ForumsDaoImpl extends ElearningBaseDaoImpl<Forums> implements Forum
 	
 	@Override
 	public List<?> validateDeleteForum(String id) throws Exception {
-		String sql = sqlBuilder("SELECT trf.id FROM t_r_forums trf FULL JOIN t_r_dtl_forums trdf ",
+		String sql = sqlBuilder("SELECT trf.id FROM t_r_forums trf FULL JOIN t_r_detail_forums trdf ",
 				" ON trf.id = trdf.id_forum WHERE trf.id = ?1 ").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, id).setMaxResults(1).getResultList();
 		List<String> result = new ArrayList<String>();

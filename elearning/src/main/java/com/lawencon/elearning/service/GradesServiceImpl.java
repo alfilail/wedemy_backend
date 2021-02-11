@@ -49,7 +49,7 @@ public class GradesServiceImpl extends BaseServiceImpl implements GradesService 
 				gradeDao.softDeleteById(id, idUser);
 			}
 			else {
-				gradeDao.deleteById(id);
+				gradeDao.deleteGradeById(id);
 			}
 			commit();			
 		} catch(Exception e) {

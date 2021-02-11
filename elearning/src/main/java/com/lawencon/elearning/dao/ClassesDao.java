@@ -20,7 +20,7 @@ public interface ClassesDao {
 
 	void update(Classes clazz, Callback before) throws Exception;
 
-	void deleteById(String id) throws Exception;
+	void deleteClassById(String id) throws Exception;
 	
 	void softDeleteById(String id, String idUser) throws Exception;
 	

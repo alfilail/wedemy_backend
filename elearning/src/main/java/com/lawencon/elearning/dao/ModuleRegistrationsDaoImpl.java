@@ -29,7 +29,7 @@ public class ModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<ModuleRegis
 		List<ModuleRegistrations> listResult = new ArrayList<>();
 		String sql = sqlBuilder(
 				"SELECT mr.id, dc.start_date, dc.end_date FROM t_r_module_registrations INNER JOIN t_m_detail_classes dc ",
-				"ON mr.id_detail_class = dc.id WHERE mr.id = ?1 AND dc.id = ?2").toString();
+				"ON mr.id_dtl_class = dc.id WHERE mr.id = ?1 AND dc.id = ?2").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlClass).setParameter(2, idModRegist)
 				.getResultList();
 		listObj.forEach(val -> {
@@ -52,7 +52,7 @@ public class ModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<ModuleRegis
 				"dc.code dtlclasscode, dc.start_date, dc.end_date, dc.start_time, dc.end_time, ",
 				"mr.id, m.id idmodule, m.code modulecode, m.module_name FROM t_r_module_registrations mr ",
 				"INNER JOIN t_m_modules m ON mr.id_module = m.id ",
-				"INNER JOIN t_m_detail_classes dc ON mr.id_detail_class = dc.id ",
+				"INNER JOIN t_m_detail_classes dc ON mr.id_dtl_class = dc.id ",
 				"INNER JOIN t_m_classes c ON dc.id_class = c.id INNER JOIN t_m_files f ON c.id_file = f.id ",
 				"INNER JOIN t_m_users u ON c.id_tutor = u.id INNER JOIN t_m_profiles p ON u.id_profile = p.id ",
 				"WHERE dc.id = ?1").toString();

@@ -14,6 +14,7 @@ import com.lawencon.elearning.model.General;
 import com.lawencon.elearning.model.Grades;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.SubmissionStatusRenewal;
+import com.lawencon.elearning.util.GeneralUtil;
 import com.lawencon.elearning.util.MailUtil;
 import com.lawencon.elearning.util.TransactionNumberCode;
 
@@ -54,6 +55,9 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 				evaluation.setIdGrade(grade);
 				evaluation.setTrxNumber(generateTrxNumber(TransactionNumberCode.EVALUATION.code));
 				evaluationsDao.insertEvaluation(evaluation, () -> validateInsert(evaluation));
+				System.out.println("Sending Email...");
+				sendEmail(evaluation);
+				System.out.println("Done");
 				insertStatusRenewal(evaluation);
 			}
 			commit();
@@ -110,7 +114,7 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 		evaluation.setIdAssignmentSubmission(assignmentSubmissions);
 		Profiles participant = evaluationsDao.getParticipantProfile(evaluation);
 
-		General general = generalService.getTemplateEmail("scrupd");
+		General general = generalService.getTemplateEmail(GeneralUtil.EVALUATION_PARTICIPANT.code);
 		String text = general.getTemplateHtml();
 
 		text = text.replace("#1#", participant.getFullName());

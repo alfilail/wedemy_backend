@@ -47,14 +47,14 @@ public class EvaluationsDaoImpl extends ElearningBaseDaoImpl<Evaluations> implem
 			throws Exception {
 		List<Evaluations> listResult = new ArrayList<>();
 		String sql = sqlBuilder("SELECT pr.fullname, u.id userid, asm.id submissionid, asm.submit_time, f.file, ",
-				"f.type, e.id evalid, e.version, e.score FROM t_r_class_enrollments ce INNER JOIN t_m_users u ON ce.id_user = u.id ",
+				"f.file_type, e.id evalid, e.version, e.score FROM t_r_class_enrollments ce INNER JOIN t_m_users u ON ce.id_participant = u.id ",
 				"INNER JOIN t_m_profiles pr ON u.id_profile = pr.id INNER JOIN t_m_detail_classes dc ",
-				"ON ce.id_detail_class = dc.id INNER JOIN t_r_module_registrations mr ON dc.id = mr.id_detail_class ",
+				"ON ce.id_dtl_class = dc.id INNER JOIN t_r_module_registrations mr ON dc.id = mr.id_dtl_class ",
 				"INNER JOIN t_r_detail_module_registrations dmr ON mr.id = dmr.id_module_rgs ",
 				"LEFT JOIN t_r_assignment_submissions asm ON dmr.id = asm.id_dtl_module_rgs ",
-				"AND ce.id_user = asm.id_participant LEFT JOIN t_m_files f ON asm.id_file = f.id ",
+				"AND ce.id_participant = asm.id_participant LEFT JOIN t_m_files f ON asm.id_file = f.id ",
 				"LEFT JOIN t_r_evaluations e ON asm.id = e.id_assignment_submission ",
-				"WHERE ce.id_detail_class =?1 and dmr.id =?2 ORDER BY asm.submit_time ASC").toString();
+				"WHERE ce.id_dtl_class =?1 and dmr.id =?2 ORDER BY asm.submit_time ASC").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlClass).setParameter(2, idDtlModuleRgs)
 				.getResultList();
 		listObj.forEach(val -> {
@@ -140,7 +140,7 @@ public class EvaluationsDaoImpl extends ElearningBaseDaoImpl<Evaluations> implem
 				" INNER JOIN t_r_detail_module_registrations dmr ON dmr.id = ams.id_dtl_module_rgs ",
 				" INNER JOIN t_r_module_registrations mr ON mr.id = dmr.id_module_rgs ",
 				" INNER JOIN t_m_modules m ON m.id = mr.id_module ",
-				" INNER JOIN t_m_detail_classes dc ON dc.id = mr.id_detail_class ",
+				" INNER JOIN t_m_detail_classes dc ON dc.id = mr.id_dtl_class ",
 				" INNER JOIN t_m_classes c ON c.id = dc.id_class INNER JOIN t_m_users ut ON ut.id = c.id_tutor ",
 				" INNER JOIN t_m_profiles pt ON pt.id = ut.id_profile WHERE dc.id = ?1 ",
 				" GROUP BY p.fullname, c.class_name, c.code, pt.fullname, ut.id ").toString();
@@ -198,7 +198,7 @@ public class EvaluationsDaoImpl extends ElearningBaseDaoImpl<Evaluations> implem
 				" INNER JOIN t_r_detail_module_registrations dmr ON dmr.id = ams.id_dtl_module_rgs ",
 				" INNER JOIN t_r_module_registrations mr ON mr.id = dmr.id_module_rgs ",
 				" INNER JOIN t_m_modules m ON m.id = mr.id_module ",
-				" INNER JOIN t_m_detail_classes dc on dc.id = mr.id_detail_class ",
+				" INNER JOIN t_m_detail_classes dc on dc.id = mr.id_dtl_class ",
 				" INNER JOIN t_m_classes c on c.id = dc.id_class",
 				" WHERE dc.id = ?1 AND ams.id_participant = ?2 ",
 				" GROUP BY p.fullname, p.email, p.address, p.phone, m.code, m.module_name, dmr.order_number ",
@@ -250,9 +250,9 @@ public class EvaluationsDaoImpl extends ElearningBaseDaoImpl<Evaluations> implem
 				" INNER JOIN t_r_detail_module_registrations dmr ON dmr.id = ams.id_dtl_module_rgs ",
 				" INNER JOIN t_r_module_registrations mr ON mr.id = dmr.id_module_rgs ",
 				" INNER JOIN t_m_modules m ON m.id = mr.id_module ",
-				" INNER JOIN t_m_detail_classes dc ON dc.id = mr.id_detail_class ",
+				" INNER JOIN t_m_detail_classes dc ON dc.id = mr.id_dtl_class ",
 				" INNER JOIN t_m_classes tmc ON tmc.id = dc.id_class ",
-				" INNER JOIN t_r_class_enrollments trce ON trce.id_detail_class = dc.id ",
+				" INNER JOIN t_r_class_enrollments trce ON trce.id_dtl_class = dc.id ",
 				" WHERE dc.id = ?1 AND ams.id_participant = ?2 ",
 				" GROUP BY tmp.fullname , tmc.class_name ",
 				" HAVING AVG(e.score) > 70 ")

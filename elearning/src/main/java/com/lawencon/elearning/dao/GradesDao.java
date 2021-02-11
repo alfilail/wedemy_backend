@@ -16,7 +16,7 @@ public interface GradesDao {
 	
 	void update(Grades grade, Callback before) throws Exception;
 	
-	void deleteById(String id) throws Exception;
+	void deleteGradeById(String id) throws Exception;
 	
 	Grades getByCode(String code) throws Exception;
 	

@@ -45,7 +45,7 @@ public class ProfilesDaoImpl extends ElearningBaseDaoImpl<Profiles> implements P
 	}
 
 	@Override
-	public void deleteById(String id) throws Exception {
+	public void deleteProfileById(String id) throws Exception {
 		deleteById(id);
 	}
 

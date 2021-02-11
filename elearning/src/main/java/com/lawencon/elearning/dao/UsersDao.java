@@ -18,7 +18,7 @@ public interface UsersDao {
 
 	void update(Users user, Callback before) throws Exception;
 
-	void deleteById(String id) throws Exception;
+	void deleteUserById(String id) throws Exception;
 
 	Users getByIdProfile(Profiles profile) throws Exception;
 

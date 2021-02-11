@@ -98,7 +98,7 @@ public class DetailClassesDaoImpl extends ElearningBaseDaoImpl<DetailClasses> im
 	}
 	
 	@Override
-	public void deleteById(String id, String idUser) throws Exception {
+	public void deleteDtlClassById(String id, String idUser) throws Exception {
 		updateNativeSQL("UPDATE t_m_detail_classes SET is_active = FALSE", id, idUser);
 	}
 	

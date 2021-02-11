@@ -37,7 +37,7 @@ public class DetailForumsDaoImpl extends ElearningBaseDaoImpl<DetailForums> impl
 
 	@Override
 	public void softDeleteDetailForumById(String id, String idUser) throws Exception {
-		updateNativeSQL("UPDATE t_m_dtl_forums SET is_active = FALSE", id, idUser);
+		updateNativeSQL("UPDATE t_m_detail_forums SET is_active = FALSE", id, idUser);
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class DetailForumsDaoImpl extends ElearningBaseDaoImpl<DetailForums> impl
 	@Override
 	public List<DetailForums> getAllDetailForumsByIdForum(String idForum) throws Exception {
 		List<DetailForums> listResult = new ArrayList<>();
-		String sql = sqlBuilder("SELECT df.id, df.created_at, df.content_text, p.fullname FROM t_r_dtl_forums df ",
+		String sql = sqlBuilder("SELECT df.id, df.created_at, df.content_text, p.fullname FROM t_r_detail_forums df ",
 				"INNER JOIN t_m_users u ON df.id_user = u.id INNER JOIN t_m_profiles p ON u.id_profile = p.id ",
 				"WHERE df.id_forum =?1").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, idForum).getResultList();

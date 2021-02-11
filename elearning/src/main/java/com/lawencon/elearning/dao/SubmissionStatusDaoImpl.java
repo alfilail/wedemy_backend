@@ -34,7 +34,7 @@ public class SubmissionStatusDaoImpl extends ElearningBaseDaoImpl<SubmissionStat
 	}
 
 	@Override
-	public void deleteById(String id) throws Exception {
+	public void deleteSubmissionStatusById(String id) throws Exception {
 		deleteById(id);
 	}
 
@@ -51,7 +51,7 @@ public class SubmissionStatusDaoImpl extends ElearningBaseDaoImpl<SubmissionStat
 	@Override
 	public List<?> validateDelete(String id) throws Exception {
 		String sql = sqlBuilder("SELECT ssr.id FROM t_m_submission_status ss ",
-				" FULL JOIN t_r_submission_status_renewal ssr ON ssr.id_submission_status = ss.id ",
+				" FULL JOIN t_r_submission_status_renewals ssr ON ssr.id_submission_status = ss.id ",
 				" WHERE ss.id = ?1 ").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, id).setMaxResults(1).getResultList();
 		List<String> result = new ArrayList<>();

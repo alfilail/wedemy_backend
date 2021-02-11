@@ -52,7 +52,7 @@ public class DetailModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<Detai
 				"SELECT lm.id materialid, lm.code materialcode, lm.learning_material_name, lm.description, ",
 				"lmt.code typecode, dmr.id dmrid, dmr.schedule_date, dmr.order_number, dmr.id_module_rgs FROM t_r_detail_module_registrations dmr ",
 				"INNER JOIN t_m_learning_materials lm ON dmr.id_learning_material = lm.id ",
-				"INNER JOIN t_m_learning_material_types lmt ON lm.id_learning_material_type = lmt.id WHERE dmr.id_module_rgs =?1")
+				"INNER JOIN t_m_learning_material_types lmt ON lm.id_type = lmt.id WHERE dmr.id_module_rgs =?1")
 						.toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, idModuleRgs).getResultList();
 		listObj.forEach(val -> {
@@ -90,7 +90,7 @@ public class DetailModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<Detai
 	public Integer totalHours(String idDtlClass) throws Exception {
 		List<Integer> result = new ArrayList<>();
 		String sql = sqlBuilder("SELECT COUNT(DISTINCT(dmr.schedule_date)) FROM t_r_detail_module_registrations dmr ",
-				"INNER JOIN t_r_module_registrations mr ON dmr.id_module_rgs = mr.id WHERE mr.id_detail_class =?1")
+				"INNER JOIN t_r_module_registrations mr ON dmr.id_module_rgs = mr.id WHERE mr.id_dtl_class =?1")
 						.toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlClass).getResultList();
 		listObj.forEach(val -> {

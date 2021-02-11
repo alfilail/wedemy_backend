@@ -37,7 +37,7 @@ public class LearningMaterialTypesDaoImpl extends ElearningBaseDaoImpl<LearningM
 	}
 
 	@Override
-	public void deleteById(String id) throws Exception {
+	public void deleteTypeById(String id) throws Exception {
 		deleteById(id);
 	}
 
@@ -56,7 +56,7 @@ public class LearningMaterialTypesDaoImpl extends ElearningBaseDaoImpl<LearningM
 	@Override
 	public List<?> validateDelete(String id) throws Exception {
 		String sql = sqlBuilder("SELECT lm.id FROM t_m_learning_material_types mt",
-				" FULL JOIN t_m_learning_materials lm ON mt.id = lm.id_learning_material_type",
+				" FULL JOIN t_m_learning_materials lm ON mt.id = lm.id_type",
 				" WHERE mt.id = ?1 ").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, id).setMaxResults(1).getResultList();
 		List<String> result = new ArrayList<String>();

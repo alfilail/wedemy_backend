@@ -94,7 +94,7 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 
 	@Override
 	public void deleteById(String id, String idUser) throws Exception {
-		detailClassesDao.deleteById(id, idUser);
+		detailClassesDao.deleteDtlClassById(id, idUser);
 	}
 
 	@Override

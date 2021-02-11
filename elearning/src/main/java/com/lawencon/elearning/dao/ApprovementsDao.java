@@ -15,7 +15,7 @@ public interface ApprovementsDao {
 
 	void update(Approvements approvement, Callback before) throws Exception;
 
-	void deleteById(String id) throws Exception;
+	void deleteApprovementById(String id) throws Exception;
 
 	Approvements getByCode(String code) throws Exception;
 	

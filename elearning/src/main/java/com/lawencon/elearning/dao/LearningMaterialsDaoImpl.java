@@ -32,7 +32,7 @@ public class LearningMaterialsDaoImpl extends ElearningBaseDaoImpl<LearningMater
 	}
 
 	@Override
-	public void deleteById(String id) throws Exception {
+	public void deleteMaterialById(String id) throws Exception {
 		deleteById(id);
 	}
 
@@ -53,7 +53,7 @@ public class LearningMaterialsDaoImpl extends ElearningBaseDaoImpl<LearningMater
 		String sql = sqlBuilder("SELECT trp.id "
 				+ " FROM t_m_learning_materials tmlm "
 				+ " INNER JOIN t_r_detail_module_registrations trdmr ON tmlm.id = id_learning_material "
-				+ " FULL JOIN t_r_presences trp ON trdmr.id = trp.id_detail_module_rgs "
+				+ " FULL JOIN t_r_presences trp ON trdmr.id = trp.id_dtl_module_rgs "
 				+ " WHERE tmlm.id = ?1").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, id).setMaxResults(1).getResultList();
 		List<String> result = new ArrayList<String>();

@@ -94,7 +94,7 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 				usersDao.softDeleteById(id, idUser);
 				profilesService.softDeleteById(user.getIdProfile().getId(), idUser);
 			} else {
-				usersDao.deleteById(id);
+				usersDao.deleteUserById(id);
 				profilesService.deleteById(user.getIdProfile().getId());
 			}
 			commit();
@@ -136,7 +136,7 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 		text = text.replace("#2#", pass);
 
 		MailHelper mailHelper = new MailHelper();
-//		mailHelper.setFrom("elearningalfione@gmail.com");
+		mailHelper.setFrom("elearningalfione@gmail.com");
 		mailHelper.setTo(profile.getEmail());
 		mailHelper.setSubject("Password has been reset");
 		mailHelper.setText(text);
@@ -253,7 +253,7 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 		text = text.replace("#1#", profile.getFullName());
 
 		MailHelper mailHelper = new MailHelper();
-//		mailHelper.setFrom("elearningalfione@gmail.com");
+		mailHelper.setFrom("elearningalfione@gmail.com");
 		mailHelper.setTo(profile.getEmail());
 		mailHelper.setSubject("Your account has been registered");
 		mailHelper.setText(text);

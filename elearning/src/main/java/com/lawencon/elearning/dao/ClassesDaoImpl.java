@@ -37,7 +37,7 @@ public class ClassesDaoImpl extends ElearningBaseDaoImpl<Classes> implements Cla
 	}
 
 	@Override
-	public void deleteById(String id) throws Exception {
+	public void deleteClassById(String id) throws Exception {
 		deleteById(id);
 	}
 

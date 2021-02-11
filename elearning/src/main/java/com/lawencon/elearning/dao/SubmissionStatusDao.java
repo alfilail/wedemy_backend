@@ -14,7 +14,7 @@ public interface SubmissionStatusDao {
 	
 	void update(SubmissionStatus submissionStatus, Callback before) throws Exception;
 	
-	void deleteById(String id) throws Exception;
+	void deleteSubmissionStatusById(String id) throws Exception;
 	
 	SubmissionStatus getByCode(String code) throws Exception;
 	

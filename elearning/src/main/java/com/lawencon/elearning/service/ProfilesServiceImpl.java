@@ -77,7 +77,7 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 
 	@Override
 	public void deleteById(String id) throws Exception {
-		profilesDao.deleteById(id);
+		profilesDao.deleteProfileById(id);
 	}
 
 	@Override

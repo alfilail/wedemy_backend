@@ -15,7 +15,7 @@ public interface LearningMaterialsDao {
 
 	void update(LearningMaterials learningMaterial, Callback before) throws Exception;
 
-	void deleteById(String id) throws Exception;
+	void deleteMaterialById(String id) throws Exception;
 
 	LearningMaterials getByCode(String code) throws Exception;
 	

@@ -37,7 +37,7 @@ public class AssignmentSubmissionsDaoImpl extends ElearningBaseDaoImpl<Assignmen
 			throws Exception {
 		List<AssignmentSubmissions> listResult = new ArrayList<>();
 		String sql = sqlBuilder(
-				"SELECT asm.id, asm.version, f.id idfile, f.file, f.type FROM t_r_assignment_submissions asm ",
+				"SELECT asm.id, asm.version, f.id idfile, f.file, f.file_type FROM t_r_assignment_submissions asm ",
 				"INNER JOIN t_m_files f ON asm.id_file = f.id WHERE asm.id_dtl_module_rgs = ?1 AND ",
 				"asm.id_participant = ?2").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlModuleRgs).setParameter(2, idParticipant)
@@ -73,7 +73,7 @@ public class AssignmentSubmissionsDaoImpl extends ElearningBaseDaoImpl<Assignmen
 		String sql = sqlBuilder("SELECT p.fullname, p.email FROM t_r_assignment_submissions asm ",
 				"INNER JOIN t_r_detail_module_registrations dmr ON asm.id_dtl_module_rgs = dmr.id ",
 				"INNER JOIN t_r_module_registrations mr ON dmr.id_module_rgs = mr.id ",
-				"INNER JOIN t_m_detail_classes dc ON mr.id_detail_class = dc.id ",
+				"INNER JOIN t_m_detail_classes dc ON mr.id_dtl_class = dc.id ",
 				"INNER JOIN t_m_classes c ON dc.id_class = c.id INNER JOIN t_m_users u ON c.id_tutor = u.id ",
 				"INNER JOIN t_m_profiles p ON u.id_profile = p.id WHERE asm.id_dtl_module_rgs = ?1").toString();
 		List<?> listObj = createNativeQuery(sql)

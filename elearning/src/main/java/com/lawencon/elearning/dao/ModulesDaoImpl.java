@@ -27,7 +27,7 @@ public class ModulesDaoImpl extends ElearningBaseDaoImpl<Modules> implements Mod
 	}
 
 	@Override
-	public void deleteById(String id) throws Exception {
+	public void deleteModuleById(String id) throws Exception {
 		deleteById(id);
 	}
 

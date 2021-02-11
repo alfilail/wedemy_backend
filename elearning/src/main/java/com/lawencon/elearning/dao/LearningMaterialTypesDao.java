@@ -19,7 +19,7 @@ public interface LearningMaterialTypesDao {
 
 	void update(LearningMaterialTypes lmType, Callback before) throws Exception;
 
-	void deleteById(String id) throws Exception;
+	void deleteTypeById(String id) throws Exception;
 
 	LearningMaterialTypes getByCode(String code) throws Exception;
 
