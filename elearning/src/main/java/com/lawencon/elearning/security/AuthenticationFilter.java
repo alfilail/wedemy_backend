@@ -77,7 +77,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException failed) throws IOException, ServletException {
 		response.setStatus(HttpStatus.UNAUTHORIZED.value());
-		if(failed.getMessage().equals("Bad credentials")) {
+		if(failed.getMessage().equals("Bad credentials") || failed.getMessage().contains("UserDetailsService returned null")) {
+			response.setContentType("application/json");
 			response.getWriter().append("Username atau Password salah");
 		}
 	}

@@ -106,16 +106,20 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 
 	@Override
 	public Users updateUserPassword(Profiles profile) throws Exception {
-		Profiles profiles = profilesService.getByEmail(profile.getEmail());
-		Users user = usersDao.getByIdProfile(profiles);
-		String pass = generatePassword();
-		System.out.println(pass);
-		user.setUserPassword(passwordEncoder.encode(pass));
-		usersDao.update(user, () -> validateUpdate(user));
-		System.out.println("Sending mail...");
-		sendEmailResetPassword(pass, profiles);
-		System.out.println("Done");
-		return user;
+			Profiles profiles = profilesService.getByEmail(profile.getEmail());
+			if(profiles == null) {
+				throw new Exception("Email yang diinput tidak terdaftar");
+			} else {
+				Users user = usersDao.getByIdProfile(profiles);
+				String pass = generatePassword();
+				System.out.println(pass);
+				user.setUserPassword(passwordEncoder.encode(pass));
+				usersDao.update(user, () -> validateUpdate(user));
+				System.out.println("Sending mail...");
+				sendEmailResetPassword(pass, profiles);
+				System.out.println("Done");
+				return user;						
+			}
 	}
 
 	private String generatePassword() {
@@ -161,7 +165,8 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 					}
 					if (user.getIdRole().getCode() != null) {
 						Roles role = rolesService.getByCode(user.getIdRole().getCode());
-						if (role.getCode().equals("TTR") || role.getCode().equals("ADM") || role.getCode().equals("SADM")) {
+						if (role.getCode().equals("TTR") || role.getCode().equals("ADM")
+								|| role.getCode().equals("SADM")) {
 							validateInsertExceptParticipant(user);
 						} else {
 							System.out.println("Sending Email......");
@@ -254,7 +259,7 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 		mailHelper.setText(text);
 		new MailServiceImpl(mailUtil, mailHelper).start();
 	}
-	
+
 	@Override
 	public Users getByIdClass(String idClass) throws Exception {
 		return usersDao.getByIdClass(idClass);
