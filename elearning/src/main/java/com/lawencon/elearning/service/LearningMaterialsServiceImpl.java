@@ -98,18 +98,14 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 			begin();
 			if(checkDelete(id) == false) {
 				learningMaterialsDao.softDeleteById(id, idUser);
-				DetailModuleRegistrations detailModule = dtlModRegistService
-						.getDetailModuleRegistrationByIdLearningMaterial(id);
-				dtlModRegistService.deleteDetailModuleRegistration(detailModule.getId(), idUser);
-				forumsService.deleteForumByIdDetailModuleRegistration(detailModule.getId(), idUser);
 			}
 			else {
 				validateDelete();
 			}
 			commit();
 		} catch (Exception e) {
-			e.getMessage();
 			rollback();
+			throw new Exception(e);
 		}
 	}
 

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.elearning.dao.ApprovementsRenewalDao;
+import com.lawencon.elearning.helper.TutorApprovementInputs;
 import com.lawencon.elearning.model.ApprovementsRenewal;
 import com.lawencon.elearning.util.ApprovementCode;
 import com.lawencon.elearning.util.TransactionNumberCode;
@@ -28,11 +29,13 @@ public class ApprovementsRenewalServiceImpl extends ElearningBaseServiceImpl imp
 	}
 
 	@Override
-	public void participantApprovementsRenewal(ApprovementsRenewal approvementsRenewal) throws Exception {
-		approvementsRenewal.setIdApprovement(
-				approvementService.getByCode(approvementsRenewal.getIdApprovement().getCode()));
-		approvementsRenewalDao.participantApprovementsRenewal(approvementsRenewal,
-				() -> validateInsert(approvementsRenewal));
+	public void participantApprovementsRenewal(TutorApprovementInputs approvementRenewals) throws Exception {
+		for (ApprovementsRenewal approvementsRenewal : approvementRenewals.getApprovementRenewals()) {
+			approvementsRenewal
+					.setIdApprovement(approvementService.getByCode(approvementsRenewal.getIdApprovement().getCode()));
+			approvementsRenewalDao.participantApprovementsRenewal(approvementsRenewal,
+					() -> validateInsert(approvementsRenewal));
+		}
 	}
 
 	@Override
@@ -50,7 +53,7 @@ public class ApprovementsRenewalServiceImpl extends ElearningBaseServiceImpl imp
 	public ApprovementsRenewal getApprovementsRenewalById(String id) throws Exception {
 		return approvementsRenewalDao.getApprovementsRenewalById(id);
 	}
-	
+
 	@Override
 	public List<?> getPresenceReport(String idDetailClass) throws Exception {
 		return approvementsRenewalDao.getPresenceReport(idDetailClass);

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lawencon.elearning.helper.TutorApprovementInputs;
 import com.lawencon.elearning.model.ApprovementsRenewal;
 import com.lawencon.elearning.service.ApprovementsRenewalService;
 import com.lawencon.elearning.util.MessageStat;
@@ -44,7 +45,8 @@ public class ApprovementsRenewalController extends ElearningBaseController {
 	@PostMapping("participant-approvement")
 	public ResponseEntity<?> participantApprovementsRenewal(@RequestBody String body) {
 		try {
-			ApprovementsRenewal approvementsRenewal = new ObjectMapper().readValue(body, ApprovementsRenewal.class);
+			TutorApprovementInputs approvementsRenewal = new ObjectMapper().readValue(body,
+					TutorApprovementInputs.class);
 			approvementsRenewalService.participantApprovementsRenewal(approvementsRenewal);
 			return responseSuccess(approvementsRenewal, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
@@ -65,7 +67,7 @@ public class ApprovementsRenewalController extends ElearningBaseController {
 			return responseError(e);
 		}
 	}
-	
+
 	@GetMapping("report/detail")
 	public HttpEntity<?> reportAttendanceDetail(@RequestParam("idDtlClass") String idDtlClass,
 			@RequestParam("idDtlModuleRgs") String idDtlModuleRgs) {
@@ -83,7 +85,7 @@ public class ApprovementsRenewalController extends ElearningBaseController {
 		headers.setContentType(MediaType.APPLICATION_PDF);
 		return new HttpEntity<>(out, headers);
 	}
-	
+
 	@GetMapping("report/{idDetailClass}")
 	public HttpEntity<?> reportPresence(@PathVariable String idDetailClass) {
 		List<?> listData = new ArrayList<>();

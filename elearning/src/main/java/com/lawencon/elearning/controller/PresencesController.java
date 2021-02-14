@@ -38,9 +38,9 @@ public class PresencesController extends ElearningBaseController {
 		try {
 			ObjectMapper obj = new ObjectMapper();
 			obj.registerModule(new JavaTimeModule());
-			Presences presence = obj.readValue(body, Presences.class);
-			presencesService.insertPresence(presence);
-			return responseSuccess(presence, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
+			Presences presences = obj.readValue(body, Presences.class);
+			presencesService.insertPresence(presences);
+			return responseSuccess(presences, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
