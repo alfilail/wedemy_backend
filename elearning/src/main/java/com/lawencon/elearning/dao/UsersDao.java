@@ -10,27 +10,28 @@ public interface UsersDao {
 
 	void insert(Users user, Callback before) throws Exception;
 
-	List<Users> getAllUser() throws Exception;
-
-	Users getUserById(String id) throws Exception;
-
-	Users getByUsername(String username) throws Exception;
-
 	void update(Users user, Callback before) throws Exception;
 
 	void deleteUserById(String id) throws Exception;
 
-	Users getByIdProfile(Profiles profile) throws Exception;
+	void softDeleteUserById(String id, String idUser) throws Exception;
 
-	List<Users> getByRoleCode(String code) throws Exception;
+	Users getUserById(String id) throws Exception;
 
-	Users getByIdDetailClass(String idDtlClass) throws Exception;
+	Users getUserByUsername(String username) throws Exception;
 
-	void softDeleteById(String id, String idUser) throws Exception;
+	Users getUserByIdNumber(String idNumber) throws Exception;
 
-	List<?> validateDelete(String id) throws Exception;
+	Users getUserByIdClass(String idClass) throws Exception;
 
-	Users getByIdNumber(String idNumber) throws Exception;
-	
-	Users getByIdClass(String idClass) throws Exception;
+	Users getUserByIdProfile(Profiles profile) throws Exception;
+
+	Users getUserByIdDetailClass(String idDtlClass) throws Exception;
+
+	List<Users> getUsersByRoleCode(String code) throws Exception;
+
+	List<Users> getAllUsers() throws Exception;
+
+	List<?> validateDeleteUser(String id) throws Exception;
+
 }

@@ -9,19 +9,20 @@ public interface ProfilesDao {
 
 	void insert(Profiles profile, Callback before) throws Exception;
 
-	List<Profiles> getAllProfile() throws Exception;
-
-	Profiles getProfileById(String id) throws Exception;
-
-	Profiles getByCode(String code) throws Exception;
-
 	void update(Profiles profile, Callback before) throws Exception;
 
 	void deleteProfileById(String id) throws Exception;
 
-	Profiles getByEmail(String email) throws Exception;
+	void softDeleteProfileById(String id, String idUser) throws Exception;
 
-	Profiles getByIdNumber(String idNumber) throws Exception;
-	
-	void softDeleteById(String id, String idUser) throws Exception;
+	Profiles getProfileById(String id) throws Exception;
+
+	Profiles getProfileByCode(String code) throws Exception;
+
+	Profiles getProfileByEmail(String email) throws Exception;
+
+	Profiles getProfileByIdNumber(String idNumber) throws Exception;
+
+	List<Profiles> getAllProfiles() throws Exception;
+
 }

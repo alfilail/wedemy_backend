@@ -44,7 +44,7 @@ public class ApprovementsRenewalDaoImpl extends ElearningBaseDaoImpl<Approvement
 	public List<ApprovementsRenewal> getListParticipantsPresence(String idDtlClass, String idDtlModuleRgs)
 			throws Exception {
 		List<ApprovementsRenewal> listResult = new ArrayList<>();
-		String sql = sqlBuilder("SELECT pr.fullname, p.id, p.presence_time, (SELECT a.code FROM ",
+		String sql = sqlBuilder("SELECT pr.fullname, u.id userid, p.id, p.presence_time, (SELECT a.code FROM ",
 				"t_r_approvement_renewals ar LEFT JOIN t_m_approvements a ON ar.id_approvement = a.id ",
 				"WHERE ar.id_presence = p.id ORDER BY ar.created_at DESC LIMIT 1), tmlm.learning_material_name ,",
 				" dmr.schedule_date ",
@@ -62,18 +62,19 @@ public class ApprovementsRenewalDaoImpl extends ElearningBaseDaoImpl<Approvement
 			Profiles profile = new Profiles();
 			profile.setFullName((String) objArr[0]);
 			Users user = new Users();
+			user.setId((String) objArr[1]);
 			user.setIdProfile(profile);
 			Presences presence = new Presences();
 			presence.setIdUser(user);
-			presence.setId(objArr[1] != null ? (String) objArr[1] : EmptyField.EMPTY.msg);
-			presence.setPresenceTime(objArr[2] != null ? ((Time) objArr[2]).toLocalTime() : null);
+			presence.setId(objArr[2] != null ? (String) objArr[2] : EmptyField.EMPTY.msg);
+			presence.setPresenceTime(objArr[3] != null ? ((Time) objArr[3]).toLocalTime() : null);
 			Approvements approvement = new Approvements();
-			approvement.setCode(objArr[3] != null ? (String) objArr[3] : EmptyField.EMPTY.msg);
+			approvement.setCode(objArr[4] != null ? (String) objArr[4] : EmptyField.EMPTY.msg);
 			LearningMaterials learningMaterial = new LearningMaterials();
-			learningMaterial.setLearningMaterialName((String) objArr[4]);
+			learningMaterial.setLearningMaterialName((String) objArr[5]);
 			DetailModuleRegistrations detailModuleRgs = new DetailModuleRegistrations();
 			detailModuleRgs.setIdLearningMaterial(learningMaterial);
-			detailModuleRgs.setScheduleDate(((Date) objArr[5]).toLocalDate());
+			detailModuleRgs.setScheduleDate(((Date) objArr[6]).toLocalDate());
 			presence.setIdDetailModuleRegistration(detailModuleRgs);
 			ApprovementsRenewal approvementRenewal = new ApprovementsRenewal();
 			approvementRenewal.setIdPresence(presence);
@@ -106,19 +107,16 @@ public class ApprovementsRenewalDaoImpl extends ElearningBaseDaoImpl<Approvement
 		});
 		return listResult.size() > 0 ? listResult.get(0) : null;
 	}
-	
+
 	@Override
-	public List<?> getPresenceReport(String idDetailClass)
-			throws Exception {
+	public List<?> getPresenceReport(String idDetailClass) throws Exception {
 		String query = sqlBuilder(" SELECT tmp.fullname, tmm.module_name , ",
 				" tmc.class_name, ROUND(COUNT(tar.id_presence)/CAST((SELECT COUNT(order_number) ",
 				" FROM t_r_detail_module_registrations trdmr ",
 				" INNER JOIN t_r_module_registrations trmr ON trdmr.id_module_rgs = trmr.id ",
 				" INNER JOIN t_m_modules tmm2 ON trmr.id_module = tmm2.id ",
-				" WHERE tmm2.module_name = tmm.module_name) AS decimal), 4) * 100 ",
-				" AS present_day ",
-				" FROM t_r_approvement_renewals tar ", 
-				" INNER JOIN t_r_presences trp ON tar.id_presence = trp.id ",
+				" WHERE tmm2.module_name = tmm.module_name) AS decimal), 4) * 100 ", " AS present_day ",
+				" FROM t_r_approvement_renewals tar ", " INNER JOIN t_r_presences trp ON tar.id_presence = trp.id ",
 				" INNER JOIN t_m_users tmu ON trp.id_user = tmu.id ",
 				" INNER JOIN t_m_profiles tmp  ON tmu.id_profile = tmp.id ",
 				" INNER JOIN t_r_detail_module_registrations trdmr ON trp.id_dtl_module_rgs = trdmr.id ",
@@ -126,15 +124,12 @@ public class ApprovementsRenewalDaoImpl extends ElearningBaseDaoImpl<Approvement
 				" INNER JOIN t_m_detail_classes tmdc  ON trmr.id_dtl_class = tmdc.id ",
 				" INNER JOIN t_m_modules tmm ON trmr.id_module = tmm.id ",
 				" INNER JOIN t_m_learning_materials tmlm ON tmlm.id = trdmr.id_learning_material ",
-				" INNER JOIN t_m_classes tmc ON tmdc.id_class = tmc.id ",
-				" WHERE tmdc.id = ?1 AND id_approvement = ",
+				" INNER JOIN t_m_classes tmc ON tmdc.id_class = tmc.id ", " WHERE tmdc.id = ?1 AND id_approvement = ",
 				" (SELECT id FROM t_m_approvements WHERE code = 'APRV') ",
-				" GROUP BY tmp.fullname, tmm.module_name, tmc.class_name ",
-				" ORDER BY tmm.module_name, tmp.fullname")
+				" GROUP BY tmp.fullname, tmm.module_name, tmc.class_name ", " ORDER BY tmm.module_name, tmp.fullname")
 						.toString();
 		List<ReportPresences> listReportPresences = new ArrayList<>();
-		List<?> listObj = createNativeQuery(query)
-				.setParameter(1, idDetailClass).getResultList();
+		List<?> listObj = createNativeQuery(query).setParameter(1, idDetailClass).getResultList();
 		listObj.forEach(val -> {
 			Object[] objArr = (Object[]) val;
 			Profiles profile = new Profiles();

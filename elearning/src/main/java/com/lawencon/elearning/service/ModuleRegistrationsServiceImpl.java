@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.elearning.dao.ModuleRegistrationsDao;
-import com.lawencon.elearning.helper.ClassesHelper;
+import com.lawencon.elearning.helper.ClassInput;
 import com.lawencon.elearning.helper.EnrolledClass;
 import com.lawencon.elearning.helper.LearningMaterialsAndPermissions;
 import com.lawencon.elearning.helper.ModuleAndLearningMaterials;
@@ -50,7 +50,7 @@ public class ModuleRegistrationsServiceImpl extends ElearningBaseServiceImpl imp
 	private UsersService userService;
 
 	@Override
-	public void insertModuleRegistration(ClassesHelper clazzHelper) throws Exception {
+	public void insertModuleRegistration(ClassInput clazzHelper) throws Exception {
 		List<Modules> modulesList = clazzHelper.getModule();
 		for (Modules modules : modulesList) {
 			ModuleRegistrations moduleRegistrations = new ModuleRegistrations();

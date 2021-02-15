@@ -9,18 +9,18 @@ public interface ModulesDao {
 
 	void insert(Modules module, Callback before) throws Exception;
 
-	List<Modules> getAllModule() throws Exception;
-
-	Modules getModuleById(String id) throws Exception;
-
-	Modules getByCode(String code) throws Exception;
-
 	void update(Modules module, Callback before) throws Exception;
 
 	void deleteModuleById(String id) throws Exception;
-	
-	void softDeleteById(String id, String idUser) throws Exception;
 
-	List<?> validateDelete(String id) throws Exception;
+	void softDeleteModuleById(String id, String idUser) throws Exception;
+
+	Modules getModuleById(String id) throws Exception;
+
+	Modules getModuleByCode(String code) throws Exception;
+
+	List<Modules> getAllModules() throws Exception;
+
+	List<?> validateDeleteModule(String id) throws Exception;
 
 }

@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.lawencon.elearning.helper.ClassesHelper;
+import com.lawencon.elearning.helper.ClassInput;
 import com.lawencon.elearning.helper.TotalClassAndUser;
 import com.lawencon.elearning.model.Classes;
 import com.lawencon.elearning.service.ClassesService;
@@ -26,27 +26,30 @@ import com.lawencon.elearning.util.MessageStat;
 
 @RestController
 @RequestMapping("class")
-public class ClassesController extends ElearningBaseController{
+public class ClassesController extends ElearningBaseController {
 
 	@Autowired
 	private ClassesService classesService;
 
-	@GetMapping
-	public ResponseEntity<?> getAll() {
+	@PostMapping
+	public ResponseEntity<?> insert(@RequestPart("body") String body, @RequestPart("file") MultipartFile file) {
 		try {
-			List<Classes> clazz = classesService.getAll();
-			return responseSuccess(clazz, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
+			ObjectMapper obj = new ObjectMapper();
+			obj.registerModule(new JavaTimeModule());
+			ClassInput classInput = obj.readValue(body, ClassInput.class);
+			classesService.insert(classInput, file);
+			return responseSuccess(classInput, HttpStatus.CREATED, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
 		}
 	}
-	
-	@GetMapping("inactive")
-	public ResponseEntity<?> getAllInactive() {
+
+	@GetMapping
+	public ResponseEntity<?> getAll() {
 		try {
-			List<Classes> clazz = classesService.getAllInactive();
-			return responseSuccess(clazz, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
+			List<Classes> classes = classesService.getAll();
+			return responseSuccess(classes, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
@@ -64,14 +67,22 @@ public class ClassesController extends ElearningBaseController{
 		}
 	}
 
-	@PostMapping
-	public ResponseEntity<?> insert(@RequestPart("body") String body, @RequestPart("file") MultipartFile file) {
+	@GetMapping("inactive")
+	public ResponseEntity<?> getAllInactive() {
 		try {
-			ObjectMapper obj = new ObjectMapper();
-			obj.registerModule(new JavaTimeModule());
-			ClassesHelper clazzHelper = obj.readValue(body, ClassesHelper.class);
-			classesService.insert(clazzHelper, file);
-			return responseSuccess(clazzHelper, HttpStatus.CREATED, MessageStat.SUCCESS_RETRIEVE);
+			List<Classes> classes = classesService.getAllInactive();
+			return responseSuccess(classes, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return responseError(e);
+		}
+	}
+
+	@GetMapping("user")
+	public ResponseEntity<?> getTotalClassAndUser() {
+		try {
+			TotalClassAndUser data = classesService.getTotalClassAndUser();
+			return responseSuccess(data, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
@@ -79,14 +90,15 @@ public class ClassesController extends ElearningBaseController{
 	}
 
 	@PutMapping
-	public ResponseEntity<?> update(@RequestPart String body, @RequestPart(value = "file", required = false) MultipartFile file) {
+	public ResponseEntity<?> update(@RequestPart String body,
+			@RequestPart(value = "file", required = false) MultipartFile file) {
 		try {
 			ObjectMapper obj = new ObjectMapper();
 			obj.registerModule(new JavaTimeModule());
 			Classes clazz = obj.readValue(body, Classes.class);
 			classesService.update(clazz, file);
-			Classes cls = classesService.getById(clazz.getId());
-			return responseSuccess(cls, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
+			Classes response = classesService.getById(clazz.getId());
+			return responseSuccess(response, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
@@ -94,22 +106,10 @@ public class ClassesController extends ElearningBaseController{
 	}
 
 	@DeleteMapping
-	public ResponseEntity<?> deleteById(@RequestParam("id") String id,
-			@RequestParam("idUser") String idUser) {
+	public ResponseEntity<?> deleteById(@RequestParam("id") String id, @RequestParam("idUser") String idUser) {
 		try {
 			classesService.deleteById(id, idUser);
 			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
-	
-	@GetMapping("user")
-	public ResponseEntity<?> getTotalClassAndUser() {
-		try {
-			TotalClassAndUser data = classesService.getTotalClassAndUser();
-			return responseSuccess(data, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);

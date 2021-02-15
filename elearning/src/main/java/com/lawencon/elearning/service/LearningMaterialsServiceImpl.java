@@ -96,10 +96,12 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 	public void deleteById(String id, String idUser) throws Exception {
 		try {
 			begin();
-			if(checkDelete(id) == false) {
+			if (checkDelete(id) == false) {
 				learningMaterialsDao.softDeleteById(id, idUser);
-			}
-			else {
+				DetailModuleRegistrations dtlModuleRgs = dtlModRegistService
+						.getDetailModuleRegistrationByIdLearningMaterial(id);
+				dtlModRegistService.deleteDetailModuleRegistration(dtlModuleRgs.getId(), idUser);
+			} else {
 				validateDelete();
 			}
 			commit();
@@ -204,15 +206,14 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 			}
 		}
 	}
-	
+
 	private boolean checkDelete(String id) throws Exception {
 		List<?> listObj = learningMaterialsDao.validateDelete(id);
-		List<?> list =  listObj.stream().filter(val -> val != null)
-				.collect(Collectors.toList());
+		List<?> list = listObj.stream().filter(val -> val != null).collect(Collectors.toList());
 		return list.size() > 0 ? true : false;
 	}
-	
-	private void validateDelete() throws Exception{
+
+	private void validateDelete() throws Exception {
 		throw new Exception("Bahan ajar tidak boleh dihapus!");
 	}
 }

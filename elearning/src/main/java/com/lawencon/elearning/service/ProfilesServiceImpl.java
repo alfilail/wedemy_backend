@@ -27,34 +27,21 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 		Files file = new Files();
 		file.setFile(null);
 		file.setType(null);
+		file.setName(null);
 		filesService.insert(file);
 		profile.setIdFile(file);
 		profilesDao.insert(profile, () -> validateInsert(profile));
 	}
 
 	@Override
-	public List<Profiles> getAll() throws Exception {
-		return profilesDao.getAllProfile();
-	}
-
-	@Override
-	public Profiles getById(String id) throws Exception {
-		return profilesDao.getProfileById(id);
-	}
-
-	@Override
-	public Profiles getByCode(String code) throws Exception {
-		return profilesDao.getByCode(code);
-	}
-
-	@Override
 	public void update(Profiles profile, MultipartFile file) throws Exception {
 		try {
-			begin();	
+			begin();
 			Files profilePict = filesService.getById(profile.getIdFile().getId());
 			if (file != null && !file.isEmpty()) {
 				profilePict.setFile(file.getBytes());
 				profilePict.setType(file.getContentType());
+				profilePict.setName(file.getOriginalFilename());
 				profilePict.setCreatedAt(profilePict.getCreatedAt());
 				profilePict.setCreatedBy(profilePict.getCreatedBy());
 				filesService.update(profilePict);
@@ -62,9 +49,8 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 			} else {
 				profile.setIdFile(profilePict);
 			}
-			Profiles pfl = getById(profile.getId());
-			profile.setCreatedAt(pfl.getCreatedAt());
-			profile.setCreatedBy(pfl.getCreatedBy());
+			profile.setCreatedAt(profilesDao.getProfileById(profile.getId()).getCreatedAt());
+			profile.setCreatedBy(profilesDao.getProfileById(profile.getId()).getCreatedBy());
 			profilesDao.update(profile, () -> {
 				validateUpdate(profile);
 			});
@@ -82,17 +68,32 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 
 	@Override
 	public void softDeleteById(String id, String idUser) throws Exception {
-		profilesDao.softDeleteById(id, idUser);
+		profilesDao.softDeleteProfileById(id, idUser);
+	}
+
+	@Override
+	public Profiles getById(String id) throws Exception {
+		return profilesDao.getProfileById(id);
+	}
+
+	@Override
+	public Profiles getByCode(String code) throws Exception {
+		return profilesDao.getProfileByCode(code);
 	}
 
 	@Override
 	public Profiles getByEmail(String email) throws Exception {
-		return profilesDao.getByEmail(email);
+		return profilesDao.getProfileByEmail(email);
 	}
 
 	@Override
 	public Profiles getByIdNumber(String idNumber) throws Exception {
-		return profilesDao.getByIdNumber(idNumber);
+		return profilesDao.getProfileByIdNumber(idNumber);
+	}
+
+	@Override
+	public List<Profiles> getAll() throws Exception {
+		return profilesDao.getAllProfiles();
 	}
 
 	private void validateInsert(Profiles profile) throws Exception {
@@ -111,16 +112,17 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 //				throw new Exception("Profile yang diedit telah diperbarui, silahkan coba lagi");
 //			}
 			if (profile.getIdFile() != null) {
-				if(profile.getIdFile().getType() != null) {
+				if (profile.getIdFile().getType() != null) {
 					String[] type = profile.getIdFile().getType().split("/");
 					String ext = type[1];
 					if (ext != null) {
-						if (ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("jpeg")) {
-							
+						if (ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("png")
+								|| ext.equalsIgnoreCase("jpeg")) {
+
 						} else {
 							throw new Exception("File harus gambar");
 						}
-					}					
+					}
 				}
 			}
 			if (profile.getPhone() != null) {

@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.elearning.dao.DetailClassesDao;
-import com.lawencon.elearning.helper.ClassesHelper;
+import com.lawencon.elearning.helper.ClassInput;
 import com.lawencon.elearning.helper.DetailClassInformation;
 import com.lawencon.elearning.model.Classes;
 import com.lawencon.elearning.model.DetailClasses;
@@ -19,6 +19,7 @@ import com.lawencon.elearning.model.Modules;
 
 @Service
 public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implements DetailClassesService {
+
 	@Autowired
 	private DetailClassesDao detailClassesDao;
 
@@ -45,8 +46,13 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 	}
 
 	@Override
+	public void update(DetailClasses dtlClass) throws Exception {
+		detailClassesDao.update(dtlClass, () -> validateUpdate(dtlClass));
+	}
+
+	@Override
 	public List<DetailClasses> getAll() throws Exception {
-		return detailClassesDao.getAllDetailClass();
+		return detailClassesDao.getAllDtlClasses();
 	}
 
 	@Override
@@ -56,7 +62,7 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 
 	@Override
 	public DetailClasses getById(String id) throws Exception {
-		return detailClassesDao.getDetailClassById(id);
+		return detailClassesDao.getDtlClassById(id);
 	}
 
 	@Override
@@ -65,7 +71,7 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 		try {
 			begin();
 			updateViews(idDtlClass);
-			dtlClassInfo.setDetailClass(detailClassesDao.getDetailClassById(idDtlClass));
+			dtlClassInfo.setDetailClass(detailClassesDao.getDtlClassById(idDtlClass));
 			dtlClassInfo.setModules(moduleRegistrationsService.getByIdDtlClass(idDtlClass));
 			dtlClassInfo.setTotalParticipant(classEnrollmentService.getTotalParticipantsByIdDtlClass(idDtlClass));
 			dtlClassInfo.setTotalHours(detailModuleRegistrationsService.totalHours(idDtlClass));
@@ -79,12 +85,17 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 
 	@Override
 	public DetailClasses getByCode(String code) throws Exception {
-		return detailClassesDao.getByCode(code);
+		return detailClassesDao.getDtlClassByCode(code);
+	}
+
+	@Override
+	public List<DetailClasses> getAllInactive() throws Exception {
+		return detailClassesDao.getAllInactive();
 	}
 
 	@Override
 	public List<DetailClasses> getTutorClasses(String idTutor) throws Exception {
-		return detailClassesDao.getTutorClasses(idTutor);
+		return detailClassesDao.getAllByIdTutor(idTutor);
 	}
 
 	@Override
@@ -103,13 +114,13 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 			begin();
 			Classes clazz = classService.getInActiveById(detailClass.getIdClass().getId());
 
-			classService.updateIsActive(detailClass.getIdClass().getId(), detailClass.getCreatedBy());
+			classService.reactivate(detailClass.getIdClass().getId(), detailClass.getCreatedBy());
 
 			detailClass.setCode(generateCodeDetailClass(clazz.getCode(), detailClass.getStartDate()));
 			detailClass.setViews(0);
 			detailClass.setIdClass(clazz);
 
-			DetailClasses detailClassOld = detailClassesDao.getByIdClass(detailClass.getIdClass().getId());
+			DetailClasses detailClassOld = detailClassesDao.getDtlClassByIdClass(detailClass.getIdClass().getId());
 
 			List<ModuleRegistrations> modulesRegistrationListOld = moduleRegistrationsService
 					.getModuleRegistrationsByIdDetailClass(detailClassOld.getId());
@@ -124,7 +135,7 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 
 				List<DetailModuleRegistrations> detailModuleRegis = detailModuleRegistrationsService
 						.getDetailModuleRegistrationsByIdModuleRgs(moduleRegistration.getId());
-				
+
 				for (DetailModuleRegistrations detailModule : detailModuleRegis) {
 					DetailModuleRegistrations detail = new DetailModuleRegistrations();
 					detail.setIdLearningMaterial(detailModule.getIdLearningMaterial());
@@ -136,7 +147,7 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 			}
 			detailClassesDao.insert(detailClass, () -> validateReactive(detailClass));
 
-			ClassesHelper clazzHelper = new ClassesHelper();
+			ClassInput clazzHelper = new ClassInput();
 			clazzHelper.setClazz(clazz);
 			clazzHelper.setDetailClass(detailClass);
 			clazzHelper.setModule(modulesList);
@@ -166,7 +177,7 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 
 	private void validateReactive(DetailClasses detailClass) throws Exception {
 		validateInsert(detailClass);
-		DetailClasses detailClazz = detailClassesDao.getByIdClass(detailClass.getIdClass().getId());
+		DetailClasses detailClazz = detailClassesDao.getDtlClassByIdClass(detailClass.getIdClass().getId());
 		if (detailClass.getStartDate().compareTo(detailClazz.getEndDate()) < 0) {
 			throw new Exception(
 					"Tanggal mulai detail kelas tidak boleh kurang dari tanggal akhir detail kelas sebelumnya");
@@ -185,11 +196,6 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 
 	private void updateViews(String id) throws Exception {
 		detailClassesDao.updateViews(id);
-	}
-
-	@Override
-	public void update(DetailClasses dtlClass) throws Exception {
-		detailClassesDao.update(dtlClass, () -> validateUpdate(dtlClass));
 	}
 
 	private void validateUpdate(DetailClasses dtlClass) throws Exception {
@@ -213,11 +219,6 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 				throw new Exception("Waktu akhir detail kelas tidak boleh kurang dari waktu akhir");
 			}
 		}
-	}
-
-	@Override
-	public List<DetailClasses> getAllInactive() throws Exception {
-		return detailClassesDao.getAllInactive();
 	}
 
 }

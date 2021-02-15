@@ -29,11 +29,25 @@ public class UsersController extends ElearningBaseController {
 	@Autowired
 	private UsersService usersService;
 
+	@PostMapping
+	public ResponseEntity<?> insert(@RequestBody String body) {
+		try {
+			ObjectMapper obj = new ObjectMapper();
+			obj.registerModule(new JavaTimeModule());
+			Users user = obj.readValue(body, Users.class);
+			usersService.insert(user);
+			return responseSuccess(user, HttpStatus.CREATED, MessageStat.SUCCESS_CREATED);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return responseError(e);
+		}
+	}
+
 	@GetMapping
 	public ResponseEntity<?> getAll() {
 		try {
-			List<Users> listUsers = usersService.getAll();
-			return responseSuccess(listUsers, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
+			List<Users> users = usersService.getAll();
+			return responseSuccess(users, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
@@ -54,34 +68,8 @@ public class UsersController extends ElearningBaseController {
 	@GetMapping("role/{roleCode}")
 	public ResponseEntity<?> getByRoleCode(@PathVariable("roleCode") String roleCode) {
 		try {
-			List<Users> user = usersService.getByRoleCode(roleCode);
-			return responseSuccess(user, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
-
-	@PostMapping
-	public ResponseEntity<?> insert(@RequestBody String body) {
-		try {
-			ObjectMapper obj = new ObjectMapper();
-			obj.registerModule(new JavaTimeModule());
-			Users user = obj.readValue(body, Users.class);
-			usersService.insert(user);
-			return responseSuccess(user, HttpStatus.CREATED, MessageStat.SUCCESS_CREATED);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
-
-	@PatchMapping("/forget-password")
-	public ResponseEntity<?> forgetPassword(@RequestBody String body) {
-		try {
-			Profiles profile = new ObjectMapper().readValue(body, Profiles.class);
-			Users user = usersService.updateUserPassword(profile);
-			return responseSuccess(user, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
+			List<Users> users = usersService.getByRoleCode(roleCode);
+			return responseSuccess(users, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
@@ -95,6 +83,18 @@ public class UsersController extends ElearningBaseController {
 			obj.registerModule(new JavaTimeModule());
 			Users user = obj.readValue(body, Users.class);
 			usersService.update(user);
+			return responseSuccess(user, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return responseError(e);
+		}
+	}
+
+	@PatchMapping("/forget-password")
+	public ResponseEntity<?> forgetPassword(@RequestBody String body) {
+		try {
+			Profiles profile = new ObjectMapper().readValue(body, Profiles.class);
+			Users user = usersService.updateUserPassword(profile);
 			return responseSuccess(user, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();

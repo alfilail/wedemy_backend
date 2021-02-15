@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.elearning.dao.ClassesDao;
-import com.lawencon.elearning.helper.ClassesHelper;
+import com.lawencon.elearning.helper.ClassInput;
 import com.lawencon.elearning.helper.TotalClassAndUser;
 import com.lawencon.elearning.model.Classes;
 import com.lawencon.elearning.model.DetailClasses;
@@ -34,25 +34,27 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 	private FilesService filesService;
 
 	@Override
-	public void insert(ClassesHelper helper, MultipartFile file) throws Exception {
+	public void insert(ClassInput classInput, MultipartFile file) throws Exception {
 		try {
 			begin();
-			if (helper.getClazz() != null) {
-				Classes clazz = helper.getClazz();
+			if (classInput.getClazz() != null) {
+				Classes clazz = classInput.getClazz();
 				Files thumbnailImg = new Files();
 				thumbnailImg.setFile(file.getBytes());
 				thumbnailImg.setType(file.getContentType());
+				thumbnailImg.setName(file.getOriginalFilename());
 				filesService.insert(thumbnailImg);
 				clazz.setIdFile(thumbnailImg);
 				classesDao.insert(clazz, () -> validateInsert(clazz));
-				if (helper.getDetailClass() != null) {
-					DetailClasses detailClass = helper.getDetailClass();
+				if (classInput.getDetailClass() != null) {
+					DetailClasses detailClass = classInput.getDetailClass();
+					detailClass.setCreatedBy(clazz.getCreatedBy());
 					detailClass.setIdClass(clazz);
 					detailClass.setViews(0);
-					helper.setDetailClass(detailClass);
-					detailClassesService.insert(helper.getDetailClass());
-					if (helper.getModule() != null) {
-						moduleRegistrationsService.insertModuleRegistration(helper);
+					classInput.setDetailClass(detailClass);
+					detailClassesService.insert(classInput.getDetailClass());
+					if (classInput.getModule() != null) {
+						moduleRegistrationsService.insertModuleRegistration(classInput);
 					}
 				}
 			}
@@ -64,21 +66,6 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 	}
 
 	@Override
-	public List<Classes> getAll() throws Exception {
-		return classesDao.getAllClass();
-	}
-
-	@Override
-	public Classes getById(String id) throws Exception {
-		return classesDao.getClassById(id);
-	}
-
-	@Override
-	public Classes getByCode(String code) throws Exception {
-		return classesDao.getByCode(code);
-	}
-
-	@Override
 	public void update(Classes clazz, MultipartFile file) throws Exception {
 		try {
 			begin();
@@ -86,13 +73,14 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 				Files logo = new Files();
 				logo.setFile(file.getBytes());
 				logo.setType(file.getContentType());
+				logo.setName(file.getOriginalFilename());
 				filesService.update(logo);
 				clazz.setIdFile(logo);
 			} else {
 				Files logoPict = filesService.getById(clazz.getIdFile().getId());
 				clazz.setIdFile(logoPict);
 			}
-			if(clazz.getIdTutor() == null) {
+			if (clazz.getIdTutor() == null) {
 				System.out.println(clazz.getIdTutor());
 				Users tutor = usersService.getByIdClass(clazz.getId());
 				clazz.setIdTutor(tutor);
@@ -107,8 +95,54 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 	}
 
 	@Override
-	public void updateIsActive(String id, String idUser) throws Exception {
-		classesDao.updateIsActive(id, idUser);
+	public void deleteById(String id, String idUser) throws Exception {
+		try {
+			begin();
+			classesDao.softDeleteClassById(id, idUser);
+			List<DetailClasses> dtlClass = detailClassesService.getAllByIdClass(id);
+			for (DetailClasses dtl : dtlClass) {
+				detailClassesService.deleteById(dtl.getId(), idUser);
+			}
+			commit();
+		} catch (Exception e) {
+			e.getMessage();
+			rollback();
+		}
+	}
+
+	@Override
+	public void reactivate(String id, String idUser) throws Exception {
+		classesDao.reactivateClass(id, idUser);
+	}
+
+	@Override
+	public Classes getById(String id) throws Exception {
+		return classesDao.getClassById(id);
+	}
+
+	@Override
+	public Classes getByCode(String code) throws Exception {
+		return classesDao.getClassByCode(code);
+	}
+
+	@Override
+	public Classes getInActiveById(String id) throws Exception {
+		return classesDao.getInActiveById(id);
+	}
+
+	@Override
+	public TotalClassAndUser getTotalClassAndUser() throws Exception {
+		return classesDao.getTotalClassAndUser();
+	}
+
+	@Override
+	public List<Classes> getAll() throws Exception {
+		return classesDao.getAllClass();
+	}
+
+	@Override
+	public List<Classes> getAllInactive() throws Exception {
+		return classesDao.getAllInactive();
 	}
 
 	private void validateInsert(Classes clazz) throws Exception {
@@ -162,7 +196,7 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 						throw new Exception("Kode kelas tidak boleh kosong!");
 					} else {
 						if (!cls.getCode().equalsIgnoreCase(clazz.getCode())) {
-							Classes clz = classesDao.getByCode(clazz.getCode());
+							Classes clz = classesDao.getClassByCode(clazz.getCode());
 							if (clz != null) {
 								throw new Exception("Kode kelas tidak boleh sama");
 							}
@@ -192,39 +226,6 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 				}
 			}
 		}
-	}
-//		}
-//	}
-
-	@Override
-	public void deleteById(String id, String idUser) throws Exception {
-		try {
-			begin();
-			classesDao.softDeleteById(id, idUser);
-			List<DetailClasses> dtlClass = detailClassesService.getAllByIdClass(id);
-			for (DetailClasses dtl : dtlClass) {
-				detailClassesService.deleteById(dtl.getId(), idUser);
-			}
-			commit();
-		} catch (Exception e) {
-			e.getMessage();
-			rollback();
-		}
-	}
-
-	@Override
-	public List<Classes> getAllInactive() throws Exception {
-		return classesDao.getAllInactive();
-	}
-
-	@Override
-	public Classes getInActiveById(String id) throws Exception {
-		return classesDao.getInActiveById(id);
-	}
-
-	@Override
-	public TotalClassAndUser getTotalClassAndUser() throws Exception {
-		return classesDao.getTotalClassAndUser();
 	}
 
 }

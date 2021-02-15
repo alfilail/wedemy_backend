@@ -2,14 +2,14 @@ package com.lawencon.elearning.service;
 
 import java.util.List;
 
-import com.lawencon.elearning.helper.ClassesHelper;
+import com.lawencon.elearning.helper.ClassInput;
 import com.lawencon.elearning.helper.EnrolledClass;
 import com.lawencon.elearning.helper.ModuleAndLearningMaterials;
 import com.lawencon.elearning.model.ModuleRegistrations;
 
 public interface ModuleRegistrationsService {
 
-	void insertModuleRegistration(ClassesHelper clazzHelper) throws Exception;
+	void insertModuleRegistration(ClassInput clazzHelper) throws Exception;
 
 	ModuleRegistrations getByIdDetailClassAndIdModuleRegistration(String idDtlClass, String idModRegist)
 			throws Exception;

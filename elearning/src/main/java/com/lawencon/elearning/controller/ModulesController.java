@@ -1,6 +1,5 @@
 package com.lawencon.elearning.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +25,25 @@ import com.lawencon.elearning.util.MessageStat;
 public class ModulesController extends ElearningBaseController {
 
 	@Autowired
-	private ModulesService moduleService;
+	private ModulesService modulesService;
+
+	@PostMapping
+	public ResponseEntity<?> insert(@RequestBody String body) {
+		try {
+			Modules module = new ObjectMapper().readValue(body, Modules.class);
+			modulesService.insert(module);
+			return responseSuccess(module, HttpStatus.CREATED, MessageStat.SUCCESS_CREATED);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return responseError(e);
+		}
+	}
 
 	@GetMapping
 	public ResponseEntity<?> getAll() {
-		List<Modules> listModules = new ArrayList<>();
 		try {
-			listModules = moduleService.getAll();
-			return responseSuccess(listModules, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
+			List<Modules> modules = modulesService.getAll();
+			return responseSuccess(modules, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
@@ -42,22 +52,9 @@ public class ModulesController extends ElearningBaseController {
 
 	@GetMapping("{id}")
 	public ResponseEntity<?> getById(@PathVariable("id") String id) {
-		Modules module = new Modules();
 		try {
-			module = moduleService.getById(id);
+			Modules module = modulesService.getById(id);
 			return responseSuccess(module, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
-
-	@PostMapping
-	public ResponseEntity<?> insert(@RequestBody String body) {
-		try {
-			Modules module = new ObjectMapper().readValue(body, Modules.class);
-			moduleService.insert(module);
-			return responseSuccess(module, HttpStatus.CREATED, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
@@ -68,9 +65,9 @@ public class ModulesController extends ElearningBaseController {
 	public ResponseEntity<?> update(@RequestBody String body) {
 		try {
 			Modules module = new ObjectMapper().readValue(body, Modules.class);
-			moduleService.update(module);
-			Modules mod = moduleService.getById(module.getId());
-			return responseSuccess(mod, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
+			modulesService.update(module);
+			Modules response = modulesService.getById(module.getId());
+			return responseSuccess(response, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
@@ -80,7 +77,7 @@ public class ModulesController extends ElearningBaseController {
 	@DeleteMapping
 	public ResponseEntity<?> deleteById(@RequestParam("id") String id, @RequestParam("idUser") String idUser) {
 		try {
-			moduleService.deleteById(id, idUser);
+			modulesService.deleteById(id, idUser);
 			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
 		} catch (Exception e) {
 			e.printStackTrace();

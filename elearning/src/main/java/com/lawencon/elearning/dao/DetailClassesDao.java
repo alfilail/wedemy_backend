@@ -7,28 +7,28 @@ import com.lawencon.util.Callback;
 
 public interface DetailClassesDao {
 
-	List<DetailClasses> getAllDetailClass() throws Exception;
-	
-	List<DetailClasses> getAllInactive() throws Exception;
-
 	void insert(DetailClasses detailClass, Callback before) throws Exception;
 
-	DetailClasses getDetailClassById(String id) throws Exception;
-
-	DetailClasses getByCode(String code) throws Exception;
-
-	List<DetailClasses> getTutorClasses(String idTutor) throws Exception;
-	
-	List<DetailClasses> getPopularClasses() throws Exception;
-	
-	void updateViews(String id) throws Exception;
-	
-	void deleteDtlClassById(String id, String idUser) throws Exception;
-	
 	void update(DetailClasses dtlClass, Callback before) throws Exception;
-	
+
+	void updateViews(String id) throws Exception;
+
+	void deleteDtlClassById(String id, String idUser) throws Exception;
+
+	DetailClasses getDtlClassById(String id) throws Exception;
+
+	DetailClasses getDtlClassByCode(String code) throws Exception;
+
+	DetailClasses getDtlClassByIdClass(String idClass) throws Exception;
+
+	List<DetailClasses> getAllDtlClasses() throws Exception;
+
+	List<DetailClasses> getAllInactive() throws Exception;
+
+	List<DetailClasses> getAllByIdTutor(String idTutor) throws Exception;
+
 	List<DetailClasses> getAllByIdClass(String idClass) throws Exception;
-	
-	DetailClasses getByIdClass(String idClass) throws Exception;
+
+	List<DetailClasses> getPopularClasses() throws Exception;
 
 }

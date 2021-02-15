@@ -30,6 +30,9 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 	private BCryptPasswordEncoder passwordEncoder;
 
 	@Autowired
+	private MailUtil mailUtil;
+
+	@Autowired
 	private ProfilesService profilesService;
 
 	@Autowired
@@ -37,9 +40,6 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 
 	@Autowired
 	private GeneralService generalService;
-
-	@Autowired
-	private MailUtil mailUtil;
 
 	@Override
 	public void insert(Users user) throws Exception {
@@ -60,25 +60,9 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 	}
 
 	@Override
-	public List<Users> getAll() throws Exception {
-		return usersDao.getAllUser();
-	}
-
-	@Override
-	public Users getById(String id) throws Exception {
-		return usersDao.getUserById(id);
-	}
-
-	@Override
-	public Users getByUsername(String username) throws Exception {
-		return usersDao.getByUsername(username);
-	}
-
-	@Override
 	public void update(Users user) throws Exception {
-		Users usr = getById(user.getId());
-		user.setCreatedAt(usr.getCreatedAt());
-		user.setCreatedBy(usr.getCreatedBy());
+		user.setCreatedAt(usersDao.getUserById(user.getId()).getCreatedAt());
+		user.setCreatedBy(usersDao.getUserById(user.getId()).getCreatedBy());
 		usersDao.update(user, () -> {
 			validateUpdate(user);
 			user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
@@ -90,8 +74,8 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 		try {
 			begin();
 			Users user = getById(id);
-			if (validateDelete(id) == true) {
-				usersDao.softDeleteById(id, idUser);
+			if (validateDelete(id)) {
+				usersDao.softDeleteUserById(id, idUser);
 				profilesService.softDeleteById(user.getIdProfile().getId(), idUser);
 			} else {
 				usersDao.deleteUserById(id);
@@ -106,20 +90,50 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 
 	@Override
 	public Users updateUserPassword(Profiles profile) throws Exception {
-			Profiles profiles = profilesService.getByEmail(profile.getEmail());
-			if(profiles == null) {
-				throw new Exception("Email yang diinput tidak terdaftar");
-			} else {
-				Users user = usersDao.getByIdProfile(profiles);
-				String pass = generatePassword();
-				System.out.println(pass);
-				user.setUserPassword(passwordEncoder.encode(pass));
-				usersDao.update(user, () -> validateUpdate(user));
-				System.out.println("Sending mail...");
-				sendEmailResetPassword(pass, profiles);
-				System.out.println("Done");
-				return user;						
-			}
+		Profiles profiles = profilesService.getByEmail(profile.getEmail());
+		if (profiles == null) {
+			throw new Exception("Email yang diinput tidak terdaftar");
+		} else {
+			Users user = usersDao.getUserByIdProfile(profiles);
+			String pass = generatePassword();
+			System.out.println(pass);
+			user.setUserPassword(passwordEncoder.encode(pass));
+			usersDao.update(user, () -> validateUpdate(user));
+			System.out.println("Sending mail...");
+			sendEmailResetPassword(pass, profiles);
+			System.out.println("Done");
+			return user;
+		}
+	}
+
+	@Override
+	public Users getById(String id) throws Exception {
+		return usersDao.getUserById(id);
+	}
+
+	@Override
+	public Users getByUsername(String username) throws Exception {
+		return usersDao.getUserByUsername(username);
+	}
+
+	@Override
+	public Users getByIdNumber(String idNumber) throws Exception {
+		return usersDao.getUserByIdNumber(idNumber);
+	}
+
+	@Override
+	public Users getByIdClass(String idClass) throws Exception {
+		return usersDao.getUserByIdClass(idClass);
+	}
+
+	@Override
+	public List<Users> getAll() throws Exception {
+		return usersDao.getAllUsers();
+	}
+
+	@Override
+	public List<Users> getByRoleCode(String code) throws Exception {
+		return usersDao.getUsersByRoleCode(code);
 	}
 
 	private String generatePassword() {
@@ -138,7 +152,7 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 		MailHelper mailHelper = new MailHelper();
 		mailHelper.setFrom("elearningalfione@gmail.com");
 		mailHelper.setTo(profile.getEmail());
-		mailHelper.setSubject("Password has been reset");
+		mailHelper.setSubject("Password telah diganti");
 		mailHelper.setText(text);
 		new MailServiceImpl(mailUtil, mailHelper).start();
 	}
@@ -175,17 +189,6 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 						}
 					}
 				}
-//				} else if (user.getIdRole().getCode() != null) {
-//					Roles role = rolesService.getRoleByCode(user.getIdRole().getCode());
-//					if (role.getCode().equals("TTR") || role.getCode().equals("ADM")) {
-//						validateInsertExceptParticipant(user);
-//					}
-//					else {
-//						System.out.println("Sending Email......");
-//						sendEmailRegister(user.getIdProfile());
-//						System.out.println("Done");
-//					}
-//				}
 			}
 		}
 
@@ -228,18 +231,8 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 		}
 	}
 
-	@Override
-	public List<Users> getByRoleCode(String code) throws Exception {
-		return usersDao.getByRoleCode(code);
-	}
-
-	@Override
-	public Users getByIdNumber(String idNumber) throws Exception {
-		return usersDao.getByIdNumber(idNumber);
-	}
-
 	private boolean validateDelete(String idUser) throws Exception {
-		List<?> listObj = usersDao.validateDelete(idUser);
+		List<?> listObj = usersDao.validateDeleteUser(idUser);
 		listObj.forEach(System.out::println);
 		List<?> list = listObj.stream().filter(val -> val != null).collect(Collectors.toList());
 		System.out.println(list.size());
@@ -255,14 +248,9 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 		MailHelper mailHelper = new MailHelper();
 		mailHelper.setFrom("elearningalfione@gmail.com");
 		mailHelper.setTo(profile.getEmail());
-		mailHelper.setSubject("Your account has been registered");
+		mailHelper.setSubject("Registrasi akun Wedemy sukses");
 		mailHelper.setText(text);
 		new MailServiceImpl(mailUtil, mailHelper).start();
-	}
-
-	@Override
-	public Users getByIdClass(String idClass) throws Exception {
-		return usersDao.getByIdClass(idClass);
 	}
 
 }

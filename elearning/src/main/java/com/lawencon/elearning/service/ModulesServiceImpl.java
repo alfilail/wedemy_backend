@@ -22,15 +22,9 @@ public class ModulesServiceImpl extends BaseServiceImpl implements ModulesServic
 	}
 
 	@Override
-	public List<Modules> getAll() throws Exception {
-		return modulesDao.getAllModule();
-	}
-
-	@Override
 	public void update(Modules module) throws Exception {
-		Modules mod = getById(module.getId());
-		module.setCreatedAt(mod.getCreatedAt());
-		module.setCreatedBy(mod.getCreatedBy());
+		module.setCreatedAt(modulesDao.getModuleById(module.getId()).getCreatedAt());
+		module.setCreatedBy(modulesDao.getModuleById(module.getId()).getCreatedBy());
 		modulesDao.update(module, () -> validateUpdate(module));
 	}
 
@@ -51,13 +45,23 @@ public class ModulesServiceImpl extends BaseServiceImpl implements ModulesServic
 	}
 
 	@Override
+	public void softDeleteById(String id, String idUser) throws Exception {
+		modulesDao.softDeleteModuleById(id, idUser);
+	}
+
+	@Override
 	public Modules getById(String id) throws Exception {
 		return modulesDao.getModuleById(id);
 	}
 
 	@Override
 	public Modules getByCode(String code) throws Exception {
-		return modulesDao.getByCode(code);
+		return modulesDao.getModuleByCode(code);
+	}
+
+	@Override
+	public List<Modules> getAll() throws Exception {
+		return modulesDao.getAllModules();
 	}
 
 	private void validateInsert(Modules module) throws Exception {
@@ -94,21 +98,16 @@ public class ModulesServiceImpl extends BaseServiceImpl implements ModulesServic
 				if (modu.getVersion() != module.getVersion()) {
 					throw new Exception("Modul yang diedit telah diperbarui, silahkan coba lagi");
 				}
-			}			
+			}
 		}
 	}
 
 	private boolean validateDelete(String id) throws Exception {
-		List<?> listObj = modulesDao.validateDelete(id);
+		List<?> listObj = modulesDao.validateDeleteModule(id);
 		listObj.forEach(System.out::println);
 		List<?> list = listObj.stream().filter(val -> val != null).collect(Collectors.toList());
 		System.out.println(list.size());
 		return list.size() > 0 ? true : false;
-	}
-
-	@Override
-	public void softDeleteById(String id, String idUser) throws Exception {
-		modulesDao.softDeleteById(id, idUser);
 	}
 
 }

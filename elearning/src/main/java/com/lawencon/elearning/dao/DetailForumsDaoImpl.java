@@ -7,7 +7,9 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.elearning.model.DetailForums;
+import com.lawencon.elearning.model.Files;
 import com.lawencon.elearning.model.Profiles;
+import com.lawencon.elearning.model.Roles;
 import com.lawencon.elearning.model.Users;
 import com.lawencon.util.Callback;
 
@@ -48,8 +50,10 @@ public class DetailForumsDaoImpl extends ElearningBaseDaoImpl<DetailForums> impl
 	@Override
 	public List<DetailForums> getAllDetailForumsByIdForum(String idForum) throws Exception {
 		List<DetailForums> listResult = new ArrayList<>();
-		String sql = sqlBuilder("SELECT df.id, df.created_at, df.content_text, p.fullname FROM t_r_detail_forums df ",
+		String sql = sqlBuilder(
+				"SELECT df.id, df.created_at, df.content_text, p.fullname, f.file, r.code FROM t_r_detail_forums df ",
 				"INNER JOIN t_m_users u ON df.id_user = u.id INNER JOIN t_m_profiles p ON u.id_profile = p.id ",
+				"INNER JOIN t_m_roles r ON u.id_role = r.id INNER JOIN t_m_files f ON p.id_file = f.id ",
 				"WHERE df.id_forum =?1").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, idForum).getResultList();
 		listObj.forEach(val -> {
@@ -60,8 +64,13 @@ public class DetailForumsDaoImpl extends ElearningBaseDaoImpl<DetailForums> impl
 			detailForum.setContentText((String) objArr[2]);
 			Profiles profile = new Profiles();
 			profile.setFullName((String) objArr[3]);
+			Files photo = new Files();
+			photo.setFile((byte[]) objArr[4]);
 			Users user = new Users();
 			user.setIdProfile(profile);
+			Roles role = new Roles();
+			role.setCode((String) objArr[5]);
+			user.setIdRole(role);
 			detailForum.setIdUser(user);
 			listResult.add(detailForum);
 		});

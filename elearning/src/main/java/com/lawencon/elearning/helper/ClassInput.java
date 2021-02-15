@@ -12,7 +12,7 @@ import lombok.Data;
 
 @JsonInclude(Include.NON_NULL)
 @Data
-public class ClassesHelper{
+public class ClassInput{
 	private Classes clazz;
 	private DetailClasses detailClass;
 	private List<Modules> module;

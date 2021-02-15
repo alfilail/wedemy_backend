@@ -14,32 +14,49 @@ import com.lawencon.util.Callback;
 
 @Repository
 public class DetailClassesDaoImpl extends ElearningBaseDaoImpl<DetailClasses> implements DetailClassesDao {
+
 	@Override
 	public void insert(DetailClasses detailClass, Callback before) throws Exception {
 		save(detailClass, before, null);
 	}
 
 	@Override
-	public List<DetailClasses> getAllDetailClass() throws Exception {
-		List<DetailClasses> listDtlClasses = createQuery("FROM DetailClasses WHERE isActive = ?1 ", DetailClasses.class).setParameter(1, true)
-				.getResultList();
-		return resultCheckList(listDtlClasses);
+	public void update(DetailClasses dtlClass, Callback before) throws Exception {
+		save(dtlClass, before, null);
 	}
 
 	@Override
-	public DetailClasses getDetailClassById(String id) throws Exception {
+	public void updateViews(String id) throws Exception {
+		String sql = sqlBuilder("UPDATE t_m_detail_classes SET views = (views + 1) WHERE id = ?1").toString();
+		createNativeQuery(sql).setParameter(1, id).executeUpdate();
+	}
+
+	@Override
+	public void deleteDtlClassById(String id, String idUser) throws Exception {
+		updateNativeSQL("UPDATE t_m_detail_classes SET is_active = FALSE", id, idUser);
+	}
+
+	@Override
+	public DetailClasses getDtlClassById(String id) throws Exception {
 		return getById(id);
 	}
 
 	@Override
-	public DetailClasses getByCode(String code) throws Exception {
+	public DetailClasses getDtlClassByCode(String code) throws Exception {
 		List<DetailClasses> detailClassList = createQuery("FROM DetailClasses WHERE code = ?1 ", DetailClasses.class)
 				.setParameter(1, code).getResultList();
 		return resultCheck(detailClassList);
 	}
 
 	@Override
-	public List<DetailClasses> getTutorClasses(String idTutor) throws Exception {
+	public List<DetailClasses> getAllDtlClasses() throws Exception {
+		List<DetailClasses> listDtlClasses = createQuery("FROM DetailClasses WHERE isActive = ?1 ", DetailClasses.class)
+				.setParameter(1, true).getResultList();
+		return resultCheckList(listDtlClasses);
+	}
+
+	@Override
+	public List<DetailClasses> getAllByIdTutor(String idTutor) throws Exception {
 		List<DetailClasses> listResult = new ArrayList<>();
 		String sql = sqlBuilder("SELECT dc.id, c.class_name, c.description, f.file, c.id_tutor, p.fullname ",
 				"FROM t_m_detail_classes dc INNER JOIN t_m_classes c ON dc.id_class = c.id ",
@@ -69,12 +86,6 @@ public class DetailClassesDaoImpl extends ElearningBaseDaoImpl<DetailClasses> im
 	}
 
 	@Override
-	public void updateViews(String id) throws Exception {
-		String sql = sqlBuilder("UPDATE t_m_detail_classes SET views = (views + 1) WHERE id = ?1").toString();
-		createNativeQuery(sql).setParameter(1, id).executeUpdate();
-	}
-
-	@Override
 	public List<DetailClasses> getPopularClasses() throws Exception {
 		List<DetailClasses> listResult = new ArrayList<>();
 		String sql = sqlBuilder("SELECT c.class_name, c.description, f.file, dc.id ",
@@ -96,36 +107,27 @@ public class DetailClassesDaoImpl extends ElearningBaseDaoImpl<DetailClasses> im
 		});
 		return listResult;
 	}
-	
-	@Override
-	public void deleteDtlClassById(String id, String idUser) throws Exception {
-		updateNativeSQL("UPDATE t_m_detail_classes SET is_active = FALSE", id, idUser);
-	}
-	
+
 	@Override
 	public List<DetailClasses> getAllByIdClass(String idClass) throws Exception {
-		List<DetailClasses> detailClassList = createQuery("FROM DetailClasses WHERE idClass.id = ?1 ", DetailClasses.class)
-				.setParameter(1, idClass).getResultList();
-		return resultCheckList(detailClassList); //ditanya mas imam
+		List<DetailClasses> detailClassList = createQuery("FROM DetailClasses WHERE idClass.id = ?1 ",
+				DetailClasses.class).setParameter(1, idClass).getResultList();
+		return resultCheckList(detailClassList); // ditanya mas imam
 	}
 
 	@Override
-	public void update(DetailClasses dtlClass, Callback before) throws Exception {
-		save(dtlClass, before, null);
-	}
-	
-	@Override
-	public DetailClasses getByIdClass(String idClass) throws Exception {
-		List<DetailClasses> detailClassList = createQuery(sqlBuilder(
-				"FROM DetailClasses WHERE idClass.id = ?1 AND isActive = ?2 ORDER BY endDate DESC").toString(), DetailClasses.class)
-				.setParameter(1, idClass).setParameter(2, false).setMaxResults(1).getResultList();
+	public DetailClasses getDtlClassByIdClass(String idClass) throws Exception {
+		List<DetailClasses> detailClassList = createQuery(
+				sqlBuilder("FROM DetailClasses WHERE idClass.id = ?1 AND isActive = ?2 ORDER BY endDate DESC")
+						.toString(),
+				DetailClasses.class).setParameter(1, idClass).setParameter(2, false).setMaxResults(1).getResultList();
 		return resultCheck(detailClassList);
 	}
-	
+
 	@Override
 	public List<DetailClasses> getAllInactive() throws Exception {
-		List<DetailClasses> listDtlClasses = createQuery("FROM DetailClasses WHERE isActive = ?1 ", DetailClasses.class).setParameter(1, false)
-				.getResultList();
+		List<DetailClasses> listDtlClasses = createQuery("FROM DetailClasses WHERE isActive = ?1 ", DetailClasses.class)
+				.setParameter(1, false).getResultList();
 		return resultCheckList(listDtlClasses);
 	}
 }

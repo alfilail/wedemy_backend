@@ -27,7 +27,7 @@ public class DetailClassesController extends ElearningBaseController {
 	private DetailClassesService dtlClassesService;
 
 	@PostMapping
-	public ResponseEntity<?> ReactiveClass(@RequestBody String body) {
+	public ResponseEntity<?> reactivateClass(@RequestBody String body) {
 		try {
 			ObjectMapper obj = new ObjectMapper();
 			obj.registerModule(new JavaTimeModule());
@@ -43,19 +43,8 @@ public class DetailClassesController extends ElearningBaseController {
 	@GetMapping
 	public ResponseEntity<?> getAll() {
 		try {
-			List<DetailClasses> dtlClass = dtlClassesService.getAll();
-			return responseSuccess(dtlClass, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
-
-	@GetMapping("inactive")
-	public ResponseEntity<?> getAllInactive() {
-		try {
-			List<DetailClasses> dtlClass = dtlClassesService.getAllInactive();
-			return responseSuccess(dtlClass, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
+			List<DetailClasses> dtlClasses = dtlClassesService.getAll();
+			return responseSuccess(dtlClasses, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
@@ -67,6 +56,17 @@ public class DetailClassesController extends ElearningBaseController {
 		try {
 			DetailClasses dtlClass = dtlClassesService.getById(id);
 			return responseSuccess(dtlClass, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return responseError(e);
+		}
+	}
+
+	@GetMapping("inactive")
+	public ResponseEntity<?> getAllInactive() {
+		try {
+			List<DetailClasses> dtlClasses = dtlClassesService.getAllInactive();
+			return responseSuccess(dtlClasses, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
@@ -85,10 +85,10 @@ public class DetailClassesController extends ElearningBaseController {
 	}
 
 	@GetMapping("tutor/{idTutor}")
-	public ResponseEntity<?> getTutorClasses(@PathVariable("idTutor") String idTutor) {
+	public ResponseEntity<?> getAllByIdTutor(@PathVariable("idTutor") String idTutor) {
 		try {
-			List<DetailClasses> listResult = dtlClassesService.getTutorClasses(idTutor);
-			return responseSuccess(listResult, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
+			List<DetailClasses> dtlClasses = dtlClassesService.getTutorClasses(idTutor);
+			return responseSuccess(dtlClasses, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
@@ -98,8 +98,8 @@ public class DetailClassesController extends ElearningBaseController {
 	@GetMapping("popular")
 	public ResponseEntity<?> getPopularClasses() {
 		try {
-			List<DetailClasses> listResult = dtlClassesService.getPopularClasses();
-			return responseSuccess(listResult, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
+			List<DetailClasses> dtlClasses = dtlClassesService.getPopularClasses();
+			return responseSuccess(dtlClasses, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);

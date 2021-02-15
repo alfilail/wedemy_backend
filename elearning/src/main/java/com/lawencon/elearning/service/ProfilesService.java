@@ -10,20 +10,20 @@ public interface ProfilesService {
 
 	void insert(Profiles profile) throws Exception;
 
-	List<Profiles> getAll() throws Exception;
+	void update(Profiles profile, MultipartFile file) throws Exception;
+
+	void deleteById(String id) throws Exception;
+
+	void softDeleteById(String id, String idUser) throws Exception;
 
 	Profiles getById(String id) throws Exception;
 
 	Profiles getByCode(String code) throws Exception;
 
-	void update(Profiles profile, MultipartFile file) throws Exception;
-
-	void deleteById(String id) throws Exception;
-	
-	void softDeleteById(String id, String idUser) throws Exception;
-
 	Profiles getByEmail(String email) throws Exception;
 
 	Profiles getByIdNumber(String idNumber) throws Exception;
+
+	List<Profiles> getAll() throws Exception;
 
 }

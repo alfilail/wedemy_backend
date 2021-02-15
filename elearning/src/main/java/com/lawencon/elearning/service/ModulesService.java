@@ -8,15 +8,15 @@ public interface ModulesService {
 
 	void insert(Modules module) throws Exception;
 
-	List<Modules> getAll() throws Exception;
-	
-	Modules getById(String id) throws Exception;
-	
-	Modules getByCode(String code) throws Exception;
-	
-	void softDeleteById(String id, String idUser) throws Exception;
-
 	void update(Modules module) throws Exception;
 
 	void deleteById(String id, String idUser) throws Exception;
+
+	void softDeleteById(String id, String idUser) throws Exception;
+
+	Modules getById(String id) throws Exception;
+
+	Modules getByCode(String code) throws Exception;
+
+	List<Modules> getAll() throws Exception;
 }
