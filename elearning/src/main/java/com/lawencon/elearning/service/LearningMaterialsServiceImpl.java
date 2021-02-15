@@ -113,7 +113,7 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 	private void insertDetailModulRegistration(DetailModuleRegistrations dtlModuleRgs) throws Exception {
 		dtlModuleRgs.setCreatedBy(dtlModuleRgs.getIdLearningMaterial().getCreatedBy());
 		dtlModuleRgs.setIdLearningMaterial(dtlModuleRgs.getIdLearningMaterial());
-		dtlModuleRgsService.insertDetailModuleRegistration(dtlModuleRgs);
+		dtlModuleRgsService.insert(dtlModuleRgs);
 	}
 
 	private void validateInsert(LearningMaterials learningMaterial) throws Exception {

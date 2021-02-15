@@ -1,6 +1,5 @@
 package com.lawencon.elearning.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +24,7 @@ import com.lawencon.elearning.util.MessageStat;
 @RestController
 @RequestMapping("learning-material-type")
 public class LearningMaterialTypesController extends ElearningBaseController {
+
 	@Autowired
 	private LearningMaterialTypesService lmTypesService;
 
@@ -40,36 +40,22 @@ public class LearningMaterialTypesController extends ElearningBaseController {
 		}
 	}
 
-	@GetMapping("{id}")
-	public ResponseEntity<?> getById(@PathVariable("id") String id) {
-		LearningMaterialTypes lmType = new LearningMaterialTypes();
-		try {
-			lmType = lmTypesService.getById(id);
-			return responseSuccess(lmType, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
-
 	@GetMapping
 	public ResponseEntity<?> getAll() {
-		List<LearningMaterialTypes> lmTypesList = new ArrayList<LearningMaterialTypes>();
 		try {
-			lmTypesList = lmTypesService.getAll();
-			return responseSuccess(lmTypesList, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
+			List<LearningMaterialTypes> lmTypes = lmTypesService.getAll();
+			return responseSuccess(lmTypes, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
 		}
 	}
 
-	@DeleteMapping
-	public ResponseEntity<?> deleteById(@RequestParam("id") String id,
-			@RequestParam("idUser") String idUser) {
+	@GetMapping("{id}")
+	public ResponseEntity<?> getById(@PathVariable("id") String id) {
 		try {
-			lmTypesService.deleteById(id, idUser);
-			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
+			LearningMaterialTypes lmType = lmTypesService.getById(id);
+			return responseSuccess(lmType, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
@@ -83,11 +69,23 @@ public class LearningMaterialTypesController extends ElearningBaseController {
 			obj.registerModule(new JavaTimeModule());
 			LearningMaterialTypes lmType = obj.readValue(body, LearningMaterialTypes.class);
 			lmTypesService.update(lmType);
-			LearningMaterialTypes learnMatType = lmTypesService.getById(lmType.getId());
-			return responseSuccess(learnMatType, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
+			LearningMaterialTypes response = lmTypesService.getById(lmType.getId());
+			return responseSuccess(response, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
 		}
 	}
+
+	@DeleteMapping
+	public ResponseEntity<?> deleteById(@RequestParam("id") String id, @RequestParam("idUser") String idUser) {
+		try {
+			lmTypesService.deleteById(id, idUser);
+			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return responseError(e);
+		}
+	}
+
 }

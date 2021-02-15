@@ -81,7 +81,7 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 				modulesList.add(module);
 
 				List<DetailModuleRegistrations> detailModuleRegis = detailModuleRegistrationsService
-						.getDetailModuleRegistrationsByIdModuleRgs(moduleRegistration.getId());
+						.getAllByIdModuleRgs(moduleRegistration.getId());
 
 				for (DetailModuleRegistrations detailModule : detailModuleRegis) {
 					DetailModuleRegistrations detail = new DetailModuleRegistrations();
@@ -101,7 +101,7 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 			moduleRegistrationsService.insert(clazzHelper);
 
 			for (DetailModuleRegistrations detailModuleRegis : detailModuleList) {
-				detailModuleRegistrationsService.insertDetailModuleRegistration(detailModuleRegis);
+				detailModuleRegistrationsService.insert(detailModuleRegis);
 			}
 			commit();
 		} catch (Exception e) {

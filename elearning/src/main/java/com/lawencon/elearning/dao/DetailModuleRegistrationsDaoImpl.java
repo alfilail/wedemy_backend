@@ -17,8 +17,7 @@ public class DetailModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<Detai
 		implements DetailModuleRegistrationsDao {
 
 	@Override
-	public void insertDetailModuleRegistration(DetailModuleRegistrations dtlModRegist, Callback before)
-			throws Exception {
+	public void insert(DetailModuleRegistrations dtlModRegist, Callback before) throws Exception {
 		save(dtlModRegist, before, null);
 	}
 
@@ -28,25 +27,46 @@ public class DetailModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<Detai
 	}
 
 	@Override
-	public DetailModuleRegistrations getDetailModuleRegistrationsById(String id) throws Exception {
+	public void deleteById(String id, String idUser) throws Exception {
+		updateNativeSQL("UPDATE t_r_detail_module_registrations SET is_active = FALSE", id, idUser);
+	}
+
+	@Override
+	public DetailModuleRegistrations getDtlModuleRgsById(String id) throws Exception {
 		return getById(id);
 	}
 
 	@Override
-	public DetailModuleRegistrations getByOrderNumber(Integer orderNumber) throws Exception {
+	public DetailModuleRegistrations getDtlModuleRgsByOrderNumber(Integer orderNumber) throws Exception {
 		DetailModuleRegistrations approvement = createQuery("FROM DetailModuleRegistrations WHERE orderNumber = ?1",
 				DetailModuleRegistrations.class).setParameter(1, orderNumber).getSingleResult();
 		return approvement;
 	}
 
 	@Override
-	public void deleteDetailModuleRegistration(String id, String idUser) throws Exception {
-		updateNativeSQL("UPDATE t_r_detail_module_registrations SET is_active = FALSE", id, idUser);
+	public DetailModuleRegistrations getDtlModuleRgsByIdLearningMaterial(String id) throws Exception {
+		List<DetailModuleRegistrations> detailModuleList = createQuery(
+				"FROM DetailModuleRegistrations WHERE idLearningMaterial = ?1", DetailModuleRegistrations.class)
+						.setParameter(1, id).getResultList();
+		return detailModuleList.size() > 0 ? detailModuleList.get(0) : null;
 	}
 
 	@Override
-	public List<DetailModuleRegistrations> getDetailModuleRegistrationsByIdModuleRgs(String idModuleRgs)
-			throws Exception {
+	public Integer totalHours(String idDtlClass) throws Exception {
+		List<Integer> result = new ArrayList<>();
+		String sql = sqlBuilder("SELECT COUNT(DISTINCT(dmr.schedule_date)) FROM t_r_detail_module_registrations dmr ",
+				"INNER JOIN t_r_module_registrations mr ON dmr.id_module_rgs = mr.id WHERE mr.id_dtl_class =?1")
+						.toString();
+		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlClass).getResultList();
+		listObj.forEach(val -> {
+			Object obj = (Object) val;
+			result.add(Integer.valueOf(obj.toString()));
+		});
+		return result.size() > 0 ? result.get(0) : 0;
+	}
+
+	@Override
+	public List<DetailModuleRegistrations> getAllByIdModuleRgs(String idModuleRgs) throws Exception {
 		List<DetailModuleRegistrations> listResult = new ArrayList<>();
 		String sql = sqlBuilder(
 				"SELECT lm.id materialid, lm.code materialcode, lm.learning_material_name, lm.description, ",
@@ -76,28 +96,6 @@ public class DetailModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<Detai
 			listResult.add(dtlModuleRgs);
 		});
 		return listResult;
-	}
-
-	@Override
-	public DetailModuleRegistrations getDetailModuleRegistrationByIdLearningMaterial(String id) throws Exception {
-		List<DetailModuleRegistrations> detailModuleList = createQuery(
-				"FROM DetailModuleRegistrations WHERE idLearningMaterial = ?1", DetailModuleRegistrations.class)
-						.setParameter(1, id).getResultList();
-		return detailModuleList.size() > 0 ? detailModuleList.get(0) : null;
-	}
-
-	@Override
-	public Integer totalHours(String idDtlClass) throws Exception {
-		List<Integer> result = new ArrayList<>();
-		String sql = sqlBuilder("SELECT COUNT(DISTINCT(dmr.schedule_date)) FROM t_r_detail_module_registrations dmr ",
-				"INNER JOIN t_r_module_registrations mr ON dmr.id_module_rgs = mr.id WHERE mr.id_dtl_class =?1")
-						.toString();
-		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlClass).getResultList();
-		listObj.forEach(val -> {
-			Object obj = (Object) val;
-			result.add(Integer.valueOf(obj.toString()));
-		});
-		return result.size() > 0 ? result.get(0) : 0;
 	}
 
 }

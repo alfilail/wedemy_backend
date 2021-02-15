@@ -79,7 +79,7 @@ public class ModuleRegistrationsServiceImpl extends ElearningBaseServiceImpl imp
 			ModuleAndLearningMaterials result = new ModuleAndLearningMaterials();
 			List<LearningMaterialsAndPermissions> learningMaterials = new ArrayList<>();
 			List<DetailModuleRegistrations> dtlModuleList = dtlModuleRgsService
-					.getDetailModuleRegistrationsByIdModuleRgs(moduleRgs.getId());
+					.getAllByIdModuleRgs(moduleRgs.getId());
 			for (DetailModuleRegistrations dtlModule : dtlModuleList) {
 				LearningMaterialsAndPermissions learningMaterial = new LearningMaterialsAndPermissions();
 				learningMaterial.setLearningMaterial(dtlModule);

@@ -6,18 +6,18 @@ import com.lawencon.elearning.model.DetailModuleRegistrations;
 
 public interface DetailModuleRegistrationsService {
 
-	void insertDetailModuleRegistration(DetailModuleRegistrations dtlModRegist) throws Exception;
+	void insert(DetailModuleRegistrations dtlModRegist) throws Exception;
 
-	List<DetailModuleRegistrations> getDetailModuleRegistrationsByIdModuleRgs(String idModuleRgs) throws Exception;
-
-	DetailModuleRegistrations getDetailModuleRegistrationsById(String id) throws Exception;
-	
-	Integer totalHours(String idDtlClass) throws Exception;
-	
-	void deleteDetailModuleRegistration(String id, String idUser) throws Exception;
-	
-	DetailModuleRegistrations getDetailModuleRegistrationByIdLearningMaterial(String id) throws Exception;
-	
 	void update(DetailModuleRegistrations dtlModRegist) throws Exception;
+
+	void deleteById(String id, String idUser) throws Exception;
+
+	DetailModuleRegistrations getDtlModuleRgsById(String id) throws Exception;
+
+	DetailModuleRegistrations getDtlModuleRgsByIdLearningMaterial(String id) throws Exception;
+
+	Integer totalHours(String idDtlClass) throws Exception;
+
+	List<DetailModuleRegistrations> getAllByIdModuleRgs(String idModuleRgs) throws Exception;
 
 }

@@ -14,70 +14,70 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 		implements DetailModuleRegistrationsService {
 
 	@Autowired
-	private DetailModuleRegistrationsDao dtlModRegistDao;
+	private DetailModuleRegistrationsDao dtlModuleRgsDao;
 
 	@Override
-	public void insertDetailModuleRegistration(DetailModuleRegistrations dtlModRegist) throws Exception {
-		dtlModRegist.setTrxNumber(generateTrxNumber(TransactionNumberCode.DETAIL_MODULE_REGISTRATION.code));
-		dtlModRegistDao.insertDetailModuleRegistration(dtlModRegist, () -> validateInsert(dtlModRegist));
+	public void insert(DetailModuleRegistrations dtlModuleRgs) throws Exception {
+		dtlModuleRgs.setTrxNumber(generateTrxNumber(TransactionNumberCode.DETAIL_MODULE_REGISTRATION.code));
+		dtlModuleRgsDao.insert(dtlModuleRgs, () -> validateInsert(dtlModuleRgs));
 	}
 
 	@Override
-	public void update(DetailModuleRegistrations dtlModRegist) throws Exception {
-		DetailModuleRegistrations dtlModRgs = dtlModRegistDao.getDetailModuleRegistrationsById(dtlModRegist.getId());
-		dtlModRegist.setCreatedAt(dtlModRegist.getCreatedAt());
-		dtlModRegist.setCreatedBy(dtlModRgs.getCreatedBy());
-		dtlModRegist.setIdModuleRegistration(dtlModRgs.getIdModuleRegistration());
-		dtlModRegistDao.update(dtlModRegist, () -> validateInsert(dtlModRegist));
+	public void update(DetailModuleRegistrations dtlModuleRgs) throws Exception {
+		DetailModuleRegistrations dtlModRgs = dtlModuleRgsDao.getDtlModuleRgsById(dtlModuleRgs.getId());
+		dtlModuleRgs.setCreatedAt(dtlModuleRgs.getCreatedAt());
+		dtlModuleRgs.setCreatedBy(dtlModRgs.getCreatedBy());
+		dtlModuleRgs.setIdModuleRegistration(dtlModRgs.getIdModuleRegistration());
+		dtlModuleRgsDao.update(dtlModuleRgs, () -> validateInsert(dtlModuleRgs));
 	}
 
 	@Override
-	public List<DetailModuleRegistrations> getDetailModuleRegistrationsByIdModuleRgs(String idModuleRgs)
-			throws Exception {
-		return dtlModRegistDao.getDetailModuleRegistrationsByIdModuleRgs(idModuleRgs);
+	public void deleteById(String id, String idUser) throws Exception {
+		dtlModuleRgsDao.deleteById(id, idUser);
 	}
 
 	@Override
-	public DetailModuleRegistrations getDetailModuleRegistrationsById(String id) throws Exception {
-		return dtlModRegistDao.getDetailModuleRegistrationsById(id);
+	public DetailModuleRegistrations getDtlModuleRgsById(String id) throws Exception {
+		return dtlModuleRgsDao.getDtlModuleRgsById(id);
+	}
+
+	@Override
+	public DetailModuleRegistrations getDtlModuleRgsByIdLearningMaterial(String id) throws Exception {
+		return dtlModuleRgsDao.getDtlModuleRgsByIdLearningMaterial(id);
 	}
 
 	@Override
 	public Integer totalHours(String idDtlClass) throws Exception {
-		return dtlModRegistDao.totalHours(idDtlClass);
+		return dtlModuleRgsDao.totalHours(idDtlClass);
 	}
 
 	@Override
-	public void deleteDetailModuleRegistration(String id, String idUser) throws Exception {
-		dtlModRegistDao.deleteDetailModuleRegistration(id, idUser);
-	}
-
-	@Override
-	public DetailModuleRegistrations getDetailModuleRegistrationByIdLearningMaterial(String id) throws Exception {
-		return dtlModRegistDao.getDetailModuleRegistrationByIdLearningMaterial(id);
+	public List<DetailModuleRegistrations> getAllByIdModuleRgs(String idModuleRgs) throws Exception {
+		return dtlModuleRgsDao.getAllByIdModuleRgs(idModuleRgs);
 	}
 
 	private void validateInsert(DetailModuleRegistrations dtlModRegist) throws Exception {
-//		if (dtlModRegist.getScheduleDate() != null) {
-//			if (dtlModRegist.getScheduleDate()
-//					.isAfter(dtlModRegist.getIdModuleRegistration().getIdDetailClass().getEndDate())) {
-//				throw new Exception("Jadwal materi tidak bisa melewati masa berlangsung kelas");
-//			}
-//			if (dtlModRegist.getScheduleDate()
-//					.isBefore(dtlModRegist.getIdModuleRegistration().getIdDetailClass().getStartDate())) {
-//				throw new Exception("Jadwal materi tidak bisa mendahului masa berlangsung kelas");
-//			}
-//		} else {
-//			throw new Exception("Jadwal materi tidak boleh kosong");
-//		}
-//		if (dtlModRegist.getOrderNumber() != null) {
-//			DetailModuleRegistrations dtlModuleRgs = dtlModRegistDao.getByOrderNumber(dtlModRegist.getOrderNumber());
-//			if (dtlModuleRgs != null) {
-//				throw new Exception("Order number dalam satu modul tidak boleh sama");
-//			}
-//		} else {
-//			throw new Exception("Order number tidak boleh kosong");
-//		}
+		if (dtlModRegist.getScheduleDate() != null) {
+			if (dtlModRegist.getScheduleDate()
+					.isAfter(dtlModRegist.getIdModuleRegistration().getIdDetailClass().getEndDate())) {
+				throw new Exception("Jadwal materi tidak bisa melewati masa berlangsung kelas");
+			}
+			if (dtlModRegist.getScheduleDate()
+					.isBefore(dtlModRegist.getIdModuleRegistration().getIdDetailClass().getStartDate())) {
+				throw new Exception("Jadwal materi tidak bisa mendahului masa berlangsung kelas");
+			}
+		} else {
+			throw new Exception("Jadwal materi tidak boleh kosong");
+		}
+		if (dtlModRegist.getOrderNumber() != null) {
+			DetailModuleRegistrations dtlModuleRgs = dtlModuleRgsDao
+					.getDtlModuleRgsByOrderNumber(dtlModRegist.getOrderNumber());
+			if (dtlModuleRgs != null) {
+				throw new Exception("Order number dalam satu modul tidak boleh sama");
+			}
+		} else {
+			throw new Exception("Order number tidak boleh kosong");
+		}
 	}
 
 }

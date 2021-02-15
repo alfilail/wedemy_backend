@@ -26,7 +26,7 @@ public class DetailModuleRegistrationsController extends ElearningBaseController
 	@GetMapping("{id}")
 	public ResponseEntity<?> getDetailModuleRgsById(@PathVariable("id") String id) {
 		try {
-			DetailModuleRegistrations dtlModuleRgs = dtlModuleService.getDetailModuleRegistrationsById(id);
+			DetailModuleRegistrations dtlModuleRgs = dtlModuleService.getDtlModuleRgsById(id);
 			return responseSuccess(dtlModuleRgs, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();

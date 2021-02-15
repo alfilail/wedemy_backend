@@ -15,21 +15,19 @@ import com.lawencon.elearning.model.LearningMaterialTypes;
 public class LearningMaterialTypesServiceImpl extends BaseServiceImpl implements LearningMaterialTypesService {
 
 	@Autowired
-	private LearningMaterialTypesDao learnMaterialTypeDao;
+	private LearningMaterialTypesDao typesDao;
 
 	@Override
 	public void insert(LearningMaterialTypes lmType) throws Exception {
-		learnMaterialTypeDao.insert(lmType, () -> validateInsert(lmType));
+		typesDao.insert(lmType, () -> validateInsert(lmType));
 	}
 
 	@Override
-	public List<LearningMaterialTypes> getAll() throws Exception {
-		return learnMaterialTypeDao.getAllLearningMaterialType();
-	}
-
-	@Override
-	public LearningMaterialTypes getById(String id) throws Exception {
-		return learnMaterialTypeDao.getLearningMaterialTypeById(id);
+	public void update(LearningMaterialTypes lmType) throws Exception {
+		LearningMaterialTypes learnMatType = getById(lmType.getId());
+		lmType.setCreatedAt(learnMatType.getCreatedAt());
+		lmType.setCreatedBy(learnMatType.getCreatedBy());
+		typesDao.update(lmType, () -> validateUpdate(lmType));
 	}
 
 	@Override
@@ -37,9 +35,9 @@ public class LearningMaterialTypesServiceImpl extends BaseServiceImpl implements
 		try {
 			begin();
 			if (validateDelete(id)) {
-				learnMaterialTypeDao.softDeleteById(id, idUser);
+				typesDao.softDeleteTypeById(id, idUser);
 			} else {
-				learnMaterialTypeDao.deleteTypeById(id);
+				typesDao.deleteTypeById(id);
 			}
 			commit();
 		} catch (Exception e) {
@@ -49,16 +47,18 @@ public class LearningMaterialTypesServiceImpl extends BaseServiceImpl implements
 	}
 
 	@Override
-	public void update(LearningMaterialTypes lmType) throws Exception {
-		LearningMaterialTypes learnMatType = getById(lmType.getId());
-		lmType.setCreatedAt(learnMatType.getCreatedAt());
-		lmType.setCreatedBy(learnMatType.getCreatedBy());
-		learnMaterialTypeDao.update(lmType, () -> validateUpdate(lmType));
+	public LearningMaterialTypes getById(String id) throws Exception {
+		return typesDao.getTypeById(id);
 	}
 
 	@Override
 	public LearningMaterialTypes getByCode(String code) throws Exception {
-		return learnMaterialTypeDao.getByCode(code);
+		return typesDao.getTypeByCode(code);
+	}
+
+	@Override
+	public List<LearningMaterialTypes> getAll() throws Exception {
+		return typesDao.getAllTypes();
 	}
 
 	private void validateInsert(LearningMaterialTypes learningMaterialTypes) throws Exception {
@@ -96,8 +96,7 @@ public class LearningMaterialTypesServiceImpl extends BaseServiceImpl implements
 							throw new Exception("Kode tipe bahan ajar tidak boleh kosong!");
 						} else {
 							if (!learningMaterialTypes.getCode().equalsIgnoreCase(learningType.getCode())) {
-								LearningMaterialTypes lmType = getByCode(
-										learningMaterialTypes.getCode());
+								LearningMaterialTypes lmType = getByCode(learningMaterialTypes.getCode());
 								if (lmType != null) {
 									throw new Exception("Kode tipe bahan ajar tidak boleh sama!");
 								}
@@ -115,7 +114,7 @@ public class LearningMaterialTypesServiceImpl extends BaseServiceImpl implements
 	}
 
 	private boolean validateDelete(String id) throws Exception {
-		List<?> listObj = learnMaterialTypeDao.validateDelete(id);
+		List<?> listObj = typesDao.validateDelete(id);
 		listObj.forEach(System.out::println);
 		List<?> list = listObj.stream().filter(val -> val != null).collect(Collectors.toList());
 		System.out.println(list.size());
