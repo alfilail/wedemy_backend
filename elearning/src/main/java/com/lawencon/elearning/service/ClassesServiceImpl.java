@@ -22,10 +22,10 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 	private ClassesDao classesDao;
 
 	@Autowired
-	private ModuleRegistrationsService moduleRegistrationsService;
+	private ModuleRegistrationsService moduleRgsService;
 
 	@Autowired
-	private DetailClassesService detailClassesService;
+	private DetailClassesService dtlClassesService;
 
 	@Autowired
 	private UsersService usersService;
@@ -52,9 +52,9 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 					detailClass.setIdClass(clazz);
 					detailClass.setViews(0);
 					classInput.setDetailClass(detailClass);
-					detailClassesService.insert(classInput.getDetailClass());
+					dtlClassesService.insert(classInput.getDetailClass());
 					if (classInput.getModule() != null) {
-						moduleRegistrationsService.insertModuleRegistration(classInput);
+						moduleRgsService.insert(classInput);
 					}
 				}
 			}
@@ -99,9 +99,9 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 		try {
 			begin();
 			classesDao.softDeleteClassById(id, idUser);
-			List<DetailClasses> dtlClass = detailClassesService.getAllByIdClass(id);
+			List<DetailClasses> dtlClass = dtlClassesService.getAllByIdClass(id);
 			for (DetailClasses dtl : dtlClass) {
-				detailClassesService.deleteById(dtl.getId(), idUser);
+				dtlClassesService.deleteById(dtl.getId(), idUser);
 			}
 			commit();
 		} catch (Exception e) {

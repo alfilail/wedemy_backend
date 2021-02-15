@@ -42,8 +42,7 @@ public class ModuleRegistrationsController extends ElearningBaseController {
 	public ResponseEntity<?> getModuleAndLearningMaterialsByIdDtlClass(@RequestParam("idUser") String idUser,
 			@RequestParam("idDtlClass") String idDtlClass) {
 		try {
-			EnrolledClass listResult = moduleRgsService
-					.getModuleAndLearningMaterialsByIdDtlClass(idUser, idDtlClass);
+			EnrolledClass listResult = moduleRgsService.getEnrolledClassByIdDtlClass(idUser, idDtlClass);
 			return responseSuccess(listResult, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -51,13 +51,63 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 	}
 
 	@Override
-	public List<DetailClasses> getAll() throws Exception {
-		return detailClassesDao.getAllDtlClasses();
+	public void deleteById(String id, String idUser) throws Exception {
+		detailClassesDao.deleteDtlClassById(id, idUser);
 	}
 
 	@Override
-	public List<DetailClasses> getAllByIdClass(String idClass) throws Exception {
-		return detailClassesDao.getAllByIdClass(idClass);
+	public void reactiveOldClass(DetailClasses detailClass) throws Exception {
+		try {
+			begin();
+			Classes clazz = classService.getInActiveById(detailClass.getIdClass().getId());
+
+			classService.reactivate(detailClass.getIdClass().getId(), detailClass.getCreatedBy());
+
+			detailClass.setCode(generateCodeDetailClass(clazz.getCode(), detailClass.getStartDate()));
+			detailClass.setViews(0);
+			detailClass.setIdClass(clazz);
+
+			DetailClasses detailClassOld = detailClassesDao.getDtlClassByIdClass(detailClass.getIdClass().getId());
+
+			List<ModuleRegistrations> modulesRegistrationListOld = moduleRegistrationsService
+					.getAllByIdDtlClass(detailClassOld.getId());
+
+			List<Modules> modulesList = new ArrayList<Modules>();
+
+			List<DetailModuleRegistrations> detailModuleList = new ArrayList<DetailModuleRegistrations>();
+
+			for (ModuleRegistrations moduleRegistration : modulesRegistrationListOld) {
+				Modules module = modulesService.getById(moduleRegistration.getIdModule().getId());
+				modulesList.add(module);
+
+				List<DetailModuleRegistrations> detailModuleRegis = detailModuleRegistrationsService
+						.getDetailModuleRegistrationsByIdModuleRgs(moduleRegistration.getId());
+
+				for (DetailModuleRegistrations detailModule : detailModuleRegis) {
+					DetailModuleRegistrations detail = new DetailModuleRegistrations();
+					detail.setIdLearningMaterial(detailModule.getIdLearningMaterial());
+					detail.setIdModuleRegistration(detailModule.getIdModuleRegistration());
+					detail.setOrderNumber(detailModule.getOrderNumber());
+					detail.setScheduleDate(detailModule.getScheduleDate());
+					detailModuleList.add(detail);
+				}
+			}
+			detailClassesDao.insert(detailClass, () -> validateReactive(detailClass));
+
+			ClassInput clazzHelper = new ClassInput();
+			clazzHelper.setClazz(clazz);
+			clazzHelper.setDetailClass(detailClass);
+			clazzHelper.setModule(modulesList);
+			moduleRegistrationsService.insert(clazzHelper);
+
+			for (DetailModuleRegistrations detailModuleRegis : detailModuleList) {
+				detailModuleRegistrationsService.insertDetailModuleRegistration(detailModuleRegis);
+			}
+			commit();
+		} catch (Exception e) {
+			rollback();
+			throw new Exception(e);
+		}
 	}
 
 	@Override
@@ -89,6 +139,16 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 	}
 
 	@Override
+	public List<DetailClasses> getAll() throws Exception {
+		return detailClassesDao.getAllDtlClasses();
+	}
+
+	@Override
+	public List<DetailClasses> getAllByIdClass(String idClass) throws Exception {
+		return detailClassesDao.getAllByIdClass(idClass);
+	}
+
+	@Override
 	public List<DetailClasses> getAllInactive() throws Exception {
 		return detailClassesDao.getAllInactive();
 	}
@@ -101,66 +161,6 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 	@Override
 	public List<DetailClasses> getPopularClasses() throws Exception {
 		return detailClassesDao.getPopularClasses();
-	}
-
-	@Override
-	public void deleteById(String id, String idUser) throws Exception {
-		detailClassesDao.deleteDtlClassById(id, idUser);
-	}
-
-	@Override
-	public void reactiveOldClass(DetailClasses detailClass) throws Exception {
-		try {
-			begin();
-			Classes clazz = classService.getInActiveById(detailClass.getIdClass().getId());
-
-			classService.reactivate(detailClass.getIdClass().getId(), detailClass.getCreatedBy());
-
-			detailClass.setCode(generateCodeDetailClass(clazz.getCode(), detailClass.getStartDate()));
-			detailClass.setViews(0);
-			detailClass.setIdClass(clazz);
-
-			DetailClasses detailClassOld = detailClassesDao.getDtlClassByIdClass(detailClass.getIdClass().getId());
-
-			List<ModuleRegistrations> modulesRegistrationListOld = moduleRegistrationsService
-					.getModuleRegistrationsByIdDetailClass(detailClassOld.getId());
-
-			List<Modules> modulesList = new ArrayList<Modules>();
-
-			List<DetailModuleRegistrations> detailModuleList = new ArrayList<DetailModuleRegistrations>();
-
-			for (ModuleRegistrations moduleRegistration : modulesRegistrationListOld) {
-				Modules module = modulesService.getById(moduleRegistration.getIdModule().getId());
-				modulesList.add(module);
-
-				List<DetailModuleRegistrations> detailModuleRegis = detailModuleRegistrationsService
-						.getDetailModuleRegistrationsByIdModuleRgs(moduleRegistration.getId());
-
-				for (DetailModuleRegistrations detailModule : detailModuleRegis) {
-					DetailModuleRegistrations detail = new DetailModuleRegistrations();
-					detail.setIdLearningMaterial(detailModule.getIdLearningMaterial());
-					detail.setIdModuleRegistration(detailModule.getIdModuleRegistration());
-					detail.setOrderNumber(detailModule.getOrderNumber());
-					detail.setScheduleDate(detailModule.getScheduleDate());
-					detailModuleList.add(detail);
-				}
-			}
-			detailClassesDao.insert(detailClass, () -> validateReactive(detailClass));
-
-			ClassInput clazzHelper = new ClassInput();
-			clazzHelper.setClazz(clazz);
-			clazzHelper.setDetailClass(detailClass);
-			clazzHelper.setModule(modulesList);
-			moduleRegistrationsService.insertModuleRegistration(clazzHelper);
-
-			for (DetailModuleRegistrations detailModuleRegis : detailModuleList) {
-				detailModuleRegistrationsService.insertDetailModuleRegistration(detailModuleRegis);
-			}
-			commit();
-		} catch (Exception e) {
-			rollback();
-			throw new Exception(e);
-		}
 	}
 
 	private void validateInsert(DetailClasses detailClass) throws Exception {

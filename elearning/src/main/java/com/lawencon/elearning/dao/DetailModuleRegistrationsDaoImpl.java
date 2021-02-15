@@ -52,8 +52,8 @@ public class DetailModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<Detai
 				"SELECT lm.id materialid, lm.code materialcode, lm.learning_material_name, lm.description, ",
 				"lmt.code typecode, dmr.id dmrid, dmr.schedule_date, dmr.order_number, dmr.id_module_rgs FROM t_r_detail_module_registrations dmr ",
 				"INNER JOIN t_m_learning_materials lm ON dmr.id_learning_material = lm.id ",
-				"INNER JOIN t_m_learning_material_types lmt ON lm.id_type = lmt.id WHERE dmr.id_module_rgs =?1")
-						.toString();
+				"INNER JOIN t_m_learning_material_types lmt ON lm.id_type = lmt.id WHERE dmr.id_module_rgs =?1 ",
+				"AND lm.is_active = true").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, idModuleRgs).getResultList();
 		listObj.forEach(val -> {
 			Object[] objArr = (Object[]) val;

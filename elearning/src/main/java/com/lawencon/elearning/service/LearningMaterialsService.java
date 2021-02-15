@@ -15,14 +15,14 @@ public interface LearningMaterialsService {
 
 	void insert(DetailModuleRegistrations dtlModuleRgs, MultipartFile file) throws Exception;
 
-	List<LearningMaterials> getAll() throws Exception;
-
-	LearningMaterials getById(String id) throws Exception;
-
 	void update(DetailModuleRegistrations dtlModuleRgs, MultipartFile file) throws Exception;
 
 	void deleteById(String id, String idUser) throws Exception;
 
+	LearningMaterials getById(String id) throws Exception;
+
 	LearningMaterials getByCode(String code) throws Exception;
+
+	List<LearningMaterials> getAll() throws Exception;
 
 }

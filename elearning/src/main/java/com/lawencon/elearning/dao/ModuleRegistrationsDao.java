@@ -7,12 +7,11 @@ import com.lawencon.util.Callback;
 
 public interface ModuleRegistrationsDao {
 
-	void insertModuleRegistration(ModuleRegistrations moduleRegistration, Callback before) throws Exception;
+	void insert(ModuleRegistrations moduleRegistration, Callback before) throws Exception;
 
-	ModuleRegistrations getByIdDetailClassAndIdModuleRegistration(String idDtlClass, String idModRegist)
-			throws Exception;
+	ModuleRegistrations getByIdDtlClassAndIdModuleRgs(String idDtlClass, String idModuleRgs) throws Exception;
 
-	List<ModuleRegistrations> getByIdDtlClass(String idDtlClass) throws Exception;
-	
-	List<ModuleRegistrations> getIdModuleRegistrationByIdDetailClass (String idDetailClass) throws Exception;
+	List<ModuleRegistrations> getAllModifiedByIdDtlClass(String idDtlClass) throws Exception;
+
+	List<ModuleRegistrations> getAllByIdDtlClass(String idDtlClass) throws Exception;
 }

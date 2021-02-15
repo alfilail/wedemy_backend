@@ -23,10 +23,6 @@ import com.lawencon.elearning.model.LearningMaterials;
 import com.lawencon.elearning.service.LearningMaterialsService;
 import com.lawencon.elearning.util.MessageStat;
 
-/**
- * @author Nur Alfilail
- */
-
 @RestController
 @RequestMapping("learning-material")
 public class LearningMaterialsController extends ElearningBaseController {
@@ -48,33 +44,22 @@ public class LearningMaterialsController extends ElearningBaseController {
 		}
 	}
 
+	@GetMapping
+	public ResponseEntity<?> getAll() {
+		try {
+			List<LearningMaterials> learningMaterials = learningMaterialsService.getAll();
+			return responseSuccess(learningMaterials, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return responseError(e);
+		}
+	}
+
 	@GetMapping("{id}")
 	public ResponseEntity<?> getById(@PathVariable String id) {
 		try {
 			LearningMaterials learningMaterial = learningMaterialsService.getById(id);
 			return responseSuccess(learningMaterial, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
-
-	@GetMapping
-	public ResponseEntity<?> getAll() {
-		try {
-			List<LearningMaterials> learningMaterialsList = learningMaterialsService.getAll();
-			return responseSuccess(learningMaterialsList, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
-
-	@DeleteMapping
-	public ResponseEntity<?> deleteById(@RequestParam("id") String id, @RequestParam("idUser") String idUser) {
-		try {
-			learningMaterialsService.deleteById(id, idUser);
-			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
@@ -95,4 +80,16 @@ public class LearningMaterialsController extends ElearningBaseController {
 			return responseError(e);
 		}
 	}
+
+	@DeleteMapping
+	public ResponseEntity<?> deleteById(@RequestParam("id") String id, @RequestParam("idUser") String idUser) {
+		try {
+			learningMaterialsService.deleteById(id, idUser);
+			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return responseError(e);
+		}
+	}
+
 }

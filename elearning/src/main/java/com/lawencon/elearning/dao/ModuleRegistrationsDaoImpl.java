@@ -19,12 +19,12 @@ public class ModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<ModuleRegis
 		implements ModuleRegistrationsDao {
 
 	@Override
-	public void insertModuleRegistration(ModuleRegistrations moduleRegistration, Callback before) throws Exception {
+	public void insert(ModuleRegistrations moduleRegistration, Callback before) throws Exception {
 		save(moduleRegistration, before, null);
 	}
 
 	@Override
-	public ModuleRegistrations getByIdDetailClassAndIdModuleRegistration(String idDtlClass, String idModRegist)
+	public ModuleRegistrations getByIdDtlClassAndIdModuleRgs(String idDtlClass, String idModRegist)
 			throws Exception {
 		List<ModuleRegistrations> listResult = new ArrayList<>();
 		String sql = sqlBuilder(
@@ -46,7 +46,7 @@ public class ModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<ModuleRegis
 	}
 
 	@Override
-	public List<ModuleRegistrations> getByIdDtlClass(String idClass) throws Exception {
+	public List<ModuleRegistrations> getAllModifiedByIdDtlClass(String idClass) throws Exception {
 		List<ModuleRegistrations> listResult = new ArrayList<>();
 		String sql = sqlBuilder("SELECT c.class_name, c.code classcode, c.description, f.file, p.fullname, ",
 				"dc.code dtlclasscode, dc.start_date, dc.end_date, dc.start_time, dc.end_time, ",
@@ -92,7 +92,7 @@ public class ModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<ModuleRegis
 	}
 	
 	@Override
-	public List<ModuleRegistrations> getIdModuleRegistrationByIdDetailClass(String idDetailClass) throws Exception {
+	public List<ModuleRegistrations> getAllByIdDtlClass(String idDetailClass) throws Exception {
 		List<ModuleRegistrations> moduleRegistrationList = createQuery("FROM ModuleRegistrations WHERE idDetailClass.id = ?1 ", ModuleRegistrations.class).setParameter(1, idDetailClass).getResultList();
 		return moduleRegistrationList.size() > 0 ? moduleRegistrationList : null;
 	}

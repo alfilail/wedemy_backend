@@ -2,10 +2,8 @@ package com.lawencon.elearning.service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +14,7 @@ import com.lawencon.elearning.helper.EnrolledClass;
 import com.lawencon.elearning.helper.LearningMaterialsAndPermissions;
 import com.lawencon.elearning.helper.ModuleAndLearningMaterials;
 import com.lawencon.elearning.model.ApprovementsRenewal;
+import com.lawencon.elearning.model.DetailClasses;
 import com.lawencon.elearning.model.DetailModuleRegistrations;
 import com.lawencon.elearning.model.ModuleRegistrations;
 import com.lawencon.elearning.model.Modules;
@@ -29,59 +28,53 @@ import com.lawencon.elearning.util.TransactionNumberCode;
 public class ModuleRegistrationsServiceImpl extends ElearningBaseServiceImpl implements ModuleRegistrationsService {
 
 	@Autowired
-	private ModuleRegistrationsDao moduleRegistrationDao;
-
-	@Autowired
-	private DetailModuleRegistrationsService dtlModuleRgsService;
+	private ModuleRegistrationsDao moduleRgsDao;
 
 	@Autowired
 	private ModulesService modulesService;
 
 	@Autowired
-	private DetailClassesService detailClassService;
+	private DetailModuleRegistrationsService dtlModuleRgsService;
 
 	@Autowired
-	private ApprovementsRenewalService approvementRenewalService;
+	private DetailClassesService dtlClassesService;
 
 	@Autowired
-	private PresencesService presenceService;
+	private ApprovementsRenewalService approvementRenewalsService;
 
 	@Autowired
-	private UsersService userService;
+	private PresencesService presencesService;
+
+	@Autowired
+	private UsersService usersService;
 
 	@Override
-	public void insertModuleRegistration(ClassInput clazzHelper) throws Exception {
-		List<Modules> modulesList = clazzHelper.getModule();
-		for (Modules modules : modulesList) {
-			ModuleRegistrations moduleRegistrations = new ModuleRegistrations();
-			moduleRegistrations.setTrxNumber(generateTrxNumber(TransactionNumberCode.MODULE_REGISTRATION.code));
-			moduleRegistrations.setIdDetailClass(clazzHelper.getDetailClass());
-			moduleRegistrations.setIdModule(modules);
-			moduleRegistrationDao.insertModuleRegistration(moduleRegistrations,
-					() -> validateInsert(moduleRegistrations));
+	public void insert(ClassInput classInput) throws Exception {
+		List<Modules> modules = classInput.getModule();
+		for (Modules module : modules) {
+			ModuleRegistrations moduleRgs = new ModuleRegistrations();
+			moduleRgs.setCreatedBy(classInput.getDetailClass().getCreatedBy());
+			moduleRgs.setTrxNumber(generateTrxNumber(TransactionNumberCode.MODULE_REGISTRATION.code));
+			moduleRgs.setIdDetailClass(classInput.getDetailClass());
+			moduleRgs.setIdModule(module);
+			moduleRgsDao.insert(moduleRgs, () -> validateInsert(moduleRgs));
 		}
 	}
 
 	@Override
-	public ModuleRegistrations getByIdDetailClassAndIdModuleRegistration(String idDtlClass, String idModRegist)
-			throws Exception {
-		return moduleRegistrationDao.getByIdDetailClassAndIdModuleRegistration(idDtlClass, idModRegist);
+	public ModuleRegistrations getByIdDtlClassAndIdModuleRgs(String idDtlClass, String idModRegist) throws Exception {
+		return moduleRgsDao.getByIdDtlClassAndIdModuleRgs(idDtlClass, idModRegist);
 	}
 
 	@Override
-	public List<ModuleRegistrations> getByIdDtlClass(String idClass) throws Exception {
-		return moduleRegistrationDao.getByIdDtlClass(idClass);
-	}
-
-	@Override
-	public EnrolledClass getModuleAndLearningMaterialsByIdDtlClass(String idUser, String idDtlClass) throws Exception {
+	public EnrolledClass getEnrolledClassByIdDtlClass(String idUser, String idDtlClass) throws Exception {
 		EnrolledClass enrolledClass = new EnrolledClass();
-		enrolledClass.setDetailClass(detailClassService.getById(idDtlClass));
+		enrolledClass.setDetailClass(dtlClassesService.getById(idDtlClass));
 		LocalTime startTime = enrolledClass.getDetailClass().getStartTime();
 		LocalTime endTime = enrolledClass.getDetailClass().getEndTime();
 		List<ModuleAndLearningMaterials> listResult = new ArrayList<>();
-		List<ModuleRegistrations> moduleRgsList = moduleRegistrationDao.getByIdDtlClass(idDtlClass);
-		Users user = userService.getById(idUser);
+		List<ModuleRegistrations> moduleRgsList = moduleRgsDao.getAllModifiedByIdDtlClass(idDtlClass);
+		Users user = usersService.getById(idUser);
 		for (ModuleRegistrations moduleRgs : moduleRgsList) {
 			ModuleAndLearningMaterials result = new ModuleAndLearningMaterials();
 			List<LearningMaterialsAndPermissions> learningMaterials = new ArrayList<>();
@@ -90,11 +83,11 @@ public class ModuleRegistrationsServiceImpl extends ElearningBaseServiceImpl imp
 			for (DetailModuleRegistrations dtlModule : dtlModuleList) {
 				LearningMaterialsAndPermissions learningMaterial = new LearningMaterialsAndPermissions();
 				learningMaterial.setLearningMaterial(dtlModule);
-				Presences tutorPresent = presenceService
+				Presences tutorPresent = presencesService
 						.doesTutorPresent(learningMaterial.getLearningMaterial().getId());
-				Presences participantPresent = presenceService
+				Presences participantPresent = presencesService
 						.doesParticipantPresent(learningMaterial.getLearningMaterial().getId(), idUser);
-				ApprovementsRenewal participantApprovement = approvementRenewalService
+				ApprovementsRenewal participantApprovement = approvementRenewalsService
 						.checkParticipantPresence(learningMaterial.getLearningMaterial().getId(), idUser);
 				if (tutorPresent != null) {
 					learningMaterial.setDoesTutorPresent(true);
@@ -142,41 +135,45 @@ public class ModuleRegistrationsServiceImpl extends ElearningBaseServiceImpl imp
 	}
 
 	@Override
-	public List<ModuleRegistrations> getModuleRegistrationsByIdDetailClass(String idDetailClass) throws Exception {
-		return moduleRegistrationDao.getIdModuleRegistrationByIdDetailClass(idDetailClass);
+	public List<ModuleRegistrations> getByIdDtlClass(String idClass) throws Exception {
+		return moduleRgsDao.getAllModifiedByIdDtlClass(idClass);
+	}
+
+	@Override
+	public List<ModuleRegistrations> getAllByIdDtlClass(String idDetailClass) throws Exception {
+		return moduleRgsDao.getAllByIdDtlClass(idDetailClass);
 	}
 
 	private void validateInsert(ModuleRegistrations moduleRegistration) throws Exception {
-//		if (moduleRegistration.getIdModule() == null) {
-//			throw new Exception("Module tidak boleh kosong!");
-//		} else {
-//			if (moduleRegistration.getIdModule().getId() == null
-//					|| moduleRegistration.getIdModule().getId().equals("")) {
-//				throw new Exception("Id Module tidak boleh kosong!");
-//			} else {
-//				Modules module = modulesService.getModuleById(moduleRegistration.getIdModule().getId());
-//				System.out.println("Test " + moduleRegistration.getIdModule().getId());
-//				System.out.println("Testtt" + module);
-//				if (module == null) {
-//					throw new Exception("Module tidak ada!");
-//				} else {
-//					if (moduleRegistration.getIdDetailClass() == null) {
-//						throw new Exception("Detail kelas tidak boleh kosong!");
-//					} else {
-//						if (moduleRegistration.getIdDetailClass().getId() == null) {
-//							throw new Exception("Id Detail Class tidak boleh kosong!");
-//						} else {
-//							DetailClasses dtlClazz = detailClassService
-//									.getDetailClassById(moduleRegistration.getIdDetailClass().getId());
-//							if (dtlClazz == null) {
-//								throw new Exception("Detail Class tidak ada!");
-//							}
-//						}
-//					}
-//				}
-//			}
-//		}
+		if (moduleRegistration.getIdModule() == null) {
+			throw new Exception("Module tidak boleh kosong!");
+		} else {
+			if (moduleRegistration.getIdModule().getId() == null
+					|| moduleRegistration.getIdModule().getId().equals("")) {
+				throw new Exception("Id Module tidak boleh kosong!");
+			} else {
+				Modules module = modulesService.getById(moduleRegistration.getIdModule().getId());
+				System.out.println("Test " + moduleRegistration.getIdModule().getId());
+				System.out.println("Testtt" + module);
+				if (module == null) {
+					throw new Exception("Module tidak ada!");
+				} else {
+					if (moduleRegistration.getIdDetailClass() == null) {
+						throw new Exception("Detail kelas tidak boleh kosong!");
+					} else {
+						if (moduleRegistration.getIdDetailClass().getId() == null) {
+							throw new Exception("Id Detail Class tidak boleh kosong!");
+						} else {
+							DetailClasses dtlClazz = dtlClassesService
+									.getById(moduleRegistration.getIdDetailClass().getId());
+							if (dtlClazz == null) {
+								throw new Exception("Detail Class tidak ada!");
+							}
+						}
+					}
+				}
+			}
+		}
 	}
-
 
 }

@@ -14,10 +14,6 @@ import com.lawencon.elearning.model.Files;
 import com.lawencon.elearning.model.LearningMaterialTypes;
 import com.lawencon.elearning.model.LearningMaterials;
 
-/**
- * @author Nur Alfilail
- */
-
 @Service
 public class LearningMaterialsServiceImpl extends BaseServiceImpl implements LearningMaterialsService {
 
@@ -25,16 +21,13 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 	private LearningMaterialsDao learningMaterialsDao;
 
 	@Autowired
-	private DetailModuleRegistrationsService dtlModRegistService;
+	private DetailModuleRegistrationsService dtlModuleRgsService;
 
 	@Autowired
 	private LearningMaterialTypesService learningMaterialTypesService;
 
 	@Autowired
 	private FilesService filesService;
-
-	@Autowired
-	ForumsService forumsService;
 
 	@Override
 	public void insert(DetailModuleRegistrations dtlModuleRgs, MultipartFile fileInput) throws Exception {
@@ -44,6 +37,7 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 			file.setCreatedBy(dtlModuleRgs.getIdLearningMaterial().getCreatedBy());
 			file.setFile(fileInput.getBytes());
 			file.setType(fileInput.getContentType());
+			file.setName(fileInput.getOriginalFilename());
 			filesService.insert(file);
 			dtlModuleRgs.getIdLearningMaterial().setIdFile(file);
 			learningMaterialsDao.insert(dtlModuleRgs.getIdLearningMaterial(),
@@ -54,16 +48,6 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 			rollback();
 			throw new Exception(e);
 		}
-	}
-
-	@Override
-	public List<LearningMaterials> getAll() throws Exception {
-		return learningMaterialsDao.getAllLearningMaterial();
-	}
-
-	@Override
-	public LearningMaterials getById(String id) throws Exception {
-		return learningMaterialsDao.getLearningMaterialById(id);
 	}
 
 	@Override
@@ -79,12 +63,12 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 				filesService.update(file);
 			}
 			LearningMaterials material = learningMaterialsDao
-					.getLearningMaterialById(dtlModuleRgs.getIdLearningMaterial().getId());
+					.getMaterialById(dtlModuleRgs.getIdLearningMaterial().getId());
 			dtlModuleRgs.getIdLearningMaterial().setCreatedAt(material.getCreatedAt());
 			dtlModuleRgs.getIdLearningMaterial().setCreatedBy(material.getCreatedBy());
 			learningMaterialsDao.update(dtlModuleRgs.getIdLearningMaterial(),
 					() -> validateUpdate(dtlModuleRgs.getIdLearningMaterial()));
-			dtlModRegistService.update(dtlModuleRgs);
+			dtlModuleRgsService.update(dtlModuleRgs);
 			commit();
 		} catch (Exception e) {
 			rollback();
@@ -97,10 +81,10 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 		try {
 			begin();
 			if (checkDelete(id) == false) {
-				learningMaterialsDao.softDeleteById(id, idUser);
-				DetailModuleRegistrations dtlModuleRgs = dtlModRegistService
-						.getDetailModuleRegistrationByIdLearningMaterial(id);
-				dtlModRegistService.deleteDetailModuleRegistration(dtlModuleRgs.getId(), idUser);
+				learningMaterialsDao.softDeleteMaterialById(id, idUser);
+//				DetailModuleRegistrations dtlModuleRgs = dtlModuleRgsService
+//						.getDetailModuleRegistrationByIdLearningMaterial(id);
+//				dtlModuleRgsService.deleteDetailModuleRegistration(dtlModuleRgs.getId(), idUser);
 			} else {
 				validateDelete();
 			}
@@ -112,14 +96,24 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 	}
 
 	@Override
+	public List<LearningMaterials> getAll() throws Exception {
+		return learningMaterialsDao.getAllMaterials();
+	}
+
+	@Override
+	public LearningMaterials getById(String id) throws Exception {
+		return learningMaterialsDao.getMaterialById(id);
+	}
+
+	@Override
 	public LearningMaterials getByCode(String code) throws Exception {
-		return learningMaterialsDao.getByCode(code);
+		return learningMaterialsDao.getMaterialByCode(code);
 	}
 
 	private void insertDetailModulRegistration(DetailModuleRegistrations dtlModuleRgs) throws Exception {
 		dtlModuleRgs.setCreatedBy(dtlModuleRgs.getIdLearningMaterial().getCreatedBy());
 		dtlModuleRgs.setIdLearningMaterial(dtlModuleRgs.getIdLearningMaterial());
-		dtlModRegistService.insertDetailModuleRegistration(dtlModuleRgs);
+		dtlModuleRgsService.insertDetailModuleRegistration(dtlModuleRgs);
 	}
 
 	private void validateInsert(LearningMaterials learningMaterial) throws Exception {
@@ -208,7 +202,7 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 	}
 
 	private boolean checkDelete(String id) throws Exception {
-		List<?> listObj = learningMaterialsDao.validateDelete(id);
+		List<?> listObj = learningMaterialsDao.validateDeleteMaterial(id);
 		List<?> list = listObj.stream().filter(val -> val != null).collect(Collectors.toList());
 		return list.size() > 0 ? true : false;
 	}
