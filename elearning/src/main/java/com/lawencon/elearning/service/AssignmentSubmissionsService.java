@@ -7,18 +7,20 @@ import org.springframework.web.multipart.MultipartFile;
 import com.lawencon.elearning.model.AssignmentSubmissions;
 
 public interface AssignmentSubmissionsService {
-	void insertAssignmentSubmissions(AssignmentSubmissions assignmentSubmission, MultipartFile file) throws Exception;
 
-	List<AssignmentSubmissions> getAllAssignmentSubmissions() throws Exception;
+	void insert(AssignmentSubmissions assignmentSubmission, MultipartFile file) throws Exception;
+
+	void update(AssignmentSubmissions assignmentSubmission, MultipartFile file) throws Exception;
+
+	void deleteById(String id) throws Exception;
 
 	AssignmentSubmissions getByIdDtlModuleRgsAndIdParticipant(String idDtlModuleRgs, String idParticipant)
 			throws Exception;
 
-	AssignmentSubmissions getAssignmentSubmissionsById(String id) throws Exception;
+	AssignmentSubmissions getById(String id) throws Exception;
 
-	AssignmentSubmissions getAssignmentSubmissionsByCode(String code) throws Exception;
+	AssignmentSubmissions getByCode(String code) throws Exception;
 
-	void updateAssignmentSubmission(AssignmentSubmissions assignmentSubmission, MultipartFile file) throws Exception;
+	List<AssignmentSubmissions> getAll() throws Exception;
 
-	void deleteAssignmentSubmissionsById(String id) throws Exception;
 }

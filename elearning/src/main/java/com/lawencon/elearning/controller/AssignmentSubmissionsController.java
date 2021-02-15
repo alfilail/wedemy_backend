@@ -29,11 +29,25 @@ public class AssignmentSubmissionsController extends ElearningBaseController {
 	@Autowired
 	private AssignmentSubmissionsService assignmentSubmissionsService;
 
-	@GetMapping("all")
-	public ResponseEntity<?> getAllClasses() {
+	@PostMapping
+	public ResponseEntity<?> insert(@RequestPart String body, @RequestPart("file") MultipartFile file) {
+		try {
+			ObjectMapper obj = new ObjectMapper();
+			obj.registerModule(new JavaTimeModule());
+			AssignmentSubmissions assignmentSubmission = obj.readValue(body, AssignmentSubmissions.class);
+			assignmentSubmissionsService.insert(assignmentSubmission, file);
+			return responseSuccess(assignmentSubmission, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return responseError(e);
+		}
+	}
+
+	@GetMapping
+	public ResponseEntity<?> getAll() {
 		try {
 			List<AssignmentSubmissions> assignmentSubmissions = assignmentSubmissionsService
-					.getAllAssignmentSubmissions();
+					.getAll();
 			return responseSuccess(assignmentSubmissions, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -42,10 +56,10 @@ public class AssignmentSubmissionsController extends ElearningBaseController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<?> getassignmentSubmissionsById(@PathVariable("id") String id) {
+	public ResponseEntity<?> getById(@PathVariable("id") String id) {
 		try {
-			AssignmentSubmissions assignmentSubmissions = assignmentSubmissionsService.getAssignmentSubmissionsById(id);
-			return responseSuccess(assignmentSubmissions, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
+			AssignmentSubmissions assignmentSubmission = assignmentSubmissionsService.getById(id);
+			return responseSuccess(assignmentSubmission, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
@@ -56,9 +70,9 @@ public class AssignmentSubmissionsController extends ElearningBaseController {
 	public ResponseEntity<?> getByIdDtlModuleRgsAndIdParticipant(@RequestParam("idDtlModuleRgs") String idDtlModuleRgs,
 			@RequestParam("idParticipant") String idParticipant) {
 		try {
-			AssignmentSubmissions assignmentSubmissions = assignmentSubmissionsService
+			AssignmentSubmissions assignmentSubmission = assignmentSubmissionsService
 					.getByIdDtlModuleRgsAndIdParticipant(idDtlModuleRgs, idParticipant);
-			return responseSuccess(assignmentSubmissions, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
+			return responseSuccess(assignmentSubmission, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
@@ -66,29 +80,13 @@ public class AssignmentSubmissionsController extends ElearningBaseController {
 	}
 
 	@PatchMapping
-	public ResponseEntity<?> updateAssignmentSubmission(@RequestPart String body,
-			@RequestPart("file") MultipartFile file) {
+	public ResponseEntity<?> update(@RequestPart String body, @RequestPart("file") MultipartFile file) {
 		try {
 			ObjectMapper obj = new ObjectMapper();
 			obj.registerModule(new JavaTimeModule());
-			AssignmentSubmissions assignmentSubmissions = obj.readValue(body, AssignmentSubmissions.class);
-			assignmentSubmissionsService.updateAssignmentSubmission(assignmentSubmissions, file);
-			return responseSuccess(assignmentSubmissions, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
-
-	@PostMapping
-	public ResponseEntity<?> insertAssignmentSubmission(@RequestPart String body,
-			@RequestPart("file") MultipartFile file) {
-		try {
-			ObjectMapper obj = new ObjectMapper();
-			obj.registerModule(new JavaTimeModule());
-			AssignmentSubmissions assignmentSubmissions = obj.readValue(body, AssignmentSubmissions.class);
-			assignmentSubmissionsService.insertAssignmentSubmissions(assignmentSubmissions, file);
-			return responseSuccess(assignmentSubmissions, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
+			AssignmentSubmissions assignmentSubmission = obj.readValue(body, AssignmentSubmissions.class);
+			assignmentSubmissionsService.update(assignmentSubmission, file);
+			return responseSuccess(assignmentSubmission, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
@@ -96,9 +94,9 @@ public class AssignmentSubmissionsController extends ElearningBaseController {
 	}
 
 	@DeleteMapping("{id}")
-	public ResponseEntity<?> deleteAssignmentSubmissionById(@PathVariable("id") String id) {
+	public ResponseEntity<?> deleteById(@PathVariable("id") String id) {
 		try {
-			assignmentSubmissionsService.deleteAssignmentSubmissionsById(id);
+			assignmentSubmissionsService.deleteById(id);
 			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
 		} catch (Exception e) {
 			e.printStackTrace();

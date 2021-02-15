@@ -110,7 +110,7 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 
 	private void sendEmail(Evaluations evaluation) throws Exception {
 		AssignmentSubmissions assignmentSubmissions = assignmentSubmissionsService
-				.getAssignmentSubmissionsById(evaluation.getIdAssignmentSubmission().getId());
+				.getById(evaluation.getIdAssignmentSubmission().getId());
 		evaluation.setIdAssignmentSubmission(assignmentSubmissions);
 		Profiles participant = evaluationsDao.getParticipantProfile(evaluation);
 

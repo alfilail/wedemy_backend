@@ -1,10 +1,7 @@
 package com.lawencon.elearning.service;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,20 +41,22 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 	private MailUtil mailUtil;
 
 	@Override
-	public void insertAssignmentSubmissions(AssignmentSubmissions assignmentSubmission, MultipartFile fileInput)
-			throws Exception {
+	public void insert(AssignmentSubmissions assignmentSubmission, MultipartFile fileInput) throws Exception {
 		try {
 			begin();
 			Files file = new Files();
+			file.setCreatedBy(assignmentSubmission.getIdParticipant().getId());
 			file.setFile(fileInput.getBytes());
 			file.setType(fileInput.getContentType());
+			file.setName(fileInput.getOriginalFilename());
 			filesService.insert(file);
+			assignmentSubmission.setCreatedBy(assignmentSubmission.getIdParticipant().getId());
 			assignmentSubmission.setIdFile(file);
 			assignmentSubmission.setSubmitTime(LocalTime.now());
 			assignmentSubmission.setTrxNumber(generateTrxNumber(TransactionNumberCode.ASSIGNMENT_SUBMISSION.code));
-			assignmentSubmissionsDao.insertAssignmentSubmission(assignmentSubmission,
-					() -> validateInsert(assignmentSubmission));
+			assignmentSubmissionsDao.insert(assignmentSubmission, () -> validateInsert(assignmentSubmission));
 			insertStatusRenewal(assignmentSubmission);
+
 			System.out.println("Sending Email...");
 			sendEmailTutor(assignmentSubmission);
 			sendEmailParticipant(assignmentSubmission);
@@ -70,13 +69,14 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 	}
 
 	@Override
-	public void updateAssignmentSubmission(AssignmentSubmissions assignmentSubmission, MultipartFile fileInput)
-			throws Exception {
+	public void update(AssignmentSubmissions assignmentSubmission, MultipartFile fileInput) throws Exception {
 		try {
 			begin();
 			Files file = filesService.getById(assignmentSubmission.getIdFile().getId());
+			file.setUpdatedBy(file.getCreatedBy());
 			file.setFile(fileInput.getBytes());
 			file.setType(fileInput.getContentType());
+			file.setName(fileInput.getOriginalFilename());
 			filesService.update(file);
 			commit();
 		} catch (Exception e) {
@@ -86,8 +86,8 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 	}
 
 	@Override
-	public List<AssignmentSubmissions> getAllAssignmentSubmissions() throws Exception {
-		return assignmentSubmissionsDao.getAllAssignmentSubmissions();
+	public List<AssignmentSubmissions> getAll() throws Exception {
+		return assignmentSubmissionsDao.getAllSubmissions();
 	}
 
 	@Override
@@ -97,18 +97,18 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 	}
 
 	@Override
-	public AssignmentSubmissions getAssignmentSubmissionsByCode(String code) throws Exception {
-		return assignmentSubmissionsDao.getAssignmentSubmissionByCode(code);
+	public AssignmentSubmissions getByCode(String code) throws Exception {
+		return assignmentSubmissionsDao.getSubmissionByCode(code);
 	}
 
 	@Override
-	public AssignmentSubmissions getAssignmentSubmissionsById(String id) throws Exception {
-		return assignmentSubmissionsDao.getAssignmentSubmissionById(id);
+	public AssignmentSubmissions getById(String id) throws Exception {
+		return assignmentSubmissionsDao.getSubmissionById(id);
 	}
 
 	@Override
-	public void deleteAssignmentSubmissionsById(String id) throws Exception {
-		assignmentSubmissionsDao.deleteAssignmentSubmissionById(id);
+	public void deleteById(String id) throws Exception {
+		assignmentSubmissionsDao.deleteSubmissionById(id);
 	}
 
 	private void sendEmailTutor(AssignmentSubmissions assignmentSubmission) throws Exception {
@@ -147,9 +147,9 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 
 	private void insertStatusRenewal(AssignmentSubmissions assignmentSubmission) throws Exception {
 		SubmissionStatusRenewal statusRenewal = new SubmissionStatusRenewal();
+		statusRenewal.setCreatedBy(assignmentSubmission.getCreatedBy());
 		statusRenewal.setIdAssignmentSubmission(assignmentSubmission);
-		statusRenewal
-				.setIdSubmissionStatus(statusService.getByCode(SubmissionStatusCode.UPLOADED.code));
+		statusRenewal.setIdSubmissionStatus(statusService.getByCode(SubmissionStatusCode.UPLOADED.code));
 		statusRenewalService.insertSubmissionStatusRenewal(statusRenewal);
 	}
 

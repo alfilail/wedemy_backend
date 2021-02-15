@@ -1,12 +1,18 @@
 package com.lawencon.elearning.dao;
 
+import java.sql.Date;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.elearning.model.AssignmentSubmissions;
+import com.lawencon.elearning.model.DetailClasses;
+import com.lawencon.elearning.model.DetailModuleRegistrations;
 import com.lawencon.elearning.model.Files;
+import com.lawencon.elearning.model.ModuleRegistrations;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.util.EmptyField;
 import com.lawencon.util.Callback;
@@ -16,20 +22,18 @@ public class AssignmentSubmissionsDaoImpl extends ElearningBaseDaoImpl<Assignmen
 		implements AssignmentSubmissionsDao {
 
 	@Override
-	public void insertAssignmentSubmission(AssignmentSubmissions assignmentSubmission, Callback before)
-			throws Exception {
+	public void insert(AssignmentSubmissions assignmentSubmission, Callback before) throws Exception {
 		save(assignmentSubmission, before, null);
 	}
 
 	@Override
-	public List<AssignmentSubmissions> getAllAssignmentSubmissions() throws Exception {
-		return getAll();
+	public void update(AssignmentSubmissions assignmentSubmission, Callback before) throws Exception {
+		save(assignmentSubmission, before, null);
 	}
 
 	@Override
-	public List<AssignmentSubmissions> getAllByIdDtlModuleRgs(String idDtlModuleRgs) throws Exception {
-		List<AssignmentSubmissions> listResult = new ArrayList<>();
-		return listResult;
+	public void deleteSubmissionById(String id) throws Exception {
+		deleteById(id);
 	}
 
 	@Override
@@ -37,9 +41,11 @@ public class AssignmentSubmissionsDaoImpl extends ElearningBaseDaoImpl<Assignmen
 			throws Exception {
 		List<AssignmentSubmissions> listResult = new ArrayList<>();
 		String sql = sqlBuilder(
-				"SELECT asm.id, asm.version, f.id idfile, f.file, f.file_type FROM t_r_assignment_submissions asm ",
-				"INNER JOIN t_m_files f ON asm.id_file = f.id WHERE asm.id_dtl_module_rgs = ?1 AND ",
-				"asm.id_participant = ?2").toString();
+				"SELECT asm.id, asm.version, f.id idfile, f.created_at, f.updated_at, f.file, f.file_type, ",
+				"f.file_name, dc.end_time, dmr.schedule_date FROM t_r_assignment_submissions asm INNER JOIN t_m_files f ",
+				"ON asm.id_file = f.id INNER JOIN t_r_detail_module_registrations dmr ON asm.id_dtl_module_rgs = dmr.id ",
+				"INNER JOIN t_r_module_registrations mr ON dmr.id_module_rgs = mr.id INNER JOIN t_m_detail_classes dc ",
+				"ON mr.id_dtl_class = dc.id WHERE asm.id_dtl_module_rgs = ?1 AND asm.id_participant = ?2").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlModuleRgs).setParameter(2, idParticipant)
 				.getResultList();
 		listObj.forEach(val -> {
@@ -48,22 +54,33 @@ public class AssignmentSubmissionsDaoImpl extends ElearningBaseDaoImpl<Assignmen
 			submission.setId(objArr[0] != null ? (String) objArr[0] : EmptyField.EMPTY.msg);
 			submission.setVersion(objArr[1] != null ? Long.valueOf(objArr[1].toString()) : null);
 			Files file = new Files();
-			file.setId((String) objArr[2]);
-			file.setFile(objArr[3] != null ? (byte[]) objArr[3] : null);
-			file.setType((String) objArr[4]);
+			file.setId(objArr[2] != null ? (String) objArr[2] : EmptyField.EMPTY.msg);
+			file.setCreatedAt(objArr[3] != null ? ((Timestamp) objArr[3]).toLocalDateTime() : null);
+			file.setUpdatedAt(objArr[4] != null ? ((Timestamp) objArr[4]).toLocalDateTime() : null);
+			file.setFile(objArr[5] != null ? (byte[]) objArr[5] : null);
+			file.setType((String) objArr[6]);
+			file.setName(objArr[7] != null ? (String) objArr[7] : EmptyField.EMPTY.msg);
 			submission.setIdFile(file);
+			DetailClasses detailClass = new DetailClasses();
+			detailClass.setEndTime(((Time) objArr[8]).toLocalTime());
+			ModuleRegistrations moduleRgs = new ModuleRegistrations();
+			moduleRgs.setIdDetailClass(detailClass);
+			DetailModuleRegistrations dtlModuleRgs = new DetailModuleRegistrations();
+			dtlModuleRgs.setIdModuleRegistration(moduleRgs);
+			dtlModuleRgs.setScheduleDate(((Date) objArr[9]).toLocalDate());
+			submission.setIdDetailModuleRegistration(dtlModuleRgs);
 			listResult.add(submission);
 		});
 		return resultCheck(listResult);
 	}
 
 	@Override
-	public AssignmentSubmissions getAssignmentSubmissionByCode(String code) throws Exception {
+	public AssignmentSubmissions getSubmissionByCode(String code) throws Exception {
 		return null;
 	}
 
 	@Override
-	public AssignmentSubmissions getAssignmentSubmissionById(String id) throws Exception {
+	public AssignmentSubmissions getSubmissionById(String id) throws Exception {
 		return getById(id);
 	}
 
@@ -103,14 +120,14 @@ public class AssignmentSubmissionsDaoImpl extends ElearningBaseDaoImpl<Assignmen
 	}
 
 	@Override
-	public void updateAssignmentSubmission(AssignmentSubmissions assignmentSubmission, Callback before)
-			throws Exception {
-		save(assignmentSubmission, before, null, true, true);
+	public List<AssignmentSubmissions> getAllSubmissions() throws Exception {
+		return getAll();
 	}
 
 	@Override
-	public void deleteAssignmentSubmissionById(String id) throws Exception {
-		deleteById(id);
+	public List<AssignmentSubmissions> getAllByIdDtlModuleRgs(String idDtlModuleRgs) throws Exception {
+		List<AssignmentSubmissions> listResult = new ArrayList<>();
+		return listResult;
 	}
 
 }
