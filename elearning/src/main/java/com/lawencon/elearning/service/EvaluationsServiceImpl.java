@@ -141,6 +141,8 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 
 	@Override
 	public List<?> getCertificate(String idUser, String idDetailClass) throws Exception {
+		List<?> data = evaluationsDao.getCertificate(idUser, idDetailClass);
+		validateReport(data);
 		return evaluationsDao.getCertificate(idUser, idDetailClass);
 	}
 

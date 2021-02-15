@@ -132,7 +132,7 @@ public class EvaluationsDaoImpl extends ElearningBaseDaoImpl<Evaluations> implem
 	@Override
 	public List<?> reportAllScore(String idDtlClass) throws Exception {
 		String sql = sqlBuilder(
-				"SELECT c.code, c.class_name, pt.fullname tutor, p.fullname participant, ut.id, avg(e.score) score ",
+				"SELECT c.code, c.class_name, pt.fullname tutor, p.fullname participant, u.id, avg(e.score) score ",
 				" FROM t_r_evaluations e ",
 				" INNER JOIN t_r_assignment_submissions ams ON ams.id = e.id_assignment_submission ",
 				" INNER JOIN t_m_users u ON u.id = ams.id_participant ",
@@ -143,7 +143,7 @@ public class EvaluationsDaoImpl extends ElearningBaseDaoImpl<Evaluations> implem
 				" INNER JOIN t_m_detail_classes dc ON dc.id = mr.id_dtl_class ",
 				" INNER JOIN t_m_classes c ON c.id = dc.id_class INNER JOIN t_m_users ut ON ut.id = c.id_tutor ",
 				" INNER JOIN t_m_profiles pt ON pt.id = ut.id_profile WHERE dc.id = ?1 ",
-				" GROUP BY p.fullname, c.class_name, c.code, pt.fullname, ut.id ").toString();
+				" GROUP BY p.fullname, c.class_name, c.code, pt.fullname, u.id ").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlClass).getResultList();
 		List<Evaluations> listEvaluations = new ArrayList<>();
 		listObj.forEach(val -> {
