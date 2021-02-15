@@ -42,10 +42,18 @@ public class AssignmentSubmissionsDaoImpl extends ElearningBaseDaoImpl<Assignmen
 		List<AssignmentSubmissions> listResult = new ArrayList<>();
 		String sql = sqlBuilder(
 				"SELECT asm.id, asm.version, f.id idfile, f.created_at, f.updated_at, f.file, f.file_type, ",
-				"f.file_name, dc.end_time, dmr.schedule_date FROM t_r_assignment_submissions asm INNER JOIN t_m_files f ",
-				"ON asm.id_file = f.id INNER JOIN t_r_detail_module_registrations dmr ON asm.id_dtl_module_rgs = dmr.id ",
-				"INNER JOIN t_r_module_registrations mr ON dmr.id_module_rgs = mr.id INNER JOIN t_m_detail_classes dc ",
-				"ON mr.id_dtl_class = dc.id WHERE asm.id_dtl_module_rgs = ?1 AND asm.id_participant = ?2").toString();
+				"f.file_name, dc.end_time, dmr.schedule_date ",
+				"FROM t_r_detail_module_registrations dmr INNER JOIN t_r_module_registrations mr ",
+				"ON dmr.id_module_rgs = mr.id INNER JOIN t_m_detail_classes dc ON mr.id_dtl_class = dc.id ",
+				"INNER JOIN t_r_class_enrollments ce ON dc.id = ce.id_dtl_class ",
+				"LEFT JOIN t_r_assignment_submissions asm ON asm.id_dtl_module_rgs = dmr.id AND ",
+				"asm.id_participant = ce.id_participant LEFT JOIN t_m_files f ON asm.id_file = f.id ",
+				"WHERE dmr.id = ?1 AND ce.id_participant = ?2").toString();
+
+//				"FROM t_r_assignment_submissions asm INNER JOIN t_m_files f ",
+//				"ON asm.id_file = f.id INNER JOIN t_r_detail_module_registrations dmr ON asm.id_dtl_module_rgs = dmr.id ",
+//				"INNER JOIN t_r_module_registrations mr ON dmr.id_module_rgs = mr.id INNER JOIN t_m_detail_classes dc ",
+//				"ON mr.id_dtl_class = dc.id WHERE asm.id_dtl_module_rgs = ?1 AND asm.id_participant = ?2").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlModuleRgs).setParameter(2, idParticipant)
 				.getResultList();
 		listObj.forEach(val -> {

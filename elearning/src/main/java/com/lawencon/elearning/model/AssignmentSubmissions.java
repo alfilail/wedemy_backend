@@ -18,7 +18,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Entity
-@JsonInclude(Include.NON_NULL)
 @Table(name = "t_r_assignment_submissions")
 @EqualsAndHashCode(callSuper = false)
 @Data
