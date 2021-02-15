@@ -81,7 +81,7 @@
 				<text><![CDATA[Nama Materi      : ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="230" y="39" width="145" height="22" uuid="fa91b228-8c18-45da-80f1-9628871bac03"/>
+				<reportElement x="230" y="38" width="145" height="22" uuid="fa91b228-8c18-45da-80f1-9628871bac03"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
@@ -94,30 +94,46 @@
 				</textElement>
 				<text><![CDATA[Tanggal Jadwal : ]]></text>
 			</staticText>
-		</band>
-	</columnHeader>
-	<detail>
-		<band height="32" splitType="Stretch">
 			<line>
-				<reportElement x="0" y="-26" width="555" height="2" uuid="92b89c94-253d-4503-af0c-822cb1bdbe77"/>
+				<reportElement x="0" y="35" width="555" height="2" uuid="92b89c94-253d-4503-af0c-822cb1bdbe77"/>
 			</line>
 			<staticText>
-				<reportElement x="102" y="-30" width="100" height="30" uuid="bf6a5b6c-b997-4fb0-8bc3-f63da32ca0ab"/>
+				<reportElement x="102" y="34" width="100" height="30" uuid="bf6a5b6c-b997-4fb0-8bc3-f63da32ca0ab"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Nama Lengkap]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="10" y="-25" width="60" height="20" uuid="063d5e6a-25b1-4971-9cb8-cd906e16bdf4"/>
+				<reportElement x="10" y="37" width="60" height="20" uuid="063d5e6a-25b1-4971-9cb8-cd906e16bdf4"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[No]]></text>
 			</staticText>
 			<line>
-				<reportElement x="0" y="22" width="555" height="1" uuid="f5cdabe3-28b9-45ed-9035-9ee9aa8dbf05"/>
+				<reportElement x="0" y="60" width="555" height="1" uuid="f5cdabe3-28b9-45ed-9035-9ee9aa8dbf05"/>
 			</line>
+			<textField>
+				<reportElement x="102" y="-4" width="197" height="30" uuid="9468f13d-6e67-4e1d-b321-8f53327c062e"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{idPresence.idDetailModuleRegistration.idLearningMaterial.learningMaterialName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="102" y="19" width="140" height="18" uuid="bed11ab8-bd57-48ea-8cc3-b75898885a3a">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ab29d48b-7358-4704-9768-b2713b82005e"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{idPresence.idDetailModuleRegistration.scheduleDate}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="32" splitType="Stretch">
 			<textField>
 				<reportElement x="6" y="-2" width="64" height="21" uuid="9d1c690d-26b5-4e63-b2d1-33bbc31bdb53"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -126,7 +142,7 @@
 				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="0" y="-4" width="555" height="2" uuid="749c891b-0cb3-408c-a188-f26faa20b348"/>
+				<reportElement x="0" y="21" width="555" height="2" uuid="749c891b-0cb3-408c-a188-f26faa20b348"/>
 			</line>
 			<textField>
 				<reportElement x="76" y="-6" width="139" height="30" uuid="0a300e02-0983-4aa2-b564-5b68218db7a0"/>
@@ -155,22 +171,6 @@
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{idApprovement.code}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="102" y="-67" width="197" height="30" uuid="9468f13d-6e67-4e1d-b321-8f53327c062e"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{idPresence.idDetailModuleRegistration.idLearningMaterial.learningMaterialName}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="102" y="-46" width="140" height="18" uuid="bed11ab8-bd57-48ea-8cc3-b75898885a3a">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ab29d48b-7358-4704-9768-b2713b82005e"/>
-				</reportElement>
-				<textElement textAlignment="Left">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{idPresence.idDetailModuleRegistration.scheduleDate}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
