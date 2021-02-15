@@ -157,7 +157,9 @@ public class EvaluationsController extends ElearningBaseController {
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_PDF);
-		return new HttpEntity<>(out, headers);
+//		return new HttpEntity<>(out, headers);
+//		return HttpResponse(true, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE, out, headers, data);
+		return responseSuccess(data, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE, out, headers);
 	}
 
 }
