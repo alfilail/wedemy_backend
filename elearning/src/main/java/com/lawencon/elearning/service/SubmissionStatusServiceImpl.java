@@ -22,18 +22,11 @@ public class SubmissionStatusServiceImpl extends BaseServiceImpl implements Subm
 	}
 
 	@Override
-	public SubmissionStatus getById(String id) throws Exception {
-		return submissionStatusDao.getSubmissionStatusById(id);
-	}
-
-	@Override
-	public SubmissionStatus getByCode(String code) throws Exception {
-		return submissionStatusDao.getByCode(code);
-	}
-
-	@Override
-	public List<SubmissionStatus> getAll() throws Exception {
-		return submissionStatusDao.getAllSubmissionStatus();
+	public void update(SubmissionStatus submissionStatus) throws Exception {
+		SubmissionStatus subStat = getById(submissionStatus.getId());
+		submissionStatus.setCreatedAt(subStat.getCreatedAt());
+		submissionStatus.setCreatedBy(subStat.getCreatedBy());
+		submissionStatusDao.update(submissionStatus, () -> validateUpdate(submissionStatus));
 	}
 
 	@Override
@@ -41,7 +34,7 @@ public class SubmissionStatusServiceImpl extends BaseServiceImpl implements Subm
 		try {
 			begin();
 			if (validateDelete(id)) {
-				submissionStatusDao.softDeleteById(id, idUser);
+				submissionStatusDao.softDeleteSubmissionStatusById(id, idUser);
 			} else {
 				submissionStatusDao.deleteSubmissionStatusById(id);
 			}
@@ -53,11 +46,18 @@ public class SubmissionStatusServiceImpl extends BaseServiceImpl implements Subm
 	}
 
 	@Override
-	public void update(SubmissionStatus submissionStatus) throws Exception {
-		SubmissionStatus subStat = getById(submissionStatus.getId());
-		submissionStatus.setCreatedAt(subStat.getCreatedAt());
-		submissionStatus.setCreatedBy(subStat.getCreatedBy());
-		submissionStatusDao.update(submissionStatus, () -> validateUpdate(submissionStatus));
+	public SubmissionStatus getById(String id) throws Exception {
+		return submissionStatusDao.getSubmissionStatusById(id);
+	}
+
+	@Override
+	public SubmissionStatus getByCode(String code) throws Exception {
+		return submissionStatusDao.getSubmissionStatusByCode(code);
+	}
+
+	@Override
+	public List<SubmissionStatus> getAll() throws Exception {
+		return submissionStatusDao.getAllSubmissionStatus();
 	}
 
 	private void validateInsert(SubmissionStatus submissionStatus) throws Exception {
@@ -101,7 +101,7 @@ public class SubmissionStatusServiceImpl extends BaseServiceImpl implements Subm
 	}
 
 	private boolean validateDelete(String id) throws Exception {
-		List<?> listObj = submissionStatusDao.validateDelete(id);
+		List<?> listObj = submissionStatusDao.validateDeleteSubmissionStatus(id);
 		listObj.forEach(System.out::println);
 		List<?> list = listObj.stream().filter(val -> val != null).collect(Collectors.toList());
 		System.out.println(list.size());

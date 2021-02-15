@@ -20,10 +20,6 @@ import com.lawencon.elearning.model.Approvements;
 import com.lawencon.elearning.service.ApprovementsService;
 import com.lawencon.elearning.util.MessageStat;
 
-/**
- * @author Nur Alfilail
- */
-
 @RestController
 @RequestMapping("approvement")
 public class ApprovementsController extends ElearningBaseController {
@@ -43,6 +39,17 @@ public class ApprovementsController extends ElearningBaseController {
 		}
 	}
 
+	@GetMapping
+	public ResponseEntity<?> getAll() {
+		try {
+			List<Approvements> approvements = approvementsService.getAll();
+			return responseSuccess(approvements, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return responseError(e);
+		}
+	}
+
 	@GetMapping("{id}")
 	public ResponseEntity<?> getById(@PathVariable String id) {
 		try {
@@ -54,11 +61,13 @@ public class ApprovementsController extends ElearningBaseController {
 		}
 	}
 
-	@GetMapping
-	public ResponseEntity<?> getAll() {
+	@PutMapping
+	public ResponseEntity<?> update(@RequestBody String body) {
 		try {
-			List<Approvements> approvementsList = approvementsService.getAll();
-			return responseSuccess(approvementsList, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
+			Approvements approvement = new ObjectMapper().readValue(body, Approvements.class);
+			approvementsService.update(approvement);
+			Approvements response = approvementsService.getById(approvement.getId());
+			return responseSuccess(response, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
@@ -66,8 +75,7 @@ public class ApprovementsController extends ElearningBaseController {
 	}
 
 	@DeleteMapping
-	public ResponseEntity<?> deleteById(@RequestParam("id") String id,
-			@RequestParam("idUser") String idUser) {
+	public ResponseEntity<?> deleteById(@RequestParam("id") String id, @RequestParam("idUser") String idUser) {
 		try {
 			approvementsService.deleteById(id, idUser);
 			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
@@ -77,16 +85,4 @@ public class ApprovementsController extends ElearningBaseController {
 		}
 	}
 
-	@PutMapping
-	public ResponseEntity<?> update(@RequestBody String body) {
-		try {
-			Approvements approvement = new ObjectMapper().readValue(body, Approvements.class);
-			approvementsService.update(approvement);
-			Approvements approve = approvementsService.getById(approvement.getId());
-			return responseSuccess(approve, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
 }

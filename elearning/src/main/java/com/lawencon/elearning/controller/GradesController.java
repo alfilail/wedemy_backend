@@ -1,6 +1,5 @@
 package com.lawencon.elearning.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,28 +23,16 @@ import com.lawencon.elearning.util.MessageStat;
 @RestController
 @RequestMapping("grade")
 public class GradesController extends ElearningBaseController {
+
 	@Autowired
 	private GradesService gradesService;
 
 	@PostMapping
 	public ResponseEntity<?> insert(@RequestBody String body) {
-		Grades grade = new Grades();
 		try {
-			grade = new ObjectMapper().readValue(body, Grades.class);
+			Grades grade = new ObjectMapper().readValue(body, Grades.class);
 			gradesService.insert(grade);
 			return responseSuccess(grade, HttpStatus.CREATED, MessageStat.SUCCESS_CREATED);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
-	
-	@GetMapping("/{id}")
-	public ResponseEntity<?> getById(@PathVariable("id") String id) {
-		Grades grade = new Grades();
-		try {
-			grade = gradesService.getById(id);
-			return responseSuccess(grade, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
@@ -54,22 +41,20 @@ public class GradesController extends ElearningBaseController {
 
 	@GetMapping
 	public ResponseEntity<?> getAll() {
-		List<Grades> gradesList = new ArrayList<Grades>();
 		try {
-			gradesList = gradesService.getAll();
-			return responseSuccess(gradesList, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
+			List<Grades> grades = gradesService.getAll();
+			return responseSuccess(grades, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
 		}
 	}
 
-	@DeleteMapping
-	public ResponseEntity<?> deleteById(@RequestParam("id") String id, 
-			@RequestParam("idUser") String idUser) {
+	@GetMapping("/{id}")
+	public ResponseEntity<?> getById(@PathVariable("id") String id) {
 		try {
-			gradesService.deleteById(id, idUser);
-			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
+			Grades grade = gradesService.getById(id);
+			return responseSuccess(grade, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
@@ -81,11 +66,23 @@ public class GradesController extends ElearningBaseController {
 		try {
 			Grades grade = new ObjectMapper().readValue(body, Grades.class);
 			gradesService.update(grade);
-			Grades grad = gradesService.getById(grade.getId());
-			return responseSuccess(grad, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
+			Grades response = gradesService.getById(grade.getId());
+			return responseSuccess(response, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
 		}
 	}
+
+	@DeleteMapping
+	public ResponseEntity<?> deleteById(@RequestParam("id") String id, @RequestParam("idUser") String idUser) {
+		try {
+			gradesService.deleteById(id, idUser);
+			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return responseError(e);
+		}
+	}
+
 }

@@ -1,6 +1,5 @@
 package com.lawencon.elearning.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +23,7 @@ import com.lawencon.elearning.util.MessageStat;
 @RestController
 @RequestMapping("submission-status")
 public class SubmissionStatusController extends ElearningBaseController {
+
 	@Autowired
 	private SubmissionStatusService submissionStatusService;
 
@@ -39,23 +39,10 @@ public class SubmissionStatusController extends ElearningBaseController {
 		}
 	}
 
-	@GetMapping("{id}")
-	public ResponseEntity<?> getById(@PathVariable("id") String id) {
-		SubmissionStatus submissionStatus = new SubmissionStatus();
-		try {
-			submissionStatus = submissionStatusService.getById(id);
-			return responseSuccess(submissionStatus, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
-
 	@GetMapping
 	public ResponseEntity<?> getAll() {
-		List<SubmissionStatus> submissionStatusList = new ArrayList<SubmissionStatus>();
 		try {
-			submissionStatusList = submissionStatusService.getAll();
+			List<SubmissionStatus> submissionStatusList = submissionStatusService.getAll();
 			return responseSuccess(submissionStatusList, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -63,12 +50,11 @@ public class SubmissionStatusController extends ElearningBaseController {
 		}
 	}
 
-	@DeleteMapping
-	public ResponseEntity<?> deleteById(@RequestParam("id") String id,
-			@RequestParam("idUser") String idUser) {
+	@GetMapping("{id}")
+	public ResponseEntity<?> getById(@PathVariable("id") String id) {
 		try {
-			submissionStatusService.deleteById(id, idUser);
-			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
+			SubmissionStatus submissionStatus = submissionStatusService.getById(id);
+			return responseSuccess(submissionStatus, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
@@ -80,11 +66,23 @@ public class SubmissionStatusController extends ElearningBaseController {
 		try {
 			SubmissionStatus submissionStatus = new ObjectMapper().readValue(body, SubmissionStatus.class);
 			submissionStatusService.update(submissionStatus);
-			SubmissionStatus subStat = submissionStatusService.getById(submissionStatus.getId());
-			return responseSuccess(subStat, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
+			SubmissionStatus response = submissionStatusService.getById(submissionStatus.getId());
+			return responseSuccess(response, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
 		}
 	}
+
+	@DeleteMapping
+	public ResponseEntity<?> deleteById(@RequestParam("id") String id, @RequestParam("idUser") String idUser) {
+		try {
+			submissionStatusService.deleteById(id, idUser);
+			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return responseError(e);
+		}
+	}
+
 }

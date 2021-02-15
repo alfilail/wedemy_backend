@@ -9,18 +9,18 @@ public interface ApprovementsDao {
 
 	void insert(Approvements approvement, Callback before) throws Exception;
 
-	List<Approvements> getAllApprovement() throws Exception;
-
-	Approvements getApprovementById(String id) throws Exception;
-
 	void update(Approvements approvement, Callback before) throws Exception;
 
 	void deleteApprovementById(String id) throws Exception;
 
-	Approvements getByCode(String code) throws Exception;
-	
-	void softDeleteById(String id, String idUser) throws Exception;
+	void softDeleteApprovementById(String id, String idUser) throws Exception;
 
-	List<?> validateDelete(String id) throws Exception;
+	Approvements getApprovementById(String id) throws Exception;
+
+	Approvements getApprovementByCode(String code) throws Exception;
+
+	List<Approvements> getAllApprovements() throws Exception;
+
+	List<?> validateDeleteApprovement(String id) throws Exception;
 
 }

@@ -9,10 +9,6 @@ import org.springframework.stereotype.Service;
 import com.lawencon.elearning.dao.ApprovementsDao;
 import com.lawencon.elearning.model.Approvements;
 
-/**
- * @author Nur Alfilail
- */
-
 @Service
 public class ApprovementsServiceImpl extends ElearningBaseServiceImpl implements ApprovementsService {
 
@@ -25,20 +21,9 @@ public class ApprovementsServiceImpl extends ElearningBaseServiceImpl implements
 	}
 
 	@Override
-	public List<Approvements> getAll() throws Exception {
-		return approvementsDao.getAllApprovement();
-	}
-
-	@Override
-	public Approvements getById(String id) throws Exception {
-		return approvementsDao.getApprovementById(id);
-	}
-
-	@Override
 	public void update(Approvements approvement) throws Exception {
-		Approvements approve = getById(approvement.getId());
-		approvement.setCreatedAt(approve.getCreatedAt());
-		approvement.setCreatedBy(approve.getCreatedBy());
+		approvement.setCreatedAt(approvementsDao.getApprovementById(approvement.getId()).getCreatedAt());
+		approvement.setCreatedBy(approvementsDao.getApprovementById(approvement.getId()).getCreatedBy());
 		approvementsDao.update(approvement, () -> validateUpdate(approvement));
 	}
 
@@ -47,7 +32,7 @@ public class ApprovementsServiceImpl extends ElearningBaseServiceImpl implements
 		try {
 			begin();
 			if (validateDelete(id)) {
-				approvementsDao.softDeleteById(id, idUser);
+				approvementsDao.softDeleteApprovementById(id, idUser);
 			} else {
 				approvementsDao.deleteApprovementById(id);
 			}
@@ -59,8 +44,18 @@ public class ApprovementsServiceImpl extends ElearningBaseServiceImpl implements
 	}
 
 	@Override
+	public Approvements getById(String id) throws Exception {
+		return approvementsDao.getApprovementById(id);
+	}
+
+	@Override
 	public Approvements getByCode(String code) throws Exception {
-		return approvementsDao.getByCode(code);
+		return approvementsDao.getApprovementByCode(code);
+	}
+
+	@Override
+	public List<Approvements> getAll() throws Exception {
+		return approvementsDao.getAllApprovements();
 	}
 
 	private void validateInsert(Approvements approvement) throws Exception {
@@ -87,8 +82,8 @@ public class ApprovementsServiceImpl extends ElearningBaseServiceImpl implements
 			} else {
 				if (!approvment.getCode().equals(approvement.getCode())) {
 					Approvements approve = getByCode(approvement.getCode());
-					if(approve != null) {
-						throw new Exception("Kode approvement sudah ada");						
+					if (approve != null) {
+						throw new Exception("Kode approvement sudah ada");
 					}
 				}
 				if (approvement.getApprovementName() == null || approvement.getApprovementName().trim().equals("")) {
@@ -102,7 +97,7 @@ public class ApprovementsServiceImpl extends ElearningBaseServiceImpl implements
 	}
 
 	private boolean validateDelete(String id) throws Exception {
-		List<?> listObj = approvementsDao.validateDelete(id);
+		List<?> listObj = approvementsDao.validateDeleteApprovement(id);
 		listObj.forEach(System.out::println);
 		List<?> list = listObj.stream().filter(val -> val != null).collect(Collectors.toList());
 		System.out.println(list.size());
