@@ -34,7 +34,7 @@ public class ApprovementsRenewalController extends ElearningBaseController {
 	public ResponseEntity<?> insertApprovementsRenewal(@RequestBody String body) {
 		try {
 			ApprovementsRenewal approvementsRenewal = new ObjectMapper().readValue(body, ApprovementsRenewal.class);
-			approvementsRenewalService.insertApprovementsRenewal(approvementsRenewal);
+			approvementsRenewalService.insertByParticipant(approvementsRenewal);
 			return responseSuccess(approvementsRenewal, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -47,7 +47,7 @@ public class ApprovementsRenewalController extends ElearningBaseController {
 		try {
 			TutorApprovementInputs approvementsRenewal = new ObjectMapper().readValue(body,
 					TutorApprovementInputs.class);
-			approvementsRenewalService.participantApprovementsRenewal(approvementsRenewal);
+			approvementsRenewalService.insertByTutor(approvementsRenewal);
 			return responseSuccess(approvementsRenewal, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -59,7 +59,7 @@ public class ApprovementsRenewalController extends ElearningBaseController {
 	public ResponseEntity<?> listParticipant(@RequestParam("idDtlClass") String idDtlClass,
 			@RequestParam("idDtlModuleRgs") String idDtlModuleRgs) {
 		try {
-			List<ApprovementsRenewal> listResult = approvementsRenewalService.getListParticipantsPresence(idDtlClass,
+			List<ApprovementsRenewal> listResult = approvementsRenewalService.getAllParticipantPresences(idDtlClass,
 					idDtlModuleRgs);
 			return responseSuccess(listResult, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
@@ -73,7 +73,7 @@ public class ApprovementsRenewalController extends ElearningBaseController {
 			@RequestParam("idDtlModuleRgs") String idDtlModuleRgs) {
 		byte[] out;
 		try {
-			List<ApprovementsRenewal> listResult = approvementsRenewalService.getListParticipantsPresence(idDtlClass,
+			List<ApprovementsRenewal> listResult = approvementsRenewalService.getAllParticipantPresences(idDtlClass,
 					idDtlModuleRgs);
 			out = JasperUtil.responseToByteArray(listResult, "DetailAttendance", null);
 		} catch (Exception e) {

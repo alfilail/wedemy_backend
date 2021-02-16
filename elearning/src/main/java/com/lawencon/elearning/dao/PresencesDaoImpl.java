@@ -12,28 +12,23 @@ import com.lawencon.util.Callback;
 public class PresencesDaoImpl extends ElearningBaseDaoImpl<Presences> implements PresencesDao {
 
 	@Override
-	public void insertPresence(Presences presence, Callback before) throws Exception {
+	public void insert(Presences presence, Callback before) throws Exception {
 		save(presence, before, null);
 	}
 
 	@Override
-	public List<Presences> getAllPresences() throws Exception {
-		return getAll();
-	}
-
-	@Override
-	public Presences getPresenceById(String id) throws Exception {
-		return getById(id);
-	}
-
-	@Override
-	public void updatePresence(Presences presence, Callback before) throws Exception {
+	public void update(Presences presence, Callback before) throws Exception {
 		save(presence, before, null, true, true);
 	}
 
 	@Override
 	public void deletePresenceById(String id) throws Exception {
 		deleteById(id);
+	}
+
+	@Override
+	public Presences getPresenceById(String id) throws Exception {
+		return getById(id);
 	}
 
 	@Override
@@ -63,10 +58,9 @@ public class PresencesDaoImpl extends ElearningBaseDaoImpl<Presences> implements
 	public Presences doesParticipantPresent(String idDtlModuleRgs, String idParticipant) throws Exception {
 		List<Presences> listResult = new ArrayList<>();
 		String sql = sqlBuilder("SELECT pr.id_user FROM t_r_presences pr ",
-				" INNER JOIN t_m_users u ON pr.id_user = u.id ",
-				" INNER JOIN t_m_profiles p ON u.id_profile = p.id ",
-				" INNER JOIN t_m_roles r ON u.id_role = r.id ",
-				" WHERE pr.id_dtl_module_rgs = ?1 AND pr.id_user = ?2").toString();
+				" INNER JOIN t_m_users u ON pr.id_user = u.id INNER JOIN t_m_profiles p ON u.id_profile = p.id ",
+				" INNER JOIN t_m_roles r ON u.id_role = r.id WHERE pr.id_dtl_module_rgs = ?1 AND pr.id_user = ?2")
+						.toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlModuleRgs).setParameter(2, idParticipant)
 				.getResultList();
 		listObj.forEach(val -> {
@@ -76,6 +70,11 @@ public class PresencesDaoImpl extends ElearningBaseDaoImpl<Presences> implements
 			listResult.add(presence);
 		});
 		return listResult.size() > 0 ? listResult.get(0) : null;
+	}
+
+	@Override
+	public List<Presences> getAllPresences() throws Exception {
+		return getAll();
 	}
 
 }

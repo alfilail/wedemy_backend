@@ -24,23 +24,46 @@ public class ApprovementsRenewalDaoImpl extends ElearningBaseDaoImpl<Approvement
 		implements ApprovementsRenewalDao {
 
 	@Override
-	public void insertApprovementsRenewal(ApprovementsRenewal approvementsRenewal, Callback before) throws Exception {
+	public void insertByParticipant(ApprovementsRenewal approvementsRenewal, Callback before) throws Exception {
 		save(approvementsRenewal, before, null);
 	}
 
 	@Override
-	public void participantApprovementsRenewal(ApprovementsRenewal approvementsRenewal, Callback before)
-			throws Exception {
+	public void insertByTutor(ApprovementsRenewal approvementsRenewal, Callback before) throws Exception {
 		save(approvementsRenewal, before, null, true, true);
 	}
 
 	@Override
-	public List<ApprovementsRenewal> getAllApprovementsRenewal() throws Exception {
+	public ApprovementsRenewal getApprovementsRenewalById(String id) throws Exception {
+		return getById(id);
+	}
+
+	@Override
+	public ApprovementsRenewal checkParticipantPresence(String idDtlModuleRgs, String idUser) throws Exception {
+		List<ApprovementsRenewal> listResult = new ArrayList<>();
+		String sql = sqlBuilder("SELECT a.code FROM t_r_presences p INNER JOIN t_r_approvement_renewals ar ",
+				"ON ar.id_presence = p.id INNER JOIN t_m_approvements a ON ar.id_approvement = a.id ",
+				"WHERE p.id_dtl_module_rgs =?1 AND p.id_user =?2 ORDER BY ar.created_at DESC LIMIT 1").toString();
+		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlModuleRgs).setParameter(2, idUser)
+				.getResultList();
+		listObj.forEach(val -> {
+			Object obj = (Object) val;
+			Approvements approvement = new Approvements();
+			approvement.setCode((String) obj);
+			ApprovementsRenewal approvementRenewal = new ApprovementsRenewal();
+			approvementRenewal.setIdApprovement(approvement);
+			listResult.add(approvementRenewal);
+		});
+		return listResult.size() > 0 ? listResult.get(0) : null;
+	}
+
+	@Override
+	public List<ApprovementsRenewal> getAllApprovementRenewals() throws Exception {
 		return getAll();
 	}
 
 	@Override
-	public List<ApprovementsRenewal> getListParticipantsPresence(String idDtlClass, String idDtlModuleRgs)
+	public List<ApprovementsRenewal> getAllParticipantPresences(String idDtlClass, String idDtlModuleRgs)
 			throws Exception {
 		List<ApprovementsRenewal> listResult = new ArrayList<>();
 		String sql = sqlBuilder("SELECT pr.fullname, u.id userid, p.id, p.presence_time, (SELECT a.code FROM ",
@@ -84,58 +107,33 @@ public class ApprovementsRenewalDaoImpl extends ElearningBaseDaoImpl<Approvement
 	}
 
 	@Override
-	public ApprovementsRenewal getApprovementsRenewalById(String id) throws Exception {
-		return getById(id);
-	}
-
-	@Override
-	public ApprovementsRenewal checkParticipantPresence(String idDtlModuleRgs, String idUser) throws Exception {
-		List<ApprovementsRenewal> listResult = new ArrayList<>();
-		String sql = sqlBuilder("SELECT a.code FROM t_r_presences p INNER JOIN t_r_approvement_renewals ar ",
-				"ON ar.id_presence = p.id INNER JOIN t_m_approvements a ON ar.id_approvement = a.id ",
-				"WHERE p.id_dtl_module_rgs =?1 AND p.id_user =?2 ORDER BY ar.created_at DESC LIMIT 1").toString();
-		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlModuleRgs).setParameter(2, idUser)
-				.getResultList();
-		listObj.forEach(val -> {
-			Object obj = (Object) val;
-			Approvements approvement = new Approvements();
-			approvement.setCode((String) obj);
-			ApprovementsRenewal approvementRenewal = new ApprovementsRenewal();
-			approvementRenewal.setIdApprovement(approvement);
-			listResult.add(approvementRenewal);
-		});
-		return listResult.size() > 0 ? listResult.get(0) : null;
-	}
-
-	@Override
 	public List<?> getPresenceReport(String idDetailClass) throws Exception {
 		String query = sqlBuilder(" SELECT tmp.fullname, ",
-                " tmc.class_name, ROUND(COUNT(tar.id_presence)/CAST((SELECT COUNT(order_number) ",
-                " FROM t_r_detail_module_registrations trdmr) AS decimal), 4) * 100 AS present_day ",
-                " FROM t_r_approvement_renewals tar ", " INNER JOIN t_r_presences trp ON tar.id_presence = trp.id ",
-                " INNER JOIN t_m_users tmu ON trp.id_user = tmu.id ",
-                " INNER JOIN t_m_profiles tmp  ON tmu.id_profile = tmp.id ",
-                " INNER JOIN t_r_detail_module_registrations trdmr ON trp.id_dtl_module_rgs = trdmr.id ",
-                " INNER JOIN t_r_module_registrations trmr ON trdmr.id_module_rgs = trmr.id ",
-                " INNER JOIN t_m_detail_classes tmdc  ON trmr.id_dtl_class = tmdc.id ",
-                " INNER JOIN t_m_modules tmm ON trmr.id_module = tmm.id ",
-                " INNER JOIN t_m_learning_materials tmlm ON tmlm.id = trdmr.id_learning_material ",
-                " INNER JOIN t_m_classes tmc ON tmdc.id_class = tmc.id ", " WHERE tmdc.id = ?1 AND id_approvement = ",
-                " (SELECT id FROM t_m_approvements WHERE code = 'ACC') ",
-                " GROUP BY tmp.fullname, tmc.class_name ", " ORDER BY tmp.fullname")
-                        .toString();
-        List<ReportPresences> listReportPresences = new ArrayList<>();
-        List<?> listObj = createNativeQuery(query).setParameter(1, idDetailClass).getResultList();
-        listObj.forEach(val -> {
-            Object[] objArr = (Object[]) val;
-            Profiles profile = new Profiles();
-            profile.setFullName((String) objArr[0]);
-            ReportPresences reportPresences = new ReportPresences();
-            reportPresences.setFullname(profile);
-            Classes clazz = new Classes();
-            clazz.setClassName((String) objArr[1]);
-            reportPresences.setClazz(clazz);
-            reportPresences.setPresentDay(Double.valueOf(objArr[2].toString()));
+				" tmc.class_name, ROUND(COUNT(tar.id_presence)/CAST((SELECT COUNT(order_number) ",
+				" FROM t_r_detail_module_registrations trdmr) AS decimal), 4) * 100 AS present_day ",
+				" FROM t_r_approvement_renewals tar ", " INNER JOIN t_r_presences trp ON tar.id_presence = trp.id ",
+				" INNER JOIN t_m_users tmu ON trp.id_user = tmu.id ",
+				" INNER JOIN t_m_profiles tmp  ON tmu.id_profile = tmp.id ",
+				" INNER JOIN t_r_detail_module_registrations trdmr ON trp.id_dtl_module_rgs = trdmr.id ",
+				" INNER JOIN t_r_module_registrations trmr ON trdmr.id_module_rgs = trmr.id ",
+				" INNER JOIN t_m_detail_classes tmdc  ON trmr.id_dtl_class = tmdc.id ",
+				" INNER JOIN t_m_modules tmm ON trmr.id_module = tmm.id ",
+				" INNER JOIN t_m_learning_materials tmlm ON tmlm.id = trdmr.id_learning_material ",
+				" INNER JOIN t_m_classes tmc ON tmdc.id_class = tmc.id ", " WHERE tmdc.id = ?1 AND id_approvement = ",
+				" (SELECT id FROM t_m_approvements WHERE code = 'ACC') ", " GROUP BY tmp.fullname, tmc.class_name ",
+				" ORDER BY tmp.fullname").toString();
+		List<ReportPresences> listReportPresences = new ArrayList<>();
+		List<?> listObj = createNativeQuery(query).setParameter(1, idDetailClass).getResultList();
+		listObj.forEach(val -> {
+			Object[] objArr = (Object[]) val;
+			Profiles profile = new Profiles();
+			profile.setFullName((String) objArr[0]);
+			ReportPresences reportPresences = new ReportPresences();
+			reportPresences.setFullname(profile);
+			Classes clazz = new Classes();
+			clazz.setClassName((String) objArr[1]);
+			reportPresences.setClazz(clazz);
+			reportPresences.setPresentDay(Double.valueOf(objArr[2].toString()));
 			listReportPresences.add(reportPresences);
 		});
 		return listReportPresences;

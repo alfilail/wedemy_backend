@@ -21,47 +21,46 @@ public class ApprovementsRenewalServiceImpl extends ElearningBaseServiceImpl imp
 	private ApprovementsService approvementService;
 
 	@Override
-	public void insertApprovementsRenewal(ApprovementsRenewal approvementsRenewal) throws Exception {
+	public void insertByParticipant(ApprovementsRenewal approvementsRenewal) throws Exception {
 		approvementsRenewal.setIdApprovement(approvementService.getByCode(ApprovementCode.PENDING.code));
 		approvementsRenewal.setTrxNumber(generateTrxNumber(TransactionNumberCode.APPROVEMENT_RENEWAL.code));
-		approvementsRenewalDao.insertApprovementsRenewal(approvementsRenewal,
-				() -> validateInsert(approvementsRenewal));
+		approvementsRenewalDao.insertByParticipant(approvementsRenewal, () -> validateInsert(approvementsRenewal));
 	}
 
 	@Override
-	public void participantApprovementsRenewal(TutorApprovementInputs approvementRenewals) throws Exception {
+	public void insertByTutor(TutorApprovementInputs approvementRenewals) throws Exception {
 		for (ApprovementsRenewal approvementsRenewal : approvementRenewals.getApprovementRenewals()) {
 			approvementsRenewal
 					.setIdApprovement(approvementService.getByCode(approvementsRenewal.getIdApprovement().getCode()));
-			approvementsRenewalDao.participantApprovementsRenewal(approvementsRenewal,
-					() -> validateInsert(approvementsRenewal));
+			approvementsRenewal.setTrxNumber(generateTrxNumber(TransactionNumberCode.APPROVEMENT_RENEWAL.code));
+			approvementsRenewalDao.insertByTutor(approvementsRenewal, () -> validateInsert(approvementsRenewal));
 		}
 	}
 
 	@Override
-	public List<ApprovementsRenewal> getAllApprovementsRenewal() throws Exception {
-		return approvementsRenewalDao.getAllApprovementsRenewal();
-	}
-
-	@Override
-	public List<ApprovementsRenewal> getListParticipantsPresence(String idDtlClass, String idDtlModuleRgs)
-			throws Exception {
-		return approvementsRenewalDao.getListParticipantsPresence(idDtlClass, idDtlModuleRgs);
-	}
-
-	@Override
-	public ApprovementsRenewal getApprovementsRenewalById(String id) throws Exception {
+	public ApprovementsRenewal getById(String id) throws Exception {
 		return approvementsRenewalDao.getApprovementsRenewalById(id);
-	}
-
-	@Override
-	public List<?> getPresenceReport(String idDetailClass) throws Exception {
-		return approvementsRenewalDao.getPresenceReport(idDetailClass);
 	}
 
 	@Override
 	public ApprovementsRenewal checkParticipantPresence(String idDtlModuleRgs, String idUser) throws Exception {
 		return approvementsRenewalDao.checkParticipantPresence(idDtlModuleRgs, idUser);
+	}
+
+	@Override
+	public List<ApprovementsRenewal> getAll() throws Exception {
+		return approvementsRenewalDao.getAllApprovementRenewals();
+	}
+
+	@Override
+	public List<ApprovementsRenewal> getAllParticipantPresences(String idDtlClass, String idDtlModuleRgs)
+			throws Exception {
+		return approvementsRenewalDao.getAllParticipantPresences(idDtlClass, idDtlModuleRgs);
+	}
+
+	@Override
+	public List<?> getPresenceReport(String idDetailClass) throws Exception {
+		return approvementsRenewalDao.getPresenceReport(idDetailClass);
 	}
 
 	private void validateInsert(ApprovementsRenewal approvementsRenewal) throws Exception {

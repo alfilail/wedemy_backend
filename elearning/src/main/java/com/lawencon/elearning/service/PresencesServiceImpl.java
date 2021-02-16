@@ -13,10 +13,6 @@ import com.lawencon.elearning.model.Users;
 import com.lawencon.elearning.util.RoleCode;
 import com.lawencon.elearning.util.TransactionNumberCode;
 
-/**
- * @author Nur Alfilail
- */
-
 @Service
 public class PresencesServiceImpl extends ElearningBaseServiceImpl implements PresencesService {
 
@@ -30,12 +26,13 @@ public class PresencesServiceImpl extends ElearningBaseServiceImpl implements Pr
 	private UsersService usersService;
 
 	@Override
-	public void insertPresence(Presences presence) throws Exception {
+	public void insert(Presences presence) throws Exception {
 		try {
 			begin();
+			presence.setCreatedBy(presence.getIdUser().getId());
 			presence.setTrxNumber(generateTrxNumber(TransactionNumberCode.PRESENCES.code));
 			presence.setPresenceTime(LocalTime.now());
-			presencesDao.insertPresence(presence, () -> validateInsert(presence));
+			presencesDao.insert(presence, () -> validateInsert(presence));
 			Users user = usersService.getById(presence.getIdUser().getId());
 			if (user.getIdRole().getCode().equals(RoleCode.PARTICIPANT.code)) {
 				insertApprovementRenewal(presence);
@@ -48,13 +45,23 @@ public class PresencesServiceImpl extends ElearningBaseServiceImpl implements Pr
 	}
 
 	@Override
-	public List<Presences> getAllPresences() throws Exception {
-		return presencesDao.getAllPresences();
+	public void update(Presences presence) throws Exception {
+		presencesDao.update(presence, () -> validateUpdate(presence));
 	}
 
 	@Override
-	public Presences getPresenceById(String id) throws Exception {
+	public void deleteById(String id) throws Exception {
+		presencesDao.deletePresenceById(id);
+	}
+
+	@Override
+	public Presences getById(String id) throws Exception {
 		return presencesDao.getPresenceById(id);
+	}
+
+	@Override
+	public Presences getByCode(String code) throws Exception {
+		return presencesDao.getPresenceByCode(code);
 	}
 
 	@Override
@@ -67,25 +74,16 @@ public class PresencesServiceImpl extends ElearningBaseServiceImpl implements Pr
 		return presencesDao.doesParticipantPresent(idDtlModuleRgs, idParticipant);
 	}
 
+	@Override
+	public List<Presences> getAll() throws Exception {
+		return presencesDao.getAllPresences();
+	}
+
 	private void insertApprovementRenewal(Presences presence) throws Exception {
 		ApprovementsRenewal approvementsRenewal = new ApprovementsRenewal();
 		approvementsRenewal.setIdPresence(presence);
-		approvementsRenewalService.insertApprovementsRenewal(approvementsRenewal);
-	}
-
-	@Override
-	public void updatePresence(Presences presence) throws Exception {
-		presencesDao.updatePresence(presence, () -> validateUpdate(presence));
-	}
-
-	@Override
-	public void deletePresenceById(String id) throws Exception {
-		presencesDao.deletePresenceById(id);
-	}
-
-	@Override
-	public Presences getPresenceByCode(String code) throws Exception {
-		return presencesDao.getPresenceByCode(code);
+		approvementsRenewal.setCreatedBy(presence.getCreatedBy());
+		approvementsRenewalService.insertByParticipant(approvementsRenewal);
 	}
 
 	private void validateInsert(Presences presence) throws Exception {

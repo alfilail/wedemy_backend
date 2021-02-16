@@ -39,7 +39,7 @@ public class PresencesController extends ElearningBaseController {
 			ObjectMapper obj = new ObjectMapper();
 			obj.registerModule(new JavaTimeModule());
 			Presences presences = obj.readValue(body, Presences.class);
-			presencesService.insertPresence(presences);
+			presencesService.insert(presences);
 			return responseSuccess(presences, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -50,7 +50,7 @@ public class PresencesController extends ElearningBaseController {
 	@GetMapping("{id}")
 	public ResponseEntity<?> getPresenceById(@PathVariable String id) {
 		try {
-			Presences presence = presencesService.getPresenceById(id);
+			Presences presence = presencesService.getById(id);
 			return responseSuccess(presence, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -61,7 +61,7 @@ public class PresencesController extends ElearningBaseController {
 	@GetMapping("all")
 	public ResponseEntity<?> getAllPresences() {
 		try {
-			List<Presences> presencesList = presencesService.getAllPresences();
+			List<Presences> presencesList = presencesService.getAll();
 			return responseSuccess(presencesList, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -72,7 +72,7 @@ public class PresencesController extends ElearningBaseController {
 	@DeleteMapping("{id}")
 	public ResponseEntity<?> deletePresenceById(@PathVariable("id") String id) {
 		try {
-			presencesService.deletePresenceById(id);
+			presencesService.deleteById(id);
 			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();
@@ -87,7 +87,7 @@ public class PresencesController extends ElearningBaseController {
 	public ResponseEntity<?> updatePresence(@RequestBody String body) {
 		try {
 			Presences presence = new ObjectMapper().readValue(body, Presences.class);
-			presencesService.updatePresence(presence);
+			presencesService.update(presence);
 			return responseSuccess(presence, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();

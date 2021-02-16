@@ -7,17 +7,18 @@ import com.lawencon.elearning.model.ApprovementsRenewal;
 
 public interface ApprovementsRenewalService {
 
-	void insertApprovementsRenewal(ApprovementsRenewal approvementsRenewal) throws Exception;
+	void insertByParticipant(ApprovementsRenewal approvementsRenewal) throws Exception;
 
-	void participantApprovementsRenewal(TutorApprovementInputs approvementRenewals) throws Exception;
+	void insertByTutor(TutorApprovementInputs approvementRenewals) throws Exception;
 
-	List<ApprovementsRenewal> getAllApprovementsRenewal() throws Exception;
+	List<ApprovementsRenewal> getAll() throws Exception;
 
-	List<ApprovementsRenewal> getListParticipantsPresence(String idDtlClass, String idDtlModuleRgs) throws Exception;
+	List<ApprovementsRenewal> getAllParticipantPresences(String idDtlClass, String idDtlModuleRgs) throws Exception;
 
-	ApprovementsRenewal getApprovementsRenewalById(String id) throws Exception;
+	ApprovementsRenewal getById(String id) throws Exception;
 
 	ApprovementsRenewal checkParticipantPresence(String idDtlModuleRgs, String idUser) throws Exception;
 
 	List<?> getPresenceReport(String idDetailClass) throws Exception;
+	
 }
