@@ -101,7 +101,7 @@ public class DetailModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<Detai
 	}
 	
 	@Override
-	public List<DetailModuleRegistrations> getAllModuleAndLearningMaterialsByIdTutor(String idTutor) throws Exception {
+	public List<DetailModuleRegistrations> getAllModuleAndLearningMaterialsByIdDetailClass(String idDetailClass) throws Exception {
 		String sql = sqlBuilder("SELECT tmm.module_name, tmlm.learning_material_name , tmlmt.type_name ",
 				" , trdmr.id as id_detail_module_rgs, tmdc.id as id_detail_class FROM t_r_module_registrations trmr ",
 				" INNER JOIN t_m_detail_classes tmdc ON trmr.id_dtl_class = tmdc.id ",
@@ -110,8 +110,8 @@ public class DetailModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<Detai
 				" INNER JOIN t_r_detail_module_registrations trdmr ON trdmr.id_module_rgs = trmr.id ",
 			    " INNER JOIN t_m_learning_materials tmlm ON tmlm.id = trdmr.id_learning_material ",
 				" INNER JOIN t_m_learning_material_types tmlmt ON tmlmt.id = tmlm.id_type ",
-				" WHERE tmc.id_tutor = ?1").toString();
-		List<?> listObj = createNativeQuery(sql).setParameter(1, idTutor).getResultList();
+				" WHERE tmdc.id = ?1").toString();
+		List<?> listObj = createNativeQuery(sql).setParameter(1, idDetailClass).getResultList();
 		List<DetailModuleRegistrations> listRes = new ArrayList<DetailModuleRegistrations>();
 		listObj.forEach(val->{
 			Object[] objArr = (Object[]) val;

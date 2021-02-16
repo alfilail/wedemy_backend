@@ -87,8 +87,8 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 	}
 	
 	@Override
-	public List<DetailModuleAndMaterialDoc> getAllModuleAndLearningMaterialByIdTutor(String idTutor) throws Exception {
-		List<DetailModuleRegistrations>  list = dtlModuleRgsDao.getAllModuleAndLearningMaterialsByIdTutor(idTutor);
+	public List<DetailModuleAndMaterialDoc> getAllModuleAndLearningMaterialByIdDetailClass(String idDetailClass) throws Exception {
+		List<DetailModuleRegistrations>  list = dtlModuleRgsDao.getAllModuleAndLearningMaterialsByIdDetailClass(idDetailClass);
 		List<DetailModuleAndMaterialDoc> listResult = new ArrayList<DetailModuleAndMaterialDoc>();
 		for(DetailModuleRegistrations detail : list) {
 			List<ApprovementsRenewal> listRes = approvementRenewalService.getAllParticipantPresences(

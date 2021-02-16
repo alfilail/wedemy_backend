@@ -37,10 +37,10 @@ public class DetailModuleRegistrationsController extends ElearningBaseController
 		}
 	}
 	
-	@GetMapping("/moduleAndMaterial/{idTutor}")
-	public ResponseEntity<?> getAllModuleAndLearningMaterialByIdTutor(@PathVariable("idTutor") String idTutor) {
+	@GetMapping("/module-and-material/{idDetailClass}")
+	public ResponseEntity<?> getAllModuleAndLearningMaterialByIdDetailClass(@PathVariable("idDetailClass") String idDetailClass) {
 		try {
-			List<DetailModuleAndMaterialDoc> all = dtlModuleService.getAllModuleAndLearningMaterialByIdTutor(idTutor);
+			List<DetailModuleAndMaterialDoc> all = dtlModuleService.getAllModuleAndLearningMaterialByIdDetailClass(idDetailClass);
 			return responseSuccess(all, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -23,6 +23,6 @@ public interface DetailModuleRegistrationsDao {
 
 	List<DetailModuleRegistrations> getAllByIdModuleRgs(String idModuleRgs) throws Exception;
 	
-	List<DetailModuleRegistrations> getAllModuleAndLearningMaterialsByIdTutor(String idTutor) throws Exception;
+	List<DetailModuleRegistrations> getAllModuleAndLearningMaterialsByIdDetailClass(String idDetailClass) throws Exception;
 
 }
