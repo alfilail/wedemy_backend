@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import com.lawencon.elearning.dao.ApprovementsRenewalDao;
 import com.lawencon.elearning.helper.TutorApprovementInputs;
 import com.lawencon.elearning.model.ApprovementsRenewal;
-import com.lawencon.elearning.util.ApprovementCode;
-import com.lawencon.elearning.util.TransactionNumberCode;
+import com.lawencon.elearning.constant.ApprovementCode;
+import com.lawencon.elearning.constant.TransactionNumberCode;
 
 @Service
 public class ApprovementsRenewalServiceImpl extends ElearningBaseServiceImpl implements ApprovementsRenewalService {

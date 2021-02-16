@@ -21,7 +21,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.lawencon.elearning.model.DetailModuleRegistrations;
 import com.lawencon.elearning.model.LearningMaterials;
 import com.lawencon.elearning.service.LearningMaterialsService;
-import com.lawencon.elearning.util.MessageStat;
+import com.lawencon.elearning.constant.MessageStat;
 
 @RestController
 @RequestMapping("learning-material")

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawencon.elearning.helper.DetailModuleAndMaterialDoc;
 import com.lawencon.elearning.model.DetailModuleRegistrations;
 import com.lawencon.elearning.service.DetailModuleRegistrationsService;
-import com.lawencon.elearning.util.MessageStat;
+import com.lawencon.elearning.constant.MessageStat;
 
 /**
  * @author Nur Alfilail

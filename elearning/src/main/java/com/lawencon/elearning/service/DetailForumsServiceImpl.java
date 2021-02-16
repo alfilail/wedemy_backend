@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.lawencon.elearning.dao.DetailForumsDao;
 import com.lawencon.elearning.model.DetailForums;
-import com.lawencon.elearning.util.TransactionNumberCode;
+import com.lawencon.elearning.constant.TransactionNumberCode;
 
 @Service
 public class DetailForumsServiceImpl extends ElearningBaseServiceImpl implements DetailForumsService{

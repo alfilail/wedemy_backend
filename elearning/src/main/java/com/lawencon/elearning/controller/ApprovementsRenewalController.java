@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lawencon.elearning.helper.TutorApprovementInputs;
 import com.lawencon.elearning.model.ApprovementsRenewal;
 import com.lawencon.elearning.service.ApprovementsRenewalService;
-import com.lawencon.elearning.util.MessageStat;
+import com.lawencon.elearning.constant.MessageStat;
 import com.lawencon.util.JasperUtil;
 
 @RestController

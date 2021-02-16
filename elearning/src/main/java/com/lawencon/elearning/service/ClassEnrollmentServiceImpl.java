@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.lawencon.elearning.dao.ClassEnrollmentsDao;
 import com.lawencon.elearning.model.ClassEnrollments;
 import com.lawencon.elearning.model.DetailClasses;
-import com.lawencon.elearning.util.TransactionNumberCode;
+import com.lawencon.elearning.constant.TransactionNumberCode;
 
 @Service
 public class ClassEnrollmentServiceImpl extends ElearningBaseServiceImpl implements ClassEnrollmentService {

@@ -23,7 +23,7 @@ import com.lawencon.elearning.helper.JasperHelper;
 import com.lawencon.elearning.helper.ScoreInputs;
 import com.lawencon.elearning.model.Evaluations;
 import com.lawencon.elearning.service.EvaluationsService;
-import com.lawencon.elearning.util.MessageStat;
+import com.lawencon.elearning.constant.MessageStat;
 import com.lawencon.util.JasperUtil;
 
 /**

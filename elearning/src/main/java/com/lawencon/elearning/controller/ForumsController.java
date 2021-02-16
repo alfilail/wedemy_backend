@@ -18,7 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lawencon.elearning.helper.ForumAndDetailForums;
 import com.lawencon.elearning.model.Forums;
 import com.lawencon.elearning.service.ForumsService;
-import com.lawencon.elearning.util.MessageStat;
+import com.lawencon.elearning.constant.MessageStat;
 
 @RestController
 @RequestMapping("forum")

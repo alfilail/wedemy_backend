@@ -22,7 +22,7 @@ import com.lawencon.elearning.helper.ClassInput;
 import com.lawencon.elearning.helper.TotalClassAndUser;
 import com.lawencon.elearning.model.Classes;
 import com.lawencon.elearning.service.ClassesService;
-import com.lawencon.elearning.util.MessageStat;
+import com.lawencon.elearning.constant.MessageStat;
 
 @RestController
 @RequestMapping("class")

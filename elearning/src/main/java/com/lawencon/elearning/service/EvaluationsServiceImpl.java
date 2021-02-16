@@ -14,10 +14,10 @@ import com.lawencon.elearning.model.General;
 import com.lawencon.elearning.model.Grades;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.SubmissionStatusRenewal;
-import com.lawencon.elearning.util.GeneralUtil;
+import com.lawencon.elearning.constant.TemplateEmail;
 import com.lawencon.elearning.util.MailUtil;
-import com.lawencon.elearning.util.SubmissionStatusCode;
-import com.lawencon.elearning.util.TransactionNumberCode;
+import com.lawencon.elearning.constant.SubmissionStatusCode;
+import com.lawencon.elearning.constant.TransactionNumberCode;
 
 /**
  * @author Nur Alfilail
@@ -122,7 +122,7 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 		evaluation.setIdAssignmentSubmission(assignmentSubmissions);
 		Profiles participant = evaluationsDao.getParticipantProfile(evaluation);
 
-		General general = generalService.getTemplateEmail(GeneralUtil.EVALUATION_PARTICIPANT.code);
+		General general = generalService.getTemplateEmail(TemplateEmail.EVALUATION_PARTICIPANT.code);
 		String text = general.getTemplateHtml();
 
 		text = text.replace("#1#", participant.getFullName());

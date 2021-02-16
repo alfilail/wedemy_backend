@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import com.lawencon.elearning.helper.TotalClassAndUser;
 import com.lawencon.elearning.model.Classes;
-import com.lawencon.elearning.util.RoleCode;
+import com.lawencon.elearning.constant.RoleCode;
 import com.lawencon.util.Callback;
 
 @Repository

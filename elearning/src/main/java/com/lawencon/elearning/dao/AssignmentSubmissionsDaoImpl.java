@@ -14,7 +14,7 @@ import com.lawencon.elearning.model.DetailModuleRegistrations;
 import com.lawencon.elearning.model.Files;
 import com.lawencon.elearning.model.ModuleRegistrations;
 import com.lawencon.elearning.model.Profiles;
-import com.lawencon.elearning.util.EmptyField;
+import com.lawencon.elearning.constant.EmptyField;
 import com.lawencon.util.Callback;
 
 @Repository

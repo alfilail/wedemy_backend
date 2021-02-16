@@ -10,7 +10,7 @@ import com.lawencon.elearning.dao.DetailModuleRegistrationsDao;
 import com.lawencon.elearning.helper.DetailModuleAndMaterialDoc;
 import com.lawencon.elearning.model.ApprovementsRenewal;
 import com.lawencon.elearning.model.DetailModuleRegistrations;
-import com.lawencon.elearning.util.TransactionNumberCode;
+import com.lawencon.elearning.constant.TransactionNumberCode;
 
 @Service
 public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceImpl

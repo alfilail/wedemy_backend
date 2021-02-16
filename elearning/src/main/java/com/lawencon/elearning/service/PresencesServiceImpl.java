@@ -10,8 +10,8 @@ import com.lawencon.elearning.dao.PresencesDao;
 import com.lawencon.elearning.model.ApprovementsRenewal;
 import com.lawencon.elearning.model.Presences;
 import com.lawencon.elearning.model.Users;
-import com.lawencon.elearning.util.RoleCode;
-import com.lawencon.elearning.util.TransactionNumberCode;
+import com.lawencon.elearning.constant.RoleCode;
+import com.lawencon.elearning.constant.TransactionNumberCode;
 
 @Service
 public class PresencesServiceImpl extends ElearningBaseServiceImpl implements PresencesService {

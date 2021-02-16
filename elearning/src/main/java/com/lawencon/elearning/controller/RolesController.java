@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lawencon.elearning.model.Roles;
 import com.lawencon.elearning.service.RolesService;
-import com.lawencon.elearning.util.MessageStat;
+import com.lawencon.elearning.constant.MessageStat;
 
 @RestController
 @RequestMapping("role")

@@ -14,10 +14,10 @@ import com.lawencon.elearning.model.Files;
 import com.lawencon.elearning.model.General;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.SubmissionStatusRenewal;
-import com.lawencon.elearning.util.GeneralUtil;
+import com.lawencon.elearning.constant.TemplateEmail;
 import com.lawencon.elearning.util.MailUtil;
-import com.lawencon.elearning.util.SubmissionStatusCode;
-import com.lawencon.elearning.util.TransactionNumberCode;
+import com.lawencon.elearning.constant.SubmissionStatusCode;
+import com.lawencon.elearning.constant.TransactionNumberCode;
 
 @Service
 public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl implements AssignmentSubmissionsService {
@@ -115,7 +115,7 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 		Profiles tutor = assignmentSubmissionsDao.getTutorProfile(assignmentSubmission);
 		Profiles participant = assignmentSubmissionsDao.getParticipantProfile(assignmentSubmission);
 
-		General general = generalService.getTemplateEmail(GeneralUtil.ASSIGNMENT_SUBMISSION_TUTOR.code);
+		General general = generalService.getTemplateEmail(TemplateEmail.ASSIGNMENT_SUBMISSION_TUTOR.code);
 		String text = general.getTemplateHtml();
 
 		text = text.replace("#1#", tutor.getFullName());
@@ -132,7 +132,7 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 	private void sendEmailParticipant(AssignmentSubmissions assignmentSubmission) throws Exception {
 		Profiles participant = assignmentSubmissionsDao.getParticipantProfile(assignmentSubmission);
 
-		General general = generalService.getTemplateEmail(GeneralUtil.ASSIGNMENT_SUBMISSION_PARTICIPANT.code);
+		General general = generalService.getTemplateEmail(TemplateEmail.ASSIGNMENT_SUBMISSION_PARTICIPANT.code);
 		String text = general.getTemplateHtml();
 
 		text = text.replace("#1#", participant.getFullName());

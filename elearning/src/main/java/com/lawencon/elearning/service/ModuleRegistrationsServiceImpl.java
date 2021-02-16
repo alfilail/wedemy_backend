@@ -20,9 +20,9 @@ import com.lawencon.elearning.model.ModuleRegistrations;
 import com.lawencon.elearning.model.Modules;
 import com.lawencon.elearning.model.Presences;
 import com.lawencon.elearning.model.Users;
-import com.lawencon.elearning.util.ApprovementCode;
-import com.lawencon.elearning.util.RoleCode;
-import com.lawencon.elearning.util.TransactionNumberCode;
+import com.lawencon.elearning.constant.ApprovementCode;
+import com.lawencon.elearning.constant.RoleCode;
+import com.lawencon.elearning.constant.TransactionNumberCode;
 
 @Service
 public class ModuleRegistrationsServiceImpl extends ElearningBaseServiceImpl implements ModuleRegistrationsService {

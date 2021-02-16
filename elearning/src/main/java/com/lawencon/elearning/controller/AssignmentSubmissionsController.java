@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.lawencon.elearning.model.AssignmentSubmissions;
 import com.lawencon.elearning.service.AssignmentSubmissionsService;
-import com.lawencon.elearning.util.MessageStat;
+import com.lawencon.elearning.constant.MessageStat;
 
 @RestController
 @RequestMapping("assignment-submission")

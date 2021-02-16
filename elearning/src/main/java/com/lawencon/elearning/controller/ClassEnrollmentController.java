@@ -25,7 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lawencon.elearning.model.ClassEnrollments;
 import com.lawencon.elearning.model.DetailClasses;
 import com.lawencon.elearning.service.ClassEnrollmentService;
-import com.lawencon.elearning.util.MessageStat;
+import com.lawencon.elearning.constant.MessageStat;
 import com.lawencon.util.JasperUtil;
 
 @RestController

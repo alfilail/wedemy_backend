@@ -1,6 +1,6 @@
-package com.lawencon.elearning.util;
+package com.lawencon.elearning.constant;
 
-public enum GeneralUtil {
+public enum TemplateEmail {
 	REGISTER("RGS"),
 	RESET_PASSWORD("PWDRST"),
 	ASSIGNMENT_SUBMISSION_PARTICIPANT("ASGPCP"),
@@ -9,7 +9,7 @@ public enum GeneralUtil {
 	
 	public String code;
 	
-	GeneralUtil(String code){
+	TemplateEmail(String code){
 		this.code = code;
 	}
 }

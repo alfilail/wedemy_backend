@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.lawencon.elearning.dao.SubmissionStatusRenewalsDao;
 import com.lawencon.elearning.model.SubmissionStatusRenewal;
-import com.lawencon.elearning.util.TransactionNumberCode;
+import com.lawencon.elearning.constant.TransactionNumberCode;
 
 /**
  * @author Nur Alfilail

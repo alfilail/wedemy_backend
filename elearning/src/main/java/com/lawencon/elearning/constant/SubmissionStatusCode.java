@@ -1,4 +1,4 @@
-package com.lawencon.elearning.util;
+package com.lawencon.elearning.constant;
 
 /**
  * @author Nur Alfilail

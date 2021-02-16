@@ -11,7 +11,7 @@ import com.lawencon.elearning.dao.ForumsDao;
 import com.lawencon.elearning.helper.ForumAndDetailForums;
 import com.lawencon.elearning.model.DetailForums;
 import com.lawencon.elearning.model.Forums;
-import com.lawencon.elearning.util.TransactionNumberCode;
+import com.lawencon.elearning.constant.TransactionNumberCode;
 
 @Service
 public class ForumsServiceImpl extends ElearningBaseServiceImpl implements ForumsService {

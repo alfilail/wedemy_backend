@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lawencon.elearning.model.SubmissionStatus;
 import com.lawencon.elearning.service.SubmissionStatusService;
-import com.lawencon.elearning.util.MessageStat;
+import com.lawencon.elearning.constant.MessageStat;
 
 @RestController
 @RequestMapping("submission-status")

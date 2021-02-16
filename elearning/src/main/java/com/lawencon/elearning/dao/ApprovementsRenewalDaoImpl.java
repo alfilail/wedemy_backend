@@ -16,7 +16,7 @@ import com.lawencon.elearning.model.LearningMaterials;
 import com.lawencon.elearning.model.Presences;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.Users;
-import com.lawencon.elearning.util.EmptyField;
+import com.lawencon.elearning.constant.EmptyField;
 import com.lawencon.util.Callback;
 
 @Repository

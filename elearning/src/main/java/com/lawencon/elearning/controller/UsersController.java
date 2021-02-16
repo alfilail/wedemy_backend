@@ -20,7 +20,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.Users;
 import com.lawencon.elearning.service.UsersService;
-import com.lawencon.elearning.util.MessageStat;
+import com.lawencon.elearning.constant.MessageStat;
 
 @RestController
 @RequestMapping("user")

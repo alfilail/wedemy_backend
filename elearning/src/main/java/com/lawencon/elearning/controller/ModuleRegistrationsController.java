@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawencon.elearning.helper.EnrolledClass;
 import com.lawencon.elearning.model.ModuleRegistrations;
 import com.lawencon.elearning.service.ModuleRegistrationsService;
-import com.lawencon.elearning.util.MessageStat;
+import com.lawencon.elearning.constant.MessageStat;
 
 /**
  * @author Nur Alfilail
