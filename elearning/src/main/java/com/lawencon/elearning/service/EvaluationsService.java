@@ -28,5 +28,6 @@ public interface EvaluationsService {
 	List<?> reportScore(String idDtlClass, String idParticipant) throws Exception;
 	
 	List<?> getCertificate(String idUser, String idDetailClass) throws Exception;
-
+	
+//	boolean checkCertificate(List<?> data) throws Exception;
 }

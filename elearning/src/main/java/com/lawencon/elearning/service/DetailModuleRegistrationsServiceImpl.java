@@ -1,11 +1,14 @@
 package com.lawencon.elearning.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.elearning.dao.DetailModuleRegistrationsDao;
+import com.lawencon.elearning.helper.DetailModuleAndMaterialDoc;
+import com.lawencon.elearning.model.ApprovementsRenewal;
 import com.lawencon.elearning.model.DetailModuleRegistrations;
 import com.lawencon.elearning.util.TransactionNumberCode;
 
@@ -15,6 +18,9 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 
 	@Autowired
 	private DetailModuleRegistrationsDao dtlModuleRgsDao;
+	
+	@Autowired
+	private ApprovementsRenewalService approvementRenewalService;
 
 	@Override
 	public void insert(DetailModuleRegistrations dtlModuleRgs) throws Exception {
@@ -78,6 +84,26 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 		} else {
 			throw new Exception("Order number tidak boleh kosong");
 		}
+	}
+	
+	@Override
+	public List<DetailModuleAndMaterialDoc> getAllModuleAndLearningMaterialByIdTutor(String idTutor) throws Exception {
+		List<DetailModuleRegistrations>  list = dtlModuleRgsDao.getAllModuleAndLearningMaterialsByIdTutor(idTutor);
+		List<DetailModuleAndMaterialDoc> listResult = new ArrayList<DetailModuleAndMaterialDoc>();
+		for(DetailModuleRegistrations detail : list) {
+			List<ApprovementsRenewal> listRes = approvementRenewalService.getAllParticipantPresences(
+					detail.getIdModuleRegistration().getIdDetailClass().getId(), detail.getId());
+			DetailModuleAndMaterialDoc dt = new DetailModuleAndMaterialDoc();
+			dt.setDetailModule(detail);
+			if(listRes.size() > 0) {
+				dt.setCheckDownload(true);
+			}
+			else {
+				dt.setCheckDownload(false);
+			}
+			listResult.add(dt);
+		}
+		return listResult;
 	}
 
 }

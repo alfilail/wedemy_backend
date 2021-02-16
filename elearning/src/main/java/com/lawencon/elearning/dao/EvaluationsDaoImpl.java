@@ -1,6 +1,7 @@
 package com.lawencon.elearning.dao;
 
 import java.sql.Time;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -254,11 +255,13 @@ public class EvaluationsDaoImpl extends ElearningBaseDaoImpl<Evaluations> implem
                 " INNER JOIN t_m_classes tmc ON tmc.id = dc.id_class ",
                 " INNER JOIN t_r_class_enrollments trce ON trce.id_dtl_class = dc.id ",
                 " WHERE dc.id = ?1 AND ams.id_participant = ?2 ",
+                " AND ?3 > dc.end_date ",
                 " GROUP BY tmp.fullname , tmc.class_name ",
                 " HAVING AVG(e.score) > 70 ")
 						.toString();
 		List<CertificateHelper> listCertificate = new ArrayList<>();
-		List<?> listObj = createNativeQuery(query).setParameter(1, idDetailClass).setParameter(2, idUser).getResultList();
+		List<?> listObj = createNativeQuery(query).setParameter(1, idDetailClass).setParameter(2, idUser)
+				.setParameter(3, LocalDate.now()).getResultList();
 		listObj.forEach(val -> {
 			Object[] objArr = (Object[]) val;
 			Profiles profile = new Profiles();

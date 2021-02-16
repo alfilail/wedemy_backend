@@ -130,6 +130,13 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{idPresence.idDetailModuleRegistration.scheduleDate}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="365" y="37" width="155" height="22" uuid="d49e2a7e-e312-4baf-9894-b920466be632"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Persetujuan]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
@@ -158,13 +165,6 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{idPresence.presenceTime}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement x="365" y="-26" width="155" height="22" uuid="d49e2a7e-e312-4baf-9894-b920466be632"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Persetujuan]]></text>
-			</staticText>
 			<textField>
 				<reportElement x="396" y="-5" width="100" height="30" uuid="b71acb03-216b-4093-86fd-c1afffb774c2">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="cd94df03-2f55-4025-9041-e05d7e72cd8d"/>

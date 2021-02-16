@@ -2,6 +2,7 @@ package com.lawencon.elearning.service;
 
 import java.util.List;
 
+import com.lawencon.elearning.helper.DetailModuleAndMaterialDoc;
 import com.lawencon.elearning.model.DetailModuleRegistrations;
 
 public interface DetailModuleRegistrationsService {
@@ -19,5 +20,7 @@ public interface DetailModuleRegistrationsService {
 	Integer totalHours(String idDtlClass) throws Exception;
 
 	List<DetailModuleRegistrations> getAllByIdModuleRgs(String idModuleRgs) throws Exception;
+	
+	List<DetailModuleAndMaterialDoc> getAllModuleAndLearningMaterialByIdTutor(String idTutor) throws Exception;
 
 }

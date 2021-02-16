@@ -6,10 +6,12 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.lawencon.elearning.model.DetailClasses;
 import com.lawencon.elearning.model.DetailModuleRegistrations;
 import com.lawencon.elearning.model.LearningMaterialTypes;
 import com.lawencon.elearning.model.LearningMaterials;
 import com.lawencon.elearning.model.ModuleRegistrations;
+import com.lawencon.elearning.model.Modules;
 import com.lawencon.util.Callback;
 
 @Repository
@@ -96,6 +98,42 @@ public class DetailModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<Detai
 			listResult.add(dtlModuleRgs);
 		});
 		return listResult;
+	}
+	
+	@Override
+	public List<DetailModuleRegistrations> getAllModuleAndLearningMaterialsByIdTutor(String idTutor) throws Exception {
+		String sql = sqlBuilder("SELECT tmm.module_name, tmlm.learning_material_name , tmlmt.type_name ",
+				" , trdmr.id as id_detail_module_rgs, tmdc.id as id_detail_class FROM t_r_module_registrations trmr ",
+				" INNER JOIN t_m_detail_classes tmdc ON trmr.id_dtl_class = tmdc.id ",
+				" INNER JOIN t_m_classes tmc ON tmdc.id_class = tmc.id ",
+				" INNER JOIN t_m_modules tmm ON trmr.id_module = tmm.id ",
+				" INNER JOIN t_r_detail_module_registrations trdmr ON trdmr.id_module_rgs = trmr.id ",
+			    " INNER JOIN t_m_learning_materials tmlm ON tmlm.id = trdmr.id_learning_material ",
+				" INNER JOIN t_m_learning_material_types tmlmt ON tmlmt.id = tmlm.id_type ",
+				" WHERE tmc.id_tutor = ?1").toString();
+		List<?> listObj = createNativeQuery(sql).setParameter(1, idTutor).getResultList();
+		List<DetailModuleRegistrations> listRes = new ArrayList<DetailModuleRegistrations>();
+		listObj.forEach(val->{
+			Object[] objArr = (Object[]) val;
+			Modules module = new Modules();
+			module.setModuleName((String) objArr[0]);
+			LearningMaterials learningMaterial = new LearningMaterials();
+			learningMaterial.setLearningMaterialName((String) objArr[1]);
+			LearningMaterialTypes learningMaterialType = new LearningMaterialTypes();
+			learningMaterialType.setLearningMaterialTypeName((String) objArr[2]);
+			learningMaterial.setIdLearningMaterialType(learningMaterialType);
+			ModuleRegistrations md = new ModuleRegistrations();
+			md.setIdModule(module);
+			DetailModuleRegistrations dmr = new DetailModuleRegistrations();
+			dmr.setIdModuleRegistration(md);
+			dmr.setIdLearningMaterial(learningMaterial);
+			dmr.setId((String) objArr[3]);
+			DetailClasses detailClass = new DetailClasses();
+			detailClass.setId((String) objArr[4]);
+			md.setIdDetailClass(detailClass);
+			listRes.add(dmr);
+		});
+		return listRes;
 	}
 
 }

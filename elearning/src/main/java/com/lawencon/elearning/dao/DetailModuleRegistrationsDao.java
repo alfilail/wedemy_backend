@@ -22,5 +22,7 @@ public interface DetailModuleRegistrationsDao {
 	Integer totalHours(String idDtlClass) throws Exception;
 
 	List<DetailModuleRegistrations> getAllByIdModuleRgs(String idModuleRgs) throws Exception;
+	
+	List<DetailModuleRegistrations> getAllModuleAndLearningMaterialsByIdTutor(String idTutor) throws Exception;
 
 }

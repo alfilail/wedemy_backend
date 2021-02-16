@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lawencon.elearning.helper.JasperHelper;
 import com.lawencon.elearning.helper.ScoreInputs;
 import com.lawencon.elearning.model.Evaluations;
 import com.lawencon.elearning.service.EvaluationsService;
@@ -142,24 +143,22 @@ public class EvaluationsController extends ElearningBaseController {
 			return responseError(e);
 		}
 	}
-	
+
 	@GetMapping("certificate")
 	public HttpEntity<?> reportCertificate(@RequestParam String idUser, @RequestParam String idDetailClass) {
 		List<?> data = new ArrayList<>();
+		JasperHelper js = new JasperHelper();
 		byte[] out;
 		try {
 			data = evaluationsService.getCertificate(idUser, idDetailClass);
 			out = JasperUtil.responseToByteArray(data, "Certificate", null);
+			js.setOut(out);
+			js.setCek(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
 		}
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_PDF);
-//		return new HttpEntity<>(out, headers);
-//		return HttpResponse(true, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE, out, headers, data);
-		return responseSuccess(data, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE, out, headers);
+		return responseSuccess(js, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 	}
 
 }
