@@ -16,6 +16,7 @@ import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.SubmissionStatusRenewal;
 import com.lawencon.elearning.util.GeneralUtil;
 import com.lawencon.elearning.util.MailUtil;
+import com.lawencon.elearning.util.SubmissionStatusCode;
 import com.lawencon.elearning.util.TransactionNumberCode;
 
 /**
@@ -99,8 +100,9 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 
 	private void insertStatusRenewal(Evaluations evaluation) throws Exception {
 		SubmissionStatusRenewal statusRenewal = new SubmissionStatusRenewal();
+		statusRenewal.setCreatedBy(evaluation.getCreatedBy());
 		statusRenewal.setIdAssignmentSubmission(evaluation.getIdAssignmentSubmission());
-		statusRenewal.setIdSubmissionStatus(statusService.getByCode("GRD"));
+		statusRenewal.setIdSubmissionStatus(statusService.getByCode(SubmissionStatusCode.GRADED.code));
 		statusRenewalService.insertSubmissionStatusRenewal(statusRenewal);
 	}
 

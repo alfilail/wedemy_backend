@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.lawencon.elearning.dao.SubmissionStatusRenewalsDao;
 import com.lawencon.elearning.model.SubmissionStatusRenewal;
-import com.lawencon.elearning.util.SubmissionStatusCode;
 import com.lawencon.elearning.util.TransactionNumberCode;
 
 /**
@@ -24,11 +23,7 @@ public class SubmissionStatusRenewalsServiceImpl extends ElearningBaseServiceImp
 	@Override
 	public void insertSubmissionStatusRenewal(SubmissionStatusRenewal statusRenewal) throws Exception {
 		statusRenewal.setTrxNumber(generateTrxNumber(TransactionNumberCode.SUBMISSION_STATUS_RENEWAL.code));
-		if (statusRenewal.getIdSubmissionStatus().getCode().equals(SubmissionStatusCode.UPLOADED.code)) {
-			statusRenewalDao.insertByParticipant(statusRenewal, () -> validateInsert(statusRenewal));
-		} else {
-			statusRenewalDao.insertByTutor(statusRenewal, () -> validateInsert(statusRenewal));
-		}
+		statusRenewalDao.insert(statusRenewal, () -> validateInsert(statusRenewal));
 	}
 
 	@Override

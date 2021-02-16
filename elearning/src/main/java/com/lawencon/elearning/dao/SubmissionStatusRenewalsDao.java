@@ -11,9 +11,7 @@ import com.lawencon.util.Callback;
 
 public interface SubmissionStatusRenewalsDao {
 
-	void insertByParticipant(SubmissionStatusRenewal statusRenewal, Callback before) throws Exception;
-	
-	void insertByTutor(SubmissionStatusRenewal statusRenewal, Callback before) throws Exception;
+	void insert(SubmissionStatusRenewal statusRenewal, Callback before) throws Exception;
 
 	List<SubmissionStatusRenewal> getAllSubmissionStatusRenewal() throws Exception;
 

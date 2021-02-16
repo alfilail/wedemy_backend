@@ -16,12 +16,7 @@ public class SubmissionStatusRenewalsDaoImpl extends ElearningBaseDaoImpl<Submis
 		implements SubmissionStatusRenewalsDao {
 
 	@Override
-	public void insertByParticipant(SubmissionStatusRenewal statusRenewal, Callback before) throws Exception {
-		save(statusRenewal, before, null);
-	}
-	
-	@Override
-	public void insertByTutor(SubmissionStatusRenewal statusRenewal, Callback before) throws Exception {
+	public void insert(SubmissionStatusRenewal statusRenewal, Callback before) throws Exception {
 		save(statusRenewal, before, null);
 	}
 
