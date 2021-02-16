@@ -73,6 +73,12 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 		for (Evaluations evaluation : scores.getEvaluations()) {
 			Grades grade = gradesService.getByScore(evaluation.getScore());
 			evaluation.setIdGrade(grade);
+			Evaluations eval = evaluationsDao.getEvaluationById(evaluation.getId());
+			evaluation.setCreatedAt(eval.getCreatedAt());
+			evaluation.setCreatedBy(eval.getCreatedBy());
+			evaluation.setUpdatedBy(eval.getCreatedBy());
+			evaluation.setTrxDate(eval.getTrxDate());
+			evaluation.setTrxNumber(eval.getTrxNumber());
 			evaluationsDao.updateEvaluation(evaluation, () -> validateInsert(evaluation));
 		}
 	}
