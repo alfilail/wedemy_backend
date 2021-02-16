@@ -102,8 +102,9 @@ public class DetailModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<Detai
 	
 	@Override
 	public List<DetailModuleRegistrations> getAllModuleAndLearningMaterialsByIdDetailClass(String idDetailClass) throws Exception {
-		String sql = sqlBuilder("SELECT tmm.id, tmm.module_name, tmlm.learning_material_name , tmlmt.type_name ",
-				" , trdmr.id as id_detail_module_rgs, tmdc.id as id_detail_class",
+		String sql = sqlBuilder("SELECT tmm.id as id_module, tmm.module_name, tmlm.learning_material_name , tmlmt.type_name ",
+				" , trdmr.id as id_detail_module_rgs, tmdc.id as id_detail_class,",
+				" trdmr.schedule_date ",
 				" FROM t_r_module_registrations trmr ",
 				" INNER JOIN t_m_detail_classes tmdc ON trmr.id_dtl_class = tmdc.id ",
 				" INNER JOIN t_m_classes tmc ON tmdc.id_class = tmc.id ",
@@ -133,6 +134,7 @@ public class DetailModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<Detai
 			DetailClasses detailClass = new DetailClasses();
 			detailClass.setId((String) objArr[5]);
 			md.setIdDetailClass(detailClass);
+			dmr.setScheduleDate(((Date) objArr[6]).toLocalDate());
 			listRes.add(dmr);
 		});
 		return listRes;
