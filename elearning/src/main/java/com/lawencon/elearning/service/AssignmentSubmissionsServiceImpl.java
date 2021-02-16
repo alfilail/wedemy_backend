@@ -122,9 +122,9 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 		text = text.replace("#2#", participant.getFullName());
 
 		MailHelper mailHelper = new MailHelper();
-		mailHelper.setFrom("elearningalfione@gmail.com");
+		mailHelper.setFrom("wedemy.id@gmail.com");
 		mailHelper.setTo(tutor.getEmail());
-		mailHelper.setSubject("Assignment Submission Has Sent");
+		mailHelper.setSubject(TemplateEmail.ASSIGNMENT_SUBMISSION_TUTOR.subject);
 		mailHelper.setText(text);
 		new MailServiceImpl(mailUtil, mailHelper).start();
 	}
@@ -138,9 +138,9 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 		text = text.replace("#1#", participant.getFullName());
 
 		MailHelper mailHelper = new MailHelper();
-		mailHelper.setFrom("elearningalfione@gmail.com");
+		mailHelper.setFrom("wedemy.id@gmail.com");
 		mailHelper.setTo(participant.getEmail());
-		mailHelper.setSubject("Assignment Submission Has Sent");
+		mailHelper.setSubject(TemplateEmail.ASSIGNMENT_SUBMISSION_PARTICIPANT.subject);
 		mailHelper.setText(text);
 		new MailServiceImpl(mailUtil, mailHelper).start();
 	}

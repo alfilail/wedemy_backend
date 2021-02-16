@@ -150,9 +150,9 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 		text = text.replace("#2#", pass);
 
 		MailHelper mailHelper = new MailHelper();
-		mailHelper.setFrom("elearningalfione@gmail.com");
+		mailHelper.setFrom("wedemy.id@gmail.com");
 		mailHelper.setTo(profile.getEmail());
-		mailHelper.setSubject("Password telah diganti");
+		mailHelper.setSubject(TemplateEmail.RESET_PASSWORD.subject);
 		mailHelper.setText(text);
 		new MailServiceImpl(mailUtil, mailHelper).start();
 	}
@@ -246,9 +246,9 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 		text = text.replace("#1#", profile.getFullName());
 
 		MailHelper mailHelper = new MailHelper();
-		mailHelper.setFrom("elearningalfione@gmail.com");
+		mailHelper.setFrom("wedemy.id@gmail.com");
 		mailHelper.setTo(profile.getEmail());
-		mailHelper.setSubject("Registrasi akun Wedemy sukses");
+		mailHelper.setSubject(TemplateEmail.REGISTER.subject);
 		mailHelper.setText(text);
 		new MailServiceImpl(mailUtil, mailHelper).start();
 	}

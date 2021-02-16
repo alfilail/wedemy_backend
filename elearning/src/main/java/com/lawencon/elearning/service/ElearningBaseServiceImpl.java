@@ -7,6 +7,7 @@ import java.util.Random;
 import com.lawencon.base.BaseServiceImpl;
 
 public class ElearningBaseServiceImpl extends BaseServiceImpl {
+	
 	protected StringBuilder bBuilder(String... datas) {
 		StringBuilder b = new StringBuilder();
 		for (String d : datas) {

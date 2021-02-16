@@ -128,9 +128,9 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 		text = text.replace("#1#", participant.getFullName());
 
 		MailHelper mailHelper = new MailHelper();
-		mailHelper.setFrom("elearningalfione@gmail.com");
+		mailHelper.setFrom("wedemy.id@gmail.com");
 		mailHelper.setTo(participant.getEmail());
-		mailHelper.setSubject("Score of Your Assignment Submission Has Updated");
+		mailHelper.setSubject(TemplateEmail.EVALUATION_PARTICIPANT.subject);
 		mailHelper.setText(text);
 		new MailServiceImpl(mailUtil, mailHelper).start();
 	}
