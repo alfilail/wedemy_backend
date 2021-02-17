@@ -70,16 +70,16 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 			for (Evaluations evaluation : scores.getEvaluations()) {
 				Grades grade = gradesService.getByScore(evaluation.getScore());
 				evaluation.setIdGrade(grade);
-			Evaluations eval = evaluationsDao.getEvaluationById(evaluation.getId());
-			evaluation.setCreatedAt(eval.getCreatedAt());
-			evaluation.setCreatedBy(eval.getCreatedBy());
-			evaluation.setUpdatedBy(eval.getCreatedBy());
-			evaluation.setTrxDate(eval.getTrxDate());
-			evaluation.setTrxNumber(eval.getTrxNumber());
+				Evaluations eval = evaluationsDao.getEvaluationById(evaluation.getId());
+				evaluation.setCreatedAt(eval.getCreatedAt());
+				evaluation.setCreatedBy(eval.getCreatedBy());
+				evaluation.setUpdatedBy(eval.getCreatedBy());
+				evaluation.setTrxDate(eval.getTrxDate());
+				evaluation.setTrxNumber(eval.getTrxNumber());
 				evaluationsDao.updateEvaluation(evaluation, () -> validateUpdate(evaluation));
 			}
 			commit();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			rollback();
 			throw new Exception(e);
 		}
@@ -115,7 +115,7 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 	}
 
 	private void validateInsert(Evaluations evaluation) throws Exception {
-		if (evaluation.getIdAssignmentSubmission() != null) {
+		if (evaluation.getIdAssignmentSubmission() != null && evaluation.getIdAssignmentSubmission().getId() != null) {
 			AssignmentSubmissions submission = assignmentSubmissionsService
 					.getById(evaluation.getIdAssignmentSubmission().getId());
 			if (submission == null) {
@@ -124,12 +124,35 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 		} else {
 			throw new Exception("Id Assignment Submission tidak boleh kosong");
 		}
-		if (evaluation.getScore() == null) {
+		if (evaluation.getIdGrade() == null) {
+			throw new Exception("Id Grade tidak boleh kosong");
+		}
+		if (evaluation.getScore() != null) {
+			if (evaluation.getScore() < 0 || evaluation.getScore() > 100) {
+				throw new Exception("Score harus dalam rentang 0 - 100");
+			}
+		} else {
 			throw new Exception("Score tidak boleh kosong");
 		}
 	}
 
 	private void validateUpdate(Evaluations evaluation) throws Exception {
+		if (evaluation.getId() != null) {
+			Evaluations eval = evaluationsDao.getEvaluationById(evaluation.getId());
+			if (eval == null) {
+				throw new Exception("Id Evaluation salah");
+			}
+		} else {
+			throw new Exception("Id Evaluation tidak boleh kosong");
+		}
+		if (evaluation.getVersion() != null) {
+			Evaluations eval = evaluationsDao.getEvaluationById(evaluation.getId());
+			if (!evaluation.getVersion().equals(eval.getVersion())) {
+				throw new Exception("Version tidak sama dengan sebelumnya");
+			}
+		} else {
+			throw new Exception("Version tidak boleh kosong");
+		}
 		if (evaluation.getIdAssignmentSubmission() != null) {
 			AssignmentSubmissions submission = assignmentSubmissionsService
 					.getById(evaluation.getIdAssignmentSubmission().getId());
@@ -139,7 +162,14 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 		} else {
 			throw new Exception("Id Assignment Submission tidak boleh kosong");
 		}
-		if (evaluation.getScore() == null) {
+		if (evaluation.getIdGrade() == null) {
+			throw new Exception("Id Grade tidak boleh kosong");
+		}
+		if (evaluation.getScore() != null) {
+			if (evaluation.getScore() < 0 || evaluation.getScore() > 100) {
+				throw new Exception("Score harus dalam rentang 0 - 100");
+			}
+		} else {
 			throw new Exception("Score tidak boleh kosong");
 		}
 	}
@@ -154,7 +184,7 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 		String text = general.getTemplateHtml();
 
 		text = text.replace("#1#", participant.getFullName());
-		
+
 		sendMail(TemplateEmail.EVALUATION_PARTICIPANT, participant, text);
 		System.out.println("ke sini nisa sabyan");
 	}
