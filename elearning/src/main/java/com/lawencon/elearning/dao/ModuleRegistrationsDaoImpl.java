@@ -24,8 +24,12 @@ public class ModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<ModuleRegis
 	}
 
 	@Override
-	public ModuleRegistrations getByIdDtlClassAndIdModuleRgs(String idDtlClass, String idModRegist)
-			throws Exception {
+	public ModuleRegistrations getModuleRgsById(String id) throws Exception {
+		return getById(id);
+	}
+
+	@Override
+	public ModuleRegistrations getByIdDtlClassAndIdModuleRgs(String idDtlClass, String idModRegist) throws Exception {
 		List<ModuleRegistrations> listResult = new ArrayList<>();
 		String sql = sqlBuilder(
 				"SELECT mr.id, dc.start_date, dc.end_date FROM t_r_module_registrations INNER JOIN t_m_detail_classes dc ",
@@ -90,10 +94,12 @@ public class ModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<ModuleRegis
 		});
 		return listResult;
 	}
-	
+
 	@Override
 	public List<ModuleRegistrations> getAllByIdDtlClass(String idDetailClass) throws Exception {
-		List<ModuleRegistrations> moduleRegistrationList = createQuery("FROM ModuleRegistrations WHERE idDetailClass.id = ?1 ", ModuleRegistrations.class).setParameter(1, idDetailClass).getResultList();
+		List<ModuleRegistrations> moduleRegistrationList = createQuery(
+				"FROM ModuleRegistrations WHERE idDetailClass.id = ?1 ", ModuleRegistrations.class)
+						.setParameter(1, idDetailClass).getResultList();
 		return moduleRegistrationList.size() > 0 ? moduleRegistrationList : null;
 	}
 

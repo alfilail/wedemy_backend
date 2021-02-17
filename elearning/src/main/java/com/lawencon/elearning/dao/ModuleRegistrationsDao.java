@@ -8,6 +8,8 @@ import com.lawencon.util.Callback;
 public interface ModuleRegistrationsDao {
 
 	void insert(ModuleRegistrations moduleRegistration, Callback before) throws Exception;
+	
+	ModuleRegistrations getModuleRgsById(String id) throws Exception;
 
 	ModuleRegistrations getByIdDtlClassAndIdModuleRgs(String idDtlClass, String idModuleRgs) throws Exception;
 

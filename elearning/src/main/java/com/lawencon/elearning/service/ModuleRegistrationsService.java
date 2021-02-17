@@ -9,6 +9,8 @@ import com.lawencon.elearning.model.ModuleRegistrations;
 public interface ModuleRegistrationsService {
 
 	void insert(ClassInput classInput) throws Exception;
+	
+	ModuleRegistrations getById(String id) throws Exception;
 
 	ModuleRegistrations getByIdDtlClassAndIdModuleRgs(String idDtlClass, String idModuleRgs) throws Exception;
 

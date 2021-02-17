@@ -8,6 +8,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lawencon.elearning.constant.ApprovementCode;
+import com.lawencon.elearning.constant.RoleCode;
+import com.lawencon.elearning.constant.TransactionNumberCode;
 import com.lawencon.elearning.dao.ModuleRegistrationsDao;
 import com.lawencon.elearning.helper.ClassInput;
 import com.lawencon.elearning.helper.EnrolledClass;
@@ -20,9 +23,6 @@ import com.lawencon.elearning.model.ModuleRegistrations;
 import com.lawencon.elearning.model.Modules;
 import com.lawencon.elearning.model.Presences;
 import com.lawencon.elearning.model.Users;
-import com.lawencon.elearning.constant.ApprovementCode;
-import com.lawencon.elearning.constant.RoleCode;
-import com.lawencon.elearning.constant.TransactionNumberCode;
 
 @Service
 public class ModuleRegistrationsServiceImpl extends ElearningBaseServiceImpl implements ModuleRegistrationsService {
@@ -62,6 +62,11 @@ public class ModuleRegistrationsServiceImpl extends ElearningBaseServiceImpl imp
 	}
 
 	@Override
+	public ModuleRegistrations getById(String id) throws Exception {
+		return moduleRgsDao.getModuleRgsById(id);
+	}
+
+	@Override
 	public ModuleRegistrations getByIdDtlClassAndIdModuleRgs(String idDtlClass, String idModRegist) throws Exception {
 		return moduleRgsDao.getByIdDtlClassAndIdModuleRgs(idDtlClass, idModRegist);
 	}
@@ -78,8 +83,7 @@ public class ModuleRegistrationsServiceImpl extends ElearningBaseServiceImpl imp
 		for (ModuleRegistrations moduleRgs : moduleRgsList) {
 			ModuleAndLearningMaterials result = new ModuleAndLearningMaterials();
 			List<LearningMaterialsAndPermissions> learningMaterials = new ArrayList<>();
-			List<DetailModuleRegistrations> dtlModuleList = dtlModuleRgsService
-					.getAllByIdModuleRgs(moduleRgs.getId());
+			List<DetailModuleRegistrations> dtlModuleList = dtlModuleRgsService.getAllByIdModuleRgs(moduleRgs.getId());
 			for (DetailModuleRegistrations dtlModule : dtlModuleList) {
 				LearningMaterialsAndPermissions learningMaterial = new LearningMaterialsAndPermissions();
 				learningMaterial.setLearningMaterial(dtlModule);

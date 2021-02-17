@@ -41,8 +41,10 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 			file.setName(fileInput.getOriginalFilename());
 			filesService.insert(file);
 			dtlModuleRgs.getIdLearningMaterial().setIdFile(file);
-			learningMaterialsDao.insert(dtlModuleRgs.getIdLearningMaterial(),
-					() -> validateInsert(dtlModuleRgs.getIdLearningMaterial()));
+			learningMaterialsDao.insert(dtlModuleRgs.getIdLearningMaterial(), () -> {
+				validateInsert(dtlModuleRgs.getIdLearningMaterial());
+				validateFileLearningMaterial(dtlModuleRgs.getIdLearningMaterial());
+			});
 			insertDetailModulRegistration(dtlModuleRgs);
 			commit();
 		} catch (Exception e) {
@@ -59,8 +61,8 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 			if (fileInput != null && !fileInput.isEmpty()) {
 				file.setFile(fileInput.getBytes());
 				file.setType(fileInput.getContentType());
-				file.setCreatedAt(file.getCreatedAt());
-				file.setCreatedBy(file.getCreatedBy());
+				file.setName(fileInput.getOriginalFilename());
+				file.setUpdatedBy(file.getCreatedBy());
 				filesService.update(file);
 				dtlModuleRgs.getIdLearningMaterial().setIdFile(file);
 				validateFileLearningMaterial(dtlModuleRgs.getIdLearningMaterial());
@@ -130,15 +132,7 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 					if (materialType == null) {
 						throw new Exception("Id tipe bahan ajar tidak ada!");
 					} else {
-						String[] type = learningMaterial.getIdFile().getType().split("/");
-						String ext = type[1];
-						if (ext != null) {
-//							if (ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("png")
-//									|| ext.equalsIgnoreCase("jpeg")) {
-//							} else {
-//								throw new Exception("File harus gambar!");
-//							}
-						} else if (learningMaterial.getLearningMaterialName() == null
+						if (learningMaterial.getLearningMaterialName() == null
 								|| learningMaterial.getLearningMaterialName().trim().equals("")) {
 							throw new Exception("Nama bahan ajar tidak boleh kosong!");
 						} else if (learningMaterial.getDescription() == null
@@ -210,22 +204,18 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 	private void validateDelete() throws Exception {
 		throw new Exception("Bahan ajar telah digunakan dalam kelangsungan kelas !");
 	}
-	
+
 	private void validateFileLearningMaterial(LearningMaterials learningMaterial) throws Exception {
 		System.out.println("ini ni" + learningMaterial.getIdFile().getType());
 		String[] type = learningMaterial.getIdFile().getType().split("/");
 		String ext = type[1];
 		System.out.println("extension" + ext);
 		if (ext != null) {
-//			if (ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("png")
-//					|| ext.equalsIgnoreCase("jpeg")) {
-//			} else {
-//				throw new Exception("File harus gambar!");
-//			}
 			if (ext.equalsIgnoreCase(ExtensionDocument.DOC.code) || ext.equalsIgnoreCase(ExtensionDocument.DOCX.code)
 					|| ext.equalsIgnoreCase(ExtensionDocument.PDF.code)
 					|| ext.equalsIgnoreCase(ExtensionDocument.ODT.code)
-					|| ext.equalsIgnoreCase(ExtensionDocument.WPS.code)) {
+					|| ext.equalsIgnoreCase(ExtensionDocument.WPS.code)
+					|| ext.equalsIgnoreCase(ExtensionDocument.PPT.code)) {
 			} else {
 				throw new Exception("File harus dokumen!");
 			}

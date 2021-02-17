@@ -11,6 +11,7 @@ import com.lawencon.elearning.dao.DetailModuleRegistrationsDao;
 import com.lawencon.elearning.helper.DetailModuleAndMaterialDoc;
 import com.lawencon.elearning.model.ApprovementsRenewal;
 import com.lawencon.elearning.model.DetailModuleRegistrations;
+import com.lawencon.elearning.model.ModuleRegistrations;
 
 @Service
 public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceImpl
@@ -21,6 +22,9 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 
 	@Autowired
 	private ApprovementsRenewalService approvementRenewalService;
+
+	@Autowired
+	private ModuleRegistrationsService moduleRgsService;
 
 	@Override
 	public void insert(DetailModuleRegistrations dtlModuleRgs) throws Exception {
@@ -66,13 +70,20 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 		if (dtlModRegist.getIdLearningMaterial().getId() == null) {
 			throw new Exception("Id Learning Material tidak boleh kosong");
 		}
+		if (dtlModRegist.getIdModuleRegistration() != null) {
+			ModuleRegistrations moduleRgs = moduleRgsService.getById(dtlModRegist.getIdModuleRegistration().getId());
+			if (moduleRgs == null) {
+				throw new Exception("Id Module Registration salah");
+			}
+		} else {
+			throw new Exception("Id Module Registration tidak boleh kosong");
+		}
 		if (dtlModRegist.getScheduleDate() != null) {
-			if (dtlModRegist.getScheduleDate()
-					.isAfter(dtlModRegist.getIdModuleRegistration().getIdDetailClass().getEndDate())) {
+			ModuleRegistrations moduleRgs = moduleRgsService.getById(dtlModRegist.getIdModuleRegistration().getId());
+			if (dtlModRegist.getScheduleDate().isAfter(moduleRgs.getIdDetailClass().getEndDate())) {
 				throw new Exception("Jadwal materi tidak bisa melewati masa berlangsung kelas");
 			}
-			if (dtlModRegist.getScheduleDate()
-					.isBefore(dtlModRegist.getIdModuleRegistration().getIdDetailClass().getStartDate())) {
+			if (dtlModRegist.getScheduleDate().isBefore(moduleRgs.getIdDetailClass().getStartDate())) {
 				throw new Exception("Jadwal materi tidak bisa mendahului masa berlangsung kelas");
 			}
 		} else {

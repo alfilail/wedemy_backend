@@ -19,7 +19,7 @@ public class FilesServiceImpl extends BaseServiceImpl implements FilesService {
 
 	@Override
 	public void insert(Files file) throws Exception {
-		filesDao.insert(file, () -> validateInsert(file));
+		filesDao.insert(file, null);
 	}
 
 	@Override
@@ -29,16 +29,7 @@ public class FilesServiceImpl extends BaseServiceImpl implements FilesService {
 
 	@Override
 	public void update(Files file) throws Exception {
-		filesDao.update(file, () -> validateUpdate(file));
+		filesDao.update(file, null);
 	}
-	
-	private void validateInsert(Files file) throws Exception {
-
-	}
-	
-	private void validateUpdate(Files file) throws Exception {
-
-	}
-
 
 }

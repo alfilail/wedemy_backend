@@ -79,7 +79,7 @@ public class DetailModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<Detai
 				"lmt.code typecode, dmr.id dmrid, dmr.schedule_date, dmr.order_number, dmr.id_module_rgs FROM t_r_detail_module_registrations dmr ",
 				"INNER JOIN t_m_learning_materials lm ON dmr.id_learning_material = lm.id ",
 				"INNER JOIN t_m_learning_material_types lmt ON lm.id_type = lmt.id WHERE dmr.id_module_rgs =?1 ",
-				"AND lm.is_active = true").toString();
+				"AND lm.is_active = true ORDER BY dmr.schedule_date ASC").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, idModuleRgs).getResultList();
 		listObj.forEach(val -> {
 			Object[] objArr = (Object[]) val;
@@ -116,8 +116,7 @@ public class DetailModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<Detai
 				" INNER JOIN t_m_modules tmm ON trmr.id_module = tmm.id ",
 				" INNER JOIN t_r_detail_module_registrations trdmr ON trdmr.id_module_rgs = trmr.id ",
 				" INNER JOIN t_m_learning_materials tmlm ON tmlm.id = trdmr.id_learning_material ",
-				" INNER JOIN t_m_learning_material_types tmlmt ON tmlmt.id = tmlm.id_type ", 
-				" WHERE tmdc.id = ?1",
+				" INNER JOIN t_m_learning_material_types tmlmt ON tmlmt.id = tmlm.id_type ", " WHERE tmdc.id = ?1",
 				" ORDER BY trdmr.schedule_date ").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, idDetailClass).getResultList();
 		List<DetailModuleRegistrations> listRes = new ArrayList<DetailModuleRegistrations>();
