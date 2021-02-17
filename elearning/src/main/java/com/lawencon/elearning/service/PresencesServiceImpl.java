@@ -6,12 +6,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lawencon.elearning.dao.PresencesDao;
-import com.lawencon.elearning.model.ApprovementsRenewal;
-import com.lawencon.elearning.model.Presences;
-import com.lawencon.elearning.model.Users;
 import com.lawencon.elearning.constant.RoleCode;
 import com.lawencon.elearning.constant.TransactionNumberCode;
+import com.lawencon.elearning.dao.PresencesDao;
+import com.lawencon.elearning.model.ApprovementsRenewal;
+import com.lawencon.elearning.model.DetailModuleRegistrations;
+import com.lawencon.elearning.model.Presences;
+import com.lawencon.elearning.model.Users;
 
 @Service
 public class PresencesServiceImpl extends ElearningBaseServiceImpl implements PresencesService {
@@ -24,6 +25,9 @@ public class PresencesServiceImpl extends ElearningBaseServiceImpl implements Pr
 
 	@Autowired
 	private UsersService usersService;
+
+	@Autowired
+	private DetailModuleRegistrationsService dtlModuleRgsService;
 
 	@Override
 	public void insert(Presences presence) throws Exception {
@@ -87,7 +91,23 @@ public class PresencesServiceImpl extends ElearningBaseServiceImpl implements Pr
 	}
 
 	private void validateInsert(Presences presence) throws Exception {
-
+		if (presence.getIdDetailModuleRegistration() != null) {
+			DetailModuleRegistrations dtlModuleRgs = dtlModuleRgsService
+					.getDtlModuleRgsById(presence.getIdDetailModuleRegistration().getId());
+			if (dtlModuleRgs == null) {
+				throw new Exception("Id Detail Module Registration salah");
+			}
+		} else {
+			throw new Exception("Id Detail Module Registration tidak boleh kosong");
+		}
+		if (presence.getIdUser() != null) {
+			Users user = usersService.getById(presence.getIdUser().getId());
+			if (user == null) {
+				throw new Exception("Id User salah");
+			}
+		} else {
+			throw new Exception("Id User tidak boleh kosong");
+		}
 	}
 
 	private void validateUpdate(Presences presence) throws Exception {

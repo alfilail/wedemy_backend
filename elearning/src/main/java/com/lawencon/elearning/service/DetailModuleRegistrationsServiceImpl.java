@@ -6,11 +6,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lawencon.elearning.constant.TransactionNumberCode;
 import com.lawencon.elearning.dao.DetailModuleRegistrationsDao;
 import com.lawencon.elearning.helper.DetailModuleAndMaterialDoc;
 import com.lawencon.elearning.model.ApprovementsRenewal;
 import com.lawencon.elearning.model.DetailModuleRegistrations;
-import com.lawencon.elearning.constant.TransactionNumberCode;
 
 @Service
 public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceImpl
@@ -18,7 +18,7 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 
 	@Autowired
 	private DetailModuleRegistrationsDao dtlModuleRgsDao;
-	
+
 	@Autowired
 	private ApprovementsRenewalService approvementRenewalService;
 
@@ -34,7 +34,7 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 		dtlModuleRgs.setCreatedAt(dtlModuleRgs.getCreatedAt());
 		dtlModuleRgs.setCreatedBy(dtlModRgs.getCreatedBy());
 		dtlModuleRgs.setIdModuleRegistration(dtlModRgs.getIdModuleRegistration());
-		dtlModuleRgsDao.update(dtlModuleRgs, () -> validateInsert(dtlModuleRgs));
+		dtlModuleRgsDao.update(dtlModuleRgs, () -> validateUpdate(dtlModuleRgs));
 	}
 
 	@Override
@@ -63,6 +63,9 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 	}
 
 	private void validateInsert(DetailModuleRegistrations dtlModRegist) throws Exception {
+		if (dtlModRegist.getIdLearningMaterial().getId() == null) {
+			throw new Exception("Id Learning Material tidak boleh kosong");
+		}
 		if (dtlModRegist.getScheduleDate() != null) {
 			if (dtlModRegist.getScheduleDate()
 					.isAfter(dtlModRegist.getIdModuleRegistration().getIdDetailClass().getEndDate())) {
@@ -76,8 +79,7 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 			throw new Exception("Jadwal materi tidak boleh kosong");
 		}
 		if (dtlModRegist.getOrderNumber() != null) {
-			DetailModuleRegistrations dtlModuleRgs = dtlModuleRgsDao
-					.getDtlModuleRgsByOrderNumber(dtlModRegist.getOrderNumber());
+			DetailModuleRegistrations dtlModuleRgs = dtlModuleRgsDao.getDtlModuleRgsByOrderNumber(dtlModRegist);
 			if (dtlModuleRgs != null) {
 				throw new Exception("Order number dalam satu modul tidak boleh sama");
 			}
@@ -85,20 +87,56 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 			throw new Exception("Order number tidak boleh kosong");
 		}
 	}
-	
+
+	private void validateUpdate(DetailModuleRegistrations dtlModuleRgs) throws Exception {
+		if (dtlModuleRgs.getId() == null) {
+			throw new Exception("Id tidak boleh kosong");
+		}
+		if (dtlModuleRgs.getVersion() == null) {
+			throw new Exception("Version tidak boleh kosong");
+		}
+		if (dtlModuleRgs.getIdLearningMaterial().getId() == null) {
+			throw new Exception("Id Learning Material tidak boleh kosong");
+		}
+		if (dtlModuleRgs.getScheduleDate() != null) {
+			if (dtlModuleRgs.getScheduleDate()
+					.isAfter(dtlModuleRgs.getIdModuleRegistration().getIdDetailClass().getEndDate())) {
+				throw new Exception("Jadwal materi tidak bisa melewati masa berlangsung kelas");
+			}
+			if (dtlModuleRgs.getScheduleDate()
+					.isBefore(dtlModuleRgs.getIdModuleRegistration().getIdDetailClass().getStartDate())) {
+				throw new Exception("Jadwal materi tidak bisa mendahului masa berlangsung kelas");
+			}
+		} else {
+			throw new Exception("Jadwal materi tidak boleh kosong");
+		}
+		if (dtlModuleRgs.getOrderNumber() != null) {
+			DetailModuleRegistrations formerData1 = dtlModuleRgsDao.getDtlModuleRgsById(dtlModuleRgs.getId());
+			if (!dtlModuleRgs.getOrderNumber().equals(formerData1.getOrderNumber())) {
+				DetailModuleRegistrations formerData2 = dtlModuleRgsDao.getDtlModuleRgsByOrderNumber(dtlModuleRgs);
+				if (formerData2 != null) {
+					throw new Exception("Order number dalam satu modul tidak boleh sama");
+				}
+			}
+		} else {
+			throw new Exception("Order number tidak boleh kosong");
+		}
+	}
+
 	@Override
-	public List<DetailModuleAndMaterialDoc> getAllModuleAndLearningMaterialByIdDetailClass(String idDetailClass) throws Exception {
-		List<DetailModuleRegistrations>  list = dtlModuleRgsDao.getAllModuleAndLearningMaterialsByIdDetailClass(idDetailClass);
+	public List<DetailModuleAndMaterialDoc> getAllModuleAndLearningMaterialByIdDetailClass(String idDetailClass)
+			throws Exception {
+		List<DetailModuleRegistrations> list = dtlModuleRgsDao
+				.getAllModuleAndLearningMaterialsByIdDetailClass(idDetailClass);
 		List<DetailModuleAndMaterialDoc> listResult = new ArrayList<DetailModuleAndMaterialDoc>();
-		for(DetailModuleRegistrations detail : list) {
+		for (DetailModuleRegistrations detail : list) {
 			List<ApprovementsRenewal> listRes = approvementRenewalService.getAllParticipantPresences(
 					detail.getIdModuleRegistration().getIdDetailClass().getId(), detail.getId());
 			DetailModuleAndMaterialDoc dt = new DetailModuleAndMaterialDoc();
 			dt.setDetailModule(detail);
-			if(listRes.size() > 0) {
+			if (listRes.size() > 0) {
 				dt.setCheckDownload(true);
-			}
-			else {
+			} else {
 				dt.setCheckDownload(false);
 			}
 			listResult.add(dt);

@@ -82,9 +82,6 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 			begin();
 			if (checkDelete(id) == false) {
 				learningMaterialsDao.softDeleteMaterialById(id, idUser);
-//				DetailModuleRegistrations dtlModuleRgs = dtlModuleRgsService
-//						.getDetailModuleRegistrationByIdLearningMaterial(id);
-//				dtlModuleRgsService.deleteDetailModuleRegistration(dtlModuleRgs.getId(), idUser);
 			} else {
 				validateDelete();
 			}
@@ -208,6 +205,6 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 	}
 
 	private void validateDelete() throws Exception {
-		throw new Exception("Bahan ajar tidak boleh dihapus!");
+		throw new Exception("Bahan ajar telah digunakan dalam kelangsungan kelas !");
 	}
 }

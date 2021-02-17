@@ -15,7 +15,7 @@ public interface DetailModuleRegistrationsDao {
 
 	DetailModuleRegistrations getDtlModuleRgsById(String id) throws Exception;
 
-	DetailModuleRegistrations getDtlModuleRgsByOrderNumber(Integer orderNumber) throws Exception;
+	DetailModuleRegistrations getDtlModuleRgsByOrderNumber(DetailModuleRegistrations dtlModuleRgs) throws Exception;
 
 	DetailModuleRegistrations getDtlModuleRgsByIdLearningMaterial(String id) throws Exception;
 
