@@ -10,6 +10,7 @@ import com.lawencon.elearning.dao.SubmissionStatusRenewalsDao;
 import com.lawencon.elearning.model.AssignmentSubmissions;
 import com.lawencon.elearning.model.SubmissionStatus;
 import com.lawencon.elearning.model.SubmissionStatusRenewal;
+import com.lawencon.elearning.model.Users;
 
 /**
  * @author Nur Alfilail
@@ -27,6 +28,9 @@ public class SubmissionStatusRenewalsServiceImpl extends ElearningBaseServiceImp
 
 	@Autowired
 	private SubmissionStatusService statusService;
+	
+	@Autowired
+	private UsersService usersService;
 
 	@Override
 	public void insertSubmissionStatusRenewal(SubmissionStatusRenewal statusRenewal) throws Exception {
@@ -45,6 +49,10 @@ public class SubmissionStatusRenewalsServiceImpl extends ElearningBaseServiceImp
 	}
 
 	private void validateInsert(SubmissionStatusRenewal statusRenewal) throws Exception {
+		Users user = usersService.getById(statusRenewal.getCreatedBy());
+		if (user == null) {
+			throw new Exception("CreatedBy bukan merupakan Id User yang valid");
+		}
 		if (statusRenewal.getIdAssignmentSubmission() != null) {
 			AssignmentSubmissions submission = submissionService
 					.getById(statusRenewal.getIdAssignmentSubmission().getId());

@@ -77,11 +77,13 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 			begin();
 			AssignmentSubmissions assignSub = getById(assignmentSubmission.getId());
 			Files file = filesService.getById(assignmentSubmission.getIdFile().getId());
-			file.setUpdatedBy(file.getCreatedBy());
-			file.setFile(fileInput.getBytes());
-			file.setType(fileInput.getContentType());
-			file.setName(fileInput.getOriginalFilename());
-			filesService.update(file);
+			if (file != null) {
+				file.setUpdatedBy(file.getCreatedBy());
+				file.setFile(fileInput.getBytes());
+				file.setType(fileInput.getContentType());
+				file.setName(fileInput.getOriginalFilename());
+				filesService.update(file);
+			}
 			assignmentSubmission.setCreatedAt(assignSub.getCreatedAt());
 			assignmentSubmission.setCreatedBy(assignSub.getCreatedBy());
 			assignmentSubmission.setTrxDate(assignSub.getTrxDate());
@@ -89,7 +91,7 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 			assignmentSubmission.setSubmitTime(assignSub.getSubmitTime());
 			assignmentSubmission.setUpdatedBy(assignSub.getCreatedBy());
 			assignmentSubmission.setIdFile(file);
-			assignmentSubmissionsDao.update(assignmentSubmission, null);
+			assignmentSubmissionsDao.update(assignmentSubmission, () -> validateUpdate(assignmentSubmission));
 			commit();
 		} catch (Exception e) {
 			rollback();
@@ -132,7 +134,7 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 
 		text = text.replace("#1#", tutor.getFullName());
 		text = text.replace("#2#", participant.getFullName());
-		
+
 		sendMail(TemplateEmail.ASSIGNMENT_SUBMISSION_TUTOR, tutor, text);
 	}
 
@@ -143,7 +145,7 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 		String text = general.getTemplateHtml();
 
 		text = text.replace("#1#", participant.getFullName());
-		
+
 		sendMail(TemplateEmail.ASSIGNMENT_SUBMISSION_PARTICIPANT, participant, text);
 	}
 
@@ -156,7 +158,8 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 	}
 
 	private void validateInsert(AssignmentSubmissions assignmentSubmissions) throws Exception {
-		if (assignmentSubmissions.getIdDetailModuleRegistration() != null) {
+		if (assignmentSubmissions.getIdDetailModuleRegistration() != null
+				&& assignmentSubmissions.getIdDetailModuleRegistration().getId() != null) {
 			DetailModuleRegistrations dtlModuleRgs = dtlModuleRgsService
 					.getDtlModuleRgsById(assignmentSubmissions.getIdDetailModuleRegistration().getId());
 			if (dtlModuleRgs == null) {
@@ -165,16 +168,61 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 		} else {
 			throw new Exception("Id Detail Module Registration tidak boleh kosong");
 		}
-		if (assignmentSubmissions.getIdFile() == null) {
+		if (assignmentSubmissions.getIdFile().getName() == null
+				|| assignmentSubmissions.getIdFile().getName().trim().equals("")) {
 			throw new Exception("File tidak boleh kosong");
 		}
-		if (assignmentSubmissions.getIdParticipant() != null) {
+		if (assignmentSubmissions.getIdParticipant() != null
+				&& assignmentSubmissions.getIdParticipant().getId() != null) {
 			Users user = usersService.getById(assignmentSubmissions.getIdParticipant().getId());
 			if (user == null) {
-				throw new Exception("Id User salah");
+				throw new Exception("Id Participant salah");
 			}
 		} else {
 			throw new Exception("Id User tidak boleh kosong");
+		}
+	}
+
+	private void validateUpdate(AssignmentSubmissions assignmentSubmissions) throws Exception {
+		if (assignmentSubmissions.getId() != null) {
+			AssignmentSubmissions submission = assignmentSubmissionsDao
+					.getSubmissionById(assignmentSubmissions.getId());
+			if (submission == null) {
+				throw new Exception("Id Assignment Submission salah");
+			}
+		} else {
+			throw new Exception("Id Assignment Submission tidak boleh kosong");
+		}
+		if (assignmentSubmissions.getVersion() != null) {
+			AssignmentSubmissions submission = assignmentSubmissionsDao
+					.getSubmissionById(assignmentSubmissions.getId());
+			if (!assignmentSubmissions.getVersion().equals(submission.getVersion())) {
+				throw new Exception("Version tidak sama dengan sebelumnya");
+			}
+		} else {
+			throw new Exception("Version tidak boleh kosong");
+		}
+		if (assignmentSubmissions.getIdDetailModuleRegistration() != null
+				&& assignmentSubmissions.getIdDetailModuleRegistration().getId() != null) {
+			DetailModuleRegistrations dtlModuleRgs = dtlModuleRgsService
+					.getDtlModuleRgsById(assignmentSubmissions.getIdDetailModuleRegistration().getId());
+			if (dtlModuleRgs == null) {
+				throw new Exception("Id Detail Module Registration salah");
+			}
+		} else {
+			throw new Exception("Id Detail Module Registration tidak boleh kosong");
+		}
+		if (assignmentSubmissions.getIdParticipant() != null
+				&& assignmentSubmissions.getIdParticipant().getId() != null) {
+			Users user = usersService.getById(assignmentSubmissions.getIdParticipant().getId());
+			if (user == null) {
+				throw new Exception("Id Participant salah");
+			}
+		} else {
+			throw new Exception("Id User tidak boleh kosong");
+		}
+		if (assignmentSubmissions.getIdFile() == null) {
+			throw new Exception("Id File salah");
 		}
 	}
 
