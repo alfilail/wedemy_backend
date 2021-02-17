@@ -32,7 +32,7 @@
 			</staticText>
 			<image>
 				<reportElement x="1" y="30" width="140" height="140" uuid="62bd4cd7-bd1e-4b9b-ab6f-2a988217880b"/>
-				<imageExpression><![CDATA["src/main/resources/report/logo-wedemy.png"]]></imageExpression>
+				<imageExpression><![CDATA["report/logo-wedemy.png"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="151" y="100" width="404" height="70" uuid="e901349b-2f7d-4c18-8c32-b7c02f9fc14c"/>

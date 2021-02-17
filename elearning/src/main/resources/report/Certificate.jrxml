@@ -48,7 +48,7 @@
 			</staticText>
 			<image>
 				<reportElement x="15" y="0" width="82" height="82" uuid="328679db-8e3d-4160-a3f8-673db1885730"/>
-				<imageExpression><![CDATA["src/main/resources/report/logo-02.png"]]></imageExpression>
+				<imageExpression><![CDATA["report/logo-02.png"]]></imageExpression>
 			</image>
 			<frame>
 				<reportElement mode="Opaque" x="-16" y="83" width="832" height="24" forecolor="#D0B48E" backcolor="#F2EBDF" uuid="616810bd-0636-423a-b3e1-e7a999123bf8"/>

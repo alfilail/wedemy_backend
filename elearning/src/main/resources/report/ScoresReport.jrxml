@@ -27,7 +27,7 @@
 			</staticText>
 			<image>
 				<reportElement x="1" y="30" width="140" height="140" uuid="e456334d-26f7-4aa8-839b-cd3d174a9ee1"/>
-				<imageExpression><![CDATA["src/main/resources/report/logo-wedemy.png"]]></imageExpression>
+				<imageExpression><![CDATA["report/logo-wedemy.png"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="151" y="100" width="404" height="70" uuid="cfabaf84-1ff3-49e8-9618-d72605b019bf"/>

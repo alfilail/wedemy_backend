@@ -57,7 +57,7 @@
 			</frame>
 			<image>
 				<reportElement x="7" y="2" width="90" height="74" uuid="a6fd6450-0674-4774-8912-6e6c8efd4e67"/>
-				<imageExpression><![CDATA["src/main/resources/report/logo-02.png"]]></imageExpression>
+				<imageExpression><![CDATA["report/logo-02.png"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="195" y="114" width="185" height="24" uuid="36e55311-83ff-42a7-9657-fe5a5196b1ab"/>

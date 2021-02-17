@@ -10,6 +10,7 @@
 	<artifactId>elearning</artifactId>
 	<name>E-Learning Apps</name>
 	<description>This is e-learning apps by group one</description>
+	<packaging>war</packaging>
 	<dependencies>
 		<dependency>
 			<groupId>org.postgresql</groupId>

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.lawencon.base.BaseServiceImpl;
+import com.lawencon.elearning.constant.ExtensionDocument;
 import com.lawencon.elearning.dao.LearningMaterialsDao;
 import com.lawencon.elearning.model.DetailModuleRegistrations;
 import com.lawencon.elearning.model.Files;
@@ -61,6 +62,8 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 				file.setCreatedAt(file.getCreatedAt());
 				file.setCreatedBy(file.getCreatedBy());
 				filesService.update(file);
+				dtlModuleRgs.getIdLearningMaterial().setIdFile(file);
+				validateFileLearningMaterial(dtlModuleRgs.getIdLearningMaterial());
 			}
 			LearningMaterials material = learningMaterialsDao
 					.getMaterialById(dtlModuleRgs.getIdLearningMaterial().getId());
@@ -130,11 +133,11 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 						String[] type = learningMaterial.getIdFile().getType().split("/");
 						String ext = type[1];
 						if (ext != null) {
-							if (ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("png")
-									|| ext.equalsIgnoreCase("jpeg")) {
-							} else {
-								throw new Exception("File harus gambar!");
-							}
+//							if (ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("png")
+//									|| ext.equalsIgnoreCase("jpeg")) {
+//							} else {
+//								throw new Exception("File harus gambar!");
+//							}
 						} else if (learningMaterial.getLearningMaterialName() == null
 								|| learningMaterial.getLearningMaterialName().trim().equals("")) {
 							throw new Exception("Nama bahan ajar tidak boleh kosong!");
@@ -206,5 +209,26 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 
 	private void validateDelete() throws Exception {
 		throw new Exception("Bahan ajar telah digunakan dalam kelangsungan kelas !");
+	}
+	
+	private void validateFileLearningMaterial(LearningMaterials learningMaterial) throws Exception {
+		System.out.println("ini ni" + learningMaterial.getIdFile().getType());
+		String[] type = learningMaterial.getIdFile().getType().split("/");
+		String ext = type[1];
+		System.out.println("extension" + ext);
+		if (ext != null) {
+//			if (ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("png")
+//					|| ext.equalsIgnoreCase("jpeg")) {
+//			} else {
+//				throw new Exception("File harus gambar!");
+//			}
+			if (ext.equalsIgnoreCase(ExtensionDocument.DOC.code) || ext.equalsIgnoreCase(ExtensionDocument.DOCX.code)
+					|| ext.equalsIgnoreCase(ExtensionDocument.PDF.code)
+					|| ext.equalsIgnoreCase(ExtensionDocument.ODT.code)
+					|| ext.equalsIgnoreCase(ExtensionDocument.WPS.code)) {
+			} else {
+				throw new Exception("File harus dokumen!");
+			}
+		}
 	}
 }

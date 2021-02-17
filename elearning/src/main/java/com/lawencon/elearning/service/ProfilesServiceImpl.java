@@ -97,20 +97,25 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 	}
 
 	private void validateInsert(Profiles profile) throws Exception {
-
+		if(profile.getAddress() == null) {
+			profile.setAddress(" ");
+		}
+		if(profile.getPhone() == null) {
+			profile.setPhone(" ");
+		}
 	}
 
 	private void validateUpdate(Profiles profile) throws Exception {
 		if (profile.getId() == null || profile.getId().trim().equals("")) {
 			throw new Exception("Id tidak boleh kosong");
 		} else {
-//			Profiles pfl = getById(profile.getId());
+			Profiles pfl = getById(profile.getId());
 			if (profile.getFullName() == null || profile.getFullName().trim().equals("")) {
 				throw new Exception("Nama Lengkap tidak boleh kosong");
 			}
-//			if (pfl.getVersion() != profile.getVersion()) {
-//				throw new Exception("Profile yang diedit telah diperbarui, silahkan coba lagi");
-//			}
+			if (pfl.getVersion() != profile.getVersion()) {
+				throw new Exception("Profile yang diedit telah diperbarui, silahkan coba lagi");
+			}
 			if (profile.getIdFile() != null) {
 				if (profile.getIdFile().getType() != null) {
 					String[] type = profile.getIdFile().getType().split("/");
