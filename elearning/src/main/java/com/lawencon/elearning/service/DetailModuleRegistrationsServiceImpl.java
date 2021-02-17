@@ -89,14 +89,16 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 		} else {
 			throw new Exception("Jadwal materi tidak boleh kosong");
 		}
-		if (dtlModRegist.getOrderNumber() != null) {
-			DetailModuleRegistrations dtlModuleRgs = dtlModuleRgsDao.getDtlModuleRgsByOrderNumber(dtlModRegist);
-			if (dtlModuleRgs != null) {
-				throw new Exception("Order number dalam satu modul tidak boleh sama");
-			}
-		} else {
-			throw new Exception("Order number tidak boleh kosong");
-		}
+//		if (dtlModRegist.getOrderNumber() != null) {
+//			System.out.println(dtlModRegist.getOrderNumber());
+//			DetailModuleRegistrations dtlModuleRgs = dtlModuleRgsDao.getDtlModuleRgsByOrderNumber(dtlModRegist);
+//			System.out.println(dtlModuleRgs.getOrderNumber());
+//			if (dtlModuleRgs != null) {
+//				throw new Exception("Order number dalam satu modul tidak boleh sama");
+//			}
+//		} else {
+//			throw new Exception("Order number tidak boleh kosong");
+//		}
 	}
 
 	private void validateUpdate(DetailModuleRegistrations dtlModuleRgs) throws Exception {
@@ -105,6 +107,12 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 		}
 		if (dtlModuleRgs.getVersion() == null) {
 			throw new Exception("Version tidak boleh kosong");
+		}
+		else {
+			DetailModuleRegistrations dm = dtlModuleRgsDao.getDtlModuleRgsById(dtlModuleRgs.getId());
+			if(dm.getVersion() != dtlModuleRgs.getVersion()) {
+				throw new Exception("Detail Module Registration version tidak sama!");
+			}
 		}
 		if (dtlModuleRgs.getIdLearningMaterial().getId() == null) {
 			throw new Exception("Id Learning Material tidak boleh kosong");
@@ -121,17 +129,17 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 		} else {
 			throw new Exception("Jadwal materi tidak boleh kosong");
 		}
-		if (dtlModuleRgs.getOrderNumber() != null) {
-			DetailModuleRegistrations formerData1 = dtlModuleRgsDao.getDtlModuleRgsById(dtlModuleRgs.getId());
-			if (!dtlModuleRgs.getOrderNumber().equals(formerData1.getOrderNumber())) {
-				DetailModuleRegistrations formerData2 = dtlModuleRgsDao.getDtlModuleRgsByOrderNumber(dtlModuleRgs);
-				if (formerData2 != null) {
-					throw new Exception("Order number dalam satu modul tidak boleh sama");
-				}
-			}
-		} else {
-			throw new Exception("Order number tidak boleh kosong");
-		}
+//		if (dtlModuleRgs.getOrderNumber() != null) {
+//			DetailModuleRegistrations formerData1 = dtlModuleRgsDao.getDtlModuleRgsById(dtlModuleRgs.getId());
+//			if (!dtlModuleRgs.getOrderNumber().equals(formerData1.getOrderNumber())) {
+//				DetailModuleRegistrations formerData2 = dtlModuleRgsDao.getDtlModuleRgsByOrderNumber(dtlModuleRgs);
+//				if (formerData2 != null) {
+//					throw new Exception("Order number dalam satu modul tidak boleh sama");
+//				}
+//			}
+//		} else {
+//			throw new Exception("Order number tidak boleh kosong");
+//		}
 	}
 
 	@Override

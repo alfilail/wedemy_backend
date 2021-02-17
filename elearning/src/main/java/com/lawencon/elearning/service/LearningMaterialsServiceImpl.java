@@ -40,7 +40,9 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 			file.setType(fileInput.getContentType());
 			file.setName(fileInput.getOriginalFilename());
 			filesService.insert(file);
-			dtlModuleRgs.getIdLearningMaterial().setIdFile(file);
+			LearningMaterials learningMaterial = dtlModuleRgs.getIdLearningMaterial();
+			learningMaterial.setIdFile(file);
+			dtlModuleRgs.setIdLearningMaterial(learningMaterial);
 			learningMaterialsDao.insert(dtlModuleRgs.getIdLearningMaterial(), () -> {
 				validateInsert(dtlModuleRgs.getIdLearningMaterial());
 				validateFileLearningMaterial(dtlModuleRgs.getIdLearningMaterial());
@@ -65,14 +67,18 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 				file.setUpdatedBy(file.getCreatedBy());
 				filesService.update(file);
 				dtlModuleRgs.getIdLearningMaterial().setIdFile(file);
-				validateFileLearningMaterial(dtlModuleRgs.getIdLearningMaterial());
 			}
 			LearningMaterials material = learningMaterialsDao
 					.getMaterialById(dtlModuleRgs.getIdLearningMaterial().getId());
 			dtlModuleRgs.getIdLearningMaterial().setCreatedAt(material.getCreatedAt());
 			dtlModuleRgs.getIdLearningMaterial().setCreatedBy(material.getCreatedBy());
+			dtlModuleRgs.getIdLearningMaterial().setUpdatedBy(material.getCreatedBy());
+			dtlModuleRgs.getIdLearningMaterial().setIdFile(material.getIdFile());
 			learningMaterialsDao.update(dtlModuleRgs.getIdLearningMaterial(),
-					() -> validateUpdate(dtlModuleRgs.getIdLearningMaterial()));
+					() -> {
+						validateUpdate(dtlModuleRgs.getIdLearningMaterial());
+						validateFileLearningMaterial(dtlModuleRgs.getIdLearningMaterial());
+					});
 			dtlModuleRgsService.update(dtlModuleRgs);
 			commit();
 		} catch (Exception e) {
@@ -171,15 +177,7 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 								if (materialType == null) {
 									throw new Exception("Id tipe bahan ajar tidak ada!");
 								} else {
-									String[] type = learningMaterial.getIdFile().getType().split("/");
-									String ext = type[1];
-									if (ext != null) {
-										if (ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("png")
-												|| ext.equalsIgnoreCase("jpeg")) {
-										} else {
-											throw new Exception("File harus gambar!");
-										}
-									} else if (learningMaterial.getLearningMaterialName() == null
+									if (learningMaterial.getLearningMaterialName() == null
 											|| learningMaterial.getLearningMaterialName().trim().equals("")) {
 										throw new Exception("Nama bahan ajar tidak boleh kosong!");
 									} else if (learningMaterial.getDescription() == null
@@ -206,16 +204,19 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 	}
 
 	private void validateFileLearningMaterial(LearningMaterials learningMaterial) throws Exception {
-		System.out.println("ini ni" + learningMaterial.getIdFile().getType());
+		System.out.println("cek type materi" + learningMaterial.getIdFile().getType());
 		String[] type = learningMaterial.getIdFile().getType().split("/");
 		String ext = type[1];
 		System.out.println("extension" + ext);
 		if (ext != null) {
-			if (ext.equalsIgnoreCase(ExtensionDocument.DOC.code) || ext.equalsIgnoreCase(ExtensionDocument.DOCX.code)
+			if (ext.equalsIgnoreCase(ExtensionDocument.DOC.code) 
+					|| ext.equalsIgnoreCase(ExtensionDocument.DOCX.code)
 					|| ext.equalsIgnoreCase(ExtensionDocument.PDF.code)
 					|| ext.equalsIgnoreCase(ExtensionDocument.ODT.code)
 					|| ext.equalsIgnoreCase(ExtensionDocument.WPS.code)
-					|| ext.equalsIgnoreCase(ExtensionDocument.PPT.code)) {
+					|| ext.equalsIgnoreCase(ExtensionDocument.PPT.code)
+					|| ext.equalsIgnoreCase(ExtensionDocument.PPTX.code)
+					|| ext.equalsIgnoreCase(ExtensionDocument.TXT.code)) {
 			} else {
 				throw new Exception("File harus dokumen!");
 			}
