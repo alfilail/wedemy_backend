@@ -82,6 +82,7 @@ public class ApprovementsRenewalController extends ElearningBaseController {
 		}
 
 		HttpHeaders headers = new HttpHeaders();
+		headers.set("Content-disposition", "attachment; filename = Laporan-Kehadiran.pdf");
 		headers.setContentType(MediaType.APPLICATION_PDF);
 		return new HttpEntity<>(out, headers);
 	}
@@ -99,6 +100,7 @@ public class ApprovementsRenewalController extends ElearningBaseController {
 		}
 
 		HttpHeaders headers = new HttpHeaders();
+		headers.set("Content-disposition", "attachment; filename = Laporan-Kehadiran-Keseluruhan.pdf");
 		headers.setContentType(MediaType.APPLICATION_PDF);
 		return new HttpEntity<>(out, headers);
 	}

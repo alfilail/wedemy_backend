@@ -11,7 +11,6 @@ import com.lawencon.elearning.constant.SubmissionStatusCode;
 import com.lawencon.elearning.constant.TemplateEmail;
 import com.lawencon.elearning.constant.TransactionNumberCode;
 import com.lawencon.elearning.dao.AssignmentSubmissionsDao;
-import com.lawencon.elearning.helper.MailHelper;
 import com.lawencon.elearning.model.AssignmentSubmissions;
 import com.lawencon.elearning.model.DetailModuleRegistrations;
 import com.lawencon.elearning.model.Files;
@@ -19,7 +18,6 @@ import com.lawencon.elearning.model.General;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.SubmissionStatusRenewal;
 import com.lawencon.elearning.model.Users;
-import com.lawencon.elearning.util.MailUtil;
 
 @Service
 public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl implements AssignmentSubmissionsService {
@@ -44,9 +42,6 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 
 	@Autowired
 	private GeneralService generalService;
-
-	@Autowired
-	private MailUtil mailUtil;
 
 	@Override
 	public void insert(AssignmentSubmissions assignmentSubmission, MultipartFile fileInput) throws Exception {
@@ -128,13 +123,8 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 
 		text = text.replace("#1#", tutor.getFullName());
 		text = text.replace("#2#", participant.getFullName());
-
-		MailHelper mailHelper = new MailHelper();
-		mailHelper.setFrom("wedemy.id@gmail.com");
-		mailHelper.setTo(tutor.getEmail());
-		mailHelper.setSubject(TemplateEmail.ASSIGNMENT_SUBMISSION_TUTOR.subject);
-		mailHelper.setText(text);
-		new MailServiceImpl(mailUtil, mailHelper).start();
+		
+		sendMail(TemplateEmail.ASSIGNMENT_SUBMISSION_TUTOR, tutor, text);
 	}
 
 	private void sendEmailParticipant(AssignmentSubmissions assignmentSubmission) throws Exception {
@@ -144,13 +134,8 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 		String text = general.getTemplateHtml();
 
 		text = text.replace("#1#", participant.getFullName());
-
-		MailHelper mailHelper = new MailHelper();
-		mailHelper.setFrom("wedemy.id@gmail.com");
-		mailHelper.setTo(participant.getEmail());
-		mailHelper.setSubject(TemplateEmail.ASSIGNMENT_SUBMISSION_PARTICIPANT.subject);
-		mailHelper.setText(text);
-		new MailServiceImpl(mailUtil, mailHelper).start();
+		
+		sendMail(TemplateEmail.ASSIGNMENT_SUBMISSION_PARTICIPANT, participant, text);
 	}
 
 	private void insertStatusRenewal(AssignmentSubmissions assignmentSubmission) throws Exception {

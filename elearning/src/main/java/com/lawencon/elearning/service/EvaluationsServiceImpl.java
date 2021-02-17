@@ -9,7 +9,6 @@ import com.lawencon.elearning.constant.SubmissionStatusCode;
 import com.lawencon.elearning.constant.TemplateEmail;
 import com.lawencon.elearning.constant.TransactionNumberCode;
 import com.lawencon.elearning.dao.EvaluationsDao;
-import com.lawencon.elearning.helper.MailHelper;
 import com.lawencon.elearning.helper.ScoreInputs;
 import com.lawencon.elearning.model.AssignmentSubmissions;
 import com.lawencon.elearning.model.Evaluations;
@@ -17,7 +16,6 @@ import com.lawencon.elearning.model.General;
 import com.lawencon.elearning.model.Grades;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.SubmissionStatusRenewal;
-import com.lawencon.elearning.util.MailUtil;
 
 /**
  * @author Nur Alfilail
@@ -43,9 +41,6 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 
 	@Autowired
 	private GeneralService generalService;
-
-	@Autowired
-	private MailUtil mailUtil;
 
 	@Override
 	public void insertEvaluation(ScoreInputs scores) throws Exception {
@@ -152,13 +147,8 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 		String text = general.getTemplateHtml();
 
 		text = text.replace("#1#", participant.getFullName());
-
-		MailHelper mailHelper = new MailHelper();
-		mailHelper.setFrom("wedemy.id@gmail.com");
-		mailHelper.setTo(participant.getEmail());
-		mailHelper.setSubject(TemplateEmail.EVALUATION_PARTICIPANT.subject);
-		mailHelper.setText(text);
-		new MailServiceImpl(mailUtil, mailHelper).start();
+		
+		sendMail(TemplateEmail.EVALUATION_PARTICIPANT, participant, text);
 	}
 
 	@Override

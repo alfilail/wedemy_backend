@@ -7,30 +7,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.lawencon.base.BaseServiceImpl;
+import com.lawencon.elearning.constant.TemplateEmail;
 import com.lawencon.elearning.dao.UsersDao;
-import com.lawencon.elearning.helper.MailHelper;
 import com.lawencon.elearning.model.General;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.Roles;
 //import com.lawencon.elearning.model.Roles;
 import com.lawencon.elearning.model.Users;
-import com.lawencon.elearning.constant.TemplateEmail;
-import com.lawencon.elearning.util.MailUtil;
 
 import net.bytebuddy.utility.RandomString;
 
 @Service
-public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
+public class UsersServiceImpl extends ElearningBaseServiceImpl implements UsersService {
 
 	@Autowired
 	private UsersDao usersDao;
 
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
-
-	@Autowired
-	private MailUtil mailUtil;
 
 	@Autowired
 	private ProfilesService profilesService;
@@ -145,17 +139,22 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 	private void sendEmailResetPassword(String pass, Profiles profile) throws Exception {
 		General general = generalService.getTemplateEmail(TemplateEmail.RESET_PASSWORD.code);
 		String text = general.getTemplateHtml();
-
+		
 		text = text.replace("#1#", profile.getFullName());
 		text = text.replace("#2#", pass);
-
-		MailHelper mailHelper = new MailHelper();
-		mailHelper.setFrom("wedemy.id@gmail.com");
-		mailHelper.setTo(profile.getEmail());
-		mailHelper.setSubject(TemplateEmail.RESET_PASSWORD.subject);
-		mailHelper.setText(text);
-		new MailServiceImpl(mailUtil, mailHelper).start();
+		
+		sendMail(TemplateEmail.RESET_PASSWORD, profile, text);
 	}
+	
+	private void sendEmailRegister(Profiles profile) throws Exception {
+		General general = generalService.getTemplateEmail(TemplateEmail.REGISTER.code);
+		String text = general.getTemplateHtml();
+
+		text = text.replace("#1#", profile.getFullName());
+		
+		sendMail(TemplateEmail.REGISTER, profile, text);
+	}
+
 
 	private void validateInsert(Users user) throws Exception {
 		if (user.getUsername() == null || user.getUsername().trim().equals("")) {
@@ -238,19 +237,4 @@ public class UsersServiceImpl extends BaseServiceImpl implements UsersService {
 		System.out.println(list.size());
 		return list.size() > 0 ? true : false;
 	}
-
-	private void sendEmailRegister(Profiles profile) throws Exception {
-		General general = generalService.getTemplateEmail(TemplateEmail.REGISTER.code);
-		String text = general.getTemplateHtml();
-
-		text = text.replace("#1#", profile.getFullName());
-
-		MailHelper mailHelper = new MailHelper();
-		mailHelper.setFrom("wedemy.id@gmail.com");
-		mailHelper.setTo(profile.getEmail());
-		mailHelper.setSubject(TemplateEmail.REGISTER.subject);
-		mailHelper.setText(text);
-		new MailServiceImpl(mailUtil, mailHelper).start();
-	}
-
 }
