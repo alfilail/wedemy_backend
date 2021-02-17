@@ -33,10 +33,12 @@ public class PresencesServiceImpl extends ElearningBaseServiceImpl implements Pr
 	public void insert(Presences presence) throws Exception {
 		try {
 			begin();
-			presence.setCreatedBy(presence.getIdUser().getId());
 			presence.setTrxNumber(generateTrxNumber(TransactionNumberCode.PRESENCES.code));
 			presence.setPresenceTime(LocalTime.now());
-			presencesDao.insert(presence, () -> validateInsert(presence));
+			presencesDao.insert(presence, () -> {
+				validateInsert(presence);
+				presence.setCreatedBy(presence.getIdUser().getId());
+			});
 			Users user = usersService.getById(presence.getIdUser().getId());
 			if (user.getIdRole().getCode().equals(RoleCode.PARTICIPANT.code)) {
 				insertApprovementRenewal(presence);
@@ -91,7 +93,8 @@ public class PresencesServiceImpl extends ElearningBaseServiceImpl implements Pr
 	}
 
 	private void validateInsert(Presences presence) throws Exception {
-		if (presence.getIdDetailModuleRegistration() != null) {
+		if (presence.getIdDetailModuleRegistration() != null
+				&& presence.getIdDetailModuleRegistration().getId() != null) {
 			DetailModuleRegistrations dtlModuleRgs = dtlModuleRgsService
 					.getDtlModuleRgsById(presence.getIdDetailModuleRegistration().getId());
 			if (dtlModuleRgs == null) {
@@ -100,7 +103,7 @@ public class PresencesServiceImpl extends ElearningBaseServiceImpl implements Pr
 		} else {
 			throw new Exception("Id Detail Module Registration tidak boleh kosong");
 		}
-		if (presence.getIdUser() != null) {
+		if (presence.getIdUser() != null && presence.getIdUser().getId() != null) {
 			Users user = usersService.getById(presence.getIdUser().getId());
 			if (user == null) {
 				throw new Exception("Id User salah");
