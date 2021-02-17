@@ -35,7 +35,7 @@ public class EvaluationsDaoImpl extends ElearningBaseDaoImpl<Evaluations> implem
 
 	@Override
 	public void updateEvaluation(Evaluations evaluation, Callback before) throws Exception {
-		save(evaluation, before, null, true, true);
+		save(evaluation, before, null);
 	}
 
 	@Override

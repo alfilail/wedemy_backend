@@ -66,6 +66,7 @@ public class DetailForumsDaoImpl extends ElearningBaseDaoImpl<DetailForums> impl
 			profile.setFullName((String) objArr[3]);
 			Files photo = new Files();
 			photo.setFile((byte[]) objArr[4]);
+			profile.setIdFile(photo);
 			Users user = new Users();
 			user.setIdProfile(profile);
 			Roles role = new Roles();

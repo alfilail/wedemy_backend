@@ -19,11 +19,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lawencon.elearning.constant.MessageStat;
 import com.lawencon.elearning.helper.JasperHelper;
 import com.lawencon.elearning.helper.ScoreInputs;
 import com.lawencon.elearning.model.Evaluations;
+import com.lawencon.elearning.model.Users;
 import com.lawencon.elearning.service.EvaluationsService;
-import com.lawencon.elearning.constant.MessageStat;
+import com.lawencon.elearning.service.UsersService;
 import com.lawencon.util.JasperUtil;
 
 /**
@@ -36,6 +38,9 @@ public class EvaluationsController extends ElearningBaseController {
 
 	@Autowired
 	private EvaluationsService evaluationsService;
+	
+	@Autowired
+	private UsersService usersService;
 
 	@GetMapping("all")
 	public ResponseEntity<?> getAllEvaluations() {
@@ -94,15 +99,21 @@ public class EvaluationsController extends ElearningBaseController {
 			@RequestParam("idParticipant") String idParticipant) {
 		List<?> listData = new ArrayList<>();
 		byte[] out;
+		StringBuilder fileName = new StringBuilder();
 		try {
 			listData = evaluationsService.reportScore(idDtlClass, idParticipant);
 			out = JasperUtil.responseToByteArray(listData, "ScoreReport", null);
+			Users user = usersService.getById(idParticipant);
+			String participant = user.getIdProfile().getFullName();
+			fileName.append("Laporan Nilai ").append(participant).append(".pdf").toString();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
 		}
+		
 
 		HttpHeaders headers = new HttpHeaders();
+		headers.set("Content-disposition", "attachment; filename=" + fileName);
 		headers.setContentType(MediaType.APPLICATION_PDF);
 		return new HttpEntity<>(out, headers);
 	}

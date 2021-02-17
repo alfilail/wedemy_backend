@@ -51,10 +51,10 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 				evaluation.setIdGrade(grade);
 				evaluation.setTrxNumber(generateTrxNumber(TransactionNumberCode.EVALUATION.code));
 				evaluationsDao.insertEvaluation(evaluation, () -> validateInsert(evaluation));
+				insertStatusRenewal(evaluation);
 				System.out.println("Sending Email...");
 				sendEmail(evaluation);
 				System.out.println("Done");
-				insertStatusRenewal(evaluation);
 			}
 			commit();
 		} catch (Exception e) {
@@ -65,16 +65,23 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 
 	@Override
 	public void updateEvaluation(ScoreInputs scores) throws Exception {
-		for (Evaluations evaluation : scores.getEvaluations()) {
-			Grades grade = gradesService.getByScore(evaluation.getScore());
-			evaluation.setIdGrade(grade);
+		try {
+			begin();
+			for (Evaluations evaluation : scores.getEvaluations()) {
+				Grades grade = gradesService.getByScore(evaluation.getScore());
+				evaluation.setIdGrade(grade);
 			Evaluations eval = evaluationsDao.getEvaluationById(evaluation.getId());
 			evaluation.setCreatedAt(eval.getCreatedAt());
 			evaluation.setCreatedBy(eval.getCreatedBy());
 			evaluation.setUpdatedBy(eval.getCreatedBy());
 			evaluation.setTrxDate(eval.getTrxDate());
 			evaluation.setTrxNumber(eval.getTrxNumber());
-			evaluationsDao.updateEvaluation(evaluation, () -> validateUpdate(evaluation));
+				evaluationsDao.updateEvaluation(evaluation, () -> validateUpdate(evaluation));
+			}
+			commit();
+		} catch(Exception e) {
+			rollback();
+			throw new Exception(e);
 		}
 	}
 
@@ -149,6 +156,7 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 		text = text.replace("#1#", participant.getFullName());
 		
 		sendMail(TemplateEmail.EVALUATION_PARTICIPANT, participant, text);
+		System.out.println("ke sini nisa sabyan");
 	}
 
 	@Override

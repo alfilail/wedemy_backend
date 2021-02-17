@@ -6,10 +6,7 @@ import java.util.List;
 import javax.persistence.PersistenceException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +23,6 @@ import com.lawencon.elearning.model.ClassEnrollments;
 import com.lawencon.elearning.model.DetailClasses;
 import com.lawencon.elearning.service.ClassEnrollmentService;
 import com.lawencon.elearning.constant.MessageStat;
-import com.lawencon.util.JasperUtil;
 
 @RestController
 @RequestMapping("class-enrollment")
