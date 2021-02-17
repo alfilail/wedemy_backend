@@ -75,16 +75,25 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 	public void update(AssignmentSubmissions assignmentSubmission, MultipartFile fileInput) throws Exception {
 		try {
 			begin();
+			AssignmentSubmissions assignSub = getById(assignmentSubmission.getId());
 			Files file = filesService.getById(assignmentSubmission.getIdFile().getId());
 			file.setUpdatedBy(file.getCreatedBy());
 			file.setFile(fileInput.getBytes());
 			file.setType(fileInput.getContentType());
 			file.setName(fileInput.getOriginalFilename());
 			filesService.update(file);
+			assignmentSubmission.setCreatedAt(assignSub.getCreatedAt());
+			assignmentSubmission.setCreatedBy(assignSub.getCreatedBy());
+			assignmentSubmission.setTrxDate(assignSub.getTrxDate());
+			assignmentSubmission.setTrxNumber(assignSub.getTrxNumber());
+			assignmentSubmission.setSubmitTime(assignSub.getSubmitTime());
+			assignmentSubmission.setUpdatedBy(assignSub.getCreatedBy());
+			assignmentSubmission.setIdFile(file);
+			assignmentSubmissionsDao.update(assignmentSubmission, null);
 			commit();
 		} catch (Exception e) {
 			rollback();
-			throw new Exception();
+			throw new Exception(e);
 		}
 	}
 
