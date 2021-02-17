@@ -7,17 +7,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.lawencon.elearning.constant.SubmissionStatusCode;
+import com.lawencon.elearning.constant.TemplateEmail;
+import com.lawencon.elearning.constant.TransactionNumberCode;
 import com.lawencon.elearning.dao.AssignmentSubmissionsDao;
 import com.lawencon.elearning.helper.MailHelper;
 import com.lawencon.elearning.model.AssignmentSubmissions;
+import com.lawencon.elearning.model.DetailModuleRegistrations;
 import com.lawencon.elearning.model.Files;
 import com.lawencon.elearning.model.General;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.SubmissionStatusRenewal;
-import com.lawencon.elearning.constant.TemplateEmail;
+import com.lawencon.elearning.model.Users;
 import com.lawencon.elearning.util.MailUtil;
-import com.lawencon.elearning.constant.SubmissionStatusCode;
-import com.lawencon.elearning.constant.TransactionNumberCode;
 
 @Service
 public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl implements AssignmentSubmissionsService {
@@ -30,6 +32,12 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 
 	@Autowired
 	private SubmissionStatusService statusService;
+
+	@Autowired
+	private DetailModuleRegistrationsService dtlModuleRgsService;
+
+	@Autowired
+	private UsersService usersService;
 
 	@Autowired
 	private FilesService filesService;
@@ -153,8 +161,27 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 		statusRenewalService.insertSubmissionStatusRenewal(statusRenewal);
 	}
 
-	private void validateInsert(AssignmentSubmissions assignmentSubmissions) {
-
+	private void validateInsert(AssignmentSubmissions assignmentSubmissions) throws Exception {
+		if (assignmentSubmissions.getIdDetailModuleRegistration() != null) {
+			DetailModuleRegistrations dtlModuleRgs = dtlModuleRgsService
+					.getDtlModuleRgsById(assignmentSubmissions.getIdDetailModuleRegistration().getId());
+			if (dtlModuleRgs == null) {
+				throw new Exception("Id Detail Module Registration salah");
+			}
+		} else {
+			throw new Exception("Id Detail Module Registration tidak boleh kosong");
+		}
+		if (assignmentSubmissions.getIdFile() == null) {
+			throw new Exception("File tidak boleh kosong");
+		}
+		if (assignmentSubmissions.getIdParticipant() != null) {
+			Users user = usersService.getById(assignmentSubmissions.getIdParticipant().getId());
+			if (user == null) {
+				throw new Exception("Id User salah");
+			}
+		} else {
+			throw new Exception("Id User tidak boleh kosong");
+		}
 	}
 
 }

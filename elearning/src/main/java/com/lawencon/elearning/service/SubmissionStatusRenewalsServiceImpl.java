@@ -5,9 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lawencon.elearning.dao.SubmissionStatusRenewalsDao;
-import com.lawencon.elearning.model.SubmissionStatusRenewal;
 import com.lawencon.elearning.constant.TransactionNumberCode;
+import com.lawencon.elearning.dao.SubmissionStatusRenewalsDao;
+import com.lawencon.elearning.model.AssignmentSubmissions;
+import com.lawencon.elearning.model.SubmissionStatus;
+import com.lawencon.elearning.model.SubmissionStatusRenewal;
 
 /**
  * @author Nur Alfilail
@@ -19,6 +21,12 @@ public class SubmissionStatusRenewalsServiceImpl extends ElearningBaseServiceImp
 
 	@Autowired
 	private SubmissionStatusRenewalsDao statusRenewalDao;
+
+	@Autowired
+	private AssignmentSubmissionsService submissionService;
+
+	@Autowired
+	private SubmissionStatusService statusService;
 
 	@Override
 	public void insertSubmissionStatusRenewal(SubmissionStatusRenewal statusRenewal) throws Exception {
@@ -37,7 +45,23 @@ public class SubmissionStatusRenewalsServiceImpl extends ElearningBaseServiceImp
 	}
 
 	private void validateInsert(SubmissionStatusRenewal statusRenewal) throws Exception {
-
+		if (statusRenewal.getIdAssignmentSubmission() != null) {
+			AssignmentSubmissions submission = submissionService
+					.getById(statusRenewal.getIdAssignmentSubmission().getId());
+			if (submission == null) {
+				throw new Exception("Id Assignment Submission salah");
+			}
+		} else {
+			throw new Exception("Id Assignment Submission tidak boleh kosong");
+		}
+		if (statusRenewal.getIdSubmissionStatus() != null) {
+			SubmissionStatus status = statusService.getByCode(statusRenewal.getIdSubmissionStatus().getCode());
+			if (status == null) {
+				throw new Exception("Kode Submission Status salah");
+			}
+		} else {
+			throw new Exception("Id Submission Status tidak boleh kosong");
+		}
 	}
 
 }

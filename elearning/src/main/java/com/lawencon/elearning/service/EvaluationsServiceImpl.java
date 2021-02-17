@@ -5,6 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lawencon.elearning.constant.SubmissionStatusCode;
+import com.lawencon.elearning.constant.TemplateEmail;
+import com.lawencon.elearning.constant.TransactionNumberCode;
 import com.lawencon.elearning.dao.EvaluationsDao;
 import com.lawencon.elearning.helper.MailHelper;
 import com.lawencon.elearning.helper.ScoreInputs;
@@ -14,10 +17,7 @@ import com.lawencon.elearning.model.General;
 import com.lawencon.elearning.model.Grades;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.SubmissionStatusRenewal;
-import com.lawencon.elearning.constant.TemplateEmail;
 import com.lawencon.elearning.util.MailUtil;
-import com.lawencon.elearning.constant.SubmissionStatusCode;
-import com.lawencon.elearning.constant.TransactionNumberCode;
 
 /**
  * @author Nur Alfilail
@@ -79,7 +79,7 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 			evaluation.setUpdatedBy(eval.getCreatedBy());
 			evaluation.setTrxDate(eval.getTrxDate());
 			evaluation.setTrxNumber(eval.getTrxNumber());
-			evaluationsDao.updateEvaluation(evaluation, () -> validateInsert(evaluation));
+			evaluationsDao.updateEvaluation(evaluation, () -> validateUpdate(evaluation));
 		}
 	}
 
@@ -113,7 +113,33 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 	}
 
 	private void validateInsert(Evaluations evaluation) throws Exception {
+		if (evaluation.getIdAssignmentSubmission() != null) {
+			AssignmentSubmissions submission = assignmentSubmissionsService
+					.getById(evaluation.getIdAssignmentSubmission().getId());
+			if (submission == null) {
+				throw new Exception("Id Assignment Submission salah");
+			}
+		} else {
+			throw new Exception("Id Assignment Submission tidak boleh kosong");
+		}
+		if (evaluation.getScore() == null) {
+			throw new Exception("Score tidak boleh kosong");
+		}
+	}
 
+	private void validateUpdate(Evaluations evaluation) throws Exception {
+		if (evaluation.getIdAssignmentSubmission() != null) {
+			AssignmentSubmissions submission = assignmentSubmissionsService
+					.getById(evaluation.getIdAssignmentSubmission().getId());
+			if (submission == null) {
+				throw new Exception("Id Assignment Submission salah");
+			}
+		} else {
+			throw new Exception("Id Assignment Submission tidak boleh kosong");
+		}
+		if (evaluation.getScore() == null) {
+			throw new Exception("Score tidak boleh kosong");
+		}
 	}
 
 	private void sendEmail(Evaluations evaluation) throws Exception {
