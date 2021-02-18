@@ -124,15 +124,15 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 		} else {
 			throw new Exception("Id Assignment Submission tidak boleh kosong");
 		}
-		if (evaluation.getIdGrade() == null) {
-			throw new Exception("Id Grade tidak boleh kosong");
-		}
 		if (evaluation.getScore() != null) {
 			if (evaluation.getScore() < 0 || evaluation.getScore() > 100) {
 				throw new Exception("Score harus dalam rentang 0 - 100");
 			}
 		} else {
 			throw new Exception("Score tidak boleh kosong");
+		}
+		if (evaluation.getIdGrade() == null) {
+			throw new Exception("Score harus dalam rentang 0 - 100");
 		}
 	}
 
@@ -163,7 +163,7 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 			throw new Exception("Id Assignment Submission tidak boleh kosong");
 		}
 		if (evaluation.getIdGrade() == null) {
-			throw new Exception("Id Grade tidak boleh kosong");
+			throw new Exception("Score harus dalam rentang 0 - 100");
 		}
 		if (evaluation.getScore() != null) {
 			if (evaluation.getScore() < 0 || evaluation.getScore() > 100) {
@@ -198,7 +198,9 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 
 	@Override
 	public List<?> reportScore(String idDtlClass, String idParticipant) throws Exception {
-		return evaluationsDao.reportScore(idDtlClass, idParticipant);
+		List<?> data = evaluationsDao.reportScore(idDtlClass, idParticipant);
+		validateReport(data);
+		return data;
 	}
 
 	@Override

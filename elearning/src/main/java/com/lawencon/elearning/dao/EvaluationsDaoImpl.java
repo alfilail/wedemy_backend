@@ -48,7 +48,7 @@ public class EvaluationsDaoImpl extends ElearningBaseDaoImpl<Evaluations> implem
 			throws Exception {
 		List<Evaluations> listResult = new ArrayList<>();
 		String sql = sqlBuilder("SELECT pr.fullname, u.id userid, asm.id submissionid, asm.submit_time, f.file, ",
-				"f.file_type, e.id evalid, e.version, e.score FROM t_r_class_enrollments ce INNER JOIN t_m_users u ON ce.id_participant = u.id ",
+				"f.file_type, f.file_name, e.id evalid, e.version, e.score FROM t_r_class_enrollments ce INNER JOIN t_m_users u ON ce.id_participant = u.id ",
 				"INNER JOIN t_m_profiles pr ON u.id_profile = pr.id INNER JOIN t_m_detail_classes dc ",
 				"ON ce.id_dtl_class = dc.id INNER JOIN t_r_module_registrations mr ON dc.id = mr.id_dtl_class ",
 				"INNER JOIN t_r_detail_module_registrations dmr ON mr.id = dmr.id_module_rgs ",
@@ -72,11 +72,12 @@ public class EvaluationsDaoImpl extends ElearningBaseDaoImpl<Evaluations> implem
 			Files file = new Files();
 			file.setFile((byte[]) objArr[4]);
 			file.setType((String) objArr[5]);
+			file.setName((String) objArr[6]);
 			submission.setIdFile(file);
 			Evaluations evaluation = new Evaluations();
-			evaluation.setId(objArr[6] != null ? (String) objArr[6] : EmptyField.EMPTY.msg);
-			evaluation.setVersion(objArr[7] != null ? Long.valueOf(objArr[7].toString()) : null);
-			evaluation.setScore(objArr[8] != null ? (Double) objArr[8] : 0);
+			evaluation.setId(objArr[7] != null ? (String) objArr[7] : EmptyField.EMPTY.msg);
+			evaluation.setVersion(objArr[8] != null ? Long.valueOf(objArr[8].toString()) : null);
+			evaluation.setScore(objArr[9] != null ? (Double) objArr[9] : 0);
 			evaluation.setIdAssignmentSubmission(submission);
 			listResult.add(evaluation);
 		});

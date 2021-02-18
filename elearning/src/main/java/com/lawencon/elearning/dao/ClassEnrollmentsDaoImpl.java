@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.lawencon.elearning.helper.CertificateHelper;
 import com.lawencon.elearning.model.ClassEnrollments;
 import com.lawencon.elearning.model.Classes;
 import com.lawencon.elearning.model.DetailClasses;

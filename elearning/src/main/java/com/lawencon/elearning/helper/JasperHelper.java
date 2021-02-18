@@ -5,5 +5,7 @@ import lombok.Data;
 @Data
 public class JasperHelper {
 	private byte[] out;
-	private boolean cek;
+	private boolean check;
+	private String fileName;
+	private String contentType;
 }

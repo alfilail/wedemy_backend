@@ -98,6 +98,7 @@ public class EvaluationsController extends ElearningBaseController {
 	public HttpEntity<?> reportScore(@RequestParam("idDtlClass") String idDtlClass,
 			@RequestParam("idParticipant") String idParticipant) {
 		List<?> listData = new ArrayList<>();
+		JasperHelper helper = new JasperHelper();
 		byte[] out;
 		StringBuilder fileName = new StringBuilder();
 		try {
@@ -105,17 +106,21 @@ public class EvaluationsController extends ElearningBaseController {
 			out = JasperUtil.responseToByteArray(listData, "ScoreReport", null);
 			Users user = usersService.getById(idParticipant);
 			String participant = user.getIdProfile().getFullName();
-			fileName.append("Laporan Nilai ").append(participant).append(".pdf").toString();
+			fileName.append("Laporan Nilai ").append(participant).append(".pdf");
+			helper.setOut(out);
+			helper.setCheck(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
 		}
 		
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.set("Content-disposition", "attachment; filename=" + fileName);
-		headers.setContentType(MediaType.APPLICATION_PDF);
-		return new HttpEntity<>(out, headers);
+//		HttpHeaders headers = new HttpHeaders();
+//		headers.set("Nama File", "attachment; filename=" + fileName);
+//		headers.setContentType(MediaType.APPLICATION_PDF);
+//		helper.setHeaders(headers);
+		helper.setFileName(fileName.toString());
+		helper.setContentType(MediaType.APPLICATION_PDF.toString());
+		return new HttpEntity<>(helper);
 	}
 
 	@GetMapping("{id}")
@@ -164,7 +169,7 @@ public class EvaluationsController extends ElearningBaseController {
 			data = evaluationsService.getCertificate(idUser, idDetailClass);
 			out = JasperUtil.responseToByteArray(data, "Certificate", null);
 			js.setOut(out);
-			js.setCek(true);
+			js.setCheck(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
