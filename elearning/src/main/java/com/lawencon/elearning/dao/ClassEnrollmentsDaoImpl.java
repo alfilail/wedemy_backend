@@ -38,11 +38,16 @@ public class ClassEnrollmentsDaoImpl extends ElearningBaseDaoImpl<ClassEnrollmen
 	@Override
 	public List<DetailClasses> getAllClassEnrollmentsByIdUser(String id) throws Exception {
 		List<DetailClasses> listResult = new ArrayList<>();
-		String sql = sqlBuilder("SELECT dc.id, c.class_name, c.description, f.file, c.id_tutor, p.fullname ",
-				"FROM t_r_class_enrollments ce INNER JOIN t_m_detail_classes dc ON ce.id_dtl_class = dc.id ",
-				"INNER JOIN t_m_classes c ON dc.id_class = c.id INNER JOIN t_m_files f ON c.id_file = f.id ",
+		String sql = sqlBuilder("SELECT dc.id, c.class_name, c.description, f.file, c.id_tutor, p.fullname, ",
+				" p.id_file, tmf.file as photo_profile ",
+				"FROM t_r_class_enrollments ce ",
+				"INNER JOIN t_m_detail_classes dc ON ce.id_dtl_class = dc.id ",
+				"INNER JOIN t_m_classes c ON dc.id_class = c.id ",
+				"INNER JOIN t_m_files f ON c.id_file = f.id ",
 				"INNER JOIN t_m_users u ON c.id_tutor = u.id ",
-				"INNER JOIN t_m_profiles p ON u.id_profile = p.id WHERE ce.id_participant =?1").toString();
+				"INNER JOIN t_m_profiles p ON u.id_profile = p.id ",
+				"INNER JOIN t_m_files tmf ON p.id_file = tmf.id ",
+				"WHERE ce.id_participant =?1").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, id).getResultList();
 		listObj.forEach(val -> {
 			Object[] objArr = (Object[]) val;

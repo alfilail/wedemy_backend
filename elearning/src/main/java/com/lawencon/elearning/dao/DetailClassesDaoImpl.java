@@ -58,10 +58,13 @@ public class DetailClassesDaoImpl extends ElearningBaseDaoImpl<DetailClasses> im
 	@Override
 	public List<DetailClasses> getAllByIdTutor(String idTutor) throws Exception {
 		List<DetailClasses> listResult = new ArrayList<>();
-		String sql = sqlBuilder("SELECT dc.id, c.class_name, c.description, f.file, c.id_tutor, p.fullname ",
+		String sql = sqlBuilder("SELECT dc.id, c.class_name, c.description, f.file, c.id_tutor, p.fullname,",
+				"p.id_file, tmf.file as photo_profile ",
 				"FROM t_m_detail_classes dc INNER JOIN t_m_classes c ON dc.id_class = c.id ",
 				"INNER JOIN t_m_files f ON c.id_file = f.id INNER JOIN t_m_users u ON c.id_tutor = u.id ",
-				"INNER JOIN t_m_profiles p ON u.id_profile = p.id WHERE c.id_tutor = ?1").toString();
+				"INNER JOIN t_m_profiles p ON u.id_profile = p.id ",
+				"INNER JOIN t_m_files tmf ON p.id_file = tmf.id ",
+				"WHERE c.id_tutor = ?1").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, idTutor).getResultList();
 		listObj.forEach(val -> {
 			Object[] objArr = (Object[]) val;
@@ -77,6 +80,10 @@ public class DetailClassesDaoImpl extends ElearningBaseDaoImpl<DetailClasses> im
 			user.setId((String) objArr[4]);
 			Profiles profile = new Profiles();
 			profile.setFullName((String) objArr[5]);
+			Files files = new Files();
+			files.setId((String) objArr[6]);
+			files.setFile((byte[]) objArr[7]);
+			profile.setIdFile(files);
 			user.setIdProfile(profile);
 			clazz.setIdTutor(user);
 			detailClass.setIdClass(clazz);

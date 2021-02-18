@@ -1,5 +1,6 @@
 package com.lawencon.elearning.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -107,10 +108,9 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 		}
 		if (dtlModuleRgs.getVersion() == null) {
 			throw new Exception("Version tidak boleh kosong");
-		}
-		else {
+		} else {
 			DetailModuleRegistrations dm = dtlModuleRgsDao.getDtlModuleRgsById(dtlModuleRgs.getId());
-			if(dm.getVersion() != dtlModuleRgs.getVersion()) {
+			if (dm.getVersion() != dtlModuleRgs.getVersion()) {
 				throw new Exception("Detail Module Registration version tidak sama!");
 			}
 		}
@@ -153,7 +153,8 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 					detail.getIdModuleRegistration().getIdDetailClass().getId(), detail.getId());
 			DetailModuleAndMaterialDoc dt = new DetailModuleAndMaterialDoc();
 			dt.setDetailModule(detail);
-			if (listRes.size() > 0) {
+			boolean checkRes = validateCheckDownload(detail, listRes);
+			if (checkRes) {
 				dt.setCheckDownload(true);
 			} else {
 				dt.setCheckDownload(false);
@@ -163,4 +164,23 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 		return listResult;
 	}
 
+	private boolean validateCheckDownload(DetailModuleRegistrations detail, List<ApprovementsRenewal> listRes)
+			throws Exception {
+		boolean checkEnrollClass = false, checkScheduleDate = false;
+		if (listRes.size() > 0) {
+			checkEnrollClass = true;
+		} else {
+			checkEnrollClass = false;
+		}
+		if (LocalDate.now().compareTo(detail.getScheduleDate()) >= 0) {
+			checkScheduleDate = true;
+		} else {
+			checkScheduleDate = false;
+		}
+		if (checkEnrollClass == true && checkScheduleDate == true) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }

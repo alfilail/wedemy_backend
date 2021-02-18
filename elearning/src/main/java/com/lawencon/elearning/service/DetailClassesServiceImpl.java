@@ -42,12 +42,15 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 	public void insert(DetailClasses detailClass) throws Exception {
 		Classes clazz = classService.getById(detailClass.getIdClass().getId());
 		detailClass.setCode(generateCodeDetailClass(clazz.getCode(), detailClass.getStartDate()));
-		detailClassesDao.insert(detailClass, () -> validateInsert(detailClass));
+		detailClassesDao.insert(detailClass, () -> validate(detailClass));
 	}
 
 	@Override
 	public void update(DetailClasses dtlClass) throws Exception {
-		detailClassesDao.update(dtlClass, () -> validateUpdate(dtlClass));
+		detailClassesDao.update(dtlClass, () -> {
+			validate(dtlClass);
+			validateUpdate(dtlClass);
+		});
 	}
 
 	@Override
@@ -163,7 +166,7 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 		return detailClassesDao.getPopularClasses();
 	}
 
-	private void validateInsert(DetailClasses detailClass) throws Exception {
+	private void validate(DetailClasses detailClass) throws Exception {
 		if (detailClass.getStartDate() == null) {
 			throw new Exception("Tanggal mulai detail kelas tidak boleh kosong!");
 		} else if (detailClass.getEndDate() == null) {
@@ -176,7 +179,7 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 	}
 
 	private void validateReactive(DetailClasses detailClass) throws Exception {
-		validateInsert(detailClass);
+		validate(detailClass);
 		DetailClasses detailClazz = detailClassesDao.getDtlClassByIdClass(detailClass.getIdClass().getId());
 		if (detailClass.getStartDate().compareTo(detailClazz.getEndDate()) < 0) {
 			throw new Exception(
@@ -199,18 +202,12 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 	}
 
 	private void validateUpdate(DetailClasses dtlClass) throws Exception {
-		if (dtlClass.getStartDate() == null) {
-			throw new Exception("Tanggal mulai detail kelas tidak boleh kosong!");
-		}
 		if (dtlClass.getEndDate() == null) {
 			throw new Exception("Tanggal akhir detail kelas tidak boleh kosong!");
 		} else {
 			if (dtlClass.getEndDate().compareTo(dtlClass.getStartDate()) < 0) {
 				throw new Exception("Tanggal akhir detail kelas tidak boleh kurang dari tanggal mulai");
 			}
-		}
-		if (dtlClass.getStartTime() == null) {
-			throw new Exception("Waktu mulai detail kelas tidak boleh kosong!");
 		}
 		if (dtlClass.getEndTime() == null) {
 			throw new Exception("Waktu akhir detail kelas tidak boleh kosong!");

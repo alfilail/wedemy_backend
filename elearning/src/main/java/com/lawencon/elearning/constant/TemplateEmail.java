@@ -1,11 +1,11 @@
 package com.lawencon.elearning.constant;
 
 public enum TemplateEmail {
-	REGISTER("RGS", "Registrasi akun Wedemy sukses"),
-	RESET_PASSWORD("PWDRST", "Password telah diganti"),
-	ASSIGNMENT_SUBMISSION_PARTICIPANT("ASGPCP", "Tugas telah terkirim"),
-	ASSIGNMENT_SUBMISSION_TUTOR("ASGTTR", "Tugas telah dikirim"),
-	EVALUATION_PARTICIPANT("SCRUPD", "Nilai tugas telah di nilai");
+	REGISTER("RGS", "Registrasi Akun Wedemy Sukses"),
+	RESET_PASSWORD("PWDRST", "Kata Sandi Telah Direset"),
+	ASSIGNMENT_SUBMISSION_PARTICIPANT("ASGPCP", "Tugas Telah Terkirim"),
+	ASSIGNMENT_SUBMISSION_TUTOR("ASGTTR", "Tugas Telah Dikirim"),
+	EVALUATION_PARTICIPANT("SCRUPD", "Nilai Tugas Telah Dinilai");
 	
 	public String code;
 	public String subject;
