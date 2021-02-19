@@ -20,7 +20,5 @@ public interface ClassEnrollmentService {
 
 	void updateClassEnrollments(ClassEnrollments classEnrollment) throws Exception;
 
-	ClassEnrollments getClassEnrollmentByCode(String code) throws Exception;
-
 	Integer getTotalParticipantsByIdDtlClass(String id) throws Exception;
 }

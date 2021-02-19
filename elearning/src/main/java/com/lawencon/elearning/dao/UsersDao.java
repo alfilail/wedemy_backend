@@ -26,8 +26,6 @@ public interface UsersDao {
 
 	Users getUserByIdProfile(Profiles profile) throws Exception;
 
-	Users getUserByIdDetailClass(String idDtlClass) throws Exception;
-
 	List<Users> getUsersByRoleCode(String code) throws Exception;
 
 	List<Users> getAllUsers() throws Exception;

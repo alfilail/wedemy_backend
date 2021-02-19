@@ -9,9 +9,20 @@ import com.lawencon.util.Callback;
 
 @Repository
 public class RolesDaoImpl extends ElearningBaseDaoImpl<Roles> implements RolesDao {
+
 	@Override
 	public void insert(Roles role, Callback before) throws Exception {
 		save(role, before, null, true, true);
+	}
+
+	@Override
+	public void update(Roles role, Callback before) throws Exception {
+		save(role, before, null, true, true);
+	}
+
+	@Override
+	public void deleteById(String id) throws Exception {
+		deleteById(id);
 	}
 
 	@Override
@@ -30,13 +41,4 @@ public class RolesDaoImpl extends ElearningBaseDaoImpl<Roles> implements RolesDa
 		return getAll();
 	}
 
-	@Override
-	public void update(Roles role, Callback before) throws Exception {
-		save(role, before, null, true, true);
-	}
-
-	@Override
-	public void deleteById(String id) throws Exception {
-		deleteById(id);
-	}
 }

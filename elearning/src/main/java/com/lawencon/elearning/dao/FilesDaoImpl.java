@@ -5,10 +5,6 @@ import org.springframework.stereotype.Repository;
 import com.lawencon.elearning.model.Files;
 import com.lawencon.util.Callback;
 
-/**
- * @author Nur Alfilail
- */
-
 @Repository
 public class FilesDaoImpl extends ElearningBaseDaoImpl<Files> implements FilesDao {
 

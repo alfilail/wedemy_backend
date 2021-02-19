@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.lawencon.elearning.constant.EmptyField;
 import com.lawencon.elearning.model.AssignmentSubmissions;
 import com.lawencon.elearning.model.Classes;
 import com.lawencon.elearning.model.DetailClasses;
@@ -18,12 +19,7 @@ import com.lawencon.elearning.model.Modules;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.Users;
 import com.lawencon.elearning.util.HibernateUtils;
-import com.lawencon.elearning.constant.EmptyField;
 import com.lawencon.util.Callback;
-
-/**
- * @author Nur Alfilail
- */
 
 @Repository
 public class EvaluationsDaoImpl extends ElearningBaseDaoImpl<Evaluations> implements EvaluationsDao {
@@ -36,52 +32,6 @@ public class EvaluationsDaoImpl extends ElearningBaseDaoImpl<Evaluations> implem
 	@Override
 	public void updateEvaluation(Evaluations evaluation, Callback before) throws Exception {
 		save(evaluation, before, null);
-	}
-
-	@Override
-	public List<Evaluations> getAllEvaluations() throws Exception {
-		return getAll();
-	}
-
-	@Override
-	public List<Evaluations> getAllByIdDtlClassAndIdDtlModuleRgs(String idDtlClass, String idDtlModuleRgs)
-			throws Exception {
-		List<Evaluations> listResult = new ArrayList<>();
-		String sql = sqlBuilder("SELECT pr.fullname, u.id userid, asm.id submissionid, asm.submit_time, f.file, ",
-				"f.file_type, f.file_name, e.id evalid, e.version, e.score FROM t_r_class_enrollments ce INNER JOIN t_m_users u ON ce.id_participant = u.id ",
-				"INNER JOIN t_m_profiles pr ON u.id_profile = pr.id INNER JOIN t_m_detail_classes dc ",
-				"ON ce.id_dtl_class = dc.id INNER JOIN t_r_module_registrations mr ON dc.id = mr.id_dtl_class ",
-				"INNER JOIN t_r_detail_module_registrations dmr ON mr.id = dmr.id_module_rgs ",
-				"LEFT JOIN t_r_assignment_submissions asm ON dmr.id = asm.id_dtl_module_rgs ",
-				"AND ce.id_participant = asm.id_participant LEFT JOIN t_m_files f ON asm.id_file = f.id ",
-				"LEFT JOIN t_r_evaluations e ON asm.id = e.id_assignment_submission ",
-				"WHERE ce.id_dtl_class =?1 and dmr.id =?2 ORDER BY asm.submit_time ASC").toString();
-		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlClass).setParameter(2, idDtlModuleRgs)
-				.getResultList();
-		listObj.forEach(val -> {
-			Object[] objArr = (Object[]) val;
-			Profiles profile = new Profiles();
-			profile.setFullName((String) objArr[0]);
-			Users user = new Users();
-			user.setId((String) objArr[1]);
-			user.setIdProfile(profile);
-			AssignmentSubmissions submission = new AssignmentSubmissions();
-			submission.setIdParticipant(user);
-			submission.setId(objArr[2] != null ? (String) objArr[2] : EmptyField.EMPTY.msg);
-			submission.setSubmitTime(objArr[3] != null ? ((Time) objArr[3]).toLocalTime() : null);
-			Files file = new Files();
-			file.setFile((byte[]) objArr[4]);
-			file.setType((String) objArr[5]);
-			file.setName((String) objArr[6]);
-			submission.setIdFile(file);
-			Evaluations evaluation = new Evaluations();
-			evaluation.setId(objArr[7] != null ? (String) objArr[7] : EmptyField.EMPTY.msg);
-			evaluation.setVersion(objArr[8] != null ? Long.valueOf(objArr[8].toString()) : null);
-			evaluation.setScore(objArr[9] != null ? (Double) objArr[9] : 0);
-			evaluation.setIdAssignmentSubmission(submission);
-			listResult.add(evaluation);
-		});
-		return listResult;
 	}
 
 	@Override
@@ -129,6 +79,52 @@ public class EvaluationsDaoImpl extends ElearningBaseDaoImpl<Evaluations> implem
 			participant.setEmail((String) objArr[1]);
 		});
 		return participant;
+	}
+
+	@Override
+	public List<Evaluations> getAllEvaluations() throws Exception {
+		return getAll();
+	}
+
+	@Override
+	public List<Evaluations> getAllByIdDtlClassAndIdDtlModuleRgs(String idDtlClass, String idDtlModuleRgs)
+			throws Exception {
+		List<Evaluations> listResult = new ArrayList<>();
+		String sql = sqlBuilder("SELECT pr.fullname, u.id userid, asm.id submissionid, asm.submit_time, f.file, ",
+				"f.file_type, f.file_name, e.id evalid, e.version, e.score FROM t_r_class_enrollments ce INNER JOIN t_m_users u ON ce.id_participant = u.id ",
+				"INNER JOIN t_m_profiles pr ON u.id_profile = pr.id INNER JOIN t_m_detail_classes dc ",
+				"ON ce.id_dtl_class = dc.id INNER JOIN t_r_module_registrations mr ON dc.id = mr.id_dtl_class ",
+				"INNER JOIN t_r_detail_module_registrations dmr ON mr.id = dmr.id_module_rgs ",
+				"LEFT JOIN t_r_assignment_submissions asm ON dmr.id = asm.id_dtl_module_rgs ",
+				"AND ce.id_participant = asm.id_participant LEFT JOIN t_m_files f ON asm.id_file = f.id ",
+				"LEFT JOIN t_r_evaluations e ON asm.id = e.id_assignment_submission ",
+				"WHERE ce.id_dtl_class =?1 and dmr.id =?2 ORDER BY asm.submit_time ASC").toString();
+		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlClass).setParameter(2, idDtlModuleRgs)
+				.getResultList();
+		listObj.forEach(val -> {
+			Object[] objArr = (Object[]) val;
+			Profiles profile = new Profiles();
+			profile.setFullName((String) objArr[0]);
+			Users user = new Users();
+			user.setId((String) objArr[1]);
+			user.setIdProfile(profile);
+			AssignmentSubmissions submission = new AssignmentSubmissions();
+			submission.setIdParticipant(user);
+			submission.setId(objArr[2] != null ? (String) objArr[2] : EmptyField.EMPTY.msg);
+			submission.setSubmitTime(objArr[3] != null ? ((Time) objArr[3]).toLocalTime() : null);
+			Files file = new Files();
+			file.setFile((byte[]) objArr[4]);
+			file.setType((String) objArr[5]);
+			file.setName((String) objArr[6]);
+			submission.setIdFile(file);
+			Evaluations evaluation = new Evaluations();
+			evaluation.setId(objArr[7] != null ? (String) objArr[7] : EmptyField.EMPTY.msg);
+			evaluation.setVersion(objArr[8] != null ? Long.valueOf(objArr[8].toString()) : null);
+			evaluation.setScore(objArr[9] != null ? (Double) objArr[9] : 0);
+			evaluation.setIdAssignmentSubmission(submission);
+			listResult.add(evaluation);
+		});
+		return listResult;
 	}
 
 	@Override
@@ -201,8 +197,7 @@ public class EvaluationsDaoImpl extends ElearningBaseDaoImpl<Evaluations> implem
 				" INNER JOIN t_r_module_registrations mr ON mr.id = dmr.id_module_rgs ",
 				" INNER JOIN t_m_modules m ON m.id = mr.id_module ",
 				" INNER JOIN t_m_detail_classes dc on dc.id = mr.id_dtl_class ",
-				" INNER JOIN t_m_classes c on c.id = dc.id_class",
-				" WHERE dc.id = ?1 AND ams.id_participant = ?2 ",
+				" INNER JOIN t_m_classes c on c.id = dc.id_class", " WHERE dc.id = ?1 AND ams.id_participant = ?2 ",
 				" GROUP BY p.fullname, p.email, p.address, p.phone, m.code, m.module_name, dmr.order_number ",
 				" ORDER BY dmr.order_number").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlClass).setParameter(2, idParticipant)
@@ -241,28 +236,26 @@ public class EvaluationsDaoImpl extends ElearningBaseDaoImpl<Evaluations> implem
 		});
 		return resultCheckList(listEvaluations);
 	}
-	
+
 	@Override
 	public List<?> getCertificate(String idUser, String idDetailClass) throws Exception {
-		String query = sqlBuilder("SELECT tmp.fullname , tmc.class_name ",
-                " FROM t_r_evaluations e ",
-                " INNER JOIN t_r_assignment_submissions ams ON ams.id = e.id_assignment_submission ",
-                " INNER JOIN t_m_users u ON u.id = ams.id_participant ",
-                " INNER JOIN t_m_profiles tmp ON u.id_profile = tmp.id ",
-                " INNER JOIN t_r_detail_module_registrations dmr ON dmr.id = ams.id_dtl_module_rgs ",
-                " INNER JOIN t_r_module_registrations mr ON mr.id = dmr.id_module_rgs ",
-                " INNER JOIN t_m_modules m ON m.id = mr.id_module ",
-                " INNER JOIN t_m_detail_classes dc ON dc.id = mr.id_dtl_class ",
-                " INNER JOIN t_m_classes tmc ON tmc.id = dc.id_class ",
-                " INNER JOIN t_r_class_enrollments trce ON trce.id_dtl_class = dc.id ",
-                " WHERE dc.id = ?1 AND ams.id_participant = ?2 ",
-                " AND ?3 > dc.end_date ",
-                " GROUP BY tmp.fullname , tmc.class_name ",
-                " HAVING AVG(e.score) > 70 ").toString();	
-		
+		String query = sqlBuilder("SELECT tmp.fullname , tmc.class_name ", " FROM t_r_evaluations e ",
+				" INNER JOIN t_r_assignment_submissions ams ON ams.id = e.id_assignment_submission ",
+				" INNER JOIN t_m_users u ON u.id = ams.id_participant ",
+				" INNER JOIN t_m_profiles tmp ON u.id_profile = tmp.id ",
+				" INNER JOIN t_r_detail_module_registrations dmr ON dmr.id = ams.id_dtl_module_rgs ",
+				" INNER JOIN t_r_module_registrations mr ON mr.id = dmr.id_module_rgs ",
+				" INNER JOIN t_m_modules m ON m.id = mr.id_module ",
+				" INNER JOIN t_m_detail_classes dc ON dc.id = mr.id_dtl_class ",
+				" INNER JOIN t_m_classes tmc ON tmc.id = dc.id_class ",
+				" INNER JOIN t_r_class_enrollments trce ON trce.id_dtl_class = dc.id ",
+				" WHERE dc.id = ?1 AND ams.id_participant = ?2 ", " AND ?3 > dc.end_date ",
+				" GROUP BY tmp.fullname , tmc.class_name ", " HAVING AVG(e.score) > 70 ").toString();
+
 		List<?> listObj = createNativeQuery(query).setParameter(1, idDetailClass).setParameter(2, idUser)
 				.setParameter(3, LocalDate.now()).getResultList();
-		List<Evaluations> certificateData = HibernateUtils.bMapperList(listObj, Evaluations.class, "idAssignmentSubmission.idParticipant.idProfile.fullName", 
+		List<Evaluations> certificateData = HibernateUtils.bMapperList(listObj, Evaluations.class,
+				"idAssignmentSubmission.idParticipant.idProfile.fullName",
 				"idAssignmentSubmission.idDetailModuleRegistration.idModuleRegistration.idDetailClass.idClass.className");
 		return resultCheckList(certificateData);
 	}

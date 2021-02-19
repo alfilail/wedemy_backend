@@ -9,6 +9,7 @@ import com.lawencon.elearning.util.HibernateUtils;
 
 @Repository
 public class GeneralDaoImpl extends ElearningBaseDaoImpl<General> implements GeneralDao{
+	
 	@Override
 	public General getTemplateEmail(String code) throws Exception {
 		String sql = sqlBuilder("SELECT template_html ",

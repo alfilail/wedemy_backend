@@ -8,10 +8,6 @@ import org.springframework.stereotype.Repository;
 import com.lawencon.elearning.model.LearningMaterialTypes;
 import com.lawencon.util.Callback;
 
-/**
- * @author Nur Alfilail
- */
-
 @Repository
 public class LearningMaterialTypesDaoImpl extends ElearningBaseDaoImpl<LearningMaterialTypes>
 		implements LearningMaterialTypesDao {

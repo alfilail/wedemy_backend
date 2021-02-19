@@ -7,10 +7,6 @@ import org.springframework.stereotype.Repository;
 import com.lawencon.elearning.model.SubmissionStatusRenewal;
 import com.lawencon.util.Callback;
 
-/**
- * @author Nur Alfilail
- */
-
 @Repository
 public class SubmissionStatusRenewalsDaoImpl extends ElearningBaseDaoImpl<SubmissionStatusRenewal>
 		implements SubmissionStatusRenewalsDao {
@@ -21,13 +17,12 @@ public class SubmissionStatusRenewalsDaoImpl extends ElearningBaseDaoImpl<Submis
 	}
 
 	@Override
-	public List<SubmissionStatusRenewal> getAllSubmissionStatusRenewal() throws Exception {
-		return getAll();
-	}
-
-	@Override
 	public SubmissionStatusRenewal getSubmissionStatusRenewalById(String id) throws Exception {
 		return getById(id);
 	}
 
+	@Override
+	public List<SubmissionStatusRenewal> getAllSubmissionStatusRenewal() throws Exception {
+		return getAll();
+	}
 }

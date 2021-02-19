@@ -24,8 +24,6 @@ public class ForumsDaoImpl extends ElearningBaseDaoImpl<Forums> implements Forum
 	@Override
 	public void updateContentForum(Forums forum, Callback before) throws Exception {
 		save(forum, before, null, true, true);
-//		String sql = "UPDATE t_r_forums SET content_text = ?1 WHERE id = ?2 ";
-//		createNativeQuery(sql).setParameter(1, forum.getContentText()).setParameter(2, forum.getId()).getSingleResult();
 	}
 
 	@Override
@@ -34,13 +32,18 @@ public class ForumsDaoImpl extends ElearningBaseDaoImpl<Forums> implements Forum
 	}
 
 	@Override
-	public List<Forums> getAllForums() throws Exception {
-		return getAll();
+	public void softDeleteForumById(String id, String idUser) throws Exception {
+		updateNativeSQL("UPDATE t_r_forums SET is_active = FALSE", id, idUser);
 	}
 
 	@Override
 	public Forums getForumById(String id) throws Exception {
 		return getById(id);
+	}
+
+	@Override
+	public List<Forums> getAllForums() throws Exception {
+		return getAll();
 	}
 
 	@Override
@@ -72,11 +75,6 @@ public class ForumsDaoImpl extends ElearningBaseDaoImpl<Forums> implements Forum
 			listResult.add(forum);
 		});
 		return listResult;
-	}
-
-	@Override
-	public void softDeleteForumById(String id, String idUser) throws Exception {
-		updateNativeSQL("UPDATE t_r_forums SET is_active = FALSE", id, idUser);
 	}
 
 	@Override

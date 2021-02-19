@@ -51,7 +51,7 @@ public class PresencesDaoImpl extends ElearningBaseDaoImpl<Presences> implements
 			presence.setId((String) obj);
 			listResult.add(presence);
 		});
-		return listResult.size() > 0 ? listResult.get(0) : null;
+		return resultCheck(listResult);
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public class PresencesDaoImpl extends ElearningBaseDaoImpl<Presences> implements
 			presence.setId((String) objArr);
 			listResult.add(presence);
 		});
-		return listResult.size() > 0 ? listResult.get(0) : null;
+		return resultCheck(listResult);
 	}
 
 	@Override

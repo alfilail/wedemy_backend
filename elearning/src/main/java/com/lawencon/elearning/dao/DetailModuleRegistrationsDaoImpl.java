@@ -75,8 +75,8 @@ public class DetailModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<Detai
 	public List<DetailModuleRegistrations> getAllByIdModuleRgs(String idModuleRgs) throws Exception {
 		List<DetailModuleRegistrations> listResult = new ArrayList<>();
 		String sql = sqlBuilder(
-				"SELECT lm.id materialid, lm.code materialcode, lm.learning_material_name, lm.description, ",
-				"lmt.code typecode, dmr.id dmrid, dmr.schedule_date, dmr.order_number, dmr.id_module_rgs FROM t_r_detail_module_registrations dmr ",
+				"SELECT lm.id materialid, lm.code materialcode, lm.learning_material_name, lmt.code typecode, ",
+				"dmr.id dmrid, dmr.schedule_date, dmr.order_number, dmr.id_module_rgs FROM t_r_detail_module_registrations dmr ",
 				"INNER JOIN t_m_learning_materials lm ON dmr.id_learning_material = lm.id ",
 				"INNER JOIN t_m_learning_material_types lmt ON lm.id_type = lmt.id WHERE dmr.id_module_rgs =?1 ",
 				"AND lm.is_active = true ORDER BY dmr.schedule_date ASC").toString();
@@ -87,17 +87,16 @@ public class DetailModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<Detai
 			learningMaterial.setId((String) objArr[0]);
 			learningMaterial.setCode((String) objArr[1]);
 			learningMaterial.setLearningMaterialName((String) objArr[2]);
-//			learningMaterial.setDescription((String) objArr[3]);
 			LearningMaterialTypes lmType = new LearningMaterialTypes();
-			lmType.setCode((String) objArr[4]);
+			lmType.setCode((String) objArr[3]);
 			learningMaterial.setIdLearningMaterialType(lmType);
 			DetailModuleRegistrations dtlModuleRgs = new DetailModuleRegistrations();
 			dtlModuleRgs.setIdLearningMaterial(learningMaterial);
-			dtlModuleRgs.setId((String) objArr[5]);
-			dtlModuleRgs.setScheduleDate(((Date) objArr[6]).toLocalDate());
-			dtlModuleRgs.setOrderNumber((Integer) objArr[7]);
+			dtlModuleRgs.setId((String) objArr[4]);
+			dtlModuleRgs.setScheduleDate(((Date) objArr[5]).toLocalDate());
+			dtlModuleRgs.setOrderNumber((Integer) objArr[6]);
 			ModuleRegistrations moduleRegis = new ModuleRegistrations();
-			moduleRegis.setId((String) objArr[8]);
+			moduleRegis.setId((String) objArr[7]);
 			dtlModuleRgs.setIdModuleRegistration(moduleRegis);
 			listResult.add(dtlModuleRgs);
 		});
@@ -116,11 +115,9 @@ public class DetailModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<Detai
 				" INNER JOIN t_m_modules tmm ON trmr.id_module = tmm.id ",
 				" INNER JOIN t_r_detail_module_registrations trdmr ON trdmr.id_module_rgs = trmr.id ",
 				" INNER JOIN t_m_learning_materials tmlm ON tmlm.id = trdmr.id_learning_material ",
-				" INNER JOIN t_m_learning_material_types tmlmt ON tmlmt.id = tmlm.id_type ", 
-				" WHERE tmdc.id = ?1 AND tmlm.is_active = ?2 ",
-				" ORDER BY trdmr.schedule_date ").toString();
-		List<?> listObj = createNativeQuery(sql).setParameter(1, idDetailClass)
-				.setParameter(2, true).getResultList();
+				" INNER JOIN t_m_learning_material_types tmlmt ON tmlmt.id = tmlm.id_type ",
+				" WHERE tmdc.id = ?1 AND tmlm.is_active = ?2 ", " ORDER BY trdmr.schedule_date ").toString();
+		List<?> listObj = createNativeQuery(sql).setParameter(1, idDetailClass).setParameter(2, true).getResultList();
 		List<DetailModuleRegistrations> listRes = new ArrayList<DetailModuleRegistrations>();
 		listObj.forEach(val -> {
 			Object[] objArr = (Object[]) val;

@@ -25,7 +25,7 @@ public class ClassEnrollmentServiceImpl extends ElearningBaseServiceImpl impleme
 			begin();
 			classEnrollment.setTrxNumber(generateTrxNumber(TransactionNumberCode.CLASS_ENROLLMENT.code));
 			classEnrollment.setIsOngoing(true);
-			classEnrollmentDao.insertClassEnrollment(classEnrollment, () -> validateInsert(classEnrollment));
+			classEnrollmentDao.insert(classEnrollment, () -> validateInsert(classEnrollment));
 			commit();
 		} catch (Exception e) {
 			rollback();
@@ -36,11 +36,6 @@ public class ClassEnrollmentServiceImpl extends ElearningBaseServiceImpl impleme
 	@Override
 	public List<ClassEnrollments> getAllClassEnrollments() throws Exception {
 		return classEnrollmentDao.getAllClassEnrollments();
-	}
-
-	@Override
-	public ClassEnrollments getClassEnrollmentByCode(String code) throws Exception {
-		return classEnrollmentDao.getclassEnrollmentByCode(code);
 	}
 
 	@Override
@@ -65,12 +60,12 @@ public class ClassEnrollmentServiceImpl extends ElearningBaseServiceImpl impleme
 
 	@Override
 	public void updateClassEnrollments(ClassEnrollments classEnrollment) throws Exception {
-		classEnrollmentDao.updateClassEnrollment(classEnrollment, () -> validateUpdate(classEnrollment));
+		classEnrollmentDao.update(classEnrollment, () -> validateUpdate(classEnrollment));
 	}
 
 	@Override
 	public void deleteClassEnrollmentsById(String id) throws Exception {
-		classEnrollmentDao.deleteclassEnrollmentById(id);
+		classEnrollmentDao.deleteClassEnrollmentById(id);
 	}
 
 	private void validateInsert(ClassEnrollments classEnrollment) throws Exception {

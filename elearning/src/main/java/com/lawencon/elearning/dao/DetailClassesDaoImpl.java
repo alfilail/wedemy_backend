@@ -119,7 +119,7 @@ public class DetailClassesDaoImpl extends ElearningBaseDaoImpl<DetailClasses> im
 	public List<DetailClasses> getAllByIdClass(String idClass) throws Exception {
 		List<DetailClasses> detailClassList = createQuery("FROM DetailClasses WHERE idClass.id = ?1 ",
 				DetailClasses.class).setParameter(1, idClass).getResultList();
-		return resultCheckList(detailClassList); // ditanya mas imam
+		return resultCheckList(detailClassList);
 	}
 
 	@Override

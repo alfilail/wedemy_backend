@@ -8,13 +8,13 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.lawencon.elearning.constant.EmptyField;
 import com.lawencon.elearning.model.AssignmentSubmissions;
 import com.lawencon.elearning.model.DetailClasses;
 import com.lawencon.elearning.model.DetailModuleRegistrations;
 import com.lawencon.elearning.model.Files;
 import com.lawencon.elearning.model.ModuleRegistrations;
 import com.lawencon.elearning.model.Profiles;
-import com.lawencon.elearning.constant.EmptyField;
 import com.lawencon.util.Callback;
 
 @Repository
@@ -49,11 +49,6 @@ public class AssignmentSubmissionsDaoImpl extends ElearningBaseDaoImpl<Assignmen
 				"LEFT JOIN t_r_assignment_submissions asm ON asm.id_dtl_module_rgs = dmr.id AND ",
 				"asm.id_participant = ce.id_participant LEFT JOIN t_m_files f ON asm.id_file = f.id ",
 				"WHERE dmr.id = ?1 AND ce.id_participant = ?2").toString();
-
-//				"FROM t_r_assignment_submissions asm INNER JOIN t_m_files f ",
-//				"ON asm.id_file = f.id INNER JOIN t_r_detail_module_registrations dmr ON asm.id_dtl_module_rgs = dmr.id ",
-//				"INNER JOIN t_r_module_registrations mr ON dmr.id_module_rgs = mr.id INNER JOIN t_m_detail_classes dc ",
-//				"ON mr.id_dtl_class = dc.id WHERE asm.id_dtl_module_rgs = ?1 AND asm.id_participant = ?2").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlModuleRgs).setParameter(2, idParticipant)
 				.getResultList();
 		listObj.forEach(val -> {

@@ -15,19 +15,20 @@ import com.lawencon.util.Callback;
 
 @Repository
 public class ClassEnrollmentsDaoImpl extends ElearningBaseDaoImpl<ClassEnrollments> implements ClassEnrollmentsDao {
+
 	@Override
-	public void insertClassEnrollment(ClassEnrollments classEnrollment, Callback before) throws Exception {
+	public void insert(ClassEnrollments classEnrollment, Callback before) throws Exception {
 		save(classEnrollment, before, null);
 	}
 
 	@Override
-	public List<ClassEnrollments> getAllClassEnrollments() throws Exception {
-		return getAll();
+	public void update(ClassEnrollments classEnrollment, Callback before) throws Exception {
+		save(classEnrollment, before, null, true, true);
 	}
 
 	@Override
-	public ClassEnrollments getclassEnrollmentByCode(String code) throws Exception {
-		return null;
+	public void deleteClassEnrollmentById(String id) throws Exception {
+		deleteById(id);
 	}
 
 	@Override
@@ -36,18 +37,48 @@ public class ClassEnrollmentsDaoImpl extends ElearningBaseDaoImpl<ClassEnrollmen
 	}
 
 	@Override
+	public ClassEnrollments getClassEnrollmentByIdDtlClassAndIdUser(String idDtlClass, String idUser) {
+		List<ClassEnrollments> listResult = new ArrayList<>();
+		String sql = sqlBuilder("SELECT id FROM t_r_class_enrollments WHERE id_dtl_class = ?1 AND id_participant =?2")
+				.toString();
+		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlClass).setParameter(2, idUser).getResultList();
+		listObj.forEach(val -> {
+			Object obj = (Object) val;
+			ClassEnrollments classEnrollment = new ClassEnrollments();
+			classEnrollment.setId((String) obj);
+			listResult.add(classEnrollment);
+		});
+		return resultCheck(listResult);
+	}
+
+	@Override
+	public Integer getTotalParticipantsByIdDtlClass(String id) throws Exception {
+		List<Integer> total = new ArrayList<>();
+		String sql = sqlBuilder("SELECT COUNT(*) FROM t_r_class_enrollments WHERE id_dtl_class =?1 ",
+				"GROUP BY id_dtl_class").toString();
+		List<?> listObj = createNativeQuery(sql).setParameter(1, id).getResultList();
+		listObj.forEach(val -> {
+			Object obj = (Object) val;
+			total.add(Integer.valueOf(obj.toString()));
+		});
+		return total.size() > 0 ? total.get(0) : 0;
+	}
+
+	@Override
+	public List<ClassEnrollments> getAllClassEnrollments() throws Exception {
+		return getAll();
+	}
+
+	@Override
 	public List<DetailClasses> getAllClassEnrollmentsByIdUser(String id) throws Exception {
 		List<DetailClasses> listResult = new ArrayList<>();
 		String sql = sqlBuilder("SELECT dc.id, c.class_name, c.description, f.file, c.id_tutor, p.fullname, ",
-				" p.id_file, tmf.file as photo_profile ",
-				"FROM t_r_class_enrollments ce ",
+				" p.id_file, tmf.file as photo_profile ", "FROM t_r_class_enrollments ce ",
 				"INNER JOIN t_m_detail_classes dc ON ce.id_dtl_class = dc.id ",
-				"INNER JOIN t_m_classes c ON dc.id_class = c.id ",
-				"INNER JOIN t_m_files f ON c.id_file = f.id ",
-				"INNER JOIN t_m_users u ON c.id_tutor = u.id ",
-				"INNER JOIN t_m_profiles p ON u.id_profile = p.id ",
-				"INNER JOIN t_m_files tmf ON p.id_file = tmf.id ",
-				"WHERE ce.id_participant =?1 AND dc.is_active = ?2 ").toString();
+				"INNER JOIN t_m_classes c ON dc.id_class = c.id ", "INNER JOIN t_m_files f ON c.id_file = f.id ",
+				"INNER JOIN t_m_users u ON c.id_tutor = u.id ", "INNER JOIN t_m_profiles p ON u.id_profile = p.id ",
+				"INNER JOIN t_m_files tmf ON p.id_file = tmf.id ", "WHERE ce.id_participant =?1 AND dc.is_active = ?2 ")
+						.toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, id).setParameter(2, true).getResultList();
 		listObj.forEach(val -> {
 			Object[] objArr = (Object[]) val;
@@ -75,41 +106,4 @@ public class ClassEnrollmentsDaoImpl extends ElearningBaseDaoImpl<ClassEnrollmen
 		return listResult;
 	}
 
-	@Override
-	public ClassEnrollments getClassEnrollmentByIdDtlClassAndIdUser(String idDtlClass, String idUser) {
-		List<ClassEnrollments> listResult = new ArrayList<>();
-		String sql = sqlBuilder("SELECT id FROM t_r_class_enrollments WHERE id_dtl_class = ?1 AND id_participant =?2")
-				.toString();
-		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlClass).setParameter(2, idUser).getResultList();
-		listObj.forEach(val -> {
-			Object obj = (Object) val;
-			ClassEnrollments classEnrollment = new ClassEnrollments();
-			classEnrollment.setId((String) obj);
-			listResult.add(classEnrollment);
-		});
-		return listResult.size() > 0 ? listResult.get(0) : null;
-	}
-
-	@Override
-	public void deleteclassEnrollmentById(String id) throws Exception {
-		deleteById(id);
-	}
-
-	@Override
-	public void updateClassEnrollment(ClassEnrollments classEnrollment, Callback before) throws Exception {
-		save(classEnrollment, before, null, true, true);
-	}
-
-	@Override
-	public Integer getTotalParticipantsByIdDtlClass(String id) throws Exception {
-		List<Integer> total = new ArrayList<>();
-		String sql = sqlBuilder("SELECT COUNT(*) FROM t_r_class_enrollments WHERE id_dtl_class =?1 ",
-				"GROUP BY id_dtl_class").toString();
-		List<?> listObj = createNativeQuery(sql).setParameter(1, id).getResultList();
-		listObj.forEach(val -> {
-			Object obj = (Object) val;
-			total.add(Integer.valueOf(obj.toString()));
-		});
-		return total.size() > 0 ? total.get(0) : 0;
-	}
 }

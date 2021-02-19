@@ -68,14 +68,6 @@ public class UsersDaoImpl extends ElearningBaseDaoImpl<Users> implements UsersDa
 	}
 
 	@Override
-	public Users getUserByIdDetailClass(String idDtlClass) throws Exception {
-		List<Users> listResult = new ArrayList<>();
-//		String sql = sqlBuilder("SELECT p.fullname, p.address, p.birth_date, p.birth_place, p.id_number, p.email, "
-//				"p.phone FROM t_m_detail ").toString();
-		return resultCheck(listResult);
-	}
-
-	@Override
 	public Users getUserByIdClass(String idClass) throws Exception {
 		String sql = sqlBuilder(" SELECT u.id, u.username, r.code, p.fullname, p.id_number, ",
 				" p.birth_place, p.birth_date, p.email, p.phone, p.address ", " FROM t_m_users u ",

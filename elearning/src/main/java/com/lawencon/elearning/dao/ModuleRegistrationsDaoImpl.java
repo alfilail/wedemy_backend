@@ -43,8 +43,6 @@ public class ModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<ModuleRegis
 			DetailClasses dtlClass = new DetailClasses();
 			dtlClass.setStartDate(((Date) objArr[1]).toLocalDate());
 			dtlClass.setEndDate(((Date) objArr[2]).toLocalDate());
-//			dtlClass.setStartDate((LocalDate) objArr[1]);
-//			dtlClass.setEndDate((LocalDate) objArr[2]);
 			moduleRgs.setIdDetailClass(dtlClass);
 			listResult.add(moduleRgs);
 		});
@@ -54,8 +52,7 @@ public class ModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<ModuleRegis
 	@Override
 	public List<ModuleRegistrations> getAllModifiedByIdDtlClass(String idClass) throws Exception {
 		List<ModuleRegistrations> listResult = new ArrayList<>();
-		String sql = sqlBuilder("SELECT c.class_name, c.code classcode, c.description, f.file, p.fullname, ",
-				"dc.code dtlclasscode, dc.start_date, dc.end_date, dc.start_time, dc.end_time, ",
+		String sql = sqlBuilder("SELECT c.class_name, c.code classcode, c.description, p.fullname, ",
 				"mr.id, m.id idmodule, m.code modulecode, m.module_name FROM t_r_module_registrations mr ",
 				"INNER JOIN t_m_modules m ON mr.id_module = m.id ",
 				"INNER JOIN t_m_detail_classes dc ON mr.id_dtl_class = dc.id ",
@@ -69,28 +66,17 @@ public class ModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<ModuleRegis
 			clazz.setClassName((String) objArr[0]);
 			clazz.setCode((String) objArr[1]);
 			clazz.setDescription((String) objArr[2]);
-//			Files thumbnailImg = new Files();
-//			thumbnailImg.setFile((byte[]) objArr[3]);
 			Profiles profile = new Profiles();
-			profile.setFullName((String) objArr[4]);
+			profile.setFullName((String) objArr[3]);
 			Users tutor = new Users();
 			tutor.setIdProfile(profile);
-//			clazz.setIdFile(thumbnailImg);
 			clazz.setIdTutor(tutor);
-//			DetailClasses detailClass = new DetailClasses();
-//			detailClass.setCode((String) objArr[5]);
-//			detailClass.setStartDate(((Date) objArr[6]).toLocalDate());
-//			detailClass.setEndDate(((Date) objArr[7]).toLocalDate());
-//			detailClass.setStartTime(((Time) objArr[8]).toLocalTime());
-//			detailClass.setEndTime(((Time) objArr[9]).toLocalTime());
-//			detailClass.setIdClass(clazz);
 			ModuleRegistrations moduleRgs = new ModuleRegistrations();
-			moduleRgs.setId((String) objArr[10]);
-//			moduleRgs.setIdDetailClass(detailClass);
+			moduleRgs.setId((String) objArr[4]);
 			Modules module = new Modules();
-			module.setId((String) objArr[11]);
-			module.setCode((String) objArr[12]);
-			module.setModuleName((String) objArr[13]);
+			module.setId((String) objArr[5]);
+			module.setCode((String) objArr[6]);
+			module.setModuleName((String) objArr[7]);
 			moduleRgs.setIdModule(module);
 			listResult.add(moduleRgs);
 		});
@@ -102,7 +88,7 @@ public class ModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<ModuleRegis
 		List<ModuleRegistrations> moduleRegistrationList = createQuery(
 				"FROM ModuleRegistrations WHERE idDetailClass.id = ?1 ", ModuleRegistrations.class)
 						.setParameter(1, idDetailClass).getResultList();
-		return moduleRegistrationList.size() > 0 ? moduleRegistrationList : null;
+		return resultCheckList(moduleRegistrationList);
 	}
 
 }

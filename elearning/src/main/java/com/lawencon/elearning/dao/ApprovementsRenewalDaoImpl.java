@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.lawencon.elearning.constant.EmptyField;
 import com.lawencon.elearning.helper.ReportPresences;
 import com.lawencon.elearning.model.Approvements;
 import com.lawencon.elearning.model.ApprovementsRenewal;
@@ -16,7 +17,6 @@ import com.lawencon.elearning.model.LearningMaterials;
 import com.lawencon.elearning.model.Presences;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.Users;
-import com.lawencon.elearning.constant.EmptyField;
 import com.lawencon.util.Callback;
 
 @Repository
@@ -54,7 +54,7 @@ public class ApprovementsRenewalDaoImpl extends ElearningBaseDaoImpl<Approvement
 			approvementRenewal.setIdApprovement(approvement);
 			listResult.add(approvementRenewal);
 		});
-		return listResult.size() > 0 ? listResult.get(0) : null;
+		return resultCheck(listResult);
 	}
 
 	@Override

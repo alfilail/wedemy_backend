@@ -15,14 +15,20 @@ import com.lawencon.util.Callback;
 
 @Repository
 public class DetailForumsDaoImpl extends ElearningBaseDaoImpl<DetailForums> implements DetailForumsDao {
+
 	@Override
 	public void insertDetailForum(DetailForums detailForum, Callback before) throws Exception {
 		save(detailForum, before, null, true, true);
 	}
 
 	@Override
-	public List<DetailForums> getAllDetailForums() throws Exception {
-		return getAll();
+	public void updateDetailForum(DetailForums detailForum, Callback before) throws Exception {
+		save(detailForum, before, null, true, true);
+	}
+
+	@Override
+	public void softDeleteDetailForumById(String id, String idUser) throws Exception {
+		updateNativeSQL("UPDATE t_m_detail_forums SET is_active = FALSE", id, idUser);
 	}
 
 	@Override
@@ -38,13 +44,8 @@ public class DetailForumsDaoImpl extends ElearningBaseDaoImpl<DetailForums> impl
 	}
 
 	@Override
-	public void softDeleteDetailForumById(String id, String idUser) throws Exception {
-		updateNativeSQL("UPDATE t_m_detail_forums SET is_active = FALSE", id, idUser);
-	}
-
-	@Override
-	public void updateDetailForum(DetailForums detailForum, Callback before) throws Exception {
-		save(detailForum, before, null, true, true);
+	public List<DetailForums> getAllDetailForums() throws Exception {
+		return getAll();
 	}
 
 	@Override
