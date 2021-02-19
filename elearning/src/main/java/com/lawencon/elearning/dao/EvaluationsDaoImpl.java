@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.lawencon.elearning.helper.CertificateHelper;
 import com.lawencon.elearning.model.AssignmentSubmissions;
 import com.lawencon.elearning.model.Classes;
 import com.lawencon.elearning.model.DetailClasses;
@@ -18,6 +17,7 @@ import com.lawencon.elearning.model.ModuleRegistrations;
 import com.lawencon.elearning.model.Modules;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.Users;
+import com.lawencon.elearning.util.HibernateUtils;
 import com.lawencon.elearning.constant.EmptyField;
 import com.lawencon.util.Callback;
 
@@ -258,22 +258,12 @@ public class EvaluationsDaoImpl extends ElearningBaseDaoImpl<Evaluations> implem
                 " WHERE dc.id = ?1 AND ams.id_participant = ?2 ",
                 " AND ?3 > dc.end_date ",
                 " GROUP BY tmp.fullname , tmc.class_name ",
-                " HAVING AVG(e.score) > 70 ")
-						.toString();
-		List<CertificateHelper> listCertificate = new ArrayList<>();
+                " HAVING AVG(e.score) > 70 ").toString();	
+		
 		List<?> listObj = createNativeQuery(query).setParameter(1, idDetailClass).setParameter(2, idUser)
 				.setParameter(3, LocalDate.now()).getResultList();
-		listObj.forEach(val -> {
-			Object[] objArr = (Object[]) val;
-			Profiles profile = new Profiles();
-			profile.setFullName((String) objArr[0]);
-			CertificateHelper certificateHelper = new CertificateHelper();
-			certificateHelper.setFullname(profile);
-			Classes clazz = new Classes();
-			clazz.setClassName((String) objArr[1]);
-			certificateHelper.setClassName(clazz);
-			listCertificate.add(certificateHelper);
-		});
-		return listCertificate;
+		List<Evaluations> certificateData = HibernateUtils.bMapperList(listObj, Evaluations.class, "idAssignmentSubmission.idParticipant.idProfile.fullName", 
+				"idAssignmentSubmission.idDetailModuleRegistration.idModuleRegistration.idDetailClass.idClass.className");
+		return resultCheckList(certificateData);
 	}
 }

@@ -139,7 +139,6 @@ public class EvaluationsController extends ElearningBaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			js.setCheck(false);
-			return responseError(e);
 		}
 
 		js.setFileName(fileName.toString());

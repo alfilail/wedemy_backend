@@ -28,8 +28,8 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="fullname.fullName" class="java.lang.String"/>
-	<field name="className.className" class="java.lang.String"/>
+	<field name="idAssignmentSubmission.idParticipant.idProfile.fullName" class="java.lang.String"/>
+	<field name="idAssignmentSubmission.idDetailModuleRegistration.idModuleRegistration.idDetailClass.idClass.className" class="java.lang.String"/>
 	<title>
 		<band height="116" splitType="Stretch">
 			<staticText>
@@ -91,14 +91,14 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="24" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{fullname.fullName}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{idAssignmentSubmission.idParticipant.idProfile.fullName}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="303" y="156" width="157" height="30" uuid="b3c42b2f-7dba-45a0-acab-d6cf23e146a8"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="20" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{className.className}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{idAssignmentSubmission.idDetailModuleRegistration.idModuleRegistration.idDetailClass.idClass.className}]]></textFieldExpression>
 			</textField>
 			<textField pattern="MMMMM dd, yyyy">
 				<reportElement x="316" y="210" width="129" height="30" uuid="f3cab70d-6d63-4f36-a98e-d3b5377cbe77"/>
