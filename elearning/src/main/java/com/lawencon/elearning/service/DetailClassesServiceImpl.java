@@ -124,8 +124,18 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 				moduleRegistrationsService.reactive(moduleRgs);
 				modulesRegistrationNew.add(moduleRgs);
 			}
+			
+			for(DetailModuleRegistrations detailModuleRgs : detailModuleList) {
+				for(ModuleRegistrations md : modulesRegistrationNew) {
+					if(detailModuleRgs.getIdModuleRegistration().getIdModule().getId()
+							.equalsIgnoreCase(md.getIdModule().getId())) {
+						detailModuleRgs.setIdModuleRegistration(md);
+						detailModuleRegistrationsService.insert(detailModuleRgs);
+					}
+				}
+			}
 //			int i = 0;
-			for (int i = 1 ; i < detailModuleList.size() ; i++) {
+//			for (int i = 1 ; i < detailModuleList.size() ; i++) {
 //				if(detailModuleList.get(i).getIdModuleRegistration() == detailModuleList.get(i+1).getIdModuleRegistration()) {
 //					dm.setIdModuleRegistration(modulesRegistrationNew.get(i));
 //					detailModuleRegistrationsService.insert(dm);
@@ -135,17 +145,18 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 //					detailModuleRegistrationsService.insert(dm);
 //				}
 //				i++;
-				DetailModuleRegistrations dm = detailModuleList.get(i-1);
-				if(detailModuleList.get(i-1).getIdModuleRegistration().getId()
-						.equalsIgnoreCase(detailModuleList.get(i).getIdModuleRegistration().getId())) {
-					dm.setIdModuleRegistration(modulesRegistrationNew.get(i-1));
-					detailModuleRegistrationsService.insert(dm);
-				}
-				else {
-					dm.setIdModuleRegistration(modulesRegistrationNew.get(i));
-					detailModuleRegistrationsService.insert(dm);
-				}
-			}
+//				DetailModuleRegistrations dm = detailModuleList.get(i-1);
+//				if(detailModuleList.get(i-1).getIdModuleRegistration().getId()
+//						.equalsIgnoreCase(detailModuleList.get(i).getIdModuleRegistration().getId())) {
+//					dm.setIdModuleRegistration(modulesRegistrationNew.get(i-1));
+//					detailModuleRegistrationsService.insert(dm);
+//				}
+//				else {
+//					dm.setIdModuleRegistration(modulesRegistrationNew.get(i));
+//					detailModuleRegistrationsService.insert(dm);
+//				}
+//			}
+			
 			
 //			detailModuleList.stream().filter(val -> {
 //				val.getIdModuleRegistration().getId()
