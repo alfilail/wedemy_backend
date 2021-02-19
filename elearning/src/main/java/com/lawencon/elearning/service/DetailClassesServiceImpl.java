@@ -8,9 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lawencon.elearning.constant.TransactionNumberCode;
 import com.lawencon.elearning.dao.DetailClassesDao;
-import com.lawencon.elearning.helper.ClassInput;
 import com.lawencon.elearning.helper.DetailClassInformation;
 import com.lawencon.elearning.model.Classes;
 import com.lawencon.elearning.model.DetailClasses;
@@ -63,46 +61,33 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 	public void reactiveOldClass(DetailClasses detailClass) throws Exception {
 		try {
 			begin();
-			// ambil id class berdasarkan id
 			Classes clazz = classService.getInActiveById(detailClass.getIdClass().getId());
-			// update classes is active = true
+			
 			classService.reactivate(detailClass.getIdClass().getId(), detailClass.getCreatedBy());
 			
-			//ngeset yg tdk ada front end
 			detailClass.setCode(generateCodeDetailClass(clazz.getCode(), detailClass.getStartDate()));
 			detailClass.setViews(0);
 			detailClass.setIdClass(clazz);
-			
-			System.out.println("iniii"+detailClass.getIdClass().getId());
 
 			DetailClasses detailClassOld = detailClassesDao.getDtlClassByIdClass(detailClass.getIdClass().getId());
 			
-			System.out.println("cekkk id detail class" + detailClassOld.getId());
-			
 			List<ModuleRegistrations> modulesRegistrationListOld = moduleRegistrationsService
 					.getAllByIdDtlClass(detailClassOld.getId());
+			
 			List<Modules> modulesList = new ArrayList<Modules>();
 
 			List<DetailModuleRegistrations> detailModuleList = new ArrayList<DetailModuleRegistrations>();
 
 			for (ModuleRegistrations moduleRegistration : modulesRegistrationListOld) {
-				System.out.println("Test id module rgs " + moduleRegistration.getId());
 				Modules module = modulesService.getById(moduleRegistration.getIdModule().getId());
 				modulesList.add(module);
 				
 				List<DetailModuleRegistrations> detailModuleRegis = detailModuleRegistrationsService
 						.getAllByIdModuleRgs(moduleRegistration.getId());
 				
-				System.out.println("cek module rgs : "+ detailModuleRegis.size());
-				
 				for (DetailModuleRegistrations detailModule : detailModuleRegis) {
-					System.out.println("astaga" + detailModule.getIdModuleRegistration().getId());
-					
 					DetailModuleRegistrations detail = new DetailModuleRegistrations();
 					detail.setIdLearningMaterial(detailModule.getIdLearningMaterial());
-					
-					System.out.println("ini cekkkk" + detailModule.getIdModuleRegistration());
-					
 					detail.setIdModuleRegistration(detailModule.getIdModuleRegistration());
 					detail.setOrderNumber(detailModule.getOrderNumber());
 					detail.setScheduleDate(detailModule.getScheduleDate());
@@ -111,16 +96,12 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 			}
 			detailClassesDao.insert(detailClass, () -> validateReactive(detailClass));
 
-//			ClassInput clazzHelper = new ClassInput();
-//			clazzHelper.setClazz(clazz);
-//			clazzHelper.setDetailClass(detailClass);
-//			clazzHelper.setModule(modulesList);
-			
 			List<ModuleRegistrations> modulesRegistrationNew = new ArrayList<ModuleRegistrations>();
 			for(Modules module : modulesList) {
 				ModuleRegistrations moduleRgs = new ModuleRegistrations();
 				moduleRgs.setIdDetailClass(detailClass);
 				moduleRgs.setIdModule(module);
+				moduleRgs.setCreatedBy(detailClass.getCreatedBy());
 				moduleRegistrationsService.reactive(moduleRgs);
 				modulesRegistrationNew.add(moduleRgs);
 			}
@@ -129,48 +110,13 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 				for(ModuleRegistrations md : modulesRegistrationNew) {
 					if(detailModuleRgs.getIdModuleRegistration().getIdModule().getId()
 							.equalsIgnoreCase(md.getIdModule().getId())) {
+						detailModuleRgs.setCreatedBy(detailClass.getCreatedBy());
+						detailModuleRgs.setScheduleDate(detailClass.getStartDate());
 						detailModuleRgs.setIdModuleRegistration(md);
 						detailModuleRegistrationsService.insert(detailModuleRgs);
 					}
 				}
 			}
-//			int i = 0;
-//			for (int i = 1 ; i < detailModuleList.size() ; i++) {
-//				if(detailModuleList.get(i).getIdModuleRegistration() == detailModuleList.get(i+1).getIdModuleRegistration()) {
-//					dm.setIdModuleRegistration(modulesRegistrationNew.get(i));
-//					detailModuleRegistrationsService.insert(dm);
-//				}
-//				else {
-//					dm.setIdModuleRegistration(modulesRegistrationNew.get(i));
-//					detailModuleRegistrationsService.insert(dm);
-//				}
-//				i++;
-//				DetailModuleRegistrations dm = detailModuleList.get(i-1);
-//				if(detailModuleList.get(i-1).getIdModuleRegistration().getId()
-//						.equalsIgnoreCase(detailModuleList.get(i).getIdModuleRegistration().getId())) {
-//					dm.setIdModuleRegistration(modulesRegistrationNew.get(i-1));
-//					detailModuleRegistrationsService.insert(dm);
-//				}
-//				else {
-//					dm.setIdModuleRegistration(modulesRegistrationNew.get(i));
-//					detailModuleRegistrationsService.insert(dm);
-//				}
-//			}
-			
-			
-//			detailModuleList.stream().filter(val -> {
-//				val.getIdModuleRegistration().getId()
-//			})
-			
-//			for (DetailModuleRegistrations dm : detailModuleList) {
-//				dm.setIdModuleRegistration(moduleRgs);
-//				detailModuleRegistrationsService.insert(dm);
-//			}
-//			System.out.println("size nya" + detailModuleList.size());
-//			for (DetailModuleRegistrations dm : detailModuleList) {
-//				dm.setIdModuleRegistration(moduleRgs);
-//				detailModuleRegistrationsService.insert(dm);
-//			}
 			commit();
 		} catch (Exception e) {
 			rollback();

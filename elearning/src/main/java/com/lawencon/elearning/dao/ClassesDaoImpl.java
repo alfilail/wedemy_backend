@@ -54,7 +54,7 @@ public class ClassesDaoImpl extends ElearningBaseDaoImpl<Classes> implements Cla
 	@Override
 	public Classes getInActiveById(String id) throws Exception {
 		List<Classes> listClass = createQuery("FROM Classes WHERE id = ?1 AND isActive = ?2 ", Classes.class)
-				.setParameter(1, id).setParameter(1, false).getResultList();
+				.setParameter(1, id).setParameter(2, false).getResultList();
 		return resultCheck(listClass);
 	}
 

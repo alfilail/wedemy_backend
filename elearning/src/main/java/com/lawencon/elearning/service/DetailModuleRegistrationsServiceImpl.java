@@ -71,35 +71,25 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 		if (dtlModRegist.getIdLearningMaterial().getId() == null) {
 			throw new Exception("Id Learning Material tidak boleh kosong");
 		}
-//		if (dtlModRegist.getIdModuleRegistration() != null) {
-//			ModuleRegistrations moduleRgs = moduleRgsService.getById(dtlModRegist.getIdModuleRegistration().getId());
-//			if (moduleRgs == null) {
-//				throw new Exception("Id Module Registration salah");
-//			}
-//		} else {
-//			throw new Exception("Id Module Registration tidak boleh kosong");
-//		}
-//		if (dtlModRegist.getScheduleDate() != null) {
-//			ModuleRegistrations moduleRgs = moduleRgsService.getById(dtlModRegist.getIdModuleRegistration().getId());
-//			if (dtlModRegist.getScheduleDate().isAfter(moduleRgs.getIdDetailClass().getEndDate())) {
-//				throw new Exception("Jadwal materi tidak bisa melewati masa berlangsung kelas");
-//			}
-//			if (dtlModRegist.getScheduleDate().isBefore(moduleRgs.getIdDetailClass().getStartDate())) {
-//				throw new Exception("Jadwal materi tidak bisa mendahului masa berlangsung kelas");
-//			}
-//		} else {
-//			throw new Exception("Jadwal materi tidak boleh kosong");
-//		}
-//		if (dtlModRegist.getOrderNumber() != null) {
-//			System.out.println(dtlModRegist.getOrderNumber());
-//			DetailModuleRegistrations dtlModuleRgs = dtlModuleRgsDao.getDtlModuleRgsByOrderNumber(dtlModRegist);
-//			System.out.println(dtlModuleRgs.getOrderNumber());
-//			if (dtlModuleRgs != null) {
-//				throw new Exception("Order number dalam satu modul tidak boleh sama");
-//			}
-//		} else {
-//			throw new Exception("Order number tidak boleh kosong");
-//		}
+		if (dtlModRegist.getIdModuleRegistration() != null) {
+			ModuleRegistrations moduleRgs = moduleRgsService.getById(dtlModRegist.getIdModuleRegistration().getId());
+			if (moduleRgs == null) {
+				throw new Exception("Id Module Registration salah");
+			}
+		} else {
+			throw new Exception("Id Module Registration tidak boleh kosong");
+		}
+		if (dtlModRegist.getScheduleDate() != null) {
+			ModuleRegistrations moduleRgs = moduleRgsService.getById(dtlModRegist.getIdModuleRegistration().getId());
+			if (dtlModRegist.getScheduleDate().isAfter(moduleRgs.getIdDetailClass().getEndDate())) {
+				throw new Exception("Jadwal materi tidak bisa melewati masa berlangsung kelas");
+			}
+			if (dtlModRegist.getScheduleDate().isBefore(moduleRgs.getIdDetailClass().getStartDate())) {
+				throw new Exception("Jadwal materi tidak bisa mendahului masa berlangsung kelas");
+			}
+		} else {
+			throw new Exception("Jadwal materi tidak boleh kosong");
+		}
 	}
 
 	private void validateUpdate(DetailModuleRegistrations dtlModuleRgs) throws Exception {

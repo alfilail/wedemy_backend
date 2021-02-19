@@ -63,6 +63,7 @@ public class ModuleRegistrationsServiceImpl extends ElearningBaseServiceImpl imp
 	
 	@Override
 	public void reactive(ModuleRegistrations moduleRgs) throws Exception {
+		moduleRgs.setTrxNumber(generateTrxNumber(TransactionNumberCode.MODULE_REGISTRATION.code));
 		moduleRgsDao.insert(moduleRgs, () -> validateInsert(moduleRgs));
 	}
 
