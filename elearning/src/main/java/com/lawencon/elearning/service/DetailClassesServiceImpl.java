@@ -169,11 +169,22 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 	private void validate(DetailClasses detailClass) throws Exception {
 		if (detailClass.getStartDate() == null) {
 			throw new Exception("Tanggal mulai detail kelas tidak boleh kosong!");
-		} else if (detailClass.getEndDate() == null) {
+		} else {
+			if(detailClass.getStartDate().isBefore(LocalDate.now())) {
+				throw new Exception("Tanggal mulai tidak boleh sebelum hari ini");
+			}
+		}
+		if (detailClass.getEndDate() == null) {
 			throw new Exception("Tanggal akhir detail kelas tidak boleh kosong!");
-		} else if (detailClass.getStartTime() == null) {
+		} else {
+			if(detailClass.getEndDate().isBefore(detailClass.getStartDate())) {
+				throw new Exception("Tanggal akhir tidak boleh sebelum tanggal mulai");
+			}
+		}
+		if (detailClass.getStartTime() == null) {
 			throw new Exception("Waktu mulai detail kelas tidak boleh kosong!");
-		} else if (detailClass.getEndTime() == null) {
+		}
+		if (detailClass.getEndTime() == null) {
 			throw new Exception("Waktu akhir detail kelas tidak boleh kosong!");
 		}
 	}

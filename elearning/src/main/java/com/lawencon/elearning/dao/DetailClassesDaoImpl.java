@@ -64,8 +64,8 @@ public class DetailClassesDaoImpl extends ElearningBaseDaoImpl<DetailClasses> im
 				"INNER JOIN t_m_files f ON c.id_file = f.id INNER JOIN t_m_users u ON c.id_tutor = u.id ",
 				"INNER JOIN t_m_profiles p ON u.id_profile = p.id ",
 				"INNER JOIN t_m_files tmf ON p.id_file = tmf.id ",
-				"WHERE c.id_tutor = ?1").toString();
-		List<?> listObj = createNativeQuery(sql).setParameter(1, idTutor).getResultList();
+				"WHERE c.id_tutor = ?1 AND dc.is_active = ?2 ").toString();
+		List<?> listObj = createNativeQuery(sql).setParameter(1, idTutor).setParameter(2, true).getResultList();
 		listObj.forEach(val -> {
 			Object[] objArr = (Object[]) val;
 			DetailClasses detailClass = new DetailClasses();

@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.lawencon.elearning.constant.MessageStat;
 import com.lawencon.elearning.helper.DetailClassInformation;
 import com.lawencon.elearning.model.DetailClasses;
 import com.lawencon.elearning.service.DetailClassesService;
-import com.lawencon.elearning.constant.MessageStat;
 
 @RestController
 @RequestMapping("detail-class")

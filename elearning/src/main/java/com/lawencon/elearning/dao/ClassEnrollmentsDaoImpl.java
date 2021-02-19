@@ -47,8 +47,8 @@ public class ClassEnrollmentsDaoImpl extends ElearningBaseDaoImpl<ClassEnrollmen
 				"INNER JOIN t_m_users u ON c.id_tutor = u.id ",
 				"INNER JOIN t_m_profiles p ON u.id_profile = p.id ",
 				"INNER JOIN t_m_files tmf ON p.id_file = tmf.id ",
-				"WHERE ce.id_participant =?1").toString();
-		List<?> listObj = createNativeQuery(sql).setParameter(1, id).getResultList();
+				"WHERE ce.id_participant =?1 AND dc.is_active = ?2 ").toString();
+		List<?> listObj = createNativeQuery(sql).setParameter(1, id).setParameter(2, true).getResultList();
 		listObj.forEach(val -> {
 			Object[] objArr = (Object[]) val;
 			DetailClasses detailClass = new DetailClasses();
@@ -63,6 +63,10 @@ public class ClassEnrollmentsDaoImpl extends ElearningBaseDaoImpl<ClassEnrollmen
 			user.setId((String) objArr[4]);
 			Profiles profile = new Profiles();
 			profile.setFullName((String) objArr[5]);
+			Files fl = new Files();
+			fl.setId((String) objArr[6]);
+			fl.setFile((byte[]) objArr[7]);
+			profile.setIdFile(fl);
 			user.setIdProfile(profile);
 			clazz.setIdTutor(user);
 			detailClass.setIdClass(clazz);

@@ -83,19 +83,8 @@ public class EvaluationsController extends ElearningBaseController {
 		return new HttpEntity<>(out, headers);
 	}
 
-	@GetMapping("scores/{idDtlClass}")
-	public ResponseEntity<?> getScores(@PathVariable("idDtlClass") String idDtlClass) {
-		try {
-			List<?> scoreList = evaluationsService.reportAllScore(idDtlClass);
-			return responseSuccess(scoreList, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
-
 	@GetMapping("/report/score")
-	public HttpEntity<?> reportScore(@RequestParam("idDtlClass") String idDtlClass,
+	public ResponseEntity<?> reportScore(@RequestParam("idDtlClass") String idDtlClass,
 			@RequestParam("idParticipant") String idParticipant) {
 		List<?> listData = new ArrayList<>();
 		JasperHelper helper = new JasperHelper();
@@ -111,16 +100,25 @@ public class EvaluationsController extends ElearningBaseController {
 			helper.setCheck(true);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return responseError(e);
+			helper.setCheck(false);
+//			return responseErrorReport(e, helper);
 		}
-		
-//		HttpHeaders headers = new HttpHeaders();
-//		headers.set("Nama File", "attachment; filename=" + fileName);
-//		headers.setContentType(MediaType.APPLICATION_PDF);
-//		helper.setHeaders(headers);
+
 		helper.setFileName(fileName.toString());
 		helper.setContentType(MediaType.APPLICATION_PDF.toString());
-		return new HttpEntity<>(helper);
+		return responseSuccess(helper, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
+	}	
+	
+	@GetMapping("scores/{idDtlClass}")
+	public ResponseEntity<?> getScores(@PathVariable("idDtlClass") String idDtlClass) {
+		List<?> scoreList = new ArrayList<>();
+		try {
+			scoreList = evaluationsService.reportAllScore(idDtlClass);
+		} catch (Exception e) {
+			e.printStackTrace();
+//			return responseError(e);
+		}
+		return responseSuccess(scoreList, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 	}
 
 	@GetMapping("{id}")
@@ -164,16 +162,26 @@ public class EvaluationsController extends ElearningBaseController {
 	public HttpEntity<?> reportCertificate(@RequestParam String idUser, @RequestParam String idDetailClass) {
 		List<?> data = new ArrayList<>();
 		JasperHelper js = new JasperHelper();
+		StringBuilder fileName = new StringBuilder();
 		byte[] out;
 		try {
 			data = evaluationsService.getCertificate(idUser, idDetailClass);
 			out = JasperUtil.responseToByteArray(data, "Certificate", null);
+			
+			Users user = usersService.getById(idUser);
+			String participant = user.getIdProfile().getFullName();
+			fileName.append("Sertifikat ").append(participant).append(".pdf");
+			
 			js.setOut(out);
 			js.setCheck(true);
 		} catch (Exception e) {
 			e.printStackTrace();
+			js.setCheck(false);
 			return responseError(e);
 		}
+		
+		js.setFileName(fileName.toString());
+		js.setContentType(MediaType.APPLICATION_PDF.toString());
 		return responseSuccess(js, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 	}
 

@@ -192,8 +192,8 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 	@Override
 	public List<?> reportAllScore(String idClass) throws Exception {
 		List<?> data = evaluationsDao.reportAllScore(idClass);
-		validateReport(data);
-		return evaluationsDao.reportAllScore(idClass);
+//		validateReport(data);
+		return data;
 	}
 
 	@Override
@@ -206,8 +206,8 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 	@Override
 	public List<?> getCertificate(String idUser, String idDetailClass) throws Exception {
 		List<?> data = evaluationsDao.getCertificate(idUser, idDetailClass);
-		validateReport(data);
-		return evaluationsDao.getCertificate(idUser, idDetailClass);
+			validateReport(data);
+			return data;			
 	}
 
 	private void validateReport(List<?> data) throws Exception {
