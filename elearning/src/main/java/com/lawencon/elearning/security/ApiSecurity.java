@@ -51,9 +51,8 @@ public class ApiSecurity extends WebSecurityConfigurerAdapter {
 //				.antMatchers(HttpMethod.PATCH, "/**").antMatchers(HttpMethod.PUT, "/**")
 //				.antMatchers(HttpMethod.DELETE, "/**");
 		web.ignoring().antMatchers(HttpMethod.POST, "/user", "/role").antMatchers(HttpMethod.GET, "/detail-class/**/",
-		"/module-registration/**/", "/class/user", "/evaluation/report/**", "/evaluation/certificate/**",
-		"/approvement-renewal/**", "/detail-module-rgs/module-and-material/**")
-		.antMatchers(HttpMethod.PATCH, "/user/forget-password");
+				"/module-registration/**/", "/class/user", "/evaluation/report/**")
+				.antMatchers(HttpMethod.PATCH, "/user/forget-password");
 	}
 
 	@Bean
@@ -63,7 +62,8 @@ public class ApiSecurity extends WebSecurityConfigurerAdapter {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**").allowedOrigins("*").allowedMethods(HttpMethod.POST.name(),
-						HttpMethod.GET.name(), HttpMethod.PATCH.name(), HttpMethod.DELETE.name(), HttpMethod.PUT.name());
+						HttpMethod.GET.name(), HttpMethod.PATCH.name(), HttpMethod.DELETE.name(),
+						HttpMethod.PUT.name());
 			}
 		};
 	}
