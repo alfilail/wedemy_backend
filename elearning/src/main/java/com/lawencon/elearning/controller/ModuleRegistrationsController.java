@@ -11,14 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawencon.elearning.constant.MessageStat;
 import com.lawencon.elearning.helper.EnrolledClass;
 import com.lawencon.elearning.model.ModuleRegistrations;
 import com.lawencon.elearning.service.ModuleRegistrationsService;
-import com.lawencon.elearning.constant.MessageStat;
-
-/**
- * @author Nur Alfilail
- */
 
 @RestController
 @RequestMapping("module-registration")
@@ -27,8 +23,8 @@ public class ModuleRegistrationsController extends ElearningBaseController {
 	@Autowired
 	private ModuleRegistrationsService moduleRgsService;
 
-	@GetMapping("dtl-class/{id}")
-	public ResponseEntity<?> getModuleByIdDtlClass(@PathVariable("id") String id) {
+	@GetMapping("detail-class/{id}")
+	public ResponseEntity<?> getByIdDtlClass(@PathVariable("id") String id) {
 		try {
 			List<ModuleRegistrations> moduleRgsList = moduleRgsService.getByIdDtlClass(id);
 			return responseSuccess(moduleRgsList, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
@@ -42,8 +38,8 @@ public class ModuleRegistrationsController extends ElearningBaseController {
 	public ResponseEntity<?> getModuleAndLearningMaterialsByIdDtlClass(@RequestParam("idUser") String idUser,
 			@RequestParam("idDtlClass") String idDtlClass) {
 		try {
-			EnrolledClass listResult = moduleRgsService.getEnrolledClassByIdDtlClass(idUser, idDtlClass);
-			return responseSuccess(listResult, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
+			EnrolledClass enrolledClass = moduleRgsService.getEnrolledClassByIdDtlClass(idUser, idDtlClass);
+			return responseSuccess(enrolledClass, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);

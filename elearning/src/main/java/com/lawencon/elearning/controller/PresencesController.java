@@ -18,13 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.lawencon.elearning.constant.MessageStat;
 import com.lawencon.elearning.model.Presences;
 import com.lawencon.elearning.service.PresencesService;
-import com.lawencon.elearning.constant.MessageStat;
-
-/**
- * @author Nur Alfilail
- */
 
 @RestController
 @RequestMapping("presence")
@@ -34,7 +30,7 @@ public class PresencesController extends ElearningBaseController {
 	private PresencesService presencesService;
 
 	@PostMapping
-	public ResponseEntity<?> insertPresence(@RequestBody String body) {
+	public ResponseEntity<?> insert(@RequestBody String body) {
 		try {
 			ObjectMapper obj = new ObjectMapper();
 			obj.registerModule(new JavaTimeModule());
@@ -47,19 +43,8 @@ public class PresencesController extends ElearningBaseController {
 		}
 	}
 
-	@GetMapping("{id}")
-	public ResponseEntity<?> getPresenceById(@PathVariable String id) {
-		try {
-			Presences presence = presencesService.getById(id);
-			return responseSuccess(presence, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
-
-	@GetMapping("all")
-	public ResponseEntity<?> getAllPresences() {
+	@GetMapping
+	public ResponseEntity<?> getAll() {
 		try {
 			List<Presences> presencesList = presencesService.getAll();
 			return responseSuccess(presencesList, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
@@ -69,8 +54,19 @@ public class PresencesController extends ElearningBaseController {
 		}
 	}
 
+	@GetMapping("{id}")
+	public ResponseEntity<?> getById(@PathVariable String id) {
+		try {
+			Presences presence = presencesService.getById(id);
+			return responseSuccess(presence, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return responseError(e);
+		}
+	}
+
 	@DeleteMapping("{id}")
-	public ResponseEntity<?> deletePresenceById(@PathVariable("id") String id) {
+	public ResponseEntity<?> deleteById(@PathVariable("id") String id) {
 		try {
 			presencesService.deleteById(id);
 			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
@@ -84,7 +80,7 @@ public class PresencesController extends ElearningBaseController {
 	}
 
 	@PutMapping
-	public ResponseEntity<?> updatePresence(@RequestBody String body) {
+	public ResponseEntity<?> update(@RequestBody String body) {
 		try {
 			Presences presence = new ObjectMapper().readValue(body, Presences.class);
 			presencesService.update(presence);

@@ -1,6 +1,5 @@
 package com.lawencon.elearning.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.PersistenceException;
@@ -19,19 +18,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lawencon.elearning.constant.MessageStat;
 import com.lawencon.elearning.model.ClassEnrollments;
 import com.lawencon.elearning.model.DetailClasses;
 import com.lawencon.elearning.service.ClassEnrollmentService;
-import com.lawencon.elearning.constant.MessageStat;
 
 @RestController
 @RequestMapping("class-enrollment")
 public class ClassEnrollmentController extends ElearningBaseController {
+
 	@Autowired
 	private ClassEnrollmentService classEnrollmentService;
 
 	@PostMapping
-	public ResponseEntity<?> insertClassEnrollment(@RequestBody String body) {
+	public ResponseEntity<?> insert(@RequestBody String body) {
 		try {
 			ClassEnrollments classEnrollment = new ObjectMapper().readValue(body, ClassEnrollments.class);
 			classEnrollmentService.insertClassEnrollment(classEnrollment);
@@ -42,11 +42,21 @@ public class ClassEnrollmentController extends ElearningBaseController {
 		}
 	}
 
-	@GetMapping("{id}")
-	public ResponseEntity<?> getClassEnrollmentById(@PathVariable("id") String id) {
-		ClassEnrollments classEnrollment = new ClassEnrollments();
+	@GetMapping
+	public ResponseEntity<?> getAll() {
 		try {
-			classEnrollment = classEnrollmentService.getClassEnrollmentsById(id);
+			List<ClassEnrollments> classEnrollments = classEnrollmentService.getAllClassEnrollments();
+			return responseSuccess(classEnrollments, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return responseError(e);
+		}
+	}
+
+	@GetMapping("{id}")
+	public ResponseEntity<?> getById(@PathVariable("id") String id) {
+		try {
+			ClassEnrollments classEnrollment = classEnrollmentService.getClassEnrollmentsById(id);
 			return responseSuccess(classEnrollment, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -54,24 +64,11 @@ public class ClassEnrollmentController extends ElearningBaseController {
 		}
 	}
 
-	@GetMapping("/all")
-	public ResponseEntity<?> getAllClassEnrollments() {
-		List<ClassEnrollments> classEnrollmentList = new ArrayList<ClassEnrollments>();
+	@GetMapping("participant/{id}")
+	public ResponseEntity<?> getAllByIdParticipant(@PathVariable("id") String id) {
 		try {
-			classEnrollmentList = classEnrollmentService.getAllClassEnrollments();
-			return responseSuccess(classEnrollmentList, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
-
-	@GetMapping("user/{id}")
-	public ResponseEntity<?> getAllClassEnrollmentsByIdUser(@PathVariable("id") String id) {
-		List<DetailClasses> classEnrollmentList = new ArrayList<>();
-		try {
-			classEnrollmentList = classEnrollmentService.getAllClassEnrollmentsByIdUser(id);
-			return responseSuccess(classEnrollmentList, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
+			List<DetailClasses> classEnrollments = classEnrollmentService.getAllClassEnrollmentsByIdUser(id);
+			return responseSuccess(classEnrollments, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
@@ -79,11 +76,11 @@ public class ClassEnrollmentController extends ElearningBaseController {
 	}
 
 	@GetMapping("participant/detail-class")
-	public ResponseEntity<?> getAllClassEnrollmentsByIdDtlClassAndIdUser(@RequestParam("idDtlClass") String idDtlClass,
+	public ResponseEntity<?> getAllByIdDtlClassAndIdParticipant(@RequestParam("idDtlClass") String idDtlClass,
 			@RequestParam("idUser") String idUser) {
-		ClassEnrollments classEnrollment = new ClassEnrollments();
 		try {
-			classEnrollment = classEnrollmentService.getClassEnrollmentByIdDtlClassAndIdUser(idDtlClass, idUser);
+			ClassEnrollments classEnrollment = classEnrollmentService
+					.getClassEnrollmentByIdDtlClassAndIdUser(idDtlClass, idUser);
 			return responseSuccess(classEnrollment, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -91,8 +88,20 @@ public class ClassEnrollmentController extends ElearningBaseController {
 		}
 	}
 
+	@PutMapping
+	public ResponseEntity<?> update(@RequestBody String body) {
+		try {
+			ClassEnrollments classEnrollment = new ObjectMapper().readValue(body, ClassEnrollments.class);
+			classEnrollmentService.updateClassEnrollments(classEnrollment);
+			return responseSuccess(classEnrollment, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return responseError(e);
+		}
+	}
+
 	@DeleteMapping("{id}")
-	public ResponseEntity<?> deleteClassEnrollmentById(@PathVariable("id") String id) {
+	public ResponseEntity<?> deleteById(@PathVariable("id") String id) {
 		try {
 			classEnrollmentService.deleteClassEnrollmentsById(id);
 			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
@@ -105,15 +114,4 @@ public class ClassEnrollmentController extends ElearningBaseController {
 		}
 	}
 
-	@PutMapping
-	public ResponseEntity<?> updateClassEnrollment(@RequestBody String body) {
-		try {
-			ClassEnrollments classEnrollment = new ObjectMapper().readValue(body, ClassEnrollments.class);
-			classEnrollmentService.updateClassEnrollments(classEnrollment);
-			return responseSuccess(classEnrollment, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
 }

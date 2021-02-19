@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,22 +27,31 @@ import com.lawencon.elearning.service.EvaluationsService;
 import com.lawencon.elearning.service.UsersService;
 import com.lawencon.util.JasperUtil;
 
-/**
- * @author Nur Alfilail
- */
-
 @RestController
 @RequestMapping("evaluation")
 public class EvaluationsController extends ElearningBaseController {
 
 	@Autowired
 	private EvaluationsService evaluationsService;
-	
+
 	@Autowired
 	private UsersService usersService;
 
-	@GetMapping("all")
-	public ResponseEntity<?> getAllEvaluations() {
+	@PostMapping
+	public ResponseEntity<?> insert(@RequestBody String body) {
+		try {
+			ObjectMapper obj = new ObjectMapper();
+			ScoreInputs scores = obj.readValue(body, ScoreInputs.class);
+			evaluationsService.insertEvaluation(scores);
+			return responseSuccess(scores, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return responseError(e);
+		}
+	}
+
+	@GetMapping
+	public ResponseEntity<?> getAll() {
 		try {
 			List<Evaluations> evaluations = evaluationsService.getAllEvaluations();
 			return responseSuccess(evaluations, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
@@ -53,7 +61,18 @@ public class EvaluationsController extends ElearningBaseController {
 		}
 	}
 
-	@GetMapping("score-submission")
+	@GetMapping("{id}")
+	public ResponseEntity<?> getById(@PathVariable("id") String id) {
+		try {
+			Evaluations evaluation = evaluationsService.getEvaluationById(id);
+			return responseSuccess(evaluation, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return responseError(e);
+		}
+	}
+
+	@GetMapping("submission-score")
 	public ResponseEntity<?> getByIdDtlClassAndIdDtlModuleRgs(@RequestParam("idDtlClass") String idDtlClass,
 			@RequestParam("idDtlModuleRgs") String idDtlModuleRgs) {
 		try {
@@ -66,25 +85,19 @@ public class EvaluationsController extends ElearningBaseController {
 		}
 	}
 
-	@GetMapping("/report/scores/{idDtlClass}")
-	public HttpEntity<?> reportAllScores(@PathVariable("idDtlClass") String idDtlClass) {
-		List<?> listData = new ArrayList<>();
-		byte[] out;
+	@GetMapping("report/{idDtlClass}")
+	public ResponseEntity<?> getAllScoresReport(@PathVariable("idDtlClass") String idDtlClass) {
+		List<?> scoreList = new ArrayList<>();
 		try {
-			listData = evaluationsService.reportAllScore(idDtlClass);
-			out = JasperUtil.responseToByteArray(listData, "ScoresReport", null);
+			scoreList = evaluationsService.reportAllScore(idDtlClass);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return responseError(e);
 		}
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_PDF);
-		return new HttpEntity<>(out, headers);
+		return responseSuccess(scoreList, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 	}
 
-	@GetMapping("/report/score")
-	public ResponseEntity<?> reportScore(@RequestParam("idDtlClass") String idDtlClass,
+	@GetMapping("/report/participant")
+	public ResponseEntity<?> getParticipantScoreReport(@RequestParam("idDtlClass") String idDtlClass,
 			@RequestParam("idParticipant") String idParticipant) {
 		List<?> listData = new ArrayList<>();
 		JasperHelper helper = new JasperHelper();
@@ -101,48 +114,37 @@ public class EvaluationsController extends ElearningBaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			helper.setCheck(false);
-//			return responseErrorReport(e, helper);
 		}
-
 		helper.setFileName(fileName.toString());
 		helper.setContentType(MediaType.APPLICATION_PDF.toString());
 		return responseSuccess(helper, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
-	}	
-	
-	@GetMapping("scores/{idDtlClass}")
-	public ResponseEntity<?> getScores(@PathVariable("idDtlClass") String idDtlClass) {
-		List<?> scoreList = new ArrayList<>();
-		try {
-			scoreList = evaluationsService.reportAllScore(idDtlClass);
-		} catch (Exception e) {
-			e.printStackTrace();
-//			return responseError(e);
-		}
-		return responseSuccess(scoreList, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 	}
 
-	@GetMapping("{id}")
-	public ResponseEntity<?> getEvaluationById(@PathVariable("id") String id) {
+	@GetMapping("certificate")
+	public HttpEntity<?> getCertificate(@RequestParam String idUser, @RequestParam String idDetailClass) {
+		List<?> data = new ArrayList<>();
+		JasperHelper js = new JasperHelper();
+		StringBuilder fileName = new StringBuilder();
+		byte[] out;
 		try {
-			Evaluations evaluation = evaluationsService.getEvaluationById(id);
-			return responseSuccess(evaluation, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
+			data = evaluationsService.getCertificate(idUser, idDetailClass);
+			out = JasperUtil.responseToByteArray(data, "Certificate", null);
 
-	@PostMapping
-	public ResponseEntity<?> insertEvaluation(@RequestBody String body) {
-		try {
-			ObjectMapper obj = new ObjectMapper();
-			ScoreInputs scores = obj.readValue(body, ScoreInputs.class);
-			evaluationsService.insertEvaluation(scores);
-			return responseSuccess(scores, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
+			Users user = usersService.getById(idUser);
+			String participant = user.getIdProfile().getFullName();
+			fileName.append("Sertifikat ").append(participant).append(".pdf");
+
+			js.setOut(out);
+			js.setCheck(true);
 		} catch (Exception e) {
 			e.printStackTrace();
+			js.setCheck(false);
 			return responseError(e);
 		}
+
+		js.setFileName(fileName.toString());
+		js.setContentType(MediaType.APPLICATION_PDF.toString());
+		return responseSuccess(js, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 	}
 
 	@PutMapping
@@ -156,33 +158,6 @@ public class EvaluationsController extends ElearningBaseController {
 			e.printStackTrace();
 			return responseError(e);
 		}
-	}
-
-	@GetMapping("certificate")
-	public HttpEntity<?> reportCertificate(@RequestParam String idUser, @RequestParam String idDetailClass) {
-		List<?> data = new ArrayList<>();
-		JasperHelper js = new JasperHelper();
-		StringBuilder fileName = new StringBuilder();
-		byte[] out;
-		try {
-			data = evaluationsService.getCertificate(idUser, idDetailClass);
-			out = JasperUtil.responseToByteArray(data, "Certificate", null);
-			
-			Users user = usersService.getById(idUser);
-			String participant = user.getIdProfile().getFullName();
-			fileName.append("Sertifikat ").append(participant).append(".pdf");
-			
-			js.setOut(out);
-			js.setCheck(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-			js.setCheck(false);
-			return responseError(e);
-		}
-		
-		js.setFileName(fileName.toString());
-		js.setContentType(MediaType.APPLICATION_PDF.toString());
-		return responseSuccess(js, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 	}
 
 }

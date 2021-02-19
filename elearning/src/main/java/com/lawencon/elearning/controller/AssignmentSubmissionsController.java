@@ -67,7 +67,7 @@ public class AssignmentSubmissionsController extends ElearningBaseController {
 	}
 
 	@GetMapping("participant")
-	public ResponseEntity<?> getByIdDtlModuleRgsAndIdParticipant(@RequestParam("idDtlModuleRgs") String idDtlModuleRgs,
+	public ResponseEntity<?> getParticipantsSubmission(@RequestParam("idDtlModuleRgs") String idDtlModuleRgs,
 			@RequestParam("idParticipant") String idParticipant) {
 		try {
 			AssignmentSubmissions assignmentSubmission = assignmentSubmissionsService

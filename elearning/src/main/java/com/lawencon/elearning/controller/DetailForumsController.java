@@ -15,40 +15,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.lawencon.elearning.constant.MessageStat;
 import com.lawencon.elearning.model.DetailForums;
 import com.lawencon.elearning.service.DetailForumsService;
-import com.lawencon.elearning.constant.MessageStat;
 
 @RestController
 @RequestMapping("detail-forum")
 public class DetailForumsController extends ElearningBaseController {
+
 	@Autowired
 	private DetailForumsService detailForumService;
 
-	@GetMapping("all")
-	public ResponseEntity<?> getAllDetailForum() {
-		try {
-			List<DetailForums> detailForums = detailForumService.getAllDetailForums();
-			return responseSuccess(detailForums, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
-
-	@GetMapping("{id}")
-	public ResponseEntity<?> getDetailForumById(@PathVariable("id") String id) {
-		try {
-			DetailForums detailForum = detailForumService.getDetailForumById(id);
-			return responseSuccess(detailForum, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
-
 	@PostMapping
-	public ResponseEntity<?> insertDetailForum(@RequestBody String body) {
+	public ResponseEntity<?> insert(@RequestBody String body) {
 		try {
 			ObjectMapper obj = new ObjectMapper();
 			obj.registerModule(new JavaTimeModule());
@@ -61,15 +40,22 @@ public class DetailForumsController extends ElearningBaseController {
 		}
 	}
 
-	@PutMapping
-	public ResponseEntity<?> updateDetailForum(@RequestBody String body) {
+	@GetMapping
+	public ResponseEntity<?> getAll() {
 		try {
-			ObjectMapper obj = new ObjectMapper();
-			obj.registerModule(new JavaTimeModule());
-			DetailForums detailForum = obj.readValue(body, DetailForums.class);
-			detailForumService.updateDetailForum(detailForum);
-			DetailForums dtlForum = detailForumService.getDetailForumById(detailForum.getId());
-			return responseSuccess(dtlForum, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
+			List<DetailForums> detailForums = detailForumService.getAllDetailForums();
+			return responseSuccess(detailForums, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return responseError(e);
+		}
+	}
+
+	@GetMapping("{id}")
+	public ResponseEntity<?> getById(@PathVariable("id") String id) {
+		try {
+			DetailForums detailForum = detailForumService.getDetailForumById(id);
+			return responseSuccess(detailForum, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
@@ -77,10 +63,25 @@ public class DetailForumsController extends ElearningBaseController {
 	}
 
 	@GetMapping("forum/{idForum}")
-	public ResponseEntity<?> getDetailForumByIdForum(@PathVariable("idForum") String idForum) {
+	public ResponseEntity<?> getAllByIdForum(@PathVariable("idForum") String idForum) {
 		try {
-			List<DetailForums> detailForum = detailForumService.getAllDetailForumsByIdForum(idForum);
-			return responseSuccess(detailForum, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
+			List<DetailForums> detailForums = detailForumService.getAllDetailForumsByIdForum(idForum);
+			return responseSuccess(detailForums, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return responseError(e);
+		}
+	}
+
+	@PutMapping
+	public ResponseEntity<?> update(@RequestBody String body) {
+		try {
+			ObjectMapper obj = new ObjectMapper();
+			obj.registerModule(new JavaTimeModule());
+			DetailForums detailForum = obj.readValue(body, DetailForums.class);
+			detailForumService.updateDetailForum(detailForum);
+			DetailForums dtlForum = detailForumService.getDetailForumById(detailForum.getId());
+			return responseSuccess(dtlForum, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);

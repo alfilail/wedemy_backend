@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lawencon.elearning.constant.MessageStat;
 import com.lawencon.elearning.helper.ForumAndDetailForums;
 import com.lawencon.elearning.model.Forums;
 import com.lawencon.elearning.service.ForumsService;
-import com.lawencon.elearning.constant.MessageStat;
 
 @RestController
 @RequestMapping("forum")
@@ -27,42 +27,8 @@ public class ForumsController extends ElearningBaseController {
 	@Autowired
 	private ForumsService forumsService;
 
-	@GetMapping("all")
-	public ResponseEntity<?> getAllForums() {
-		try {
-			List<Forums> forum = forumsService.getAllForums();
-			return responseSuccess(forum, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
-
-	@GetMapping("material/{id}")
-	public ResponseEntity<?> getForumByIdDetailModuleRegistration(@PathVariable("id") String id) {
-		try {
-			List<ForumAndDetailForums> listResult = new ArrayList<>();
-			listResult = forumsService.getForumByIdDetailModuleRegistration(id);
-			return responseSuccess(listResult, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
-
-	@GetMapping("{id}")
-	public ResponseEntity<?> getForumById(@PathVariable("id") String id) {
-		try {
-			Forums forum = forumsService.getForumById(id);
-			return responseSuccess(forum, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
-
 	@PostMapping
-	public ResponseEntity<?> insertForum(@RequestBody String body) {
+	public ResponseEntity<?> insert(@RequestBody String body) {
 		try {
 			Forums forum = new ObjectMapper().readValue(body, Forums.class);
 			forumsService.insertForum(forum);
@@ -73,8 +39,42 @@ public class ForumsController extends ElearningBaseController {
 		}
 	}
 
+	@GetMapping
+	public ResponseEntity<?> getAll() {
+		try {
+			List<Forums> forum = forumsService.getAllForums();
+			return responseSuccess(forum, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return responseError(e);
+		}
+	}
+
+	@GetMapping("{id}")
+	public ResponseEntity<?> getById(@PathVariable("id") String id) {
+		try {
+			Forums forum = forumsService.getForumById(id);
+			return responseSuccess(forum, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return responseError(e);
+		}
+	}
+
+	@GetMapping("material/{id}")
+	public ResponseEntity<?> getByIdDtlModuleRgs(@PathVariable("id") String id) {
+		try {
+			List<ForumAndDetailForums> listResult = new ArrayList<>();
+			listResult = forumsService.getForumByIdDetailModuleRegistration(id);
+			return responseSuccess(listResult, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return responseError(e);
+		}
+	}
+
 	@PatchMapping
-	public ResponseEntity<?> updateForum(@RequestBody String body) {
+	public ResponseEntity<?> update(@RequestBody String body) {
 		try {
 			Forums forum = new ObjectMapper().readValue(body, Forums.class);
 			forumsService.updateContentForum(forum);

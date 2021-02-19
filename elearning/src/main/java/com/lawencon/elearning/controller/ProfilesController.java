@@ -18,9 +18,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.lawencon.elearning.constant.MessageStat;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.service.ProfilesService;
-import com.lawencon.elearning.constant.MessageStat;
 
 @RestController
 @RequestMapping("profile")
@@ -28,6 +28,20 @@ public class ProfilesController extends ElearningBaseController {
 
 	@Autowired
 	private ProfilesService profilesService;
+
+	@PostMapping
+	public ResponseEntity<?> insert(@RequestBody String body) {
+		try {
+			ObjectMapper obj = new ObjectMapper();
+			obj.registerModule(new JavaTimeModule());
+			Profiles profile = obj.readValue(body, Profiles.class);
+			profilesService.insert(profile);
+			return responseSuccess(profile, HttpStatus.CREATED, MessageStat.SUCCESS_CREATED);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return responseError(e);
+		}
+	}
 
 	@GetMapping
 	public ResponseEntity<?> getAll() {
@@ -45,20 +59,6 @@ public class ProfilesController extends ElearningBaseController {
 		try {
 			Profiles profile = profilesService.getById(id);
 			return responseSuccess(profile, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
-
-	@PostMapping
-	public ResponseEntity<?> insert(@RequestBody String body) {
-		try {
-			ObjectMapper obj = new ObjectMapper();
-			obj.registerModule(new JavaTimeModule());
-			Profiles profile = obj.readValue(body, Profiles.class);
-			profilesService.insert(profile);
-			return responseSuccess(profile, HttpStatus.CREATED, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);

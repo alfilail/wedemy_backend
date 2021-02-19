@@ -10,14 +10,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawencon.elearning.constant.MessageStat;
 import com.lawencon.elearning.helper.DetailModuleAndMaterialDoc;
 import com.lawencon.elearning.model.DetailModuleRegistrations;
 import com.lawencon.elearning.service.DetailModuleRegistrationsService;
-import com.lawencon.elearning.constant.MessageStat;
-
-/**
- * @author Nur Alfilail
- */
 
 @RestController
 @RequestMapping("detail-module-rgs")
@@ -36,11 +32,13 @@ public class DetailModuleRegistrationsController extends ElearningBaseController
 			return responseError(e);
 		}
 	}
-	
+
 	@GetMapping("/module-and-material/{idDetailClass}")
-	public ResponseEntity<?> getAllModuleAndLearningMaterialByIdDetailClass(@PathVariable("idDetailClass") String idDetailClass) {
+	public ResponseEntity<?> getAllModuleAndLearningMaterialByIdDetailClass(
+			@PathVariable("idDetailClass") String idDetailClass) {
 		try {
-			List<DetailModuleAndMaterialDoc> all = dtlModuleService.getAllModuleAndLearningMaterialByIdDetailClass(idDetailClass);
+			List<DetailModuleAndMaterialDoc> all = dtlModuleService
+					.getAllModuleAndLearningMaterialByIdDetailClass(idDetailClass);
 			return responseSuccess(all, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
