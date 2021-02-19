@@ -25,9 +25,6 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 	@Override
 	public void insert(Profiles profile) throws Exception {
 		Files file = new Files();
-		file.setFile(null);
-		file.setType(null);
-		file.setName(null);
 		filesService.insert(file);
 		profile.setIdFile(file);
 		profilesDao.insert(profile, () -> validateInsert(profile));
@@ -98,10 +95,10 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 
 	private void validateInsert(Profiles profile) throws Exception {
 		if(profile.getAddress() == null) {
-			profile.setAddress(" ");
+			profile.setAddress("-");
 		}
 		if(profile.getPhone() == null) {
-			profile.setPhone(" ");
+			profile.setPhone("-");
 		}
 	}
 
@@ -121,7 +118,7 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 					String[] type = profile.getIdFile().getType().split("/");
 					String ext = type[1];
 					if (ext != null) {
-						if (ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("png")
+						if (ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("jpg")
 								|| ext.equalsIgnoreCase("jpeg")) {
 
 						} else {

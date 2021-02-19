@@ -186,7 +186,6 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 		text = text.replace("#1#", participant.getFullName());
 
 		sendMail(TemplateEmail.EVALUATION_PARTICIPANT, participant, text);
-		System.out.println("ke sini nisa sabyan");
 	}
 
 	@Override
