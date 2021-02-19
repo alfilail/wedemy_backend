@@ -60,6 +60,11 @@ public class ModuleRegistrationsServiceImpl extends ElearningBaseServiceImpl imp
 			moduleRgsDao.insert(moduleRgs, () -> validateInsert(moduleRgs));
 		}
 	}
+	
+	@Override
+	public void reactive(ModuleRegistrations moduleRgs) throws Exception {
+		moduleRgsDao.insert(moduleRgs, () -> validateInsert(moduleRgs));
+	}
 
 	@Override
 	public ModuleRegistrations getById(String id) throws Exception {

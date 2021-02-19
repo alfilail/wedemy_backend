@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lawencon.elearning.constant.TransactionNumberCode;
 import com.lawencon.elearning.dao.DetailClassesDao;
 import com.lawencon.elearning.helper.ClassInput;
 import com.lawencon.elearning.helper.DetailClassInformation;
@@ -62,17 +63,22 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 	public void reactiveOldClass(DetailClasses detailClass) throws Exception {
 		try {
 			begin();
-			begin();
+			// ambil id class berdasarkan id
 			Classes clazz = classService.getInActiveById(detailClass.getIdClass().getId());
-
+			// update classes is active = true
 			classService.reactivate(detailClass.getIdClass().getId(), detailClass.getCreatedBy());
-
+			
+			//ngeset yg tdk ada front end
 			detailClass.setCode(generateCodeDetailClass(clazz.getCode(), detailClass.getStartDate()));
 			detailClass.setViews(0);
 			detailClass.setIdClass(clazz);
+			
+			System.out.println("iniii"+detailClass.getIdClass().getId());
 
 			DetailClasses detailClassOld = detailClassesDao.getDtlClassByIdClass(detailClass.getIdClass().getId());
-
+			
+			System.out.println("cekkk id detail class" + detailClassOld.getId());
+			
 			List<ModuleRegistrations> modulesRegistrationListOld = moduleRegistrationsService
 					.getAllByIdDtlClass(detailClassOld.getId());
 			List<Modules> modulesList = new ArrayList<Modules>();
@@ -90,10 +96,14 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 				System.out.println("cek module rgs : "+ detailModuleRegis.size());
 				
 				for (DetailModuleRegistrations detailModule : detailModuleRegis) {
+					System.out.println("astaga" + detailModule.getIdModuleRegistration().getId());
+					
 					DetailModuleRegistrations detail = new DetailModuleRegistrations();
 					detail.setIdLearningMaterial(detailModule.getIdLearningMaterial());
+					
 					System.out.println("ini cekkkk" + detailModule.getIdModuleRegistration());
-					detail.setIdModuleRegistration(moduleRegistration);
+					
+					detail.setIdModuleRegistration(detailModule.getIdModuleRegistration());
 					detail.setOrderNumber(detailModule.getOrderNumber());
 					detail.setScheduleDate(detailModule.getScheduleDate());
 					detailModuleList.add(detail);
@@ -101,20 +111,55 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 			}
 			detailClassesDao.insert(detailClass, () -> validateReactive(detailClass));
 
-			ClassInput clazzHelper = new ClassInput();
-			clazzHelper.setClazz(clazz);
-			clazzHelper.setDetailClass(detailClass);
-			clazzHelper.setModule(modulesList);
-			moduleRegistrationsService.insert(clazzHelper);
+//			ClassInput clazzHelper = new ClassInput();
+//			clazzHelper.setClazz(clazz);
+//			clazzHelper.setDetailClass(detailClass);
+//			clazzHelper.setModule(modulesList);
 			
-			System.out.println("size nya" + detailModuleList.size());
-			for (DetailModuleRegistrations dm : detailModuleList) {
-				System.out.println("id Detail Module Registration Cek" + dm.getId());
-				ModuleRegistrations moduleRgs = moduleRegistrationsService
-						.getByIdDtlClassAndIdModuleRgs(detailClass.getId(), dm.getIdModuleRegistration().getId());
-				dm.setIdModuleRegistration(moduleRgs);
-				detailModuleRegistrationsService.insert(dm);
+			List<ModuleRegistrations> modulesRegistrationNew = new ArrayList<ModuleRegistrations>();
+			for(Modules module : modulesList) {
+				ModuleRegistrations moduleRgs = new ModuleRegistrations();
+				moduleRgs.setIdDetailClass(detailClass);
+				moduleRgs.setIdModule(module);
+				moduleRegistrationsService.reactive(moduleRgs);
+				modulesRegistrationNew.add(moduleRgs);
 			}
+//			int i = 0;
+			for (int i = 1 ; i < detailModuleList.size() ; i++) {
+//				if(detailModuleList.get(i).getIdModuleRegistration() == detailModuleList.get(i+1).getIdModuleRegistration()) {
+//					dm.setIdModuleRegistration(modulesRegistrationNew.get(i));
+//					detailModuleRegistrationsService.insert(dm);
+//				}
+//				else {
+//					dm.setIdModuleRegistration(modulesRegistrationNew.get(i));
+//					detailModuleRegistrationsService.insert(dm);
+//				}
+//				i++;
+				DetailModuleRegistrations dm = detailModuleList.get(i-1);
+				if(detailModuleList.get(i-1).getIdModuleRegistration().getId()
+						.equalsIgnoreCase(detailModuleList.get(i).getIdModuleRegistration().getId())) {
+					dm.setIdModuleRegistration(modulesRegistrationNew.get(i-1));
+					detailModuleRegistrationsService.insert(dm);
+				}
+				else {
+					dm.setIdModuleRegistration(modulesRegistrationNew.get(i));
+					detailModuleRegistrationsService.insert(dm);
+				}
+			}
+			
+//			detailModuleList.stream().filter(val -> {
+//				val.getIdModuleRegistration().getId()
+//			})
+			
+//			for (DetailModuleRegistrations dm : detailModuleList) {
+//				dm.setIdModuleRegistration(moduleRgs);
+//				detailModuleRegistrationsService.insert(dm);
+//			}
+//			System.out.println("size nya" + detailModuleList.size());
+//			for (DetailModuleRegistrations dm : detailModuleList) {
+//				dm.setIdModuleRegistration(moduleRgs);
+//				detailModuleRegistrationsService.insert(dm);
+//			}
 			commit();
 		} catch (Exception e) {
 			rollback();
