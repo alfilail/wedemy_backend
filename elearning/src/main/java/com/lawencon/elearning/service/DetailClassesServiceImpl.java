@@ -62,6 +62,7 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 	public void reactiveOldClass(DetailClasses detailClass) throws Exception {
 		try {
 			begin();
+			begin();
 			Classes clazz = classService.getInActiveById(detailClass.getIdClass().getId());
 
 			classService.reactivate(detailClass.getIdClass().getId(), detailClass.getCreatedBy());
@@ -74,22 +75,25 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 
 			List<ModuleRegistrations> modulesRegistrationListOld = moduleRegistrationsService
 					.getAllByIdDtlClass(detailClassOld.getId());
-
 			List<Modules> modulesList = new ArrayList<Modules>();
 
 			List<DetailModuleRegistrations> detailModuleList = new ArrayList<DetailModuleRegistrations>();
 
 			for (ModuleRegistrations moduleRegistration : modulesRegistrationListOld) {
+				System.out.println("Test id module rgs " + moduleRegistration.getId());
 				Modules module = modulesService.getById(moduleRegistration.getIdModule().getId());
 				modulesList.add(module);
-
+				
 				List<DetailModuleRegistrations> detailModuleRegis = detailModuleRegistrationsService
 						.getAllByIdModuleRgs(moduleRegistration.getId());
-
+				
+				System.out.println("cek module rgs : "+ detailModuleRegis.size());
+				
 				for (DetailModuleRegistrations detailModule : detailModuleRegis) {
 					DetailModuleRegistrations detail = new DetailModuleRegistrations();
 					detail.setIdLearningMaterial(detailModule.getIdLearningMaterial());
-					detail.setIdModuleRegistration(detailModule.getIdModuleRegistration());
+					System.out.println("ini cekkkk" + detailModule.getIdModuleRegistration());
+					detail.setIdModuleRegistration(moduleRegistration);
 					detail.setOrderNumber(detailModule.getOrderNumber());
 					detail.setScheduleDate(detailModule.getScheduleDate());
 					detailModuleList.add(detail);
@@ -102,9 +106,14 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 			clazzHelper.setDetailClass(detailClass);
 			clazzHelper.setModule(modulesList);
 			moduleRegistrationsService.insert(clazzHelper);
-
-			for (DetailModuleRegistrations detailModuleRegis : detailModuleList) {
-				detailModuleRegistrationsService.insert(detailModuleRegis);
+			
+			System.out.println("size nya" + detailModuleList.size());
+			for (DetailModuleRegistrations dm : detailModuleList) {
+				System.out.println("id Detail Module Registration Cek" + dm.getId());
+				ModuleRegistrations moduleRgs = moduleRegistrationsService
+						.getByIdDtlClassAndIdModuleRgs(detailClass.getId(), dm.getIdModuleRegistration().getId());
+				dm.setIdModuleRegistration(moduleRgs);
+				detailModuleRegistrationsService.insert(dm);
 			}
 			commit();
 		} catch (Exception e) {

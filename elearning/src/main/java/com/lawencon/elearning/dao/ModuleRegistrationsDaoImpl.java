@@ -1,6 +1,6 @@
 package com.lawencon.elearning.dao;
 
-import java.time.LocalDate;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,17 +32,19 @@ public class ModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<ModuleRegis
 	public ModuleRegistrations getByIdDtlClassAndIdModuleRgs(String idDtlClass, String idModRegist) throws Exception {
 		List<ModuleRegistrations> listResult = new ArrayList<>();
 		String sql = sqlBuilder(
-				"SELECT mr.id, dc.start_date, dc.end_date FROM t_r_module_registrations INNER JOIN t_m_detail_classes dc ",
+				"SELECT mr.id, dc.start_date, dc.end_date FROM t_r_module_registrations mr INNER JOIN t_m_detail_classes dc ",
 				"ON mr.id_dtl_class = dc.id WHERE mr.id = ?1 AND dc.id = ?2").toString();
-		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlClass).setParameter(2, idModRegist)
+		List<?> listObj = createNativeQuery(sql).setParameter(1, idModRegist).setParameter(2, idDtlClass)
 				.getResultList();
 		listObj.forEach(val -> {
 			Object[] objArr = (Object[]) val;
 			ModuleRegistrations moduleRgs = new ModuleRegistrations();
 			moduleRgs.setId((String) objArr[0]);
 			DetailClasses dtlClass = new DetailClasses();
-			dtlClass.setStartDate((LocalDate) objArr[1]);
-			dtlClass.setEndDate((LocalDate) objArr[2]);
+			dtlClass.setStartDate(((Date) objArr[1]).toLocalDate());
+			dtlClass.setEndDate(((Date) objArr[2]).toLocalDate());
+//			dtlClass.setStartDate((LocalDate) objArr[1]);
+//			dtlClass.setEndDate((LocalDate) objArr[2]);
 			moduleRgs.setIdDetailClass(dtlClass);
 			listResult.add(moduleRgs);
 		});

@@ -157,8 +157,6 @@ public class ModuleRegistrationsServiceImpl extends ElearningBaseServiceImpl imp
 				throw new Exception("Id Module tidak boleh kosong!");
 			} else {
 				Modules module = modulesService.getById(moduleRegistration.getIdModule().getId());
-				System.out.println("Test " + moduleRegistration.getIdModule().getId());
-				System.out.println("Testtt" + module);
 				if (module == null) {
 					throw new Exception("Module tidak ada!");
 				} else {
