@@ -13,10 +13,6 @@ import com.lawencon.model.BaseTransaction;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-/**
- * @author Nur Alfilail
- */
-
 @Entity
 @JsonInclude(Include.NON_NULL)
 @Table(name = "t_r_submission_status_renewals")

@@ -18,10 +18,6 @@ import com.lawencon.model.BaseMaster;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-/**
- * @author Nur Alfilail
- */
-
 @Entity
 @JsonInclude(Include.NON_NULL)
 @Table(name = "t_m_detail_classes")
