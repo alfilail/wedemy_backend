@@ -44,6 +44,7 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 			learningMaterial.setIdFile(file);
 			dtlModuleRgs.setIdLearningMaterial(learningMaterial);
 			learningMaterialsDao.insert(dtlModuleRgs.getIdLearningMaterial(), () -> {
+				validate(dtlModuleRgs.getIdLearningMaterial());
 				validateInsert(dtlModuleRgs.getIdLearningMaterial());
 				validateFileLearningMaterial(dtlModuleRgs.getIdLearningMaterial());
 			});
@@ -75,6 +76,7 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 			dtlModuleRgs.getIdLearningMaterial().setUpdatedBy(material.getCreatedBy());
 			dtlModuleRgs.getIdLearningMaterial().setIdFile(material.getIdFile());
 			learningMaterialsDao.update(dtlModuleRgs.getIdLearningMaterial(), () -> {
+				validate(dtlModuleRgs.getIdLearningMaterial());
 				validateUpdate(dtlModuleRgs.getIdLearningMaterial());
 				validateFileLearningMaterial(dtlModuleRgs.getIdLearningMaterial());
 			});
@@ -123,6 +125,23 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 		dtlModuleRgsService.insert(dtlModuleRgs);
 	}
 
+	private void validate(LearningMaterials learningMaterial) throws Exception {
+		if (learningMaterial.getIdLearningMaterialType() == null) {
+			LearningMaterialTypes materialType = learningMaterialTypesService
+					.getById(learningMaterial.getIdLearningMaterialType().getId());
+			if (materialType == null) {
+				throw new Exception("Id tipe bahan ajar tidak ada!");
+			}
+		}
+		if (learningMaterial.getLearningMaterialName() == null
+				|| learningMaterial.getLearningMaterialName().trim().equals("")) {
+			throw new Exception("Nama bahan ajar tidak boleh kosong!");
+		}
+		if (learningMaterial.getDescription() == null || learningMaterial.getDescription().trim().equals("")) {
+			throw new Exception("Deskripsi bahan ajar tidak boleh kosong!");
+		}
+	}
+
 	private void validateInsert(LearningMaterials learningMaterial) throws Exception {
 		if (learningMaterial.getCode() == null || learningMaterial.getCode().trim().equals("")) {
 			throw new Exception("Kode bahan ajar tidak boleh kosong!");
@@ -130,22 +149,6 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 			LearningMaterials learningMaterials = getByCode(learningMaterial.getCode());
 			if (learningMaterials != null) {
 				throw new Exception("Kode bahan ajar tidak boleh sama!");
-			} else {
-				if (learningMaterial.getIdLearningMaterialType() == null) {
-					LearningMaterialTypes materialType = learningMaterialTypesService
-							.getById(learningMaterial.getIdLearningMaterialType().getId());
-					if (materialType == null) {
-						throw new Exception("Id tipe bahan ajar tidak ada!");
-					} else {
-						if (learningMaterial.getLearningMaterialName() == null
-								|| learningMaterial.getLearningMaterialName().trim().equals("")) {
-							throw new Exception("Nama bahan ajar tidak boleh kosong!");
-						} else if (learningMaterial.getDescription() == null
-								|| learningMaterial.getDescription().trim().equals("")) {
-							throw new Exception("Deskripsi bahan ajar tidak boleh kosong!");
-						}
-					}
-				}
 			}
 		}
 	}
@@ -160,31 +163,14 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 			} else {
 				if (learningMaterial.getVersion() != lm.getVersion()) {
 					throw new Exception("Kelas version tidak sama!");
+				} 
+				if (learningMaterial.getCode() == null || learningMaterial.getCode().trim().equals("")) {
+					throw new Exception("Kode bahan ajar tidak boleh kosong!");
 				} else {
-					if (learningMaterial.getCode() == null || learningMaterial.getCode().trim().equals("")) {
-						throw new Exception("Kode bahan ajar tidak boleh kosong!");
-					} else {
-						if (!learningMaterial.getCode().equalsIgnoreCase(lm.getCode())) {
-							LearningMaterials learningMaterials = getByCode(learningMaterial.getCode());
-							if (learningMaterials != null) {
-								throw new Exception("Kode bahan ajar tidak boleh sama!");
-							}
-						} else {
-							if (learningMaterial.getIdLearningMaterialType() == null) {
-								LearningMaterialTypes materialType = learningMaterialTypesService
-										.getById(learningMaterial.getIdLearningMaterialType().getId());
-								if (materialType == null) {
-									throw new Exception("Id tipe bahan ajar tidak ada!");
-								} else {
-									if (learningMaterial.getLearningMaterialName() == null
-											|| learningMaterial.getLearningMaterialName().trim().equals("")) {
-										throw new Exception("Nama bahan ajar tidak boleh kosong!");
-									} else if (learningMaterial.getDescription() == null
-											|| learningMaterial.getDescription().trim().equals("")) {
-										throw new Exception("Deskripsi bahan ajar tidak boleh kosong!");
-									}
-								}
-							}
+					if (!learningMaterial.getCode().equalsIgnoreCase(lm.getCode())) {
+						LearningMaterials learningMaterials = getByCode(learningMaterial.getCode());
+						if (learningMaterials != null) {
+							throw new Exception("Kode bahan ajar tidak boleh sama!");
 						}
 					}
 				}

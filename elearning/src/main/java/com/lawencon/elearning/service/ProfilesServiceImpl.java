@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.lawencon.base.BaseServiceImpl;
+import com.lawencon.elearning.constant.ExtensionImage;
 import com.lawencon.elearning.dao.ProfilesDao;
 import com.lawencon.elearning.model.Files;
 import com.lawencon.elearning.model.Profiles;
@@ -118,8 +119,9 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 					String[] type = profile.getIdFile().getType().split("/");
 					String ext = type[1];
 					if (ext != null) {
-						if (ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("jpg")
-								|| ext.equalsIgnoreCase("jpeg")) {
+						if (ext.equalsIgnoreCase(ExtensionImage.PNG.code) 
+								|| ext.equalsIgnoreCase(ExtensionImage.JPG.code)
+								|| ext.equalsIgnoreCase(ExtensionImage.JPEG.code)) {
 
 						} else {
 							throw new Exception("File harus gambar");

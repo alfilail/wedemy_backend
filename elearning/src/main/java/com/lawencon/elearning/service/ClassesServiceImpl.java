@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.lawencon.base.BaseServiceImpl;
+import com.lawencon.elearning.constant.ExtensionImage;
 import com.lawencon.elearning.dao.ClassesDao;
 import com.lawencon.elearning.helper.ClassInput;
 import com.lawencon.elearning.helper.TotalClassAndUser;
@@ -46,7 +47,11 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 				thumbnailImg.setName(file.getOriginalFilename());
 				filesService.insert(thumbnailImg);
 				clazz.setIdFile(thumbnailImg);
-				classesDao.insert(clazz, () -> validateInsert(clazz));
+				classesDao.insert(clazz, () -> 
+				{
+					validateInsert(clazz);
+					validate(clazz);
+				});
 				if (classInput.getDetailClass() != null) {
 					DetailClasses detailClass = classInput.getDetailClass();
 					detailClass.setCreatedBy(clazz.getCreatedBy());
@@ -86,7 +91,10 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 				Users tutor = usersService.getByIdClass(clazz.getId());
 				clazz.setIdTutor(tutor);
 			}
-			classesDao.update(clazz, () -> validateUpdate(clazz));
+			classesDao.update(clazz, () -> {
+				validateUpdate(clazz);
+				validate(clazz);
+			});
 			commit();
 		} catch (Exception e) {
 			rollback();
@@ -146,6 +154,29 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 		return classesDao.getAllInactive();
 	}
 
+	private void validate(Classes clazz) throws Exception {
+		if (clazz.getIdFile() != null) {
+			String[] type = clazz.getIdFile().getType().split("/");
+			String ext = type[1];
+			if (ext != null) {
+				if (ext.equalsIgnoreCase(ExtensionImage.PNG.code) || ext.equalsIgnoreCase(ExtensionImage.JPG.code)
+						|| ext.equalsIgnoreCase(ExtensionImage.JPEG.code)) {
+				} else {
+					throw new Exception("File harus gambar!");
+				}
+			}
+		}
+		if (clazz.getClassName() == null) {
+			throw new Exception("Nama kelas tidak boleh kosong!");
+		}
+		if (clazz.getDescription() == null) {
+			throw new Exception("Dekripsi kelas tidak boleh kosong!");
+		}
+		if (clazz.getQuota() == null) {
+			throw new Exception("Quota kelas tidak boleh kosong!");
+		}
+	}
+
 	private void validateInsert(Classes clazz) throws Exception {
 		if (clazz.getCode() == null || clazz.getCode().trim().equals("")) {
 			throw new Exception("Kode kelas tidak boleh kosong!");
@@ -153,30 +184,13 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 			Classes cls = getByCode(clazz.getCode());
 			if (cls != null) {
 				throw new Exception("Kode kelas yang dimasukkan sudah ada!");
+			}
+			if (clazz.getIdTutor() == null) {
+				throw new Exception("Tutor tidak boleh kosong!");
 			} else {
-				if (clazz.getIdTutor() == null) {
-					throw new Exception("Tutor tidak boleh kosong!");
-				} else {
-					Users user = usersService.getByIdNumber(clazz.getIdTutor().getIdProfile().getIdNumber());
-					if (user == null) {
-						throw new Exception("Id Tutor tidak ada!");
-					} else {
-						String[] type = clazz.getIdFile().getType().split("/");
-						String ext = type[1];
-						if (ext != null) {
-							if (ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("png")
-									|| ext.equalsIgnoreCase("jpeg")) {
-							} else {
-								throw new Exception("File harus gambar!");
-							}
-						} else if (clazz.getClassName() == null) {
-							throw new Exception("Nama kelas tidak boleh kosong!");
-						} else if (clazz.getDescription() == null) {
-							throw new Exception("Dekripsi kelas tidak boleh kosong!");
-						} else if (clazz.getQuota() == null) {
-							throw new Exception("Quota kelas tidak boleh kosong!");
-						}
-					}
+				Users user = usersService.getByIdNumber(clazz.getIdTutor().getIdProfile().getIdNumber());
+				if (user == null) {
+					throw new Exception("Id Tutor tidak ada!");
 				}
 			}
 		}
@@ -201,32 +215,10 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 							if (clz != null) {
 								throw new Exception("Kode kelas tidak boleh sama");
 							}
-						} else {
-							if (clazz.getIdFile() != null) {
-								String[] type = clazz.getIdFile().getType().split("/");
-								String ext = type[1];
-								if (ext != null) {
-									if (ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("png")
-											|| ext.equalsIgnoreCase("jpeg")) {
-									} else {
-										throw new Exception("File harus gambar!");
-									}
-								}
-							}
-							if (clazz.getClassName() == null) {
-								throw new Exception("Nama kelas tidak boleh kosong!");
-							}
-							if (clazz.getDescription() == null) {
-								throw new Exception("Dekripsi kelas tidak boleh kosong!");
-							}
-							if (clazz.getQuota() == null) {
-								throw new Exception("Quota kelas tidak boleh kosong!");
-							}
 						}
 					}
 				}
 			}
 		}
 	}
-
 }
