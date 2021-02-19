@@ -12,8 +12,6 @@ public interface DetailForumsDao {
 	
 	DetailForums getDetailForumById(String id) throws Exception;
 	
-	void updateDetailForum(DetailForums detailForum, Callback before) throws Exception;
-	
 	void softDeleteDetailForumById(String id, String idUser) throws Exception;
 	
 	DetailForums getDetailForumByCode(String code) throws Exception;

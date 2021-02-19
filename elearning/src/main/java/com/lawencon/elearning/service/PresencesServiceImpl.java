@@ -51,11 +51,6 @@ public class PresencesServiceImpl extends ElearningBaseServiceImpl implements Pr
 	}
 
 	@Override
-	public void update(Presences presence) throws Exception {
-		presencesDao.update(presence, () -> validateUpdate(presence));
-	}
-
-	@Override
 	public void deleteById(String id) throws Exception {
 		presencesDao.deletePresenceById(id);
 	}
@@ -111,10 +106,6 @@ public class PresencesServiceImpl extends ElearningBaseServiceImpl implements Pr
 		} else {
 			throw new Exception("Id User tidak boleh kosong");
 		}
-	}
-
-	private void validateUpdate(Presences presence) throws Exception {
-
 	}
 
 }

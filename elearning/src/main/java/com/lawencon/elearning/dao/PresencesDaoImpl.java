@@ -17,11 +17,6 @@ public class PresencesDaoImpl extends ElearningBaseDaoImpl<Presences> implements
 	}
 
 	@Override
-	public void update(Presences presence, Callback before) throws Exception {
-		save(presence, before, null, true, true);
-	}
-
-	@Override
 	public void deletePresenceById(String id) throws Exception {
 		deleteById(id);
 	}

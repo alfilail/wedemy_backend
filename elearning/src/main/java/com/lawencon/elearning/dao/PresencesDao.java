@@ -9,8 +9,6 @@ public interface PresencesDao {
 
 	void insert(Presences presence, Callback before) throws Exception;
 
-	void update(Presences presence, Callback before) throws Exception;
-
 	void deletePresenceById(String id) throws Exception;
 
 	Presences getPresenceById(String id) throws Exception;

@@ -9,8 +9,6 @@ public interface ForumsDao {
 	
 	void insertForum(Forums forum, Callback before) throws Exception;
 	
-	void updateContentForum(Forums forum, Callback before) throws Exception;
-	
 	void deleteForumById(String id) throws Exception;
 	
 	List<Forums> getAllForums() throws Exception;

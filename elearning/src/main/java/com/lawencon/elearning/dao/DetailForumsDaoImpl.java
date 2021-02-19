@@ -22,11 +22,6 @@ public class DetailForumsDaoImpl extends ElearningBaseDaoImpl<DetailForums> impl
 	}
 
 	@Override
-	public void updateDetailForum(DetailForums detailForum, Callback before) throws Exception {
-		save(detailForum, before, null, true, true);
-	}
-
-	@Override
 	public void softDeleteDetailForumById(String id, String idUser) throws Exception {
 		updateNativeSQL("UPDATE t_m_detail_forums SET is_active = FALSE", id, idUser);
 	}

@@ -6,19 +6,19 @@ import com.lawencon.elearning.model.ClassEnrollments;
 import com.lawencon.elearning.model.DetailClasses;
 
 public interface ClassEnrollmentService {
-	void insertClassEnrollment(ClassEnrollments classEnrollment) throws Exception;
 
-	List<ClassEnrollments> getAllClassEnrollments() throws Exception;
+	void insert(ClassEnrollments classEnrollment) throws Exception;
 
-	ClassEnrollments getClassEnrollmentsById(String id) throws Exception;
+	void deleteById(String id) throws Exception;
 
-	List<DetailClasses> getAllClassEnrollmentsByIdUser(String id) throws Exception;
+	ClassEnrollments getById(String id) throws Exception;
 
-	ClassEnrollments getClassEnrollmentByIdDtlClassAndIdUser(String idDtlClass, String idUser);
-
-	void deleteClassEnrollmentsById(String id) throws Exception;
-
-	void updateClassEnrollments(ClassEnrollments classEnrollment) throws Exception;
+	ClassEnrollments getByIdDtlClassAndIdParticipant(String idDtlClass, String idUser);
 
 	Integer getTotalParticipantsByIdDtlClass(String id) throws Exception;
+
+	List<ClassEnrollments> getAll() throws Exception;
+
+	List<DetailClasses> getAllByIdUser(String id) throws Exception;
+
 }

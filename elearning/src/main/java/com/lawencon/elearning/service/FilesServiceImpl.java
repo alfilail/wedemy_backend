@@ -7,10 +7,6 @@ import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.elearning.dao.FilesDao;
 import com.lawencon.elearning.model.Files;
 
-/**
- * @author Nur Alfilail
- */
-
 @Service
 public class FilesServiceImpl extends BaseServiceImpl implements FilesService {
 
@@ -23,13 +19,13 @@ public class FilesServiceImpl extends BaseServiceImpl implements FilesService {
 	}
 
 	@Override
-	public Files getById(String id) throws Exception {
-		return filesDao.getFileById(id);
+	public void update(Files file) throws Exception {
+		filesDao.update(file, null);
 	}
 
 	@Override
-	public void update(Files file) throws Exception {
-		filesDao.update(file, null);
+	public Files getById(String id) throws Exception {
+		return filesDao.getFileById(id);
 	}
 
 }

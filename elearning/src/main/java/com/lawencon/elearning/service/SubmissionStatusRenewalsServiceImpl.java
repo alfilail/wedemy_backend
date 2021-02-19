@@ -12,10 +12,6 @@ import com.lawencon.elearning.model.SubmissionStatus;
 import com.lawencon.elearning.model.SubmissionStatusRenewal;
 import com.lawencon.elearning.model.Users;
 
-/**
- * @author Nur Alfilail
- */
-
 @Service
 public class SubmissionStatusRenewalsServiceImpl extends ElearningBaseServiceImpl
 		implements SubmissionStatusRenewalsService {
@@ -28,7 +24,7 @@ public class SubmissionStatusRenewalsServiceImpl extends ElearningBaseServiceImp
 
 	@Autowired
 	private SubmissionStatusService statusService;
-	
+
 	@Autowired
 	private UsersService usersService;
 

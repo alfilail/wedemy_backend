@@ -16,8 +16,6 @@ public interface AssignmentSubmissionsDao {
 
 	AssignmentSubmissions getSubmissionById(String id) throws Exception;
 
-	AssignmentSubmissions getSubmissionByCode(String code) throws Exception;
-
 	AssignmentSubmissions getByIdDtlModuleRgsAndIdParticipant(String idDtlModuleRgs, String idParticipant)
 			throws Exception;
 

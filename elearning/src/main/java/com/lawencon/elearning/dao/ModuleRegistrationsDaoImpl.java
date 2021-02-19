@@ -46,7 +46,7 @@ public class ModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<ModuleRegis
 			moduleRgs.setIdDetailClass(dtlClass);
 			listResult.add(moduleRgs);
 		});
-		return listResult.size() > 0 ? listResult.get(0) : null;
+		return resultCheck(listResult);
 	}
 
 	@Override

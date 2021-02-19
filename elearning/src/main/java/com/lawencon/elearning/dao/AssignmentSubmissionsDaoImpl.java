@@ -78,11 +78,6 @@ public class AssignmentSubmissionsDaoImpl extends ElearningBaseDaoImpl<Assignmen
 	}
 
 	@Override
-	public AssignmentSubmissions getSubmissionByCode(String code) throws Exception {
-		return null;
-	}
-
-	@Override
 	public AssignmentSubmissions getSubmissionById(String id) throws Exception {
 		return getById(id);
 	}

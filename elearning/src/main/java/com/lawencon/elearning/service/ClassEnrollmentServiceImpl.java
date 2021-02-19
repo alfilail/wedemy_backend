@@ -5,14 +5,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lawencon.elearning.constant.TransactionNumberCode;
 import com.lawencon.elearning.dao.ClassEnrollmentsDao;
 import com.lawencon.elearning.model.ClassEnrollments;
 import com.lawencon.elearning.model.DetailClasses;
-import com.lawencon.elearning.constant.TransactionNumberCode;
 
 @Service
 public class ClassEnrollmentServiceImpl extends ElearningBaseServiceImpl implements ClassEnrollmentService {
-	
+
 	@Autowired
 	private ClassEnrollmentsDao classEnrollmentDao;
 
@@ -20,7 +20,7 @@ public class ClassEnrollmentServiceImpl extends ElearningBaseServiceImpl impleme
 	private DetailClassesService detailClassService;
 
 	@Override
-	public void insertClassEnrollment(ClassEnrollments classEnrollment) throws Exception {
+	public void insert(ClassEnrollments classEnrollment) throws Exception {
 		try {
 			begin();
 			classEnrollment.setTrxNumber(generateTrxNumber(TransactionNumberCode.CLASS_ENROLLMENT.code));
@@ -34,22 +34,17 @@ public class ClassEnrollmentServiceImpl extends ElearningBaseServiceImpl impleme
 	}
 
 	@Override
-	public List<ClassEnrollments> getAllClassEnrollments() throws Exception {
-		return classEnrollmentDao.getAllClassEnrollments();
+	public void deleteById(String id) throws Exception {
+		classEnrollmentDao.deleteClassEnrollmentById(id);
 	}
 
 	@Override
-	public ClassEnrollments getClassEnrollmentsById(String id) throws Exception {
+	public ClassEnrollments getById(String id) throws Exception {
 		return classEnrollmentDao.getClassEnrollmentById(id);
 	}
 
 	@Override
-	public List<DetailClasses> getAllClassEnrollmentsByIdUser(String id) throws Exception {
-		return classEnrollmentDao.getAllClassEnrollmentsByIdUser(id);
-	}
-
-	@Override
-	public ClassEnrollments getClassEnrollmentByIdDtlClassAndIdUser(String idDtlClass, String idUser) {
+	public ClassEnrollments getByIdDtlClassAndIdParticipant(String idDtlClass, String idUser) {
 		return classEnrollmentDao.getClassEnrollmentByIdDtlClassAndIdUser(idDtlClass, idUser);
 	}
 
@@ -59,13 +54,13 @@ public class ClassEnrollmentServiceImpl extends ElearningBaseServiceImpl impleme
 	}
 
 	@Override
-	public void updateClassEnrollments(ClassEnrollments classEnrollment) throws Exception {
-		classEnrollmentDao.update(classEnrollment, () -> validateUpdate(classEnrollment));
+	public List<ClassEnrollments> getAll() throws Exception {
+		return classEnrollmentDao.getAllClassEnrollments();
 	}
 
 	@Override
-	public void deleteClassEnrollmentsById(String id) throws Exception {
-		classEnrollmentDao.deleteClassEnrollmentById(id);
+	public List<DetailClasses> getAllByIdUser(String id) throws Exception {
+		return classEnrollmentDao.getAllClassEnrollmentsByIdUser(id);
 	}
 
 	private void validateInsert(ClassEnrollments classEnrollment) throws Exception {
@@ -76,7 +71,4 @@ public class ClassEnrollmentServiceImpl extends ElearningBaseServiceImpl impleme
 		}
 	}
 
-	private void validateUpdate(ClassEnrollments classEnrollment) throws Exception {
-
-	}
 }

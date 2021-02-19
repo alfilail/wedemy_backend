@@ -48,12 +48,6 @@ public class DetailForumsServiceImpl extends ElearningBaseServiceImpl implements
 	}
 
 	@Override
-	public void updateDetailForum(DetailForums detailForum) throws Exception {
-		detailForum.setDtlForumDateTime(LocalDateTime.now());
-		detailForumDao.updateDetailForum(detailForum, () -> validateUpdate(detailForum));
-	}
-
-	@Override
 	public void softDeleteDetailForumById(String id, String idUser) throws Exception {
 		detailForumDao.softDeleteDetailForumById(id, idUser);
 	}
@@ -85,7 +79,4 @@ public class DetailForumsServiceImpl extends ElearningBaseServiceImpl implements
 		}
 	}
 
-	private void validateUpdate(DetailForums detailForum) {
-
-	}
 }

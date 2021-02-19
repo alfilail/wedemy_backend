@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -67,18 +66,6 @@ public class ForumsController extends ElearningBaseController {
 			List<ForumAndDetailForums> listResult = new ArrayList<>();
 			listResult = forumsService.getForumByIdDetailModuleRegistration(id);
 			return responseSuccess(listResult, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
-
-	@PatchMapping
-	public ResponseEntity<?> update(@RequestBody String body) {
-		try {
-			Forums forum = new ObjectMapper().readValue(body, Forums.class);
-			forumsService.updateContentForum(forum);
-			return responseSuccess(forum, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);

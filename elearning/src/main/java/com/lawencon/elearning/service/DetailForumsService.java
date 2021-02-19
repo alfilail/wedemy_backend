@@ -13,8 +13,6 @@ public interface DetailForumsService {
 	
 	void softDeleteDetailForumById (String id, String idUser) throws Exception;
 	
-	void updateDetailForum(DetailForums detailForum) throws Exception;
-	
 	DetailForums getDetailForumByCode(String code) throws Exception;
 	
 	List<DetailForums> getAllDetailForumsByIdForum(String idForum) throws Exception;

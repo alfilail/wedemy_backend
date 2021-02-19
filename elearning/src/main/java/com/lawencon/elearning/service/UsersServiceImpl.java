@@ -139,22 +139,17 @@ public class UsersServiceImpl extends ElearningBaseServiceImpl implements UsersS
 	private void sendEmailResetPassword(String pass, Profiles profile) throws Exception {
 		General general = generalService.getTemplateEmail(TemplateEmail.RESET_PASSWORD.code);
 		String text = general.getTemplateHtml();
-		
 		text = text.replace("#1#", profile.getFullName());
 		text = text.replace("#2#", pass);
-		
 		sendMail(TemplateEmail.RESET_PASSWORD, profile, text);
 	}
-	
+
 	private void sendEmailRegister(Profiles profile) throws Exception {
 		General general = generalService.getTemplateEmail(TemplateEmail.REGISTER.code);
 		String text = general.getTemplateHtml();
-
 		text = text.replace("#1#", profile.getFullName());
-		
 		sendMail(TemplateEmail.REGISTER, profile, text);
 	}
-
 
 	private void validateInsert(Users user) throws Exception {
 		if (user.getUsername() == null || user.getUsername().trim().equals("")) {

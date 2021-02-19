@@ -14,13 +14,13 @@ public class FilesDaoImpl extends ElearningBaseDaoImpl<Files> implements FilesDa
 	}
 
 	@Override
-	public Files getFileById(String id) throws Exception {
-		return getById(id);
+	public void update(Files file, Callback before) throws Exception {
+		save(file, before, null);
 	}
 
 	@Override
-	public void update(Files file, Callback before) throws Exception {
-		save(file, before, null);
+	public Files getFileById(String id) throws Exception {
+		return getById(id);
 	}
 
 }

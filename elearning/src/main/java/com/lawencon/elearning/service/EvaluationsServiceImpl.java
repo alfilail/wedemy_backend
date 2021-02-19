@@ -17,10 +17,6 @@ import com.lawencon.elearning.model.Grades;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.SubmissionStatusRenewal;
 
-/**
- * @author Nur Alfilail
- */
-
 @Service
 public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements EvaluationsService {
 
@@ -50,7 +46,7 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 				Grades grade = gradesService.getByScore(evaluation.getScore());
 				evaluation.setIdGrade(grade);
 				evaluation.setTrxNumber(generateTrxNumber(TransactionNumberCode.EVALUATION.code));
-				evaluationsDao.insertEvaluation(evaluation, () -> validateInsert(evaluation));
+				evaluationsDao.insertEvaluation(evaluation, () -> validate(evaluation));
 				insertStatusRenewal(evaluation);
 				System.out.println("Sending Email...");
 				sendEmail(evaluation);
@@ -76,7 +72,10 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 				evaluation.setUpdatedBy(eval.getCreatedBy());
 				evaluation.setTrxDate(eval.getTrxDate());
 				evaluation.setTrxNumber(eval.getTrxNumber());
-				evaluationsDao.updateEvaluation(evaluation, () -> validateUpdate(evaluation));
+				evaluationsDao.updateEvaluation(evaluation, () -> {
+					validateUpdate(evaluation);
+					validate(evaluation);
+				});
 			}
 			commit();
 		} catch (Exception e) {
@@ -114,7 +113,7 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 		statusRenewalService.insertSubmissionStatusRenewal(statusRenewal);
 	}
 
-	private void validateInsert(Evaluations evaluation) throws Exception {
+	private void validate(Evaluations evaluation) throws Exception {
 		if (evaluation.getIdAssignmentSubmission() != null && evaluation.getIdAssignmentSubmission().getId() != null) {
 			AssignmentSubmissions submission = assignmentSubmissionsService
 					.getById(evaluation.getIdAssignmentSubmission().getId());
@@ -124,15 +123,15 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 		} else {
 			throw new Exception("Id Assignment Submission tidak boleh kosong");
 		}
+		if (evaluation.getIdGrade() == null) {
+			throw new Exception("Score harus dalam rentang 0 - 100");
+		}
 		if (evaluation.getScore() != null) {
 			if (evaluation.getScore() < 0 || evaluation.getScore() > 100) {
 				throw new Exception("Score harus dalam rentang 0 - 100");
 			}
 		} else {
 			throw new Exception("Score tidak boleh kosong");
-		}
-		if (evaluation.getIdGrade() == null) {
-			throw new Exception("Score harus dalam rentang 0 - 100");
 		}
 	}
 
@@ -153,25 +152,6 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 		} else {
 			throw new Exception("Version tidak boleh kosong");
 		}
-		if (evaluation.getIdAssignmentSubmission() != null) {
-			AssignmentSubmissions submission = assignmentSubmissionsService
-					.getById(evaluation.getIdAssignmentSubmission().getId());
-			if (submission == null) {
-				throw new Exception("Id Assignment Submission salah");
-			}
-		} else {
-			throw new Exception("Id Assignment Submission tidak boleh kosong");
-		}
-		if (evaluation.getIdGrade() == null) {
-			throw new Exception("Score harus dalam rentang 0 - 100");
-		}
-		if (evaluation.getScore() != null) {
-			if (evaluation.getScore() < 0 || evaluation.getScore() > 100) {
-				throw new Exception("Score harus dalam rentang 0 - 100");
-			}
-		} else {
-			throw new Exception("Score tidak boleh kosong");
-		}
 	}
 
 	private void sendEmail(Evaluations evaluation) throws Exception {
@@ -179,19 +159,15 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 				.getById(evaluation.getIdAssignmentSubmission().getId());
 		evaluation.setIdAssignmentSubmission(assignmentSubmissions);
 		Profiles participant = evaluationsDao.getParticipantProfile(evaluation);
-
 		General general = generalService.getTemplateEmail(TemplateEmail.EVALUATION_PARTICIPANT.code);
 		String text = general.getTemplateHtml();
-
 		text = text.replace("#1#", participant.getFullName());
-
 		sendMail(TemplateEmail.EVALUATION_PARTICIPANT, participant, text);
 	}
 
 	@Override
 	public List<?> reportAllScore(String idClass) throws Exception {
 		List<?> data = evaluationsDao.reportAllScore(idClass);
-//		validateReport(data);
 		return data;
 	}
 
@@ -206,7 +182,7 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 	public List<?> getCertificate(String idUser, String idDetailClass) throws Exception {
 		List<?> data = evaluationsDao.getCertificate(idUser, idDetailClass);
 		validateReport(data);
-		return data;			
+		return data;
 	}
 
 	private void validateReport(List<?> data) throws Exception {

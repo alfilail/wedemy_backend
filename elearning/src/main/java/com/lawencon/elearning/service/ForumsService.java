@@ -9,13 +9,11 @@ public interface ForumsService {
 
 	void insertForum(Forums forum) throws Exception;
 
-	void updateContentForum(Forums forum) throws Exception;
-
 	void deleteForumByIdDetailModuleRegistration(String id, String idUser) throws Exception;
 
-	List<Forums> getAllForums() throws Exception;
-
 	Forums getForumById(String id) throws Exception;
+
+	List<Forums> getAllForums() throws Exception;
 
 	List<ForumAndDetailForums> getForumByIdDetailModuleRegistration(String id) throws Exception;
 

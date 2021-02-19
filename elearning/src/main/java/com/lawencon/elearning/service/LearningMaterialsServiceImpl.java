@@ -74,11 +74,10 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 			dtlModuleRgs.getIdLearningMaterial().setCreatedBy(material.getCreatedBy());
 			dtlModuleRgs.getIdLearningMaterial().setUpdatedBy(material.getCreatedBy());
 			dtlModuleRgs.getIdLearningMaterial().setIdFile(material.getIdFile());
-			learningMaterialsDao.update(dtlModuleRgs.getIdLearningMaterial(),
-					() -> {
-						validateUpdate(dtlModuleRgs.getIdLearningMaterial());
-						validateFileLearningMaterial(dtlModuleRgs.getIdLearningMaterial());
-					});
+			learningMaterialsDao.update(dtlModuleRgs.getIdLearningMaterial(), () -> {
+				validateUpdate(dtlModuleRgs.getIdLearningMaterial());
+				validateFileLearningMaterial(dtlModuleRgs.getIdLearningMaterial());
+			});
 			dtlModuleRgsService.update(dtlModuleRgs);
 			commit();
 		} catch (Exception e) {
@@ -209,8 +208,7 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 		String ext = type[1];
 		System.out.println("extension" + ext);
 		if (ext != null) {
-			if (ext.equalsIgnoreCase(ExtensionDocument.DOC.code) 
-					|| ext.equalsIgnoreCase(ExtensionDocument.DOCX.code)
+			if (ext.equalsIgnoreCase(ExtensionDocument.DOC.code) || ext.equalsIgnoreCase(ExtensionDocument.DOCX.code)
 					|| ext.equalsIgnoreCase(ExtensionDocument.PDF.code)
 					|| ext.equalsIgnoreCase(ExtensionDocument.ODT.code)
 					|| ext.equalsIgnoreCase(ExtensionDocument.WPS.code)

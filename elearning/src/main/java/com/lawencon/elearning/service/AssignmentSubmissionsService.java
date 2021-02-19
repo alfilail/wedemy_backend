@@ -19,8 +19,6 @@ public interface AssignmentSubmissionsService {
 
 	AssignmentSubmissions getById(String id) throws Exception;
 
-	AssignmentSubmissions getByCode(String code) throws Exception;
-
 	List<AssignmentSubmissions> getAll() throws Exception;
 
 }

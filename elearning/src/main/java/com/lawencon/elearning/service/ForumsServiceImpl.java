@@ -39,11 +39,6 @@ public class ForumsServiceImpl extends ElearningBaseServiceImpl implements Forum
 	}
 
 	@Override
-	public void updateContentForum(Forums forum) throws Exception {
-		forumsDao.updateContentForum(forum, () -> validateUpdate(forum));
-	}
-
-	@Override
 	public void deleteForumByIdDetailModuleRegistration(String idDetailModuleRegistration, String idUser)
 			throws Exception {
 		begin();
@@ -59,13 +54,13 @@ public class ForumsServiceImpl extends ElearningBaseServiceImpl implements Forum
 	}
 
 	@Override
-	public List<Forums> getAllForums() throws Exception {
-		return forumsDao.getAllForums();
+	public Forums getForumById(String id) throws Exception {
+		return forumsDao.getForumById(id);
 	}
 
 	@Override
-	public Forums getForumById(String id) throws Exception {
-		return forumsDao.getForumById(id);
+	public List<Forums> getAllForums() throws Exception {
+		return forumsDao.getAllForums();
 	}
 
 	@Override
@@ -103,10 +98,6 @@ public class ForumsServiceImpl extends ElearningBaseServiceImpl implements Forum
 		} else {
 			throw new Exception("Id User tidak boleh kosong");
 		}
-	}
-
-	private void validateUpdate(Forums forum) throws Exception {
-
 	}
 
 }

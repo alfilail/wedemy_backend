@@ -8,8 +8,6 @@ public interface PresencesService {
 
 	void insert(Presences presence) throws Exception;
 
-	void update(Presences presence) throws Exception;
-
 	void deleteById(String id) throws Exception;
 
 	Presences getById(String id) throws Exception;

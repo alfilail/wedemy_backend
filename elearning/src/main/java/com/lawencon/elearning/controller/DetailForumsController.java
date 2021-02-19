@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -67,21 +66,6 @@ public class DetailForumsController extends ElearningBaseController {
 		try {
 			List<DetailForums> detailForums = detailForumService.getAllDetailForumsByIdForum(idForum);
 			return responseSuccess(detailForums, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
-
-	@PutMapping
-	public ResponseEntity<?> update(@RequestBody String body) {
-		try {
-			ObjectMapper obj = new ObjectMapper();
-			obj.registerModule(new JavaTimeModule());
-			DetailForums detailForum = obj.readValue(body, DetailForums.class);
-			detailForumService.updateDetailForum(detailForum);
-			DetailForums dtlForum = detailForumService.getDetailForumById(detailForum.getId());
-			return responseSuccess(dtlForum, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);

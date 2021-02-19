@@ -30,7 +30,10 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 	@Override
 	public void insert(DetailModuleRegistrations dtlModuleRgs) throws Exception {
 		dtlModuleRgs.setTrxNumber(generateTrxNumber(TransactionNumberCode.DETAIL_MODULE_REGISTRATION.code));
-		dtlModuleRgsDao.insert(dtlModuleRgs, () -> validateInsert(dtlModuleRgs));
+		dtlModuleRgsDao.insert(dtlModuleRgs, () -> {
+			validate(dtlModuleRgs);
+			validateInsert(dtlModuleRgs);
+		});
 	}
 
 	@Override
@@ -39,7 +42,10 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 		dtlModuleRgs.setCreatedAt(dtlModuleRgs.getCreatedAt());
 		dtlModuleRgs.setCreatedBy(dtlModRgs.getCreatedBy());
 		dtlModuleRgs.setIdModuleRegistration(dtlModRgs.getIdModuleRegistration());
-		dtlModuleRgsDao.update(dtlModuleRgs, () -> validateUpdate(dtlModuleRgs));
+		dtlModuleRgsDao.update(dtlModuleRgs, () -> {
+			validate(dtlModuleRgs);
+			validateUpdate(dtlModuleRgs);
+		});
 	}
 
 	@Override
@@ -67,10 +73,13 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 		return dtlModuleRgsDao.getAllByIdModuleRgs(idModuleRgs);
 	}
 
-	private void validateInsert(DetailModuleRegistrations dtlModRegist) throws Exception {
+	private void validate(DetailModuleRegistrations dtlModRegist) throws Exception {
 		if (dtlModRegist.getIdLearningMaterial().getId() == null) {
 			throw new Exception("Id Learning Material tidak boleh kosong");
 		}
+	}
+
+	private void validateInsert(DetailModuleRegistrations dtlModRegist) throws Exception {
 		if (dtlModRegist.getIdModuleRegistration() != null) {
 			ModuleRegistrations moduleRgs = moduleRgsService.getById(dtlModRegist.getIdModuleRegistration().getId());
 			if (moduleRgs == null) {
@@ -104,9 +113,6 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 				throw new Exception("Detail Module Registration version tidak sama!");
 			}
 		}
-		if (dtlModuleRgs.getIdLearningMaterial().getId() == null) {
-			throw new Exception("Id Learning Material tidak boleh kosong");
-		}
 		if (dtlModuleRgs.getScheduleDate() != null) {
 			if (dtlModuleRgs.getScheduleDate()
 					.isAfter(dtlModuleRgs.getIdModuleRegistration().getIdDetailClass().getEndDate())) {
@@ -119,17 +125,7 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 		} else {
 			throw new Exception("Jadwal materi tidak boleh kosong");
 		}
-//		if (dtlModuleRgs.getOrderNumber() != null) {
-//			DetailModuleRegistrations formerData1 = dtlModuleRgsDao.getDtlModuleRgsById(dtlModuleRgs.getId());
-//			if (!dtlModuleRgs.getOrderNumber().equals(formerData1.getOrderNumber())) {
-//				DetailModuleRegistrations formerData2 = dtlModuleRgsDao.getDtlModuleRgsByOrderNumber(dtlModuleRgs);
-//				if (formerData2 != null) {
-//					throw new Exception("Order number dalam satu modul tidak boleh sama");
-//				}
-//			}
-//		} else {
-//			throw new Exception("Order number tidak boleh kosong");
-//		}
+
 	}
 
 	@Override

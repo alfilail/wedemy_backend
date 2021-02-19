@@ -45,4 +45,5 @@ public class ElearningBaseServiceImpl extends BaseServiceImpl {
 		mailHelper.setText(text);
 		new MailServiceImpl(mailUtil, mailHelper).start();
 	}
+	
 }

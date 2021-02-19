@@ -8,6 +8,7 @@ import com.lawencon.elearning.model.General;
 
 @Service
 public class GeneralServiceImpl implements GeneralService{
+	
 	@Autowired
 	private GeneralDao generalDao;
 	
@@ -15,4 +16,5 @@ public class GeneralServiceImpl implements GeneralService{
 	public General getTemplateEmail(String code) throws Exception {
 		return generalDao.getTemplateEmail(code);
 	}
+	
 }

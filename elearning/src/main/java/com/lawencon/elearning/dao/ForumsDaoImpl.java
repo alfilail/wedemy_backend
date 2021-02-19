@@ -22,11 +22,6 @@ public class ForumsDaoImpl extends ElearningBaseDaoImpl<Forums> implements Forum
 	}
 
 	@Override
-	public void updateContentForum(Forums forum, Callback before) throws Exception {
-		save(forum, before, null, true, true);
-	}
-
-	@Override
 	public void deleteForumById(String id) throws Exception {
 		deleteById(id);
 	}

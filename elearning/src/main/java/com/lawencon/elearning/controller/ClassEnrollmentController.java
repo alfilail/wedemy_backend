@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,7 +33,7 @@ public class ClassEnrollmentController extends ElearningBaseController {
 	public ResponseEntity<?> insert(@RequestBody String body) {
 		try {
 			ClassEnrollments classEnrollment = new ObjectMapper().readValue(body, ClassEnrollments.class);
-			classEnrollmentService.insertClassEnrollment(classEnrollment);
+			classEnrollmentService.insert(classEnrollment);
 			return responseSuccess(classEnrollment, HttpStatus.OK, MessageStat.SUCCESS_CREATE_ENROLL);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -45,7 +44,7 @@ public class ClassEnrollmentController extends ElearningBaseController {
 	@GetMapping
 	public ResponseEntity<?> getAll() {
 		try {
-			List<ClassEnrollments> classEnrollments = classEnrollmentService.getAllClassEnrollments();
+			List<ClassEnrollments> classEnrollments = classEnrollmentService.getAll();
 			return responseSuccess(classEnrollments, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -56,7 +55,7 @@ public class ClassEnrollmentController extends ElearningBaseController {
 	@GetMapping("{id}")
 	public ResponseEntity<?> getById(@PathVariable("id") String id) {
 		try {
-			ClassEnrollments classEnrollment = classEnrollmentService.getClassEnrollmentsById(id);
+			ClassEnrollments classEnrollment = classEnrollmentService.getById(id);
 			return responseSuccess(classEnrollment, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -67,7 +66,7 @@ public class ClassEnrollmentController extends ElearningBaseController {
 	@GetMapping("participant/{id}")
 	public ResponseEntity<?> getAllByIdParticipant(@PathVariable("id") String id) {
 		try {
-			List<DetailClasses> classEnrollments = classEnrollmentService.getAllClassEnrollmentsByIdUser(id);
+			List<DetailClasses> classEnrollments = classEnrollmentService.getAllByIdUser(id);
 			return responseSuccess(classEnrollments, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -79,21 +78,9 @@ public class ClassEnrollmentController extends ElearningBaseController {
 	public ResponseEntity<?> getAllByIdDtlClassAndIdParticipant(@RequestParam("idDtlClass") String idDtlClass,
 			@RequestParam("idUser") String idUser) {
 		try {
-			ClassEnrollments classEnrollment = classEnrollmentService
-					.getClassEnrollmentByIdDtlClassAndIdUser(idDtlClass, idUser);
+			ClassEnrollments classEnrollment = classEnrollmentService.getByIdDtlClassAndIdParticipant(idDtlClass,
+					idUser);
 			return responseSuccess(classEnrollment, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
-
-	@PutMapping
-	public ResponseEntity<?> update(@RequestBody String body) {
-		try {
-			ClassEnrollments classEnrollment = new ObjectMapper().readValue(body, ClassEnrollments.class);
-			classEnrollmentService.updateClassEnrollments(classEnrollment);
-			return responseSuccess(classEnrollment, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
@@ -103,7 +90,7 @@ public class ClassEnrollmentController extends ElearningBaseController {
 	@DeleteMapping("{id}")
 	public ResponseEntity<?> deleteById(@PathVariable("id") String id) {
 		try {
-			classEnrollmentService.deleteClassEnrollmentsById(id);
+			classEnrollmentService.deleteById(id);
 			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();
