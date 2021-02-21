@@ -173,8 +173,8 @@ public class EvaluationsDaoImpl extends ElearningBaseDaoImpl<Evaluations> implem
 				" INNER JOIN t_m_modules m ON m.id = mr.id_module ",
 				" INNER JOIN t_m_detail_classes dc on dc.id = mr.id_dtl_class ",
 				" INNER JOIN t_m_classes c on c.id = dc.id_class", " WHERE dc.id = ?1 AND ams.id_participant = ?2 ",
-				" GROUP BY p.fullname, p.email, p.address, p.phone, m.code, m.module_name, dmr.order_number ",
-				" ORDER BY dmr.order_number").toString();
+				" GROUP BY p.fullname, p.email, p.address, p.phone, m.code, m.module_name ",
+				" ORDER BY dmr.schedule_date").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, idDtlClass).setParameter(2, idParticipant)
 				.getResultList();
 		List<Evaluations> listEvaluations = new ArrayList<>();

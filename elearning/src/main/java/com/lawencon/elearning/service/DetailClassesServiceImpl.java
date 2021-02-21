@@ -89,7 +89,6 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 					DetailModuleRegistrations detail = new DetailModuleRegistrations();
 					detail.setIdLearningMaterial(detailModule.getIdLearningMaterial());
 					detail.setIdModuleRegistration(detailModule.getIdModuleRegistration());
-					detail.setOrderNumber(detailModule.getOrderNumber());
 					detail.setScheduleDate(detailModule.getScheduleDate());
 					detailModuleList.add(detail);
 				}

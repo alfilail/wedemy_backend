@@ -34,9 +34,6 @@ public class DetailModuleRegistrations extends BaseTransaction {
 	@JoinColumn(name = "id_learning_material", nullable = false, foreignKey = @ForeignKey(name = "FK_LEARNING_MATERIAL_OF_DTL_MODULE_RGS"))
 	private LearningMaterials idLearningMaterial;
 
-	@Column(name = "order_number", nullable = false)
-	private Integer orderNumber;
-
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	@Column(name = "schedule_date", nullable = false)
 	private LocalDate scheduleDate;

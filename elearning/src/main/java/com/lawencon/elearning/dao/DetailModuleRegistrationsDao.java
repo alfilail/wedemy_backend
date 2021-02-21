@@ -15,14 +15,13 @@ public interface DetailModuleRegistrationsDao {
 
 	DetailModuleRegistrations getDtlModuleRgsById(String id) throws Exception;
 
-	DetailModuleRegistrations getDtlModuleRgsByOrderNumber(DetailModuleRegistrations dtlModuleRgs) throws Exception;
-
 	DetailModuleRegistrations getDtlModuleRgsByIdLearningMaterial(String id) throws Exception;
 
 	Integer totalHours(String idDtlClass) throws Exception;
 
 	List<DetailModuleRegistrations> getAllByIdModuleRgs(String idModuleRgs) throws Exception;
-	
-	List<DetailModuleRegistrations> getAllModuleAndLearningMaterialsByIdDetailClass(String idDetailClass) throws Exception;
+
+	List<DetailModuleRegistrations> getAllModuleAndLearningMaterialsByIdDetailClass(String idDetailClass)
+			throws Exception;
 
 }
