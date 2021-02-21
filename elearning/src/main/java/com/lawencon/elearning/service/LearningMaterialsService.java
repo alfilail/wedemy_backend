@@ -7,10 +7,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.lawencon.elearning.model.DetailModuleRegistrations;
 import com.lawencon.elearning.model.LearningMaterials;
 
-/**
- * @author Nur Alfilail
- */
-
 public interface LearningMaterialsService {
 
 	void insert(DetailModuleRegistrations dtlModuleRgs, MultipartFile file) throws Exception;
@@ -24,7 +20,7 @@ public interface LearningMaterialsService {
 	LearningMaterials getByCode(String code) throws Exception;
 
 	List<LearningMaterials> getAll() throws Exception;
-	
+
 	LearningMaterials getByIdDetailModuleRgs(String idDtlModuleRgs) throws Exception;
 
 }

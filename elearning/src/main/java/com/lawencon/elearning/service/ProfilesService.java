@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.lawencon.elearning.model.AssignmentSubmissions;
+import com.lawencon.elearning.model.Evaluations;
 import com.lawencon.elearning.model.Profiles;
 
 public interface ProfilesService {
@@ -21,6 +23,12 @@ public interface ProfilesService {
 	Profiles getByEmail(String email) throws Exception;
 
 	Profiles getByIdNumber(String idNumber) throws Exception;
+	
+	Profiles getTutorProfileByIdDtlModuleRgs(AssignmentSubmissions assignmentSubmission) throws Exception;
+
+	Profiles getParticipantProfileByIdDtlModuleRgs(AssignmentSubmissions assignmentSubmission) throws Exception;
+	
+	Profiles getParticipantProfileById(Evaluations evaluation) throws Exception;
 
 	List<Profiles> getAll() throws Exception;
 

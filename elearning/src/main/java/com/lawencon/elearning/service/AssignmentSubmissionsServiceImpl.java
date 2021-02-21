@@ -38,6 +38,9 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 	private UsersService usersService;
 
 	@Autowired
+	private ProfilesService profilesService;
+
+	@Autowired
 	private FilesService filesService;
 
 	@Autowired
@@ -126,8 +129,8 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 	}
 
 	private void sendEmailTutor(AssignmentSubmissions assignmentSubmission) throws Exception {
-		Profiles tutor = assignmentSubmissionsDao.getTutorProfile(assignmentSubmission);
-		Profiles participant = assignmentSubmissionsDao.getParticipantProfile(assignmentSubmission);
+		Profiles tutor = profilesService.getTutorProfileByIdDtlModuleRgs(assignmentSubmission);
+		Profiles participant = profilesService.getParticipantProfileByIdDtlModuleRgs(assignmentSubmission);
 		General general = generalService.getTemplateEmail(TemplateEmail.ASSIGNMENT_SUBMISSION_TUTOR.code);
 		String text = general.getTemplateHtml();
 		text = text.replace("#1#", tutor.getFullName());
@@ -136,7 +139,7 @@ public class AssignmentSubmissionsServiceImpl extends ElearningBaseServiceImpl i
 	}
 
 	private void sendEmailParticipant(AssignmentSubmissions assignmentSubmission) throws Exception {
-		Profiles participant = assignmentSubmissionsDao.getParticipantProfile(assignmentSubmission);
+		Profiles participant = profilesService.getParticipantProfileByIdDtlModuleRgs(assignmentSubmission);
 		General general = generalService.getTemplateEmail(TemplateEmail.ASSIGNMENT_SUBMISSION_PARTICIPANT.code);
 		String text = general.getTemplateHtml();
 		text = text.replace("#1#", participant.getFullName());

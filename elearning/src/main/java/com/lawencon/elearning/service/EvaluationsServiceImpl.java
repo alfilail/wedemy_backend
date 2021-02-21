@@ -36,6 +36,9 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 	private AssignmentSubmissionsService assignmentSubmissionsService;
 
 	@Autowired
+	private ProfilesService profilesService;
+
+	@Autowired
 	private GeneralService generalService;
 
 	@Override
@@ -153,7 +156,7 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 		AssignmentSubmissions assignmentSubmissions = assignmentSubmissionsService
 				.getById(evaluation.getIdAssignmentSubmission().getId());
 		evaluation.setIdAssignmentSubmission(assignmentSubmissions);
-		Profiles participant = evaluationsDao.getParticipantProfile(evaluation);
+		Profiles participant = profilesService.getParticipantProfileById(evaluation);
 		General general = generalService.getTemplateEmail(TemplateEmail.EVALUATION_PARTICIPANT.code);
 		String text = general.getTemplateHtml();
 		text = text.replace("#1#", participant.getFullName());

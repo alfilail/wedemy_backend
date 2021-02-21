@@ -5,10 +5,6 @@ import java.util.List;
 import com.lawencon.elearning.helper.ScoreInputs;
 import com.lawencon.elearning.model.Evaluations;
 
-/**
- * @author Nur Alfilail
- */
-
 public interface EvaluationsService {
 
 	void insertEvaluation(ScoreInputs scores) throws Exception;
@@ -24,8 +20,7 @@ public interface EvaluationsService {
 	List<?> reportAllScore(String idClass) throws Exception;
 
 	List<?> reportScore(String idDtlClass, String idParticipant) throws Exception;
-	
+
 	List<?> getCertificate(String idUser, String idDetailClass) throws Exception;
-	
-//	boolean checkCertificate(List<?> data) throws Exception;
+
 }

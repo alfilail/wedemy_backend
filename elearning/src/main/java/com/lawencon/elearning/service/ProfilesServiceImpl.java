@@ -11,6 +11,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.elearning.constant.ExtensionImage;
 import com.lawencon.elearning.dao.ProfilesDao;
+import com.lawencon.elearning.model.AssignmentSubmissions;
+import com.lawencon.elearning.model.Evaluations;
 import com.lawencon.elearning.model.Files;
 import com.lawencon.elearning.model.Profiles;
 
@@ -82,6 +84,21 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 	@Override
 	public Profiles getByIdNumber(String idNumber) throws Exception {
 		return profilesDao.getProfileByIdNumber(idNumber);
+	}
+
+	@Override
+	public Profiles getTutorProfileByIdDtlModuleRgs(AssignmentSubmissions assignmentSubmission) throws Exception {
+		return profilesDao.getTutorProfileByIdDtlModuleRgs(assignmentSubmission);
+	}
+
+	@Override
+	public Profiles getParticipantProfileByIdDtlModuleRgs(AssignmentSubmissions assignmentSubmission) throws Exception {
+		return profilesDao.getParticipantProfileByIdDtlModuleRgs(assignmentSubmission);
+	}
+
+	@Override
+	public Profiles getParticipantProfileById(Evaluations evaluation) throws Exception {
+		return profilesDao.getParticipantProfileById(evaluation);
 	}
 
 	@Override

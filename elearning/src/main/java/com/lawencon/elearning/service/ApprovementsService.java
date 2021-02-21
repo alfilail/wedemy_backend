@@ -4,10 +4,6 @@ import java.util.List;
 
 import com.lawencon.elearning.model.Approvements;
 
-/**
- * @author Nur Alfilail
- */
-
 public interface ApprovementsService {
 
 	void insert(Approvements approvement) throws Exception;
