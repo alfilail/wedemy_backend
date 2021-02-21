@@ -90,8 +90,6 @@ public class ApprovementsRenewalDaoImpl extends ElearningBaseDaoImpl<Approvement
 			presence.setIdUser(user);
 			presence.setId(objArr[2] != null ? (String) objArr[2] : EmptyField.EMPTY.msg);
 			presence.setPresenceTime(objArr[3] != null ? ((Time) objArr[3]).toLocalTime() : null);
-			presence.setPresenceTimeDisplay(
-					presence.getPresenceTime() != null ? presence.getPresenceTime().toString() : "-");
 			Approvements approvement = new Approvements();
 			approvement.setCode(objArr[4] != null ? (String) objArr[4] : EmptyField.EMPTY.msg);
 			LearningMaterials learningMaterial = new LearningMaterials();

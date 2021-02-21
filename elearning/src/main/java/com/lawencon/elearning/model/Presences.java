@@ -8,7 +8,6 @@ import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -39,6 +38,4 @@ public class Presences extends BaseTransaction {
 	@JoinColumn(name = "id_user", nullable = false, foreignKey = @ForeignKey(name = "FK_USER_OF_PRESENCE"))
 	private Users idUser;
 
-	@Transient
-	private String presenceTimeDisplay;
 }
