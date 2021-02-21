@@ -18,7 +18,6 @@ import com.lawencon.elearning.model.ModuleRegistrations;
 import com.lawencon.elearning.model.Modules;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.Users;
-import com.lawencon.elearning.util.HibernateUtils;
 import com.lawencon.util.Callback;
 
 @Repository
@@ -228,9 +227,39 @@ public class EvaluationsDaoImpl extends ElearningBaseDaoImpl<Evaluations> implem
 				" GROUP BY tmp.fullname , tmc.class_name HAVING AVG(e.score) > 70 ").toString();
 		List<?> listObj = createNativeQuery(query).setParameter(1, idDetailClass).setParameter(2, idUser)
 				.setParameter(3, LocalDate.now()).getResultList();
-		List<Evaluations> certificateData = HibernateUtils.bMapperList(listObj, Evaluations.class,
-				"idAssignmentSubmission.idParticipant.idProfile.fullName",
-				"idAssignmentSubmission.idDetailModuleRegistration.idModuleRegistration.idDetailClass.idClass.className");
-		return resultCheckList(certificateData);
+		List<Evaluations> data = new ArrayList<>();
+		listObj.forEach(val -> {
+			Object[] objArr = (Object[]) val;
+			Profiles profile = new Profiles();
+			profile.setFullName((String) objArr[0]);
+			
+			Users user = new Users();
+			user.setIdProfile(profile);
+			
+			Classes cls = new Classes();
+			cls.setClassName((String) objArr[1]);
+			
+			DetailClasses dtlClass = new DetailClasses();
+			dtlClass.setIdClass(cls);
+			
+			ModuleRegistrations modRegist = new ModuleRegistrations();
+			modRegist.setIdDetailClass(dtlClass);
+			
+			DetailModuleRegistrations dtlModRegist = new DetailModuleRegistrations();
+			dtlModRegist.setIdModuleRegistration(modRegist);
+
+			AssignmentSubmissions assignmentSub = new AssignmentSubmissions();
+			assignmentSub.setIdDetailModuleRegistration(dtlModRegist);
+			assignmentSub.setIdParticipant(user);
+			
+			Evaluations eval = new Evaluations();
+			eval.setIdAssignmentSubmission(assignmentSub);
+			data.add(eval);
+		});
+		return resultCheckList(data);
+//		List<Evaluations> certificateData = HibernateUtils.bMapperList(listObj, Evaluations.class,
+//				"idAssignmentSubmission.idParticipant.idProfile.fullName",
+//				"idAssignmentSubmission.idDetailModuleRegistration.idModuleRegistration.idDetailClass.idClass.className");
+//		return resultCheckList(certificateData);
 	}
 }

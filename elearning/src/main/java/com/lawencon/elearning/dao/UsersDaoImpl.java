@@ -1,13 +1,14 @@
 package com.lawencon.elearning.dao;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.elearning.model.Profiles;
+import com.lawencon.elearning.model.Roles;
 import com.lawencon.elearning.model.Users;
-import com.lawencon.elearning.util.HibernateUtils;
 import com.lawencon.util.Callback;
 
 @Repository
@@ -57,26 +58,63 @@ public class UsersDaoImpl extends ElearningBaseDaoImpl<Users> implements UsersDa
 	@Override
 	public Users getUserByIdNumber(String idNumber) throws Exception {
 		String sql = sqlBuilder(" SELECT u.id, u.username, r.code, p.fullname, p.id_number, ",
-				" p.birth_place, p.birth_date, p.email, p.phone, p.address ", " FROM t_m_users u ",
+				" p.birth_place, p.birth_date, p.email, p.phone, p.address FROM t_m_users u ",
 				" INNER JOIN t_m_profiles p ON p.id = u.id_profile", " INNER JOIN t_m_roles r ON r.id = u.id_role ",
 				" WHERE p.id_number = ?1 AND u.is_active = ?2 ").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, idNumber).setParameter(2, true).getResultList();
-		List<Users> listUsers = HibernateUtils.bMapperList(listObj, Users.class, "id", "username", "idRole.code",
-				"idProfile.fullName", "idProfile.idNumber", "idProfile.birthPlace", "idProfile.birthDate",
-				"idProfile.email", "idProfile.phone", "idProfile.address");
+		List<Users> listUsers = new ArrayList<>();
+		listObj.forEach(val -> {
+			Object[] objArr = (Object[]) val;
+			Users user = new Users();
+			user.setId((String) objArr[0]);
+			user.setUsername((String) objArr[1]);
+			
+			Roles role = new Roles();
+			role.setCode((String) objArr[2]);
+			
+			Profiles profile = new Profiles();
+			profile.setFullName((String) objArr[3]);
+			profile.setIdNumber((String) objArr[4]);
+			profile.setBirthPlace((String) objArr[5]);
+			profile.setBirthDate(((Date) objArr[6]).toLocalDate());
+			profile.setEmail((String) objArr[7]);
+			profile.setAddress((String) objArr[8]);
+			user.setIdRole(role);
+			user.setIdProfile(profile);
+			listUsers.add(user);
+		});
 		return resultCheck(listUsers);
 	}
 
 	@Override
 	public Users getUserByIdClass(String idClass) throws Exception {
 		String sql = sqlBuilder(" SELECT u.id, u.username, r.code, p.fullname, p.id_number, ",
-				" p.birth_place, p.birth_date, p.email, p.phone, p.address ", " FROM t_m_users u ",
+				" p.birth_place, p.birth_date, p.email, p.phone, p.address FROM t_m_users u ",
 				" INNER JOIN t_m_profiles p ON p.id = u.id_profile INNER JOIN t_m_roles r ON r.id = u.id_role ",
 				" INNER JOIN t_m_classes c ON u.id = c.id_tutor WHERE c.id = ?1 and u.is_active = ?2 ").toString();
 		List<?> listResult = createNativeQuery(sql).setParameter(1, idClass).setParameter(2, true).getResultList();
-		List<Users> listUsers = HibernateUtils.bMapperList(listResult, Users.class, "id", "username", "idRole.code",
-				"idProfile.fullName", "idProfile.idNumber", "idProfile.birthPlace", "idProfile.birthDate",
-				"idProfile.email", "idProfile.phone", "idProfile.address");
+		List<Users> listUsers = new ArrayList<>();
+		listResult.forEach(val -> {
+			Object[] objArr = (Object[]) val;
+			Users user = new Users();
+			user.setId((String) objArr[0]);
+			user.setUsername((String) objArr[1]);
+			
+			Roles role = new Roles();
+			role.setCode((String) objArr[2]);
+			
+			Profiles profile = new Profiles();
+			profile.setFullName((String) objArr[3]);
+			profile.setIdNumber((String) objArr[4]);
+			profile.setBirthPlace((String) objArr[5]);
+			profile.setBirthDate(((Date) objArr[6]).toLocalDate());
+			profile.setEmail((String) objArr[7]);
+			profile.setPhone((String) objArr[8]);
+			profile.setAddress((String) objArr[9]);
+			user.setIdRole(role);
+			user.setIdProfile(profile);
+			listUsers.add(user);
+		});
 		return resultCheck(listUsers);
 	}
 
@@ -94,9 +132,30 @@ public class UsersDaoImpl extends ElearningBaseDaoImpl<Users> implements UsersDa
 				" p.email, p.phone, p.address, p.bio FROM t_m_users u INNER JOIN t_m_profiles p ON p.id = u.id_profile",
 				" INNER JOIN t_m_roles r ON r.id = u.id_role WHERE r.code = ?1 AND u.is_active = ?2").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, code).setParameter(2, true).getResultList();
-		return HibernateUtils.bMapperList(listObj, Users.class, "id", "username", "idRole.code", "idProfile.fullName",
-				"idProfile.idNumber", "idProfile.birthPlace", "idProfile.birthDate", "idProfile.email",
-				"idProfile.phone", "idProfile.address", "idProfile.bio");
+		List<Users> listUsers = new ArrayList<>();
+		listObj.forEach(val -> {
+			Object[] objArr = (Object[]) val;
+			Users user = new Users();
+			user.setId((String) objArr[0]);
+			user.setUsername((String) objArr[1]);
+			
+			Roles role = new Roles();
+			role.setCode((String) objArr[2]);
+			user.setIdRole(role);
+			
+			Profiles profile = new Profiles();
+			profile.setFullName((String) objArr[3]);
+			profile.setIdNumber((String) objArr[4]);
+			profile.setBirthPlace((String) objArr[5]);
+			profile.setBirthDate(objArr[6] != null ? ((Date) objArr[6]).toLocalDate() : null);
+			profile.setEmail((String) objArr[7]);
+			profile.setPhone((String) objArr[8]);
+			profile.setAddress((String) objArr[9]);
+			profile.setBio((String) objArr[10]);
+			user.setIdProfile(profile);
+			listUsers.add(user);
+		});
+		return resultCheckList(listUsers);
 	}
 
 	@Override
