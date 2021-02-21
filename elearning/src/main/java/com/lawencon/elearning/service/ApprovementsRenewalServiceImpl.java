@@ -69,7 +69,9 @@ public class ApprovementsRenewalServiceImpl extends ElearningBaseServiceImpl imp
 
 	@Override
 	public List<?> getPresenceReport(String idDetailClass) throws Exception {
-		return approvementsRenewalDao.getPresenceReport(idDetailClass);
+		List<?> data = approvementsRenewalDao.getPresenceReport(idDetailClass);
+		validateReport(data);
+		return data;
 	}
 
 	private void validateInsert(ApprovementsRenewal approvementsRenewal) throws Exception {
@@ -93,5 +95,10 @@ public class ApprovementsRenewalServiceImpl extends ElearningBaseServiceImpl imp
 			throw new Exception("Id Presence tidak boleh kosong");
 		}
 	}
-
+	
+	private void validateReport(List<?> data) throws Exception {
+		if (data == null) {
+			throw new Exception("Data kosong");
+		}
+	}
 }

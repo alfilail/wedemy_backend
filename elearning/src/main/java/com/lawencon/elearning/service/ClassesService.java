@@ -29,5 +29,7 @@ public interface ClassesService {
 	List<Classes> getAll() throws Exception;
 
 	List<Classes> getAllInactive() throws Exception;
+	
+	Classes getByIdDetailClass(String idDetailClass) throws Exception;
 
 }

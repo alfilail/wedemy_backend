@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lawencon.elearning.constant.MessageStat;
+import com.lawencon.elearning.helper.JasperHelper;
 import com.lawencon.elearning.helper.TutorApprovementInputs;
 import com.lawencon.elearning.model.ApprovementsRenewal;
+import com.lawencon.elearning.model.Classes;
+import com.lawencon.elearning.model.LearningMaterials;
 import com.lawencon.elearning.service.ApprovementsRenewalService;
+import com.lawencon.elearning.service.ClassesService;
+import com.lawencon.elearning.service.LearningMaterialsService;
 import com.lawencon.util.JasperUtil;
 
 @RestController
@@ -30,6 +33,12 @@ public class ApprovementsRenewalController extends ElearningBaseController {
 
 	@Autowired
 	private ApprovementsRenewalService approvementsRenewalService;
+	
+	@Autowired
+	private ClassesService classService;
+	
+	@Autowired
+	private LearningMaterialsService learningMaterialService;
 
 	@PostMapping
 	public ResponseEntity<?> insert(@RequestBody String body) {
@@ -70,40 +79,48 @@ public class ApprovementsRenewalController extends ElearningBaseController {
 	}
 
 	@GetMapping("report/{idDetailClass}")
-	public HttpEntity<?> getPresenceReport(@PathVariable String idDetailClass) {
+	public ResponseEntity<?> getAttendanceReport(@PathVariable String idDetailClass) {
 		List<?> listData = new ArrayList<>();
+		JasperHelper helper = new JasperHelper();
 		byte[] out;
+		StringBuilder fileName = new StringBuilder();
 		try {
 			listData = approvementsRenewalService.getPresenceReport(idDetailClass);
 			out = JasperUtil.responseToByteArray(listData, "Attendance", null);
+			Classes clazz = classService.getByIdDetailClass(idDetailClass);
+			fileName.append("Laporan Kehadiran ").append(clazz.getClassName()).append(".pdf");
+			helper.setOut(out);
+			helper.setCheck(true);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return responseError(e);
+			helper.setCheck(false);
 		}
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.set("Content-disposition", "attachment; filename = Laporan-Kehadiran-Keseluruhan.pdf");
-		headers.setContentType(MediaType.APPLICATION_PDF);
-		return new HttpEntity<>(out, headers);
+		helper.setFileName(fileName.toString());
+		helper.setContentType(MediaType.APPLICATION_PDF.toString());
+		return responseSuccess(helper, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 	}
 
 	@GetMapping("report/detail")
-	public HttpEntity<?> getDetailPresenceReport(@RequestParam("idDtlClass") String idDtlClass,
+	public ResponseEntity<?> getDetailAttendanceReport(@RequestParam("idDtlClass") String idDtlClass,
 			@RequestParam("idDtlModuleRgs") String idDtlModuleRgs) {
+		JasperHelper helper = new JasperHelper();
 		byte[] out;
+		StringBuilder fileName = new StringBuilder();
 		try {
 			List<ApprovementsRenewal> listResult = approvementsRenewalService.getAllParticipantPresences(idDtlClass,
 					idDtlModuleRgs);
 			out = JasperUtil.responseToByteArray(listResult, "DetailAttendance", null);
+			LearningMaterials learningMaterial = learningMaterialService.getByIdDetailModuleRgs(idDtlModuleRgs);
+			fileName.append("Laporan Kehadiran Materi ").append(learningMaterial.getLearningMaterialName()).append(".pdf");
+			helper.setOut(out);
+			helper.setCheck(true);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return responseError(e);
+			helper.setCheck(false);
 		}
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.set("Content-disposition", "attachment; filename = Laporan-Kehadiran.pdf");
-		headers.setContentType(MediaType.APPLICATION_PDF);
-		return new HttpEntity<>(out, headers);
+		helper.setFileName(fileName.toString());
+		helper.setContentType(MediaType.APPLICATION_PDF.toString());
+		return responseSuccess(helper, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 	}
 
 }

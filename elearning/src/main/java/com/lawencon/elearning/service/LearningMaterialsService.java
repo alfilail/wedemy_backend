@@ -24,5 +24,7 @@ public interface LearningMaterialsService {
 	LearningMaterials getByCode(String code) throws Exception;
 
 	List<LearningMaterials> getAll() throws Exception;
+	
+	LearningMaterials getByIdDetailModuleRgs(String idDtlModuleRgs) throws Exception;
 
 }

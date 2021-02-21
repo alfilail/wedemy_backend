@@ -153,6 +153,12 @@ public class ClassesServiceImpl extends BaseServiceImpl implements ClassesServic
 	public List<Classes> getAllInactive() throws Exception {
 		return classesDao.getAllInactive();
 	}
+	
+	@Override
+	public Classes getByIdDetailClass(String idDetailClass) throws Exception {
+		DetailClasses detailClass = dtlClassesService.getById(idDetailClass);
+		return classesDao.getClassById(detailClass.getIdClass().getId());
+	}
 
 	private void validate(Classes clazz) throws Exception {
 		if (clazz.getIdFile() != null) {

@@ -118,6 +118,12 @@ public class LearningMaterialsServiceImpl extends BaseServiceImpl implements Lea
 	public LearningMaterials getByCode(String code) throws Exception {
 		return learningMaterialsDao.getMaterialByCode(code);
 	}
+	
+	@Override
+	public LearningMaterials getByIdDetailModuleRgs(String idDtlModuleRgs) throws Exception {
+		DetailModuleRegistrations detailModuleRgs = dtlModuleRgsService.getDtlModuleRgsById(idDtlModuleRgs);
+		return learningMaterialsDao.getMaterialById(detailModuleRgs.getIdLearningMaterial().getId());
+	}
 
 	private void insertDetailModulRegistration(DetailModuleRegistrations dtlModuleRgs) throws Exception {
 		dtlModuleRgs.setCreatedBy(dtlModuleRgs.getIdLearningMaterial().getCreatedBy());
