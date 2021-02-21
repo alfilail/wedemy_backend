@@ -15,7 +15,7 @@
 		<![CDATA[]]>
 	</queryString>
 	<field name="idPresence.idUser.idProfile.fullName" class="java.lang.String"/>
-	<field name="idPresence.presenceTime" class="java.time.LocalTime"/>
+	<field name="idPresence.presenceTimeDisplay" class="java.time.LocalTime"/>
 	<field name="idApprovement.code" class="java.lang.String"/>
 	<field name="idPresence.idDetailModuleRegistration.idLearningMaterial.learningMaterialName" class="java.lang.String"/>
 	<field name="idPresence.idDetailModuleRegistration.scheduleDate" class="java.time.LocalDate"/>
@@ -163,14 +163,14 @@
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9a0f99af-c6ec-4349-add6-ccb1dcc7b52e"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{idPresence.presenceTime}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{idPresence.presenceTimeDisplay}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="396" y="-5" width="100" height="30" uuid="b71acb03-216b-4093-86fd-c1afffb774c2">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="cd94df03-2f55-4025-9041-e05d7e72cd8d"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{idApprovement.code}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{idApprovement.code}.equals("Empty") ? "-" : $F{idApprovement.code}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
