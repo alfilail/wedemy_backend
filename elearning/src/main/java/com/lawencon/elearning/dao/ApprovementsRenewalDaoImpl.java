@@ -110,7 +110,10 @@ public class ApprovementsRenewalDaoImpl extends ElearningBaseDaoImpl<Approvement
 	public List<?> getPresenceReport(String idDetailClass) throws Exception {
 		String query = sqlBuilder(" SELECT tmp.fullname, ",
 				" tmc.class_name, ROUND(COUNT(tar.id_presence)/CAST((SELECT COUNT(trdmr.id) ",
-				" FROM t_r_detail_module_registrations trdmr) AS decimal), 4) * 100 AS present_day ",
+				" FROM t_r_detail_module_registrations trdmr ",
+				" INNER JOIN t_r_module_registrations trmr ON trdmr.id_module_rgs = trmr.id ",
+				" WHERE trmr.id_dtl_class = ?1) ",
+				" AS decimal), 4) * 100 AS present_day ",
 				" FROM t_r_approvement_renewals tar INNER JOIN t_r_presences trp ON tar.id_presence = trp.id ",
 				" INNER JOIN t_m_users tmu ON trp.id_user = tmu.id ",
 				" INNER JOIN t_m_profiles tmp  ON tmu.id_profile = tmp.id ",
