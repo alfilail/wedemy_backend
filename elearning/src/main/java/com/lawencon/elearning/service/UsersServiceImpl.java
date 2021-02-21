@@ -43,6 +43,7 @@ public class UsersServiceImpl extends ElearningBaseServiceImpl implements UsersS
 				validateInsert(user);
 				Roles role = rolesService.getByCode(user.getIdRole().getCode());
 				user.setIdRole(role);
+				user.getIdProfile().setCreatedBy(user.getCreatedBy());;
 				profilesService.insert(user.getIdProfile());
 				user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
 			});

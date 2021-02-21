@@ -12,7 +12,7 @@ public class GeneralDaoImpl extends ElearningBaseDaoImpl<General> implements Gen
 	@Override
 	public General getTemplateEmail(String code) throws Exception {
 		List<General> general = createQuery("FROM General WHERE code=?1", General.class)
-				.setParameter(1, 2).getResultList();
+				.setParameter(1, code).getResultList();
 		return resultCheck(general);
 	}
 }

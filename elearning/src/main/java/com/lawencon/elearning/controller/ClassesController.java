@@ -98,7 +98,7 @@ public class ClassesController extends ElearningBaseController {
 			Classes clazz = obj.readValue(body, Classes.class);
 			classesService.update(clazz, file);
 			Classes response = classesService.getById(clazz.getId());
-			return responseSuccess(response, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
+			return responseSuccess(response, HttpStatus.OK, MessageStat.SUCCESS_UPDATE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
@@ -109,7 +109,7 @@ public class ClassesController extends ElearningBaseController {
 	public ResponseEntity<?> deleteById(@RequestParam("id") String id, @RequestParam("idUser") String idUser) {
 		try {
 			classesService.deleteById(id, idUser);
-			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
+			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
