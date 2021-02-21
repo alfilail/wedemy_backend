@@ -209,8 +209,13 @@ public class EvaluationsDaoImpl extends ElearningBaseDaoImpl<Evaluations> implem
 			profile.setFullName((String) objArr[0]);
 			profile.setEmail((String) objArr[1]);
 			profile.setAddress((String) objArr[2]);
+			if(profile.getAddress() == null) {
+				profile.setAddress("-");
+			}
 			profile.setPhone((String) objArr[3]);
-
+			if(profile.getPhone() == null) {
+				profile.setPhone("-");
+			}
 			Users user = new Users();
 			user.setIdProfile(profile);
 

@@ -95,12 +95,7 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 	}
 
 	private void validateInsert(Profiles profile) throws Exception {
-		if(profile.getAddress() == null) {
-			profile.setAddress("-");
-		}
-		if(profile.getPhone() == null) {
-			profile.setPhone("-");
-		}
+		
 	}
 
 	private void validateUpdate(Profiles profile) throws Exception {
