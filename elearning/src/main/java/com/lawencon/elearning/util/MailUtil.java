@@ -7,14 +7,14 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
-import com.lawencon.elearning.helper.MailHelper;
+import com.lawencon.elearning.helper.Mail;
 
 @Component
 public class MailUtil {
 	@Autowired
 	private JavaMailSender mailSender;
 	
-	public void sendMail(MailHelper mailHelper) throws Exception {
+	public void sendMail(Mail mailHelper) throws Exception {
 		MimeMessage message = mailSender.createMimeMessage();
 		
 	    MimeMessageHelper helper = new MimeMessageHelper(message, false);

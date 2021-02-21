@@ -2,12 +2,9 @@ package com.lawencon.elearning.controller;
 
 import java.util.List;
 
-import javax.persistence.PersistenceException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -58,20 +55,6 @@ public class PresencesController extends ElearningBaseController {
 		try {
 			Presences presence = presencesService.getById(id);
 			return responseSuccess(presence, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
-
-	@DeleteMapping("{id}")
-	public ResponseEntity<?> deleteById(@PathVariable("id") String id) {
-		try {
-			presencesService.deleteById(id);
-			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
-		} catch (PersistenceException pe) {
-			pe.printStackTrace();
-			return new ResponseEntity<>("Data used in another table", HttpStatus.BAD_REQUEST);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);

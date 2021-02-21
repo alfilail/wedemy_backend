@@ -145,7 +145,7 @@ public class ModuleRegistrationsServiceImpl extends ElearningBaseServiceImpl imp
 	}
 
 	@Override
-	public List<ModuleRegistrations> getByIdDtlClass(String idClass) throws Exception {
+	public List<ModuleRegistrations> getAllModifiedByIdDtlClass(String idClass) throws Exception {
 		return moduleRgsDao.getAllModifiedByIdDtlClass(idClass);
 	}
 

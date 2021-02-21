@@ -5,12 +5,8 @@ import com.lawencon.elearning.model.Users;
 
 import lombok.Data;
 
-/**
- * @author Nur Alfilail
- */
-
 @Data
-public class RegisterHelper {
+public class Register {
 
 	private Users user;
 	private Profiles profile;

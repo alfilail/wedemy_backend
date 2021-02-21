@@ -100,11 +100,6 @@ public class EvaluationsServiceImpl extends ElearningBaseServiceImpl implements 
 		return evaluationsDao.getEvaluationById(id);
 	}
 
-	@Override
-	public Evaluations getEvaluationByCode(String code) throws Exception {
-		return evaluationsDao.getEvaluationByCode(code);
-	}
-
 	private void insertStatusRenewal(Evaluations evaluation) throws Exception {
 		SubmissionStatusRenewal statusRenewal = new SubmissionStatusRenewal();
 		statusRenewal.setCreatedBy(evaluation.getCreatedBy());

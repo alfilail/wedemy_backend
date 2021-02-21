@@ -6,10 +6,6 @@ import com.lawencon.elearning.model.Evaluations;
 
 import lombok.Data;
 
-/**
- * @author Nur Alfilail
- */
-
 @Data
 public class ScoreInputs {
 

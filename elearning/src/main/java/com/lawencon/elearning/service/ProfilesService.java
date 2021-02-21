@@ -18,8 +18,6 @@ public interface ProfilesService {
 
 	Profiles getById(String id) throws Exception;
 
-	Profiles getByCode(String code) throws Exception;
-
 	Profiles getByEmail(String email) throws Exception;
 
 	Profiles getByIdNumber(String idNumber) throws Exception;

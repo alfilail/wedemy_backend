@@ -130,7 +130,7 @@ public class DetailModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<Detai
 				" INNER JOIN t_m_learning_material_types tmlmt ON tmlmt.id = tmlm.id_type ",
 				" WHERE tmdc.id = ?1 AND tmlm.is_active = ?2 ", " ORDER BY trdmr.schedule_date ").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, idDetailClass).setParameter(2, true).getResultList();
-		List<DetailModuleRegistrations> listRes = new ArrayList<DetailModuleRegistrations>();
+		List<DetailModuleRegistrations> listResult = new ArrayList<DetailModuleRegistrations>();
 		listObj.forEach(val -> {
 			Object[] objArr = (Object[]) val;
 			Modules module = new Modules();
@@ -151,9 +151,9 @@ public class DetailModuleRegistrationsDaoImpl extends ElearningBaseDaoImpl<Detai
 			detailClass.setId((String) objArr[5]);
 			md.setIdDetailClass(detailClass);
 			dmr.setScheduleDate(((Date) objArr[6]).toLocalDate());
-			listRes.add(dmr);
+			listResult.add(dmr);
 		});
-		return listRes;
+		return listResult;
 	}
 
 }

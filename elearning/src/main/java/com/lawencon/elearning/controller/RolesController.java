@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lawencon.elearning.constant.MessageStat;
 import com.lawencon.elearning.model.Roles;
 import com.lawencon.elearning.service.RolesService;
-import com.lawencon.elearning.constant.MessageStat;
 
 @RestController
 @RequestMapping("role")
@@ -64,17 +64,6 @@ public class RolesController extends ElearningBaseController {
 		}
 	}
 
-	@DeleteMapping
-	public ResponseEntity<?> deleteById(@RequestParam("id") String id) {
-		try {
-			rolesService.deleteById(id);
-			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
-
 	@PutMapping
 	public ResponseEntity<?> update(@RequestBody String body) {
 		try {
@@ -86,4 +75,16 @@ public class RolesController extends ElearningBaseController {
 			return responseError(e);
 		}
 	}
+
+	@DeleteMapping
+	public ResponseEntity<?> deleteById(@RequestParam("id") String id) {
+		try {
+			rolesService.deleteById(id);
+			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return responseError(e);
+		}
+	}
+
 }

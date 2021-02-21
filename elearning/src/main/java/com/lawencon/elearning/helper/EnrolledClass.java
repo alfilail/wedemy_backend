@@ -6,10 +6,6 @@ import com.lawencon.elearning.model.DetailClasses;
 
 import lombok.Data;
 
-/**
- * @author Nur Alfilail
- */
-
 @Data
 public class EnrolledClass {
 

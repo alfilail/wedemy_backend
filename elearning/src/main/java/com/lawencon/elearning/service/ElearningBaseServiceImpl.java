@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.lawencon.base.BaseServiceImpl;
 import com.lawencon.elearning.constant.TemplateEmail;
-import com.lawencon.elearning.helper.MailHelper;
+import com.lawencon.elearning.helper.Mail;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.util.MailUtil;
 
@@ -38,7 +38,7 @@ public class ElearningBaseServiceImpl extends BaseServiceImpl {
 	}
 	
 	protected void sendMail(TemplateEmail templateEmail, Profiles profile, String text) throws Exception {
-		MailHelper mailHelper = new MailHelper();
+		Mail mailHelper = new Mail();
 		mailHelper.setFrom("wedemy.id@gmail.com");
 		mailHelper.setTo(profile.getEmail());
 		mailHelper.setSubject(templateEmail.subject);

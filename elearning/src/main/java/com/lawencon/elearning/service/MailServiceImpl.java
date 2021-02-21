@@ -1,14 +1,14 @@
 package com.lawencon.elearning.service;
 
-import com.lawencon.elearning.helper.MailHelper;
+import com.lawencon.elearning.helper.Mail;
 import com.lawencon.elearning.util.MailUtil;
 
 public class MailServiceImpl extends Thread {
 	
 	private MailUtil mailUtil;
-	private MailHelper mailHelper;
+	private Mail mailHelper;
 	
-	public MailServiceImpl(MailUtil mailUtil, MailHelper mailHelper) {
+	public MailServiceImpl(MailUtil mailUtil, Mail mailHelper) {
 		this.mailUtil = mailUtil;
 		this.mailHelper = mailHelper;
 	}

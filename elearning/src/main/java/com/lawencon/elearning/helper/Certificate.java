@@ -6,7 +6,7 @@ import com.lawencon.elearning.model.Profiles;
 import lombok.Data;
 
 @Data
-public class CertificateHelper {
+public class Certificate {
 	Profiles fullname;
 	Classes className;
 }

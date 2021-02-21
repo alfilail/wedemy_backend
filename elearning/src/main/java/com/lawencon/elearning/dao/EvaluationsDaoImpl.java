@@ -40,13 +40,6 @@ public class EvaluationsDaoImpl extends ElearningBaseDaoImpl<Evaluations> implem
 	}
 
 	@Override
-	public Evaluations getEvaluationByCode(String code) throws Exception {
-		Evaluations evaluation = createQuery("FROM Evaluations WHERE code = ?1", Evaluations.class)
-				.setParameter(1, code).getSingleResult();
-		return evaluation;
-	}
-
-	@Override
 	public Evaluations getByIdDtlModuleRgsAndIdParticipant(String idDtlModuleRgs, String idParticipant)
 			throws Exception {
 		List<Evaluations> listResult = new ArrayList<>();
@@ -208,14 +201,8 @@ public class EvaluationsDaoImpl extends ElearningBaseDaoImpl<Evaluations> implem
 			Profiles profile = new Profiles();
 			profile.setFullName((String) objArr[0]);
 			profile.setEmail((String) objArr[1]);
-			profile.setAddress((String) objArr[2]);
-			if(profile.getAddress() == null) {
-				profile.setAddress("-");
-			}
-			profile.setPhone((String) objArr[3]);
-			if(profile.getPhone() == null) {
-				profile.setPhone("-");
-			}
+			profile.setAddress(objArr[2] != null ? (String) objArr[2] : "-");
+			profile.setPhone(objArr[3] != null ? (String) objArr[3] : "-");
 			Users user = new Users();
 			user.setIdProfile(profile);
 
@@ -244,7 +231,7 @@ public class EvaluationsDaoImpl extends ElearningBaseDaoImpl<Evaluations> implem
 
 	@Override
 	public List<?> getCertificate(String idUser, String idDetailClass) throws Exception {
-		String query = sqlBuilder("SELECT tmp.fullname , tmc.class_name ", " FROM t_r_evaluations e ",
+		String query = sqlBuilder("SELECT tmp.fullname , tmc.class_name FROM t_r_evaluations e ",
 				" INNER JOIN t_r_assignment_submissions ams ON ams.id = e.id_assignment_submission ",
 				" INNER JOIN t_m_users u ON u.id = ams.id_participant ",
 				" INNER JOIN t_m_profiles tmp ON u.id_profile = tmp.id ",
@@ -254,9 +241,8 @@ public class EvaluationsDaoImpl extends ElearningBaseDaoImpl<Evaluations> implem
 				" INNER JOIN t_m_detail_classes dc ON dc.id = mr.id_dtl_class ",
 				" INNER JOIN t_m_classes tmc ON tmc.id = dc.id_class ",
 				" INNER JOIN t_r_class_enrollments trce ON trce.id_dtl_class = dc.id ",
-				" WHERE dc.id = ?1 AND ams.id_participant = ?2 ", " AND ?3 > dc.end_date ",
-				" GROUP BY tmp.fullname , tmc.class_name ", " HAVING AVG(e.score) > 70 ").toString();
-
+				" WHERE dc.id = ?1 AND ams.id_participant = ?2 AND ?3 > dc.end_date ",
+				" GROUP BY tmp.fullname , tmc.class_name HAVING AVG(e.score) > 70 ").toString();
 		List<?> listObj = createNativeQuery(query).setParameter(1, idDetailClass).setParameter(2, idUser)
 				.setParameter(3, LocalDate.now()).getResultList();
 		List<Evaluations> certificateData = HibernateUtils.bMapperList(listObj, Evaluations.class,

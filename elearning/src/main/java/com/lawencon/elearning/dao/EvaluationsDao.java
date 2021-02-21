@@ -24,8 +24,6 @@ public interface EvaluationsDao {
 
 	Evaluations getEvaluationById(String id) throws Exception;
 
-	Evaluations getEvaluationByCode(String code) throws Exception;
-
 	Profiles getParticipantProfile(Evaluations evaluation) throws Exception;
 
 	List<?> reportAllScore(String idClass) throws Exception;

@@ -67,7 +67,7 @@ public class ClassEnrollmentServiceImpl extends ElearningBaseServiceImpl impleme
 		Integer totalParticipant = getTotalParticipantsByIdDtlClass(classEnrollment.getIdDetailClass().getId());
 		DetailClasses detailClass = detailClassService.getById(classEnrollment.getIdDetailClass().getId());
 		if (totalParticipant >= detailClass.getIdClass().getQuota()) {
-			throw new Exception("Quota kelas sudah penuh!");
+			throw new Exception("Kuota kelas sudah penuh!");
 		}
 	}
 

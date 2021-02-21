@@ -17,4 +17,5 @@ public class GeneralDaoImpl extends ElearningBaseDaoImpl<General> implements Gen
 		List<?> listObj = createNativeQuery(sql).setParameter(1, code).getResultList();
 		return HibernateUtils.bMapperList(listObj, General.class, "templateHtml").get(0);
 	}
+	
 }

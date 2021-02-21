@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import com.lawencon.elearning.model.Users;
 import com.lawencon.elearning.service.UsersService;
 
-
 @Service
 public class ApiSecurityServiceImpl implements UserDetailsService {
 

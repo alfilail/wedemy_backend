@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,9 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.lawencon.elearning.constant.MessageStat;
 import com.lawencon.elearning.model.AssignmentSubmissions;
 import com.lawencon.elearning.service.AssignmentSubmissionsService;
-import com.lawencon.elearning.constant.MessageStat;
 
 @RestController
 @RequestMapping("assignment-submission")
@@ -46,8 +45,7 @@ public class AssignmentSubmissionsController extends ElearningBaseController {
 	@GetMapping
 	public ResponseEntity<?> getAll() {
 		try {
-			List<AssignmentSubmissions> assignmentSubmissions = assignmentSubmissionsService
-					.getAll();
+			List<AssignmentSubmissions> assignmentSubmissions = assignmentSubmissionsService.getAll();
 			return responseSuccess(assignmentSubmissions, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -93,14 +91,4 @@ public class AssignmentSubmissionsController extends ElearningBaseController {
 		}
 	}
 
-	@DeleteMapping("{id}")
-	public ResponseEntity<?> deleteById(@PathVariable("id") String id) {
-		try {
-			assignmentSubmissionsService.deleteById(id);
-			return responseSuccess(null, HttpStatus.OK, MessageStat.SUCCESS_DELETE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
 }

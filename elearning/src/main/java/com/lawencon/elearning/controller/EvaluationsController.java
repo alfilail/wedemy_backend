@@ -9,9 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lawencon.elearning.constant.MessageStat;
-import com.lawencon.elearning.helper.JasperHelper;
+import com.lawencon.elearning.helper.Jasper;
 import com.lawencon.elearning.helper.ScoreInputs;
 import com.lawencon.elearning.model.Evaluations;
 import com.lawencon.elearning.model.Users;
@@ -100,7 +100,7 @@ public class EvaluationsController extends ElearningBaseController {
 	public ResponseEntity<?> getParticipantScoreReport(@RequestParam("idDtlClass") String idDtlClass,
 			@RequestParam("idParticipant") String idParticipant) {
 		List<?> listData = new ArrayList<>();
-		JasperHelper helper = new JasperHelper();
+		Jasper helper = new Jasper();
 		byte[] out;
 		StringBuilder fileName = new StringBuilder();
 		try {
@@ -123,7 +123,7 @@ public class EvaluationsController extends ElearningBaseController {
 	@GetMapping("certificate")
 	public HttpEntity<?> getCertificate(@RequestParam String idUser, @RequestParam String idDetailClass) {
 		List<?> data = new ArrayList<>();
-		JasperHelper js = new JasperHelper();
+		Jasper js = new Jasper();
 		StringBuilder fileName = new StringBuilder();
 		byte[] out;
 		try {
@@ -146,7 +146,7 @@ public class EvaluationsController extends ElearningBaseController {
 		return responseSuccess(js, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 	}
 
-	@PutMapping
+	@PatchMapping
 	public ResponseEntity<?> update(@RequestBody String body) {
 		try {
 			ObjectMapper obj = new ObjectMapper();

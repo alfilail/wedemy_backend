@@ -18,7 +18,7 @@ public interface ModuleRegistrationsService {
 
 	EnrolledClass getEnrolledClassByIdDtlClass(String idUser, String idDtlClass) throws Exception;
 
-	List<ModuleRegistrations> getByIdDtlClass(String idDtlClass) throws Exception;
+	List<ModuleRegistrations> getAllModifiedByIdDtlClass(String idDtlClass) throws Exception;
 
 	List<ModuleRegistrations> getAllByIdDtlClass(String idDtlClass) throws Exception;
 }

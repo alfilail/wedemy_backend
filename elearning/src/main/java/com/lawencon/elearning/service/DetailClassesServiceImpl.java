@@ -136,7 +136,7 @@ public class DetailClassesServiceImpl extends ElearningBaseServiceImpl implement
 			begin();
 			updateViews(idDtlClass);
 			dtlClassInfo.setDetailClass(detailClassesDao.getDtlClassById(idDtlClass));
-			dtlClassInfo.setModules(moduleRegistrationsService.getByIdDtlClass(idDtlClass));
+			dtlClassInfo.setModules(moduleRegistrationsService.getAllModifiedByIdDtlClass(idDtlClass));
 			dtlClassInfo.setTotalParticipant(classEnrollmentService.getTotalParticipantsByIdDtlClass(idDtlClass));
 			dtlClassInfo.setTotalHours(detailModuleRegistrationsService.totalHours(idDtlClass));
 			commit();

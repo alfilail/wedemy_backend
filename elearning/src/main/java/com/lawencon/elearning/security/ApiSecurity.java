@@ -47,11 +47,8 @@ public class ApiSecurity extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-//		web.ignoring().antMatchers(HttpMethod.POST, "/**").antMatchers(HttpMethod.GET, "/**")
-//				.antMatchers(HttpMethod.PATCH, "/**").antMatchers(HttpMethod.PUT, "/**")
-//				.antMatchers(HttpMethod.DELETE, "/**");
-		web.ignoring().antMatchers(HttpMethod.POST, "/user", "/role").antMatchers(HttpMethod.GET, "/detail-class/**/",
-				"/module-registration/**/", "/class/user", "/evaluation/report/**")
+		web.ignoring().antMatchers(HttpMethod.POST, "/user", "/role")
+				.antMatchers(HttpMethod.GET, "/detail-class/**/", "/class/user")
 				.antMatchers(HttpMethod.PATCH, "/user/forget-password");
 	}
 

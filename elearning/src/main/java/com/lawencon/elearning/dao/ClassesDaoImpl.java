@@ -46,9 +46,9 @@ public class ClassesDaoImpl extends ElearningBaseDaoImpl<Classes> implements Cla
 
 	@Override
 	public Classes getClassByCode(String code) throws Exception {
-		List<Classes> clsList = createQuery("FROM Classes WHERE code = ?1 AND isActive = ?2", Classes.class)
+		List<Classes> listClass = createQuery("FROM Classes WHERE code = ?1 AND isActive = ?2", Classes.class)
 				.setParameter(1, code).setParameter(2, true).getResultList();
-		return resultCheck(clsList);
+		return resultCheck(listClass);
 	}
 
 	@Override

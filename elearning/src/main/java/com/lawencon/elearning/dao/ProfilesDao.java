@@ -17,8 +17,6 @@ public interface ProfilesDao {
 
 	Profiles getProfileById(String id) throws Exception;
 
-	Profiles getProfileByCode(String code) throws Exception;
-
 	Profiles getProfileByEmail(String email) throws Exception;
 
 	Profiles getProfileByIdNumber(String idNumber) throws Exception;

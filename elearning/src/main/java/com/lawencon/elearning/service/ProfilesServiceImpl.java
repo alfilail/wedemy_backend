@@ -28,7 +28,7 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 		Files file = new Files();
 		filesService.insert(file);
 		profile.setIdFile(file);
-		profilesDao.insert(profile, () -> validateInsert(profile));
+		profilesDao.insert(profile, null);
 	}
 
 	@Override
@@ -75,11 +75,6 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 	}
 
 	@Override
-	public Profiles getByCode(String code) throws Exception {
-		return profilesDao.getProfileByCode(code);
-	}
-
-	@Override
 	public Profiles getByEmail(String email) throws Exception {
 		return profilesDao.getProfileByEmail(email);
 	}
@@ -92,10 +87,6 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 	@Override
 	public List<Profiles> getAll() throws Exception {
 		return profilesDao.getAllProfiles();
-	}
-
-	private void validateInsert(Profiles profile) throws Exception {
-		
 	}
 
 	private void validateUpdate(Profiles profile) throws Exception {
@@ -114,7 +105,7 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 					String[] type = profile.getIdFile().getType().split("/");
 					String ext = type[1];
 					if (ext != null) {
-						if (ext.equalsIgnoreCase(ExtensionImage.PNG.code) 
+						if (ext.equalsIgnoreCase(ExtensionImage.PNG.code)
 								|| ext.equalsIgnoreCase(ExtensionImage.JPG.code)
 								|| ext.equalsIgnoreCase(ExtensionImage.JPEG.code)) {
 

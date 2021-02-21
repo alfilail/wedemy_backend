@@ -36,13 +36,6 @@ public class ProfilesDaoImpl extends ElearningBaseDaoImpl<Profiles> implements P
 	}
 
 	@Override
-	public Profiles getProfileByCode(String code) throws Exception {
-		Profiles profile = createQuery("FROM Profiles WHERE code = ?1 ", Profiles.class).setParameter(1, code)
-				.getSingleResult();
-		return profile;
-	}
-
-	@Override
 	public Profiles getProfileByIdNumber(String idNumber) throws Exception {
 		List<Profiles> listResult = createQuery("FROM Profiles WHERE idNumber = ?1 ", Profiles.class)
 				.setParameter(1, idNumber).getResultList();

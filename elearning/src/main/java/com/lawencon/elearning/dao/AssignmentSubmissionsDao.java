@@ -24,7 +24,5 @@ public interface AssignmentSubmissionsDao {
 	Profiles getParticipantProfile(AssignmentSubmissions assignmentSubmission) throws Exception;
 
 	List<AssignmentSubmissions> getAllSubmissions() throws Exception;
-
-	List<AssignmentSubmissions> getAllByIdDtlModuleRgs(String idDtlModuleRgs) throws Exception;
 	
 }

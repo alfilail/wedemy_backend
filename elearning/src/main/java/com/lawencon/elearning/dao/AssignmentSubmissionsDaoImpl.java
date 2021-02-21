@@ -61,7 +61,7 @@ public class AssignmentSubmissionsDaoImpl extends ElearningBaseDaoImpl<Assignmen
 			file.setCreatedAt(objArr[3] != null ? ((Timestamp) objArr[3]).toLocalDateTime() : null);
 			file.setUpdatedAt(objArr[4] != null ? ((Timestamp) objArr[4]).toLocalDateTime() : null);
 			file.setFile(objArr[5] != null ? (byte[]) objArr[5] : null);
-			file.setType((String) objArr[6]);
+			file.setType(objArr[6] != null ? (String) objArr[6] : EmptyField.EMPTY.msg);
 			file.setName(objArr[7] != null ? (String) objArr[7] : EmptyField.EMPTY.msg);
 			submission.setIdFile(file);
 			DetailClasses detailClass = new DetailClasses();
@@ -120,12 +120,6 @@ public class AssignmentSubmissionsDaoImpl extends ElearningBaseDaoImpl<Assignmen
 	@Override
 	public List<AssignmentSubmissions> getAllSubmissions() throws Exception {
 		return getAll();
-	}
-
-	@Override
-	public List<AssignmentSubmissions> getAllByIdDtlModuleRgs(String idDtlModuleRgs) throws Exception {
-		List<AssignmentSubmissions> listResult = new ArrayList<>();
-		return listResult;
 	}
 
 }

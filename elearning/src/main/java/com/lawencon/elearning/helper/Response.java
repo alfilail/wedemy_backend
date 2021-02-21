@@ -2,10 +2,6 @@ package com.lawencon.elearning.helper;
 
 import lombok.Data;
 
-/**
- * @author Nur Alfilail
- */
-
 @Data
 public class Response<T> {
 

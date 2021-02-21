@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lawencon.elearning.constant.MessageStat;
-import com.lawencon.elearning.helper.JasperHelper;
+import com.lawencon.elearning.helper.Jasper;
 import com.lawencon.elearning.helper.TutorApprovementInputs;
 import com.lawencon.elearning.model.ApprovementsRenewal;
 import com.lawencon.elearning.model.Classes;
@@ -81,7 +81,7 @@ public class ApprovementsRenewalController extends ElearningBaseController {
 	@GetMapping("report/{idDetailClass}")
 	public ResponseEntity<?> getAttendanceReport(@PathVariable String idDetailClass) {
 		List<?> listData = new ArrayList<>();
-		JasperHelper helper = new JasperHelper();
+		Jasper helper = new Jasper();
 		byte[] out;
 		StringBuilder fileName = new StringBuilder();
 		try {
@@ -103,7 +103,7 @@ public class ApprovementsRenewalController extends ElearningBaseController {
 	@GetMapping("report/detail")
 	public ResponseEntity<?> getDetailAttendanceReport(@RequestParam("idDtlClass") String idDtlClass,
 			@RequestParam("idDtlModuleRgs") String idDtlModuleRgs) {
-		JasperHelper helper = new JasperHelper();
+		Jasper helper = new Jasper();
 		byte[] out;
 		StringBuilder fileName = new StringBuilder();
 		try {

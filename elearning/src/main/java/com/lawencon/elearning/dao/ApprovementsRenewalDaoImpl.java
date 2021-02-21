@@ -109,9 +109,9 @@ public class ApprovementsRenewalDaoImpl extends ElearningBaseDaoImpl<Approvement
 	@Override
 	public List<?> getPresenceReport(String idDetailClass) throws Exception {
 		String query = sqlBuilder(" SELECT tmp.fullname, ",
-				" tmc.class_name, ROUND(COUNT(tar.id_presence)/CAST((SELECT COUNT(order_number) ",
+				" tmc.class_name, ROUND(COUNT(tar.id_presence)/CAST((SELECT COUNT(trdmr.id) ",
 				" FROM t_r_detail_module_registrations trdmr) AS decimal), 4) * 100 AS present_day ",
-				" FROM t_r_approvement_renewals tar ", " INNER JOIN t_r_presences trp ON tar.id_presence = trp.id ",
+				" FROM t_r_approvement_renewals tar INNER JOIN t_r_presences trp ON tar.id_presence = trp.id ",
 				" INNER JOIN t_m_users tmu ON trp.id_user = tmu.id ",
 				" INNER JOIN t_m_profiles tmp  ON tmu.id_profile = tmp.id ",
 				" INNER JOIN t_r_detail_module_registrations trdmr ON trp.id_dtl_module_rgs = trdmr.id ",
@@ -119,8 +119,8 @@ public class ApprovementsRenewalDaoImpl extends ElearningBaseDaoImpl<Approvement
 				" INNER JOIN t_m_detail_classes tmdc  ON trmr.id_dtl_class = tmdc.id ",
 				" INNER JOIN t_m_modules tmm ON trmr.id_module = tmm.id ",
 				" INNER JOIN t_m_learning_materials tmlm ON tmlm.id = trdmr.id_learning_material ",
-				" INNER JOIN t_m_classes tmc ON tmdc.id_class = tmc.id ", " WHERE tmdc.id = ?1 AND id_approvement = ",
-				" (SELECT id FROM t_m_approvements WHERE code = 'ACC') ", " GROUP BY tmp.fullname, tmc.class_name ",
+				" INNER JOIN t_m_classes tmc ON tmdc.id_class = tmc.id WHERE tmdc.id = ?1 AND id_approvement = ",
+				" (SELECT id FROM t_m_approvements WHERE code = 'ACC') GROUP BY tmp.fullname, tmc.class_name ",
 				" ORDER BY tmp.fullname").toString();
 		List<ReportPresences> listReportPresences = new ArrayList<>();
 		List<?> listObj = createNativeQuery(query).setParameter(1, idDetailClass).getResultList();

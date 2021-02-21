@@ -3,7 +3,7 @@ package com.lawencon.elearning.helper;
 import lombok.Data;
 
 @Data
-public class MailHelper {
+public class Mail {
 	private String from;
 	private String to;
 	private String subject;

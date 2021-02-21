@@ -7,10 +7,6 @@ import com.lawencon.elearning.model.Forums;
 
 import lombok.Data;
 
-/**
- * @author Nur Alfilail
- */
-
 @Data
 public class ForumAndDetailForums {
 
