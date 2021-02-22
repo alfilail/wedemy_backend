@@ -51,6 +51,7 @@ public class UsersServiceImpl extends ElearningBaseServiceImpl implements UsersS
 			if (user.getIdRole().getCode().equals(RoleCode.PARTICIPANT.code)) {
 				user.setCreatedAt(user.getCreatedAt());
 				user.setCreatedBy(user.getId());
+				user.setUpdatedBy(user.getId());
 				usersDao.update(user, null);
 			}
 			commit();
