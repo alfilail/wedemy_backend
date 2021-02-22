@@ -33,24 +33,12 @@ public class ApprovementsRenewalController extends ElearningBaseController {
 
 	@Autowired
 	private ApprovementsRenewalService approvementsRenewalService;
-	
+
 	@Autowired
 	private ClassesService classService;
-	
+
 	@Autowired
 	private LearningMaterialsService learningMaterialService;
-
-	@PostMapping
-	public ResponseEntity<?> insert(@RequestBody String body) {
-		try {
-			ApprovementsRenewal approvementsRenewal = new ObjectMapper().readValue(body, ApprovementsRenewal.class);
-			approvementsRenewalService.insertByParticipant(approvementsRenewal);
-			return responseSuccess(approvementsRenewal, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
 
 	@PostMapping("tutor-approvement")
 	public ResponseEntity<?> insertTutorApprovement(@RequestBody String body) {
@@ -111,7 +99,8 @@ public class ApprovementsRenewalController extends ElearningBaseController {
 					idDtlModuleRgs);
 			out = JasperUtil.responseToByteArray(listResult, "DetailAttendance", null);
 			LearningMaterials learningMaterial = learningMaterialService.getByIdDetailModuleRgs(idDtlModuleRgs);
-			fileName.append("Laporan Kehadiran Materi ").append(learningMaterial.getLearningMaterialName()).append(".pdf");
+			fileName.append("Laporan Kehadiran Materi ").append(learningMaterial.getLearningMaterialName())
+					.append(".pdf");
 			helper.setOut(out);
 			helper.setCheck(true);
 		} catch (Exception e) {

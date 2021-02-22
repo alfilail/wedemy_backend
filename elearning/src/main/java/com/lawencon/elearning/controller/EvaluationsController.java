@@ -50,28 +50,6 @@ public class EvaluationsController extends ElearningBaseController {
 		}
 	}
 
-	@GetMapping
-	public ResponseEntity<?> getAll() {
-		try {
-			List<Evaluations> evaluations = evaluationsService.getAllEvaluations();
-			return responseSuccess(evaluations, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
-
-	@GetMapping("{id}")
-	public ResponseEntity<?> getById(@PathVariable("id") String id) {
-		try {
-			Evaluations evaluation = evaluationsService.getEvaluationById(id);
-			return responseSuccess(evaluation, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
-
 	@GetMapping("submission-score")
 	public ResponseEntity<?> getByIdDtlClassAndIdDtlModuleRgs(@RequestParam("idDtlClass") String idDtlClass,
 			@RequestParam("idDtlModuleRgs") String idDtlModuleRgs) {

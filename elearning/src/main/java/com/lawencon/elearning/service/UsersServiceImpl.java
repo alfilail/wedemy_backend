@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.lawencon.elearning.constant.RoleCode;
 import com.lawencon.elearning.constant.TemplateEmail;
 import com.lawencon.elearning.dao.UsersDao;
 import com.lawencon.elearning.model.General;
@@ -43,10 +44,14 @@ public class UsersServiceImpl extends ElearningBaseServiceImpl implements UsersS
 				validateInsert(user);
 				Roles role = rolesService.getByCode(user.getIdRole().getCode());
 				user.setIdRole(role);
-				user.getIdProfile().setCreatedBy(user.getCreatedBy());;
+				user.getIdProfile().setCreatedBy(user.getCreatedBy());
 				profilesService.insert(user.getIdProfile());
 				user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
 			});
+			if (user.getIdRole().getCode().equals(RoleCode.PARTICIPANT.code)) {
+				user.setCreatedBy(user.getId());
+				usersDao.update(user, null);
+			}
 			commit();
 		} catch (Exception e) {
 			rollback();

@@ -38,28 +38,6 @@ public class ClassEnrollmentController extends ElearningBaseController {
 		}
 	}
 
-	@GetMapping
-	public ResponseEntity<?> getAll() {
-		try {
-			List<ClassEnrollments> classEnrollments = classEnrollmentService.getAll();
-			return responseSuccess(classEnrollments, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
-
-	@GetMapping("{id}")
-	public ResponseEntity<?> getById(@PathVariable("id") String id) {
-		try {
-			ClassEnrollments classEnrollment = classEnrollmentService.getById(id);
-			return responseSuccess(classEnrollment, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
-
 	@GetMapping("participant/{id}")
 	public ResponseEntity<?> getAllByIdParticipant(@PathVariable("id") String id) {
 		try {

@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lawencon.elearning.constant.MessageStat;
 import com.lawencon.elearning.model.Grades;
 import com.lawencon.elearning.service.GradesService;
-import com.lawencon.elearning.constant.MessageStat;
 
 @RestController
 @RequestMapping("grade")
@@ -44,17 +43,6 @@ public class GradesController extends ElearningBaseController {
 		try {
 			List<Grades> grades = gradesService.getAll();
 			return responseSuccess(grades, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
-
-	@GetMapping("/{id}")
-	public ResponseEntity<?> getById(@PathVariable("id") String id) {
-		try {
-			Grades grade = gradesService.getById(id);
-			return responseSuccess(grade, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);

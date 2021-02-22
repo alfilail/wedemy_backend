@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.lawencon.elearning.constant.MessageStat;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.Users;
 import com.lawencon.elearning.service.UsersService;
-import com.lawencon.elearning.constant.MessageStat;
 
 @RestController
 @RequestMapping("user")
@@ -37,17 +37,6 @@ public class UsersController extends ElearningBaseController {
 			Users user = obj.readValue(body, Users.class);
 			usersService.insert(user);
 			return responseSuccess(user, HttpStatus.CREATED, MessageStat.SUCCESS_CREATED);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
-
-	@GetMapping
-	public ResponseEntity<?> getAll() {
-		try {
-			List<Users> users = usersService.getAll();
-			return responseSuccess(users, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);

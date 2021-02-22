@@ -39,28 +39,6 @@ public class DetailForumsController extends ElearningBaseController {
 		}
 	}
 
-	@GetMapping
-	public ResponseEntity<?> getAll() {
-		try {
-			List<DetailForums> detailForums = detailForumService.getAllDetailForums();
-			return responseSuccess(detailForums, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
-
-	@GetMapping("{id}")
-	public ResponseEntity<?> getById(@PathVariable("id") String id) {
-		try {
-			DetailForums detailForum = detailForumService.getDetailForumById(id);
-			return responseSuccess(detailForum, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
-
 	@GetMapping("forum/{idForum}")
 	public ResponseEntity<?> getAllByIdForum(@PathVariable("idForum") String idForum) {
 		try {

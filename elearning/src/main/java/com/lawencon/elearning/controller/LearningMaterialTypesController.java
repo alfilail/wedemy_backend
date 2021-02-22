@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.lawencon.elearning.constant.MessageStat;
 import com.lawencon.elearning.model.LearningMaterialTypes;
 import com.lawencon.elearning.service.LearningMaterialTypesService;
-import com.lawencon.elearning.constant.MessageStat;
 
 @RestController
 @RequestMapping("learning-material-type")
@@ -45,17 +44,6 @@ public class LearningMaterialTypesController extends ElearningBaseController {
 		try {
 			List<LearningMaterialTypes> lmTypes = lmTypesService.getAll();
 			return responseSuccess(lmTypes, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
-
-	@GetMapping("{id}")
-	public ResponseEntity<?> getById(@PathVariable("id") String id) {
-		try {
-			LearningMaterialTypes lmType = lmTypesService.getById(id);
-			return responseSuccess(lmType, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);

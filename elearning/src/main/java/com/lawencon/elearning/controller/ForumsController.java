@@ -38,28 +38,6 @@ public class ForumsController extends ElearningBaseController {
 		}
 	}
 
-	@GetMapping
-	public ResponseEntity<?> getAll() {
-		try {
-			List<Forums> forum = forumsService.getAllForums();
-			return responseSuccess(forum, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
-
-	@GetMapping("{id}")
-	public ResponseEntity<?> getById(@PathVariable("id") String id) {
-		try {
-			Forums forum = forumsService.getForumById(id);
-			return responseSuccess(forum, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
-
 	@GetMapping("material/{id}")
 	public ResponseEntity<?> getByIdDtlModuleRgs(@PathVariable("id") String id) {
 		try {

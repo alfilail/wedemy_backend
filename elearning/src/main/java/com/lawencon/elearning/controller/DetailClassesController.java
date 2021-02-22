@@ -62,17 +62,6 @@ public class DetailClassesController extends ElearningBaseController {
 		}
 	}
 
-	@GetMapping("inactive")
-	public ResponseEntity<?> getAllInactive() {
-		try {
-			List<DetailClasses> dtlClasses = dtlClassesService.getAllInactive();
-			return responseSuccess(dtlClasses, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return responseError(e);
-		}
-	}
-
 	@GetMapping("information/{id}")
 	public ResponseEntity<?> getInformationByIdDetailClass(@PathVariable("id") String id) {
 		try {
