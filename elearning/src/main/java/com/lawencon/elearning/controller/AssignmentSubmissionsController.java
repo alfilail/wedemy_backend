@@ -32,7 +32,7 @@ public class AssignmentSubmissionsController extends ElearningBaseController {
 			obj.registerModule(new JavaTimeModule());
 			AssignmentSubmissions assignmentSubmission = obj.readValue(body, AssignmentSubmissions.class);
 			assignmentSubmissionsService.insert(assignmentSubmission, file);
-			return responseSuccess(assignmentSubmission, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
+			return responseSuccess(assignmentSubmission, HttpStatus.CREATED, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);

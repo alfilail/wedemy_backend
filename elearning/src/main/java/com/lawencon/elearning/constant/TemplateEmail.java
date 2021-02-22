@@ -6,7 +6,7 @@ public enum TemplateEmail {
 	RESET_PASSWORD("PWDRST", "Kata Sandi Telah Direset"),
 	ASSIGNMENT_SUBMISSION_PARTICIPANT("ASGPCP", "Tugas Telah Terkirim"),
 	ASSIGNMENT_SUBMISSION_TUTOR("ASGTTR", "Tugas Telah Dikirim"),
-	EVALUATION_PARTICIPANT("SCRUPD", "Nilai Tugas Telah Dinilai");
+	EVALUATION_PARTICIPANT("SCRUPD", "Tugas Telah Dinilai");
 	
 	public String code;
 	public String subject;
