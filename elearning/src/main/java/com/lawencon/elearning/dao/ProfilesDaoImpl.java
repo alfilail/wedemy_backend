@@ -23,6 +23,11 @@ public class ProfilesDaoImpl extends ElearningBaseDaoImpl<Profiles> implements P
 	}
 
 	@Override
+	public void autoUpdateParticipant(Profiles profile, Callback before) throws Exception {
+		save(profile, before, null, true, true);
+	}
+
+	@Override
 	public void deleteProfileById(String id) throws Exception {
 		deleteById(id);
 	}

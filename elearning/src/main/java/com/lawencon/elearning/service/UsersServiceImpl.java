@@ -48,16 +48,20 @@ public class UsersServiceImpl extends ElearningBaseServiceImpl implements UsersS
 				profilesService.insert(user.getIdProfile());
 				user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
 			});
-			if (user.getIdRole().getCode().equals(RoleCode.PARTICIPANT.code)) {
-				user.setCreatedAt(user.getCreatedAt());
-				user.setCreatedBy(user.getId());
-				user.setUpdatedBy(user.getId());
-				usersDao.updateCreatedByForParticipant(user, null);
-			}
 			commit();
 		} catch (Exception e) {
 			rollback();
 			throw new Exception(e);
+		}
+		if (user.getIdRole().getCode().equals(RoleCode.PARTICIPANT.code)) {
+			user.setCreatedAt(user.getCreatedAt());
+			user.setCreatedBy(user.getId());
+			user.setUpdatedBy(user.getId());
+			usersDao.update(user, null);
+			user.getIdProfile().setCreatedAt(user.getCreatedAt());
+			user.getIdProfile().setCreatedBy(user.getId());
+			user.getIdProfile().setUpdatedBy(user.getId());
+			profilesService.autoUpdateParticipant(user.getIdProfile(), null);
 		}
 	}
 

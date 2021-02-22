@@ -15,6 +15,7 @@ import com.lawencon.elearning.model.AssignmentSubmissions;
 import com.lawencon.elearning.model.Evaluations;
 import com.lawencon.elearning.model.Files;
 import com.lawencon.elearning.model.Profiles;
+import com.lawencon.util.Callback;
 
 @Service
 public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesService {
@@ -59,6 +60,11 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 			rollback();
 			throw new Exception(e);
 		}
+	}
+
+	@Override
+	public void autoUpdateParticipant(Profiles profile, Callback before) throws Exception {
+		profilesDao.autoUpdateParticipant(profile, before);
 	}
 
 	@Override

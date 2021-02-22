@@ -12,6 +12,8 @@ public interface ProfilesDao {
 	void insert(Profiles profile, Callback before) throws Exception;
 
 	void update(Profiles profile, Callback before) throws Exception;
+	
+	void autoUpdateParticipant(Profiles profile, Callback before) throws Exception;
 
 	void deleteProfileById(String id) throws Exception;
 
