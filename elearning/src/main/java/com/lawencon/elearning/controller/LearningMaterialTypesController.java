@@ -32,7 +32,7 @@ public class LearningMaterialTypesController extends ElearningBaseController {
 		try {
 			LearningMaterialTypes lmType = new ObjectMapper().readValue(body, LearningMaterialTypes.class);
 			lmTypesService.insert(lmType);
-			return responseSuccess(lmType, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
+			return responseSuccess(lmType, HttpStatus.CREATED, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);

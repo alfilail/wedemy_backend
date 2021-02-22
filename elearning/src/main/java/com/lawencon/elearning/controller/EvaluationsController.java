@@ -43,7 +43,7 @@ public class EvaluationsController extends ElearningBaseController {
 			ObjectMapper obj = new ObjectMapper();
 			ScoreInputs scores = obj.readValue(body, ScoreInputs.class);
 			evaluationsService.insertEvaluation(scores);
-			return responseSuccess(scores, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
+			return responseSuccess(scores, HttpStatus.CREATED, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);

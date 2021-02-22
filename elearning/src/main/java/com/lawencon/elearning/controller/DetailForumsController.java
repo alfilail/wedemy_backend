@@ -32,7 +32,7 @@ public class DetailForumsController extends ElearningBaseController {
 			obj.registerModule(new JavaTimeModule());
 			DetailForums detailForum = obj.readValue(body, DetailForums.class);
 			detailForumService.insertDetailForum(detailForum);
-			return responseSuccess(detailForum, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
+			return responseSuccess(detailForum, HttpStatus.CREATED, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);

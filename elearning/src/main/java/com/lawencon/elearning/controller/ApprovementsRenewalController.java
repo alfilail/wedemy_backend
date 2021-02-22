@@ -46,7 +46,7 @@ public class ApprovementsRenewalController extends ElearningBaseController {
 			TutorApprovementInputs approvementsRenewal = new ObjectMapper().readValue(body,
 					TutorApprovementInputs.class);
 			approvementsRenewalService.insertByTutor(approvementsRenewal);
-			return responseSuccess(approvementsRenewal, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
+			return responseSuccess(approvementsRenewal, HttpStatus.CREATED, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);

@@ -31,7 +31,7 @@ public class ForumsController extends ElearningBaseController {
 		try {
 			Forums forum = new ObjectMapper().readValue(body, Forums.class);
 			forumsService.insertForum(forum);
-			return responseSuccess(forum, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
+			return responseSuccess(forum, HttpStatus.CREATED, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);

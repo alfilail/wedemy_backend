@@ -33,7 +33,7 @@ public class DetailClassesController extends ElearningBaseController {
 			obj.registerModule(new JavaTimeModule());
 			DetailClasses detailClass = obj.readValue(body, DetailClasses.class);
 			dtlClassesService.reactiveOldClass(detailClass);
-			return responseSuccess(detailClass, HttpStatus.OK, MessageStat.SUCCESS_CREATED);
+			return responseSuccess(detailClass, HttpStatus.CREATED, MessageStat.SUCCESS_CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);

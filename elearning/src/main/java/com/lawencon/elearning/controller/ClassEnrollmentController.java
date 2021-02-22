@@ -31,7 +31,7 @@ public class ClassEnrollmentController extends ElearningBaseController {
 		try {
 			ClassEnrollments classEnrollment = new ObjectMapper().readValue(body, ClassEnrollments.class);
 			classEnrollmentService.insert(classEnrollment);
-			return responseSuccess(classEnrollment, HttpStatus.OK, MessageStat.SUCCESS_CREATE_ENROLL);
+			return responseSuccess(classEnrollment, HttpStatus.CREATED, MessageStat.SUCCESS_CREATE_ENROLL);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseError(e);
