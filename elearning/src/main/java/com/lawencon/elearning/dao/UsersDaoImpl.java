@@ -167,12 +167,12 @@ public class UsersDaoImpl extends ElearningBaseDaoImpl<Users> implements UsersDa
 	public List<?> validateDeleteUser(String id) throws Exception {
 		String sql = sqlBuilder("SELECT tmc.id as id_class, trp.id as id_presence, ",
 				" tras.id as id_assignment_submission, trf.id as id_forum, ",
-				" trdf.id as id_detail_forum, trce.id as id_class_enrollment ", " FROM t_m_users tmu ",
+				" trdf.id as id_detail_forum, trce.id as id_class_enrollment FROM t_m_users tmu ",
 				" FULL JOIN t_m_classes tmc on tmu.id = tmc.id_tutor ",
 				" FULL JOIN t_r_presences trp on tmu.id = trp.id_user ",
 				" FULL JOIN t_r_assignment_submissions tras on tmu.id = tras.id_participant ",
 				" FULL JOIN t_r_forums trf on tmu.id = trf.id_user ",
-				" FULL JOIN t_r_dtl_forums trdf on tmu.id = trdf.id_user ",
+				" FULL JOIN t_r_detail_forums trdf on tmu.id = trdf.id_user ",
 				" FULL JOIN t_r_class_enrollments trce on tmu.id = trce.id_participant where tmu.id = ?1 ").toString();
 		List<?> listObj = createNativeQuery(sql).setParameter(1, id).setMaxResults(1).getResultList();
 		List<String> result = new ArrayList<String>();
