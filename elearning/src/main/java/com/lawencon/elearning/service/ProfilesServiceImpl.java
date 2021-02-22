@@ -149,7 +149,12 @@ public class ProfilesServiceImpl extends BaseServiceImpl implements ProfilesServ
 			}
 			if (profile.getIdNumber() != null) {
 				if (profile.getIdNumber().length() > 16) {
-					throw new Exception("Kartu penduduk tidak sesuai!");
+					throw new Exception("Nomor identitas tidak sesuai!");
+				} else {
+					String regex = "\\d+";
+					if(!profile.getIdNumber().matches(regex)) {
+						throw new Exception("Nomor identitas harus angka");
+					}
 				}
 			}
 		}

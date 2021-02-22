@@ -13,7 +13,6 @@ import com.lawencon.elearning.dao.UsersDao;
 import com.lawencon.elearning.model.General;
 import com.lawencon.elearning.model.Profiles;
 import com.lawencon.elearning.model.Roles;
-//import com.lawencon.elearning.model.Roles;
 import com.lawencon.elearning.model.Users;
 
 import net.bytebuddy.utility.RandomString;
@@ -203,15 +202,29 @@ public class UsersServiceImpl extends ElearningBaseServiceImpl implements UsersS
 	private void validateInsertExceptParticipant(Users user) throws Exception {
 		if (user.getIdProfile().getIdNumber() == null || user.getIdProfile().getIdNumber().trim().equals("")) {
 			throw new Exception("Nomor Kartu Penduduk tidak boleh kosong");
-		} else if (user.getIdProfile().getBirthPlace() == null
+		} else {
+			String regex = "\\d+";
+			if(!user.getIdProfile().getIdNumber().matches(regex)) {
+				throw new Exception("Nomor Kartu Penduduk tidak sesuai");
+			}
+		}
+		if (user.getIdProfile().getBirthPlace() == null
 				|| user.getIdProfile().getBirthPlace().trim().equals("")) {
 			throw new Exception("Tempat Lahir tidak boleh kosong");
-		} else if (user.getIdProfile().getBirthDate() == null
+		}
+		if (user.getIdProfile().getBirthDate() == null
 				|| user.getIdProfile().getBirthDate().toString().trim().equals("")) {
 			throw new Exception("Tanggal Lahir tidak boleh kosong");
-		} else if (user.getIdProfile().getPhone() == null) {
+		}
+		if (user.getIdProfile().getPhone() == null) {
 			throw new Exception("Nomor Handphone tidak boleh kosong");
-		} else if (user.getIdProfile().getEmail() == null) {
+		} else {
+			String regex = "\\d+";
+			if(!user.getIdProfile().getPhone().matches(regex)) {
+				throw new Exception("Nomor Handphone tidak sesuai");
+			}
+		}
+		if (user.getIdProfile().getEmail() == null) {
 			throw new Exception("Email tidak boleh kosong");
 		}
 	}
