@@ -109,7 +109,7 @@
 			</textField>
 			<image>
 				<reportElement x="344" y="242" width="79" height="92" uuid="70abfd6b-9e84-4bdd-9db8-d8fb0f9fa5f0"/>
-				<imageExpression><![CDATA["src/main/resources/report/ttd alfi.png.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["report/ttd alfi.png.jpg"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="330" y="324" width="100" height="30" uuid="187e3302-7a19-424e-b2c8-f8fd4898fb38"/>
