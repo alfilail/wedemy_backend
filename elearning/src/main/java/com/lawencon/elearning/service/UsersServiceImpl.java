@@ -52,7 +52,7 @@ public class UsersServiceImpl extends ElearningBaseServiceImpl implements UsersS
 				user.setCreatedAt(user.getCreatedAt());
 				user.setCreatedBy(user.getId());
 				user.setUpdatedBy(user.getId());
-				usersDao.update(user, null);
+				usersDao.updateCreatedByForParticipant(user, null);
 			}
 			commit();
 		} catch (Exception e) {

@@ -12,6 +12,8 @@ public interface UsersDao {
 
 	void update(Users user, Callback before) throws Exception;
 
+	void updateCreatedByForParticipant(Users user, Callback before) throws Exception;
+
 	void deleteUserById(String id) throws Exception;
 
 	void softDeleteUserById(String id, String idUser) throws Exception;

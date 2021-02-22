@@ -25,6 +25,11 @@ public class UsersDaoImpl extends ElearningBaseDaoImpl<Users> implements UsersDa
 	}
 
 	@Override
+	public void updateCreatedByForParticipant(Users user, Callback before) throws Exception {
+		save(user, before, null);
+	}
+
+	@Override
 	public void deleteUserById(String id) throws Exception {
 		deleteById(id);
 	}
@@ -68,10 +73,10 @@ public class UsersDaoImpl extends ElearningBaseDaoImpl<Users> implements UsersDa
 			Users user = new Users();
 			user.setId((String) objArr[0]);
 			user.setUsername((String) objArr[1]);
-			
+
 			Roles role = new Roles();
 			role.setCode((String) objArr[2]);
-			
+
 			Profiles profile = new Profiles();
 			profile.setFullName((String) objArr[3]);
 			profile.setIdNumber((String) objArr[4]);
@@ -99,10 +104,10 @@ public class UsersDaoImpl extends ElearningBaseDaoImpl<Users> implements UsersDa
 			Users user = new Users();
 			user.setId((String) objArr[0]);
 			user.setUsername((String) objArr[1]);
-			
+
 			Roles role = new Roles();
 			role.setCode((String) objArr[2]);
-			
+
 			Profiles profile = new Profiles();
 			profile.setFullName((String) objArr[3]);
 			profile.setIdNumber((String) objArr[4]);
@@ -138,11 +143,11 @@ public class UsersDaoImpl extends ElearningBaseDaoImpl<Users> implements UsersDa
 			Users user = new Users();
 			user.setId((String) objArr[0]);
 			user.setUsername((String) objArr[1]);
-			
+
 			Roles role = new Roles();
 			role.setCode((String) objArr[2]);
 			user.setIdRole(role);
-			
+
 			Profiles profile = new Profiles();
 			profile.setFullName((String) objArr[3]);
 			profile.setIdNumber((String) objArr[4]);
