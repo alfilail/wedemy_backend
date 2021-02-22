@@ -39,8 +39,11 @@ public class DetailModuleRegistrationsServiceImpl extends ElearningBaseServiceIm
 	@Override
 	public void update(DetailModuleRegistrations dtlModuleRgs) throws Exception {
 		DetailModuleRegistrations dtlModRgs = dtlModuleRgsDao.getDtlModuleRgsById(dtlModuleRgs.getId());
-		dtlModuleRgs.setCreatedAt(dtlModuleRgs.getCreatedAt());
+		dtlModuleRgs.setCreatedAt(dtlModRgs.getCreatedAt());
 		dtlModuleRgs.setCreatedBy(dtlModRgs.getCreatedBy());
+		dtlModuleRgs.setUpdatedBy(dtlModRgs.getCreatedBy());
+		dtlModuleRgs.setTrxDate(dtlModRgs.getTrxDate());
+		dtlModuleRgs.setTrxNumber(dtlModRgs.getTrxNumber());
 		dtlModuleRgs.setIdModuleRegistration(dtlModRgs.getIdModuleRegistration());
 		dtlModuleRgsDao.update(dtlModuleRgs, () -> {
 			validate(dtlModuleRgs);
