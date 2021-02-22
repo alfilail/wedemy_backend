@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +30,17 @@ public class ClassesController extends ElearningBaseController {
 
 	@Autowired
 	private ClassesService classesService;
+	
+	@GetMapping("{id}")
+	public ResponseEntity<?> getById(@PathVariable("id") String id) {
+		try {
+			Classes clazz = classesService.getById(id);
+			return responseSuccess(clazz, HttpStatus.OK, MessageStat.SUCCESS_RETRIEVE);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return responseError(e);
+		}
+	}
 
 	@PostMapping
 	public ResponseEntity<?> insert(@RequestPart("body") String body, @RequestPart("file") MultipartFile file) {
