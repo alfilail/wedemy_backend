@@ -49,6 +49,7 @@ public class UsersServiceImpl extends ElearningBaseServiceImpl implements UsersS
 				user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
 			});
 			if (user.getIdRole().getCode().equals(RoleCode.PARTICIPANT.code)) {
+				user.setCreatedAt(user.getCreatedAt());
 				user.setCreatedBy(user.getId());
 				usersDao.update(user, null);
 			}
